@@ -1,5 +1,3 @@
-'use client';
-
 import { Info, Result, SubPath } from '@/types/odsay';
 import { getCoordinates } from '@/utils/getCoordinates';
 import { searchPubTransPathAJAX } from '@/utils/searchPath';

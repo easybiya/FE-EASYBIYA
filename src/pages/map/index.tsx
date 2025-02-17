@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Item } from '@/types';
-import InfoModal from './_components/InfoModal';
 import { AddressSearchResult, AddressSearchStatus, getCoordinates } from '@/utils/getCoordinates';
+import InfoModal from '@/components/map/InfoModal';
 
 declare global {
   interface Window {

@@ -29,9 +29,9 @@ const fixedData = [
 
 export default function InfoModal({ modalContent, closeModal }: Props) {
   return (
-    <div className='absolute top-32 z-50'>
-      <div className='relative w-[450px] flex flex-col p-5 gap-2 h-fit bg-white rounded-lg shadow-lg'>
-        <p className='text-lg font-bold'>{modalContent?.name}</p>
+    <div className="absolute top-32 z-50">
+      <div className="relative w-[450px] flex flex-col p-5 gap-2 h-fit bg-white rounded-lg shadow-lg">
+        <p className="text-lg font-bold">{modalContent?.name}</p>
         <p>주소: {modalContent?.address}</p>
         {fixedData.map((item) => (
           <div key={item.id}>
@@ -39,7 +39,7 @@ export default function InfoModal({ modalContent, closeModal }: Props) {
           </div>
         ))}
         <Link href={`/detail/${modalContent.id}`}>상세보기</Link>
-        <button className='absolute top-2 right-2' onClick={closeModal}>
+        <button className="absolute top-2 right-2" onClick={closeModal}>
           닫기
         </button>
       </div>
