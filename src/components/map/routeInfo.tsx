@@ -16,6 +16,8 @@ const trafficType: Record<number, string> = {
   3: '도보',
 };
 
+const STABLE_TIME_DAY = 1000 * 60 * 60 * 24;
+
 export default function RouteInfo({
   fixedSpot,
   spotAddress,
@@ -37,12 +39,12 @@ export default function RouteInfo({
       });
       return result.path[0];
     },
-    staleTime: 1000 * 60 * 60 * 24,
+    staleTime: STABLE_TIME_DAY,
   });
 
   if (isLoading)
     return (
-      <div className="flex h-20 justify-between items-center p-4 bg-gray-300 rounded-lg"></div>
+      <div className="flex h-20 justify-between items-center p-4 bg-gray-200 rounded-lg"></div>
     );
 
   return (
