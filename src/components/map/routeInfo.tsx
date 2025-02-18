@@ -1,7 +1,8 @@
-import { Info, Result, SubPath } from '@/types/odsay';
+import { Result } from '@/types/odsay';
 import { getCoordinates } from '@/utils/getCoordinates';
 import { searchPubTransPathAJAX } from '@/utils/searchPath';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
 export interface Item {
   id: number;
@@ -23,25 +24,26 @@ export default function RouteInfo({
   spotAddress: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [routeInfo, setRouteInfo] = useState<Info | null>(null);
-  const [subInfo, setSubInfo] = useState<SubPath[] | null>(null);
-  useEffect(() => {
-    const getRoute = async () => {
+  const { data, isLoading } = useQuery({
+    queryKey: [fixedSpot.address, spotAddress],
+    queryFn: async () => {
       const fixedCoorder = await getCoordinates(fixedSpot.address);
       const spotCoorder = await getCoordinates(spotAddress);
-      const reuslt: Result = await searchPubTransPathAJAX({
+      const result: Result = await searchPubTransPathAJAX({
         sx: String(spotCoorder.x),
         sy: String(spotCoorder.y),
         ex: String(fixedCoorder.x),
         ey: String(fixedCoorder.y),
       });
-      const info = reuslt.path[0].info;
-      setRouteInfo(info);
-      setSubInfo(reuslt.path[0].subPath);
-      console.log(reuslt.path[0].subPath);
-    };
-    getRoute();
-  }, [fixedSpot.address, spotAddress]);
+      return result.path[0];
+    },
+    staleTime: 1000 * 60 * 60 * 24,
+  });
+
+  if (isLoading)
+    return (
+      <div className="flex h-20 justify-between items-center p-4 bg-gray-300 rounded-lg"></div>
+    );
 
   return (
     <>
@@ -50,18 +52,18 @@ export default function RouteInfo({
         onClick={() => setIsOpen(!isOpen)}
       >
         <p>{fixedSpot.name}</p>
-        소요시간: {routeInfo?.totalTime}분
+        소요시간: {data?.info.totalTime}분
       </div>
       {isOpen && (
         <div className="h-[400px] pl-4">
-          {subInfo?.map((info, index) => {
+          {data?.subPath?.map((info, index) => {
             if (info.sectionTime > 0) {
               return (
                 <div
                   key={index}
                   className="flex gap-3"
                   style={{
-                    height: `${(info.sectionTime / (routeInfo?.totalTime ?? 1)) * 100}%`,
+                    height: `${(info.sectionTime / (data.info.totalTime ?? 1)) * 100}%`,
                   }}
                 >
                   <div
