@@ -74,7 +74,6 @@ export default function Page() {
     return marker;
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const moveCurrentPosition = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
