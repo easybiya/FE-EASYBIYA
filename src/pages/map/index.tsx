@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { Item } from '@/types';
 import { AddressSearchResult, AddressSearchStatus, getCoordinates } from '@/utils/getCoordinates';
 import InfoModal from '@/components/map/infoModal';
-import CurrentPositionImage from '../../../public/images/CurrentPosition.png';
 
 declare global {
   interface Window {
@@ -64,7 +63,7 @@ export default function Page() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const createCurrentMarker = (currentLocation: any) => {
-    const imageSrc: string = CurrentPositionImage.src;
+    const imageSrc: string = '/images/CurrentPosition.png';
     const imageSize = new window.kakao.maps.Size(50);
     const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
     const marker = new window.kakao.maps.Marker({
@@ -126,7 +125,6 @@ export default function Page() {
           (result: AddressSearchResult[], status: AddressSearchStatus) => {
             if (status === window.kakao.maps.services.Status.OK) {
               const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-
               const marker = new window.kakao.maps.Marker({
                 position: coords,
                 map: newMap,
