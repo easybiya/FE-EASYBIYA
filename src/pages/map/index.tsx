@@ -86,8 +86,8 @@ export default function Page() {
 
       const houseList = houseData;
       const fixedList = fixedData;
+      const geocoder = new window.kakao.maps.services.Geocoder();
       houseList.forEach((house) => {
-        const geocoder = new window.kakao.maps.services.Geocoder();
         geocoder.addressSearch(
           house.address,
           (result: AddressSearchResult[], status: AddressSearchStatus) => {
@@ -109,7 +109,6 @@ export default function Page() {
         );
       });
       fixedList.forEach((fixed) => {
-        const geocoder = new window.kakao.maps.services.Geocoder();
         geocoder.addressSearch(
           fixed.address,
           (result: AddressSearchResult[], status: AddressSearchStatus) => {
