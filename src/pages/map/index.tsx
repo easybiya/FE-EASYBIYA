@@ -43,6 +43,7 @@ export default function Page() {
   const [modalContent, setModalContent] = useState<Item | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [map, setMap] = useState<any>(null);
+  const [currentMarkter, setCurrentMarker] = useState(false);
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -52,11 +53,42 @@ export default function Page() {
   const handleTag = async (item: Item) => {
     setModalContent(item);
     setIsModalOpen(true);
-    const fixedCoorder = await getCoordinates(item.address);
-    const currentLocation = new window.kakao.maps.LatLng(fixedCoorder.y, fixedCoorder.x);
+    const houseCoorder = await getCoordinates(item.address);
+    const houseLocation = new window.kakao.maps.LatLng(houseCoorder.y, houseCoorder.x);
     if (map) {
-      map.setCenter(currentLocation);
+      map.setCenter(houseLocation);
       map.setLevel(3);
+    }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const createCurrentMarker = (currentLocation: any) => {
+    const imageSrc: string = '/images/CurrentPosition.png';
+    const imageSize = new window.kakao.maps.Size(50);
+    const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
+    const marker = new window.kakao.maps.Marker({
+      position: currentLocation,
+      image: markerImage,
+    });
+    return marker;
+  };
+
+  const moveCurrentPosition = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        // 브라우저 접속 위치
+        const currentLocation = new window.kakao.maps.LatLng(
+          position.coords.latitude,
+          position.coords.longitude,
+        );
+        if (!currentMarkter) {
+          const newMarker = createCurrentMarker(currentLocation);
+          newMarker.setMap(map);
+          setCurrentMarker(true);
+        }
+        map.setCenter(currentLocation);
+        map.setLevel(3);
+      });
     }
   };
 
@@ -81,19 +113,18 @@ export default function Page() {
             position.coords.longitude,
           );
           newMap.setCenter(currentLocation);
+          const currentMarker = createCurrentMarker(currentLocation);
+          currentMarker.setMap(newMap);
+          setCurrentMarker(true);
         });
       }
-
-      const houseList = houseData;
-      const fixedList = fixedData;
-      houseList.forEach((house) => {
-        const geocoder = new window.kakao.maps.services.Geocoder();
+      const geocoder = new window.kakao.maps.services.Geocoder();
+      houseData.forEach((house) => {
         geocoder.addressSearch(
           house.address,
           (result: AddressSearchResult[], status: AddressSearchStatus) => {
             if (status === window.kakao.maps.services.Status.OK) {
               const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-
               const marker = new window.kakao.maps.Marker({
                 position: coords,
                 map: newMap,
@@ -108,8 +139,7 @@ export default function Page() {
           },
         );
       });
-      fixedList.forEach((fixed) => {
-        const geocoder = new window.kakao.maps.services.Geocoder();
+      fixedData.forEach((fixed) => {
         geocoder.addressSearch(
           fixed.address,
           (result: AddressSearchResult[], status: AddressSearchStatus) => {
@@ -177,8 +207,16 @@ export default function Page() {
           </div>
         ))}
       </div>
-      <div id="map" className="w-[500px] h-[700px] mt-10" />
-      {isModalOpen && <InfoModal modalContent={modalContent!} closeModal={closeModal} />}
+      <div className="relative">
+        <div id="map" className="w-[500px] h-[700px] mt-10" />
+        <div
+          className="absolute w-8 h-8 top-14 right-5 bg-white z-50 rounded-full cursor-pointer"
+          onClick={moveCurrentPosition}
+        ></div>
+      </div>
+      {isModalOpen && modalContent && (
+        <InfoModal modalContent={modalContent} closeModal={closeModal} />
+      )}
     </div>
   );
 }
