@@ -1,3 +1,4 @@
+import Layout from '@/components/Layout';
 import '@/styles/globals.css';
 import '@/styles/reset.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -14,7 +15,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </Head>
       <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </>
