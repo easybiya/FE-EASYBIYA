@@ -1,10 +1,12 @@
-import Image from 'next/image';
 import HouseTypeTag from './HouseTypeTag';
 import { House } from '@/types';
+import Dropdown from '../Dropdown/Dropdown';
 
 interface Props {
   info: House;
 }
+
+const menuList = ['수정', '삭제'];
 
 export default function HouseCard({ info }: Props) {
   return (
@@ -13,9 +15,7 @@ export default function HouseCard({ info }: Props) {
         <h1 className="font-bold text-2xl">🏠 {info.name}</h1>
         <div className="flex gap-1">
           <input type="checkbox" />
-          <button type="button">
-            <Image src="/icons/DropDownIcon.svg" alt="드롭다운아이콘" width={20} height={20} />
-          </button>
+          <Dropdown list={menuList} />
         </div>
       </div>
       <div className="flex w-full justify-between rounded-lg bg-gray-200 p-5">
