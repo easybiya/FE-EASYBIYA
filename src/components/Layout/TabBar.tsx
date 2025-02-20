@@ -22,7 +22,7 @@ export default function TabBar() {
           <span className="text-xs">등록하기</span>
         </Link>
         <Link
-          href="/distance"
+          href="/map"
           className="w-1/4 flex flex-col items-center gap-1 pt-[6px] pb-3 text-gray-700 cursor-pointer"
         >
           <div className="w-7 h-7 bg-green-600" />
