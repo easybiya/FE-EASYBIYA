@@ -1,6 +1,7 @@
 import OptionButton from '@/components/Button/OptionButton';
+import Dropdown from '@/components/Dropdown';
 import Input from '@/components/Input';
-import React from 'react';
+import React, { useState } from 'react';
 
 const colors = [
   {
@@ -42,6 +43,9 @@ const colors = [
 ];
 
 const Index = () => {
+  const [selectedOption, setSelectedOption] = useState<string>('최신 순');
+  const options = ['최신 순', '입주 빠른 순'];
+
   return (
     <>
       <div className="p-8 grid grid-cols-4 gap-6">
@@ -74,6 +78,17 @@ const Index = () => {
       </div>
       <div className="px-5">
         <Input placeholder="입력하세요" />
+      </div>
+      <div className="w-full flex justify-end">
+        <Dropdown
+          options={options}
+          selectedOption={selectedOption}
+          onSelect={setSelectedOption}
+          triggerType="select"
+        />
+      </div>
+      <div className="w-full flex justify-end">
+        <Dropdown options={options} onSelect={setSelectedOption} triggerType="meatball" />
       </div>
     </>
   );
