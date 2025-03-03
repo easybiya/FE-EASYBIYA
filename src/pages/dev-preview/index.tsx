@@ -84,11 +84,11 @@ const Index = () => {
           options={options}
           selectedOption={selectedOption}
           onSelect={setSelectedOption}
-          triggerType="select"
+          type="select"
         />
       </div>
       <div className="w-full flex justify-end">
-        <Dropdown options={options} onSelect={setSelectedOption} triggerType="meatball" />
+        <Dropdown options={options} onSelect={setSelectedOption} type="meatball" />
       </div>
     </>
   );
