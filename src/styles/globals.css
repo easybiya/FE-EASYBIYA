@@ -30,6 +30,100 @@
   src: url('/font/Pretendard-Bold.woff2') format('woff2');
 }
 
+@layer base {
+  html {
+    font-family: 'Pretendard', sans-serif;
+  }
+}
+
+.text-r-15 {
+  font-family: 'Pretendard';
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 22.2px;
+  letter-spacing: -0.3px;
+}
+
+.text-s-15 {
+  font-family: 'Pretendard';
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 22.2px;
+  letter-spacing: -0.3px;
+}
+
+.text-b-16 {
+  font-family: 'Pretendard';
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: -0.32px;
+}
+
+.text-b-13 {
+  font-family: 'Pretendard';
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 19.76px;
+  letter-spacing: -0.26px;
+}
+
+.text-b-18 {
+  font-family: 'Pretendard';
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 27px;
+  letter-spacing: -0.36px;
+}
+
+.text-r-14 {
+  font-family: 'Pretendard';
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 19.6px;
+  letter-spacing: -0.28px;
+}
+
+.text-b-15 {
+  font-family: 'Pretendard';
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 21.9px;
+  letter-spacing: -0.3px;
+}
+
+.text-b-20 {
+  font-family: 'Pretendard';
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 22.4px;
+  letter-spacing: -0.4px;
+}
+
+.text-b-24 {
+  font-family: 'Pretendard';
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 36px;
+  letter-spacing: -0.48px;
+}
+
+.text-r-12 {
+  font-family: 'Pretendard';
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 17.52px;
+  letter-spacing: -0.12px;
+}
+
+.text-m-12 {
+  font-family: 'Pretendard';
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 17.52px;
+  letter-spacing: -0.12px;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
