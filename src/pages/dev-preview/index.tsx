@@ -38,10 +38,8 @@ export default function Index() {
       </div>
 
       <div className="mb-[70px] p-4 space-y-4">
-        {/* 텍스트 (연락처) */}
         <ChecklistItem type="text" label="📞 부동산 중개인 연락처" value={contact} />
 
-        {/* 단일 선택 (라디오 버튼) */}
         <ChecklistItem
           type="radio"
           label="🏠 방 구조"
@@ -49,7 +47,6 @@ export default function Index() {
           options={['1룸', '1.5룸', '2룸']}
           onChange={(value) => setRoomType(value as string)}
         />
-
         <ChecklistItem
           type="radio"
           label="🛡️ 보험 가입 가능 여부"
@@ -57,8 +54,6 @@ export default function Index() {
           options={['가능', '불가능']}
           onChange={(value) => setInsurance(value as string)}
         />
-
-        {/* 다중 선택 (체크박스) */}
         <ChecklistItem
           type="checkbox"
           label="📌 시설 및 조건 점검"
