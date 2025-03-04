@@ -1,3 +1,4 @@
+import IconComponent from '@/components/Asset/Icon';
 import CustomButton from '@/components/Button/CustomButton';
 import OptionButton from '@/components/Button/OptionButton';
 import ChecklistItem from '@/components/CheckList/CheckListItem';
@@ -23,11 +24,18 @@ export default function Index() {
         <OptionButton>월세</OptionButton>
       </div>
       <div className="flex gap-2 px-5">
-        <OptionButton isSelected subtext="중복 선택">
-          체크리스트
+        <OptionButton icon={<IconComponent name="addListCheck" width={16} height={16} />}>
+          복수 선택
         </OptionButton>
-        <OptionButton subtext="단일 선택">체크리스트</OptionButton>
-        <OptionButton>텍스트</OptionButton>
+        <OptionButton
+          isSelected
+          icon={<IconComponent name="addListRadio" width={16} height={16} />}
+        >
+          단일 선택
+        </OptionButton>
+        <OptionButton icon={<IconComponent name="addListText" width={16} height={16} />}>
+          텍스트
+        </OptionButton>
       </div>
       <div className="px-5">
         <Input placeholder="입력하세요" />
