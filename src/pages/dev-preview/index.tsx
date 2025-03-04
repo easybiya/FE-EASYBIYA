@@ -38,8 +38,12 @@ export default function Index() {
       </div>
 
       <div className="mb-[70px] p-4 space-y-4">
-        <ChecklistItem type="text" label="📞 부동산 중개인 연락처" value={contact} />
-
+        <ChecklistItem
+          type="text"
+          label="📞 부동산 중개인 연락처"
+          value={contact}
+          onChange={(value) => setContact(value as string)}
+        />
         <ChecklistItem
           type="radio"
           label="🏠 방 구조"

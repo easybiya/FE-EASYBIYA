@@ -8,6 +8,9 @@ interface ChecklistItemProps {
   onChange?: (value: string | string[]) => void;
 }
 
+// TO DO
+// 풀 땡기면 IconComponent 사용해서 아이콘 추가
+
 export default function ChecklistItem({
   type,
   label,
@@ -52,7 +55,7 @@ export default function ChecklistItem({
                 checked={Array.isArray(value) && value.includes(option)}
                 onChange={() => {
                   if (!Array.isArray(value)) return;
-                  let newValue = value.includes(option)
+                  const newValue = value.includes(option)
                     ? value.filter((v) => v !== option)
                     : [...value, option];
                   onChange?.(newValue);
