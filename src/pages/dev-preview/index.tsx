@@ -1,65 +1,17 @@
+import CustomButton from '@/components/Button/CustomButton';
 import OptionButton from '@/components/Button/OptionButton';
+import ChecklistItem from '@/components/CheckList/CheckListItem';
 import Input from '@/components/Input';
-import React from 'react';
+import React, { useState } from 'react';
 
-const colors = [
-  {
-    name: 'violet',
-    shades: {
-      100: '#EDE7F6',
-      200: '#D1C4E9',
-      300: '#B39DDB',
-      400: '#7E57C2',
-      500: '#5E35B1',
-      600: '#4527A0',
-      700: '#311B92',
-      800: '#240D63',
-      900: '#1E0E4B',
-    },
-  },
-  {
-    name: 'gray',
-    shades: {
-      100: '#F5F5F5',
-      200: '#EEEEEE',
-      300: '#E0E0E0',
-      400: '#BDBDBD',
-      500: '#828282',
-      600: '#4F4F4F',
-      700: '#333333',
-      800: '#1F1F1F',
-      900: '#121212',
-    },
-  },
-  {
-    name: 'red',
-    shades: { 100: '#FFEBEE', 400: '#EF9A9A', 500: '#EF5350', 600: '#E53935', 900: '#600000' },
-  },
-  {
-    name: 'green',
-    shades: { 100: '#E8F5E9', 400: '#81C784', 500: '#4CAF50', 600: '#43A047', 900: '#003300' },
-  },
-];
+export default function Index() {
+  const [contact, setContact] = useState<string>('010-1234-5678');
+  const [roomType, setRoomType] = useState<string>('');
+  const [insurance, setInsurance] = useState<string>('');
+  const [conditions, setConditions] = useState<string[]>([]);
 
-const Index = () => {
   return (
     <>
-      <div className="p-8 grid grid-cols-4 gap-6">
-        {colors.map(({ name, shades }) => (
-          <div key={name}>
-            <h2 className="text-2xl font-bold mb-4">{name}</h2>
-            {Object.entries(shades).map(([shade, hex]) => (
-              <div key={shade} className="mb-2 flex items-center">
-                <div className="w-16 h-8 rounded" style={{ backgroundColor: hex }}></div>
-                <span className="ml-4 text-sm">
-                  {name}-{shade}
-                </span>
-                <span className="ml-2 text-xs text-gray-600">{hex}</span>
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
       <div className="flex gap-2 px-5">
         <OptionButton>전세</OptionButton>
         <OptionButton isSelected>반전세</OptionButton>
@@ -75,8 +27,45 @@ const Index = () => {
       <div className="px-5">
         <Input placeholder="입력하세요" />
       </div>
+      <CustomButton label="다음" fullWidth />
+      <CustomButton label="템플릿 저장" variant="secondary" fullWidth />
+      <CustomButton label="건너 뛰기" variant="ghost" fullWidth />
+      <CustomButton label="비활성화 버튼" disabled fullWidth />
+      <div className="flex flex-row">
+        <CustomButton label="작은 버튼" size="small" />
+        <CustomButton label="중간 버튼" size="medium" />
+        <CustomButton label="큰 버튼" size="large" />
+      </div>
+
+      <div className="mb-[70px] p-4 space-y-4">
+        <ChecklistItem
+          type="text"
+          label="📞 부동산 중개인 연락처"
+          value={contact}
+          onChange={(value) => setContact(value as string)}
+        />
+        <ChecklistItem
+          type="radio"
+          label="🏠 방 구조"
+          value={roomType}
+          options={['1룸', '1.5룸', '2룸']}
+          onChange={(value) => setRoomType(value as string)}
+        />
+        <ChecklistItem
+          type="radio"
+          label="🛡️ 보험 가입 가능 여부"
+          value={insurance}
+          options={['가능', '불가능']}
+          onChange={(value) => setInsurance(value as string)}
+        />
+        <ChecklistItem
+          type="checkbox"
+          label="📌 시설 및 조건 점검"
+          value={conditions}
+          options={['주차 가능 여부', '엘리베이터 유무', '방음 상태']}
+          onChange={(value) => setConditions(value as string[])}
+        />
+      </div>
     </>
   );
-};
-
-export default Index;
+}
