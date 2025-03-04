@@ -1,10 +1,15 @@
 import CustomButton from '@/components/Button/CustomButton';
-import KakaoLoginButton from '@/components/Button/KakaoLoginButton';
 import OptionButton from '@/components/Button/OptionButton';
+import ChecklistItem from '@/components/CheckList/CheckListItem';
 import Input from '@/components/Input';
-import React from 'react';
+import React, { useState } from 'react';
 
-const Index = () => {
+export default function Index() {
+  const [contact, setContact] = useState<string>('010-1234-5678');
+  const [roomType, setRoomType] = useState<string>('');
+  const [insurance, setInsurance] = useState<string>('');
+  const [conditions, setConditions] = useState<string[]>([]);
+
   return (
     <>
       <div className="flex gap-2 px-5">
@@ -31,8 +36,37 @@ const Index = () => {
         <CustomButton label="중간 버튼" size="medium" />
         <CustomButton label="큰 버튼" size="large" />
       </div>
+
+      <div className="mb-[70px] p-4 space-y-4">
+        {/* 텍스트 (연락처) */}
+        <ChecklistItem type="text" label="📞 부동산 중개인 연락처" value={contact} />
+
+        {/* 단일 선택 (라디오 버튼) */}
+        <ChecklistItem
+          type="radio"
+          label="🏠 방 구조"
+          value={roomType}
+          options={['1룸', '1.5룸', '2룸']}
+          onChange={(value) => setRoomType(value as string)}
+        />
+
+        <ChecklistItem
+          type="radio"
+          label="🛡️ 보험 가입 가능 여부"
+          value={insurance}
+          options={['가능', '불가능']}
+          onChange={(value) => setInsurance(value as string)}
+        />
+
+        {/* 다중 선택 (체크박스) */}
+        <ChecklistItem
+          type="checkbox"
+          label="📌 시설 및 조건 점검"
+          value={conditions}
+          options={['주차 가능 여부', '엘리베이터 유무', '방음 상태']}
+          onChange={(value) => setConditions(value as string[])}
+        />
+      </div>
     </>
   );
-};
-
-export default Index;
+}
