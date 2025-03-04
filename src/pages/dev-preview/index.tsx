@@ -1,6 +1,7 @@
 import OptionButton from '@/components/Button/OptionButton';
 import Dropdown from '@/components/Dropdown';
 import Input from '@/components/Input';
+import { useToastStore } from '@/store/toastStore';
 import React, { useState } from 'react';
 
 const colors = [
@@ -45,6 +46,7 @@ const colors = [
 const Index = () => {
   const [selectedOption, setSelectedOption] = useState<string>('최신 순');
   const options = ['최신 순', '입주 빠른 순'];
+  const { showToast } = useToastStore();
 
   return (
     <>
@@ -89,6 +91,20 @@ const Index = () => {
       </div>
       <div className="w-full flex justify-end">
         <Dropdown options={options} onSelect={setSelectedOption} type="meatball" />
+      </div>
+      <div className="p-8">
+        <button
+          onClick={() => showToast('성공했습니다!', 'success')}
+          className="px-4 py-2 bg-green-500 text-white rounded-lg"
+        >
+          성공 토스트
+        </button>
+        <button
+          onClick={() => showToast('에러가 발생했습니다!', 'error')}
+          className="ml-4 px-4 py-2 bg-red-500 text-white rounded-lg"
+        >
+          에러 토스트
+        </button>
       </div>
     </>
   );
