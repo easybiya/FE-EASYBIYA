@@ -1,6 +1,6 @@
+import Dropdown from '../Dropdown';
 import HouseTypeTag from './HouseTypeTag';
 import { House } from '@/types';
-import Dropdown from '../Dropdown/Dropdown';
 
 interface Props {
   info: House;
@@ -15,7 +15,7 @@ export default function HouseCard({ info }: Props) {
         <h1 className="font-bold text-2xl">🏠 {info.name}</h1>
         <div className="flex gap-1">
           <input type="checkbox" />
-          <Dropdown list={menuList} />
+          <Dropdown options={menuList} type="meatball" />
         </div>
       </div>
       <div className="flex w-full justify-between rounded-lg bg-gray-200 p-5">

@@ -12,7 +12,7 @@ export default function Input({ placeholder, type = 'text', icon, onChange }: In
         type={type}
         placeholder={placeholder}
         onChange={onChange}
-        className="flex-1 px-2 py-1 text-[15px] text-gray-800 outline-none bg-transparent"
+        className="flex-1 px-2 py-1 text-r-15 text-gray-800 outline-none bg-transparent"
       />
       {icon && <div className="ml-2">{icon}</div>}
     </div>

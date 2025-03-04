@@ -1,18 +1,20 @@
 interface OptionButtonProps {
   isSelected?: boolean;
-  subtext?: string;
   children: React.ReactNode;
+  icon?: React.ReactNode;
 }
 
-export default function OptionButton({ isSelected, subtext, children }: OptionButtonProps) {
+export default function OptionButton({ isSelected, children, icon }: OptionButtonProps) {
   return (
     <button
-      className={`w-full min-h-10 max-h-[52px] px-3 py-2 rounded-md border h-auto flex flex-col items-center justify-center ${
+      className={`w-full min-h-10 rounded-md border h-auto flex flex-col items-center justify-center ${
         isSelected ? 'border-gray-800' : 'border-gray-300'
-      } bg-white hover:bg-gray-100 text-gray-800 text-[15px]`}
+      } ${
+        icon ? 'gap-[6px] p-3 pb-4' : 'px-3 py-2'
+      } bg-white hover:bg-gray-100 text-gray-800 text-r-15`}
     >
       {children}
-      {subtext && <div className="text-[11px] text-gray-500">{subtext}</div>}
+      {icon}
     </button>
   );
 }
