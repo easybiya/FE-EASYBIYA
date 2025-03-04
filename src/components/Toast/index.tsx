@@ -13,7 +13,7 @@ export default function Toast() {
         width={16}
         height={16}
       />
-      <span className="text-sm text-white">{message}</span>
+      <span className="text-r-14 text-white">{message}</span>
     </div>
   );
 }
