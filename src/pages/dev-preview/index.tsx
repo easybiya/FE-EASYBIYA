@@ -1,4 +1,5 @@
 import CustomButton from '@/components/Button/CustomButton';
+import KakaoLoginButton from '@/components/Button/KakaoLoginButton';
 import OptionButton from '@/components/Button/OptionButton';
 import Input from '@/components/Input';
 import React from 'react';
@@ -25,9 +26,11 @@ const Index = () => {
       <CustomButton label="템플릿 저장" variant="secondary" fullWidth />
       <CustomButton label="건너 뛰기" variant="ghost" fullWidth />
       <CustomButton label="비활성화 버튼" disabled fullWidth />
-      <CustomButton label="작은 버튼" size="small" />
-      <CustomButton label="중간 버튼" size="medium" />
-      <CustomButton label="큰 버튼" size="large" />
+      <div className="flex flex-row">
+        <CustomButton label="작은 버튼" size="small" />
+        <CustomButton label="중간 버튼" size="medium" />
+        <CustomButton label="큰 버튼" size="large" />
+      </div>
     </>
   );
 };
