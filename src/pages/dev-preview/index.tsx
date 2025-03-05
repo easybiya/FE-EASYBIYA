@@ -4,6 +4,7 @@ import OptionButton from '@/components/Button/OptionButton';
 import ChecklistItem from '@/components/CheckList/CheckListItem';
 import Dropdown from '@/components/Dropdown';
 import Input from '@/components/Input';
+import { useModalStore } from '@/store/modalStore';
 import { useToastStore } from '@/store/toastStore';
 import React, { useState } from 'react';
 
@@ -15,6 +16,7 @@ export default function Index() {
   const [selectedOption, setSelectedOption] = useState<string>('최신 순');
   const options = ['최신 순', '입주 빠른 순'];
   const { showToast } = useToastStore();
+  const { openModal } = useModalStore();
 
   return (
     <div className="pb-[66px]">
@@ -102,6 +104,41 @@ export default function Index() {
           className="ml-4 px-4 py-2 bg-red-500 text-white rounded-lg"
         >
           에러 토스트
+        </button>
+      </div>
+      <div className="p-6">
+        <button
+          onClick={() =>
+            openModal('info', {
+              title: '알림',
+              description:
+                '정보 모달 정보 모달 정보 모달 정보 모달 정보 모달 정보 모달 정보 모달 정보 모달 ',
+            })
+          }
+          className="mr-2"
+        >
+          정보 모달
+        </button>
+
+        <button
+          onClick={() =>
+            openModal('input', { title: '새 템플릿 생성', onConfirm: () => alert('생성됨') })
+          }
+          className="mr-2"
+        >
+          입력 모달
+        </button>
+
+        <button
+          onClick={() =>
+            openModal('confirm', {
+              title: '확인',
+              description: '나의 체크리스트에 저장하시겠어요?',
+              onConfirm: () => alert('저장됨'),
+            })
+          }
+        >
+          확인 모달
         </button>
       </div>
     </div>
