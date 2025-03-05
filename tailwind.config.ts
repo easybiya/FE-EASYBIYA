@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import * as tailwindAnimate from 'tailwindcss-animate';
 
 const config: Config = {
   darkMode: ['class'],
@@ -15,23 +16,6 @@ const config: Config = {
         sans: ['Pretendard', 'Arial', 'Helvetica', 'sans-serif'], // 기본 sans 설정 변경
       },
       colors: {
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
-        gray: {
-          900: '#191B1E',
-          800: '#2E3032',
-          700: '#41454A',
-          600: '#747A83',
-          500: '#9099A5',
-          400: '#B5C1D2',
-          300: '#D7DFEA',
-          200: '#EDF2F8',
-          100: '#F1F5FA',
-        },
-      },
-    },
-    extend: {
-      colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         violet: {
@@ -46,15 +30,15 @@ const config: Config = {
           '900': '#1E0E4B',
         },
         gray: {
-          '100': '#F5F5F5',
-          '200': '#EEEEEE',
-          '300': '#E0E0E0',
-          '400': '#BDBDBD',
-          '500': '#828282',
-          '600': '#4F4F4F',
-          '700': '#333333',
-          '800': '#1F1F1F',
-          '900': '#121212',
+          900: '#191B1E',
+          800: '#2E3032',
+          700: '#41454A',
+          600: '#747A83',
+          500: '#9099A5',
+          400: '#B5C1D2',
+          300: '#D7DFEA',
+          200: '#EDF2F8',
+          100: '#F1F5FA',
         },
         red: {
           '100': '#FFEBEE',
@@ -116,7 +100,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [tailwindAnimate],
 };
 
 export default config;
