@@ -18,14 +18,14 @@ export default function Header({ type, title }: HeaderProps) {
         return (
           <>
             <div className="w-6" />
-            <h1 className="text-lg font-semibold">{title}</h1>
+            <h1 className="text-b-20">{title}</h1>
             <div className="w-6 h-6 bg-gray-300 rounded cursor-pointer" /> {/* 닫기 */}
           </>
         );
       case 2:
         return (
           <>
-            <h1 className="text-lg font-semibold">{title}</h1>
+            <h1 className="text-b-20">{title}</h1>
             <div className="flex gap-2">
               <div className="w-6 h-6 bg-gray-300 rounded cursor-pointer" /> {/* 공유 */}
               <div className="w-6 h-6 bg-gray-300 rounded cursor-pointer" /> {/* 매물 추가 */}
@@ -35,7 +35,7 @@ export default function Header({ type, title }: HeaderProps) {
       case 3:
         return (
           <>
-            <h1 className="text-lg font-semibold">{title}</h1>
+            <h1 className="text-b-20">{title}</h1>
             <div className="flex gap-2">
               <div className="w-6 h-6 bg-gray-300 rounded cursor-pointer" /> {/* 공유 */}
               <div className="w-6 h-6 bg-gray-300 rounded cursor-pointer" /> {/* 케밥 */}
@@ -47,7 +47,7 @@ export default function Header({ type, title }: HeaderProps) {
           <>
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 bg-gray-300 rounded cursor-pointer" /> {/* 뒤로가기 */}
-              <h1 className="text-lg font-semibold">{title}</h1>
+              <h1 className="text-b-20">{title}</h1>
             </div>
             <div className="w-6" />
           </>
@@ -55,7 +55,7 @@ export default function Header({ type, title }: HeaderProps) {
       case 5:
         return (
           <>
-            <h1 className="text-lg font-semibold">{title}</h1>
+            <h1 className="text-b-20">{title}</h1>
             <div className="w-6" />
           </>
         );
@@ -64,13 +64,13 @@ export default function Header({ type, title }: HeaderProps) {
           <>
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 bg-gray-300 rounded cursor-pointer" /> {/* 뒤로가기 */}
-              <h1 className="text-lg font-semibold">{title}</h1>
+              <h1 className="text-b-20">{title}</h1>
             </div>
-            <div className="w-auto h-6 bg-gray-300 rounded cursor-pointer">생성</div>
+            <div className="w-auto h-6 bg-gray-300 text-s-15 rounded cursor-pointer">생성</div>
           </>
         );
       default:
-        return <h1 className="text-lg font-semibold">{title}</h1>;
+        return <h1 className="text-b-20">{title}</h1>;
     }
   };
 
