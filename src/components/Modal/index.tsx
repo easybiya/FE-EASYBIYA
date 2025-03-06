@@ -1,16 +1,66 @@
+import { createPortal } from 'react-dom';
 import { useModalStore } from '@/store/modalStore';
 import Input from '../Input';
 import IconComponent from '../Asset/Icon';
 import CustomButton from '../Button/CustomButton';
+import { usePreventScroll } from '@/hooks/usePreventScroll';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 export default function Modal() {
   const { isOpen, type, title, description, onConfirm, onCancel, closeModal } = useModalStore();
+  const router = useRouter();
+  usePreventScroll(isOpen);
+
+  useEffect(() => {
+    if (isOpen) {
+      window.history.pushState({ isModalOpen: true }, '', window.location.href);
+    }
+
+    const handlePopState = () => {
+      closeModal();
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [isOpen, closeModal]);
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      closeModal();
+    };
+
+    router.events.on('routeChangeStart', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
+    };
+  }, [router, closeModal]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    };
+
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, closeModal]);
 
   if (!isOpen || !type) return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
       onClick={closeModal}
     >
       <div
@@ -48,6 +98,7 @@ export default function Modal() {
           </button>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
