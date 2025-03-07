@@ -1,4 +1,5 @@
 import Layout from '@/components/Layout';
+import Modal from '@/components/Modal';
 import Toast from '@/components/Toast';
 import '@/styles/globals.css';
 import '@/styles/reset.css';
@@ -19,6 +20,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <Layout>
           <Component {...pageProps} />
           <Toast />
+          <Modal />
         </Layout>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
