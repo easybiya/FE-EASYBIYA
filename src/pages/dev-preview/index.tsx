@@ -52,13 +52,14 @@ export default function Index() {
         <CustomButton label="큰 버튼" size="large" />
       </div>
 
-      <div className="mb-[70px] p-4 space-y-4">
+      {/* <div className="mb-[70px] p-4 space-y-4">
         <ChecklistItem
           type="text"
           label="📞 부동산 중개인 연락처"
           value={contact}
           onChange={(value) => setContact(value as string)}
           id={0}
+          index={0}
         />
         <ChecklistItem
           type="radio"
@@ -67,6 +68,7 @@ export default function Index() {
           options={['1룸', '1.5룸', '2룸']}
           onChange={(value) => setRoomType(value as string)}
           id={0}
+          index={0}
         />
         <ChecklistItem
           type="radio"
@@ -75,6 +77,7 @@ export default function Index() {
           options={['가능', '불가능']}
           onChange={(value) => setInsurance(value as string)}
           id={0}
+          index={0}
         />
         <ChecklistItem
           type="checkbox"
@@ -83,8 +86,9 @@ export default function Index() {
           options={['주차 가능 여부', '엘리베이터 유무', '방음 상태']}
           onChange={(value) => setConditions(value as string[])}
           id={0}
+          index={0}
         />
-      </div>
+      </div> */}
       <div className="w-full flex justify-end">
         <Dropdown
           options={options}
