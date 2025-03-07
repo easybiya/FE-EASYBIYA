@@ -12,28 +12,17 @@ export default function ChecklistPage() {
     () => DefaultChecklist.map((item) => ({ ...item })) as ChecklistItemType[],
   );
 
-  const handleChange = (id: number, newValue: string | string[]) => {
-    setChecklist((prev) => {
-      const index = prev.findIndex((item) => item.id === id);
-      if (index === -1) return prev; 
-
-      const updatedItem = { ...prev[index] };
-
-      switch (updatedItem.type) {
-        case 'checkbox':
-          updatedItem.value = Array.isArray(newValue) ? [...newValue] : [];
-          break;
-        case 'radio':
-        case 'text':
-          updatedItem.value = String(newValue);
-          break;
-      }
-
-      const newChecklist = [...prev];
-      newChecklist[index] = updatedItem;
-
-      return newChecklist;
-    });
+  const updateChecklistValue = (id: number, newValue: string | string[]) => {
+    setChecklist((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              value: item.type === 'checkbox' && Array.isArray(newValue) ? [...newValue] : newValue,
+            }
+          : item,
+      ),
+    );
   };
 
   return (
@@ -55,7 +44,7 @@ export default function ChecklistPage() {
           <CheckListItem
             key={item.id}
             {...item}
-            onChange={(value) => handleChange(item.id, value)}
+            onChange={(value) => updateChecklistValue(item.id, value)}
           />
         ))}
       </div>
