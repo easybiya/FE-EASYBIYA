@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { DragDropContext, Droppable, DropResult } from '@hello-pangea/dnd';
 import CheckListItem from '@/components/CheckList/CheckListItem';
 import CustomButton from '@/components/Button/CustomButton';
 import { DefaultChecklist } from '@/data/defaultCheckList';
@@ -25,6 +26,18 @@ export default function ChecklistPage() {
     );
   };
 
+  // TO DO
+  // API에 변경된 데이터 저장
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+
+    const items = Array.from(checklist);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setChecklist(items);
+  };
+
   return (
     <div className="px-4 pt-6 pb-4 bg-[#F6F5F2]">
       <div className="mb-3 relative flex items-center justify-center">
@@ -39,15 +52,23 @@ export default function ChecklistPage() {
 
       <ProgressIndicator totalSteps={4} />
 
-      <div className="mt-4 space-y-4">
-        {checklist.map((item) => (
-          <CheckListItem
-            key={item.id}
-            {...item}
-            onChange={(value) => updateChecklistValue(item.id, value)}
-          />
-        ))}
-      </div>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="checklist">
+          {(provided) => (
+            <div className="mt-4 space-y-4" ref={provided.innerRef} {...provided.droppableProps}>
+              {checklist.map((item, index) => (
+                <CheckListItem
+                  key={item.id}
+                  index={index}
+                  {...item}
+                  onChange={(value) => updateChecklistValue(item.id, value)}
+                />
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
 
       <div className="mt-6">
         <h2 className="text-lg font-bold text-gray-900 mb-3">체크리스트 추가</h2>
