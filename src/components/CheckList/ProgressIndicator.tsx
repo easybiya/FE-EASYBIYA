@@ -23,19 +23,19 @@ export default function ProgressIndicator({ totalSteps }: { totalSteps: number }
         return (
           <div key={stepNumber} className="flex items-center">
             <div
-              className={`w-6 h-6 flex items-center justify-center rounded-full border border-gray-700
-                ${isCurrent ? 'bg-gray-700 text-white font-bold' : 'text-gray-700'}
+              className={`w-[18px] h-[18px] flex items-center justify-center rounded-full border border-gray-700
+                ${isCurrent ? 'bg-gray-700 text-white text-b-13' : 'text-gray-700'}
                 ${isUpcoming ? 'bg-white text-gray-700 border-gray-700' : ''}`}
             >
               {isCompleted ? (
                 <IconComponent
                   name="checkCircle"
-                  width={20}
-                  height={20}
+                  width={18}
+                  height={18}
                   className="text-gray-700"
                 />
               ) : (
-                <span className="font-bold text-sm">{stepNumber}</span>
+                <span className="text-b-13">{stepNumber}</span>
               )}
             </div>
 

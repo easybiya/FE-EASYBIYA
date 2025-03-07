@@ -21,8 +21,7 @@ export default function Button({
   icon,
   className = '',
 }: ButtonProps) {
-  const baseStyles =
-    'flex items-center justify-center rounded-md font-medium transition font-semibold';
+  const baseStyles = 'flex items-center justify-center rounded-md font-medium transition text-s-15';
   const sizeStyles = {
     small: 'h-10 px-4 text-sm',
     medium: 'h-12 px-6 text-base',

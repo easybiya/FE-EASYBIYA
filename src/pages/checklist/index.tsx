@@ -58,9 +58,9 @@ export default function ChecklistPage() {
           name="arrowLeft"
           width={24}
           height={24}
-          className="absolute left-0 cursor-pointer text-gray-900"
+          className="absolute left-0 cursor-pointer"
         />
-        <h1 className="text-xl font-bold text-gray-900 text-center">체크리스트 등록</h1>
+        <h1 className="text-b-18 text-center">체크리스트 등록</h1>
       </div>
 
       <ProgressIndicator totalSteps={4} />

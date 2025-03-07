@@ -9,7 +9,7 @@ export default function LoginPage() {
         <IconComponent name="close" width={16} height={16} />
       </button>
 
-      <h1 className="text-lg font-semibold text-gray-900 mb-5">이집이야</h1>
+      <h1 className="text-b-24 mb-5">이집이야</h1>
 
       <div className="flex items-center justify-center rounded-md mb-[116px]">
         <Image

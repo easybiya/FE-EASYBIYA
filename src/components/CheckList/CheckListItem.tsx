@@ -34,7 +34,7 @@ export default function ChecklistItem({
                 height={16}
                 className="text-gray-400 cursor-grab"
               />
-              <p className="font-semibold text-gray-800 text-sm">{label}</p>
+              <p className="text-b-15">{label}</p>
               {hasInfo && (
                 <IconComponent
                   name="infoCircle"
@@ -54,13 +54,13 @@ export default function ChecklistItem({
           </div>
 
           {/* 텍스트 */}
-          {type === 'text' && <p className="text-gray-700 text-sm">{value}</p>}
+          {type === 'text' && <p className="text-r-14">{value}</p>}
 
           {/* 단일 선택 (라디오 버튼) */}
           {type === 'radio' && (
             <div className="flex flex-col gap-2 mt-1">
               {options.map((option) => (
-                <label key={option} className="flex items-center gap-2 text-gray-800 text-sm">
+                <label key={option} className="flex items-center gap-2 text-r-14">
                   <input
                     type="radio"
                     name={label}
@@ -79,7 +79,7 @@ export default function ChecklistItem({
           {type === 'checkbox' && (
             <div className="flex flex-col gap-2 mt-1">
               {options.map((option) => (
-                <label key={option} className="flex items-center gap-2 text-gray-800 text-sm">
+                <label key={option} className="flex items-center gap-2 text-r-14">
                   <input
                     type="checkbox"
                     value={option}
