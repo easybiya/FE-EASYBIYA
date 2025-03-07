@@ -4,6 +4,7 @@ import CustomButton from '@/components/Button/CustomButton';
 import { DefaultChecklist } from '@/data/defaultCheckList';
 import IconComponent from '@/components/Asset/Icon';
 import ChecklistAddButton from '@/components/Button/CheckListAddButton';
+import ProgressIndicator from '@/components/CheckList/ProgressIndicator';
 
 export default function ChecklistPage() {
   const [checklist, setChecklist] = useState(DefaultChecklist);
@@ -26,23 +27,7 @@ export default function ChecklistPage() {
         <h1 className="text-xl font-bold text-gray-900 text-center">체크리스트 등록</h1>
       </div>
 
-      <div className="flex items-center justify-center gap-3 mb-6">
-        {[1, 2, 3, 4].map((step, index) => (
-          <div key={step} className="flex items-center">
-            <div
-              className={`w-5 h-5 flex items-center justify-center rounded-full text-xs border 
-              ${
-                index < 3
-                  ? 'border-black bg-black text-white'
-                  : 'border-gray-300 bg-white text-gray-600'
-              }`}
-            >
-              {index < 3 ? '✔' : step}
-            </div>
-            {index !== 3 && <div className="w-8 h-[2px] bg-gray-300 mx-1"></div>}
-          </div>
-        ))}
-      </div>
+      <ProgressIndicator totalSteps={4} />
 
       <div className="space-y-4">
         {checklist.map((item) => (
