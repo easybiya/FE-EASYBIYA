@@ -2,19 +2,16 @@ import React, { useState, useEffect } from 'react';
 import CheckListItem from '@/components/CheckList/CheckListItem';
 import CustomButton from '@/components/Button/CustomButton';
 import { DefaultChecklist } from '@/data/defaultCheckList';
-import IconComponent from '@/components/Asset/Icon';
 import ChecklistAddButton from '@/components/Button/CheckListAddButton';
-import ProgressIndicator from '@/components/CheckList/ProgressIndicator';
 import { ChecklistItemType } from '@/types/checklist';
 import { DragDropContext, DropResult, Droppable } from '@hello-pangea/dnd';
+import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
 
 export default function ChecklistPage() {
   const [checklist, setChecklist] = useState<ChecklistItemType[]>(() =>
     DefaultChecklist.map((item) => ({ ...item })),
   );
 
-  // TO DO: 필요시 API에 변경된 순서 저장
-  // 로컬 스토리지에서 체크리스트 불러오기
   useEffect(() => {
     const savedChecklist = localStorage.getItem('checklist');
     if (savedChecklist) {
@@ -53,17 +50,7 @@ export default function ChecklistPage() {
 
   return (
     <div className="px-4 pt-6 pb-4 bg-[#F6F5F2]">
-      <div className="mb-3 relative flex items-center justify-center">
-        <IconComponent
-          name="arrowLeft"
-          width={24}
-          height={24}
-          className="absolute left-0 cursor-pointer"
-        />
-        <h1 className="text-b-18 text-center">체크리스트 등록</h1>
-      </div>
-
-      <ProgressIndicator totalSteps={4} />
+      <HeaderWithProgress title="체크리스트 등록" totalSteps={4} />
 
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="checklist">

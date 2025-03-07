@@ -8,6 +8,7 @@ export interface IconComponentProps {
   height?: number;
   isBtn?: boolean;
   className?: string;
+  onClick?: () => void;
 }
 
 export default function IconComponent({
@@ -17,6 +18,7 @@ export default function IconComponent({
   height,
   isBtn = false,
   className = '',
+  onClick,
 }: IconComponentProps) {
   const iconSrc = ICONS[name];
 
@@ -30,7 +32,7 @@ export default function IconComponent({
       <div
         className={`flex items-center justify-center ${
           isBtn ? 'cursor-pointer' : 'cursor-default'
-        } ${className}`} // className 추가
+        } ${className}`}
       >
         <Image
           src={iconSrc as string}
@@ -39,6 +41,7 @@ export default function IconComponent({
           width={width}
           height={height}
           className="object-cover"
+          onClick={onClick}
         />
       </div>
     );

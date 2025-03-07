@@ -4,7 +4,7 @@ import IconComponent from '../Asset/Icon';
 const stepMapping: { [key: string]: number } = {
   '/example': 1,
   '/example2': 2,
-  '/example3': 3,
+  '/add-photo': 3,
   '/checklist': 4,
 };
 
@@ -13,7 +13,7 @@ export default function ProgressIndicator({ totalSteps }: { totalSteps: number }
   const currentStep = stepMapping[router.pathname] || 1; // 현재 경로에 맞는 스텝 번호 가져오기
 
   return (
-    <div className="flex items-center justify-center gap-3">
+    <div className="flex items-center justify-center">
       {[...Array(totalSteps)].map((_, index) => {
         const stepNumber = index + 1;
         const isCompleted = stepNumber < currentStep;
