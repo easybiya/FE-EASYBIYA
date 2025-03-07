@@ -1,6 +1,7 @@
 export const ICONS = {
   arrowDown: '/icons/arrow-down.svg',
   arrowUp: '/icons/arrow-up.svg',
+  arrowLeft: '/icons/arrow-left.svg',
   meatball: '/icons/meatball.svg',
   meatballGray: '/icons/meatball-gray.svg',
   toastError: '/icons/toast-error.svg',
@@ -13,4 +14,7 @@ export const ICONS = {
   drag: '/icons/drag.svg',
   plus: '/icons/plus.svg',
   search: '/icons/search.svg',
+  radio: '/icons/radio.svg',
+  checkbox: '/icons/checkbox',
+  text: '/icons/text',
 };

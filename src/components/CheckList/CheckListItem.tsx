@@ -16,7 +16,7 @@ export default function ChecklistItem({
   onChange,
 }: ChecklistItemProps) {
   return (
-    <div className="flex flex-col p-4 border border-gray-300 rounded-lg bg-white shadow-sm">
+    <div className="flex flex-col pt-4 pr-2 pb-4 pl-4 border border-gray-300 rounded-lg bg-white shadow-sm">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <IconComponent name="drag" width={16} height={16} className="text-gray-400 cursor-grab" />

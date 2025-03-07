@@ -30,7 +30,7 @@ export default function Button({
   };
   const variantStyles = {
     primary: 'bg-gray-900 text-white hover:bg-gray-800 active:bg-gray-700',
-    secondary: 'border border-gray-900 text-black hover:bg-gray-100',
+    secondary: 'border border-gray-900 bg-white text-black hover:bg-gray-100',
     ghost: 'text-black',
   };
 
