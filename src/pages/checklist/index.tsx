@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { DragDropContext, Droppable, DropResult } from '@hello-pangea/dnd';
+import React, { useState, useEffect } from 'react';
 import CheckListItem from '@/components/CheckList/CheckListItem';
 import CustomButton from '@/components/Button/CustomButton';
 import { DefaultChecklist } from '@/data/defaultCheckList';
@@ -7,27 +6,40 @@ import IconComponent from '@/components/Asset/Icon';
 import ChecklistAddButton from '@/components/Button/CheckListAddButton';
 import ProgressIndicator from '@/components/CheckList/ProgressIndicator';
 import { ChecklistItemType } from '@/types/checklist';
+import { DragDropContext, DropResult, Droppable } from '@hello-pangea/dnd';
 
 export default function ChecklistPage() {
-  const [checklist, setChecklist] = useState<ChecklistItemType[]>(
-    () => DefaultChecklist.map((item) => ({ ...item })) as ChecklistItemType[],
+  const [checklist, setChecklist] = useState<ChecklistItemType[]>(() =>
+    DefaultChecklist.map((item) => ({ ...item })),
   );
 
+  // TO DO: 필요시 API에 변경된 순서 저장
+  // 로컬 스토리지에서 체크리스트 불러오기
+  useEffect(() => {
+    const savedChecklist = localStorage.getItem('checklist');
+    if (savedChecklist) {
+      setChecklist(JSON.parse(savedChecklist)); // 저장된 데이터가 있다면 불러오기
+    } else {
+      setChecklist(DefaultChecklist.map((item) => ({ ...item }))); // 기본값 설정
+    }
+  }, []);
+
   const updateChecklistValue = (id: number, newValue: string | string[]) => {
-    setChecklist((prev) =>
-      prev.map((item) =>
+    setChecklist((prev) => {
+      const updatedChecklist = prev.map((item) =>
         item.id === id
           ? {
               ...item,
               value: item.type === 'checkbox' && Array.isArray(newValue) ? [...newValue] : newValue,
             }
           : item,
-      ),
-    );
+      );
+
+      localStorage.setItem('checklist', JSON.stringify(updatedChecklist));
+      return updatedChecklist;
+    });
   };
 
-  // TO DO
-  // API에 변경된 데이터 저장
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
@@ -35,7 +47,8 @@ export default function ChecklistPage() {
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
 
-    setChecklist(items);
+    setChecklist([...items]);
+    localStorage.setItem('checklist', JSON.stringify(items));
   };
 
   return (

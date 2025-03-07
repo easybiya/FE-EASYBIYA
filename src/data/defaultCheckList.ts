@@ -1,4 +1,6 @@
-export const DefaultChecklist = [
+import { ChecklistItemType } from '@/types/checklist';
+
+export const DefaultChecklist: ChecklistItemType[] = [
   { id: 1, label: '📱부동산 중개인 연락처', type: 'text', value: '010-0000-0000' },
   { id: 2, label: '📱집 주인 연락처', type: 'text', value: '010-0000-0000' },
   { id: 3, label: '📏방 구조', type: 'radio', options: ['1룸', '1.5룸', '2룸'], value: '1룸' },
