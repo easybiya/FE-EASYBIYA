@@ -8,8 +8,16 @@ export const DefaultChecklist = [
     type: 'radio',
     options: ['가능', '불가능'],
     value: '가능',
+    hasInfo: true,
   },
-  { id: 5, label: '💰근저당 여부', type: 'radio', options: ['예', '아니오'], value: '예' },
+  {
+    id: 5,
+    label: '💰근저당 여부',
+    type: 'radio',
+    options: ['예', '아니오'],
+    value: '예',
+    hasInfo: true,
+  },
   {
     id: 6,
     label: '🚌위치 및 교통 편의성 점검',
@@ -40,6 +48,7 @@ export const DefaultChecklist = [
     type: 'checkbox',
     options: ['지대 높이', '방향'],
     value: [],
+    hasInfo: true,
   },
   {
     id: 9,

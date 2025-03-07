@@ -5,6 +5,7 @@ interface ChecklistItemProps {
   label: string;
   value?: string | string[];
   options?: string[];
+  hasInfo?: boolean;
   onChange?: (value: string | string[]) => void;
 }
 
@@ -13,6 +14,7 @@ export default function ChecklistItem({
   label,
   value,
   options = [],
+  hasInfo,
   onChange,
 }: ChecklistItemProps) {
   return (
@@ -21,6 +23,14 @@ export default function ChecklistItem({
         <div className="flex items-center gap-2">
           <IconComponent name="drag" width={16} height={16} className="text-gray-400 cursor-grab" />
           <p className="font-semibold text-gray-800 text-sm">{label}</p>
+          {hasInfo && (
+            <IconComponent
+              name="infoCircle"
+              width={16}
+              height={16}
+              className="text-gray-500 cursor-pointer"
+            />
+          )}
         </div>
 
         <IconComponent
@@ -31,8 +41,10 @@ export default function ChecklistItem({
         />
       </div>
 
+      {/* 텍스트 값 */}
       {type === 'text' && <p className="text-gray-700 text-sm">{value}</p>}
 
+      {/* 단일 선택 (라디오 버튼) */}
       {type === 'radio' && (
         <div className="flex flex-col gap-2 mt-1">
           {options.map((option) => (
@@ -51,6 +63,7 @@ export default function ChecklistItem({
         </div>
       )}
 
+      {/* 다중 선택 (체크박스) */}
       {type === 'checkbox' && (
         <div className="flex flex-col gap-2 mt-1">
           {options.map((option) => (

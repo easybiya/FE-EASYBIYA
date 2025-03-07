@@ -16,7 +16,6 @@ export default function ChecklistPage() {
 
   return (
     <div className="px-4 pt-6 pb-4 bg-[#F6F5F2] min-h-screen">
-      {/* 🔙 뒤로 가기 버튼 & 체크리스트 등록 타이틀 */}
       <div className="relative flex items-center justify-center mb-6">
         <IconComponent
           name="arrowLeft"
@@ -27,7 +26,6 @@ export default function ChecklistPage() {
         <h1 className="text-xl font-bold text-gray-900 text-center">체크리스트 등록</h1>
       </div>
 
-      {/* ✅ 진행 단계 UI */}
       <div className="flex items-center justify-center gap-3 mb-6">
         {[1, 2, 3, 4].map((step, index) => (
           <div key={step} className="flex items-center">
@@ -46,7 +44,6 @@ export default function ChecklistPage() {
         ))}
       </div>
 
-      {/* 📋 체크리스트 아이템 */}
       <div className="space-y-4">
         {checklist.map((item) => (
           <CheckListItem
@@ -57,7 +54,7 @@ export default function ChecklistPage() {
         ))}
       </div>
 
-      <div className="mt-10">
+      <div className="mt-6">
         <h2 className="text-lg font-bold text-gray-900 mb-3">체크리스트 추가</h2>
         <div className="grid grid-cols-3 gap-3">
           <ChecklistAddButton label="중복 선택" iconName="addListCheck" />
@@ -66,7 +63,6 @@ export default function ChecklistPage() {
         </div>
       </div>
 
-      {/* 💾 저장 버튼 */}
       <CustomButton label="템플릿 저장" variant="secondary" fullWidth className="mt-5 mb-6" />
     </div>
   );

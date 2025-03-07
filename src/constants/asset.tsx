@@ -14,7 +14,5 @@ export const ICONS = {
   drag: '/icons/drag.svg',
   plus: '/icons/plus.svg',
   search: '/icons/search.svg',
-  radio: '/icons/radio.svg',
-  checkbox: '/icons/checkbox',
-  text: '/icons/text',
+  infoCircle: 'icons/info-circle.svg',
 };
