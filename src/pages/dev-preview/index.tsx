@@ -1,7 +1,7 @@
 import IconComponent from '@/components/Asset/Icon';
 import CustomButton from '@/components/Button/CustomButton';
 import OptionButton from '@/components/Button/OptionButton';
-import ChecklistItem from '@/components/CheckList/CheckListItem';
+// import ChecklistItem from '@/components/CheckList/CheckListItem';
 import Dropdown from '@/components/Dropdown';
 import Input from '@/components/Input';
 import { useModalStore } from '@/store/modalStore';
@@ -9,10 +9,10 @@ import { useToastStore } from '@/store/toastStore';
 import React, { useState } from 'react';
 
 export default function Index() {
-  const [contact, setContact] = useState<string>('010-1234-5678');
-  const [roomType, setRoomType] = useState<string>('');
-  const [insurance, setInsurance] = useState<string>('');
-  const [conditions, setConditions] = useState<string[]>([]);
+  // const [contact, setContact] = useState<string>('010-1234-5678');
+  // const [roomType, setRoomType] = useState<string>('');
+  // const [insurance, setInsurance] = useState<string>('');
+  // const [conditions, setConditions] = useState<string[]>([]);
   const [selectedOption, setSelectedOption] = useState<string>('최신 순');
   const options = ['최신 순', '입주 빠른 순'];
   const { showToast } = useToastStore();
