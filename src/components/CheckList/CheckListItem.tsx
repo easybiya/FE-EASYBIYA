@@ -1,4 +1,4 @@
-import React from 'react';
+import IconComponent from '../Asset/Icon';
 
 interface ChecklistItemProps {
   type: 'text' | 'radio' | 'checkbox';
@@ -8,9 +8,6 @@ interface ChecklistItemProps {
   onChange?: (value: string | string[]) => void;
 }
 
-// TO DO
-// 풀 땡기면 IconComponent 사용해서 아이콘 추가
-
 export default function ChecklistItem({
   type,
   label,
@@ -19,24 +16,34 @@ export default function ChecklistItem({
   onChange,
 }: ChecklistItemProps) {
   return (
-    <div className="pl-4 pr-2 py-4 border border-gray-300 rounded-lg bg-white shadow-sm">
-      <p className="font-semibold text-gray-800 mb-2">{label}</p>
+    <div className="flex flex-col p-4 border border-gray-300 rounded-lg bg-white shadow-sm">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <IconComponent name="drag" width={16} height={16} className="text-gray-400 cursor-grab" />
+          <p className="font-semibold text-gray-800 text-sm">{label}</p>
+        </div>
 
-      {/* 텍스트 */}
-      {type === 'text' && <p className="text-black">{value}</p>}
+        <IconComponent
+          name="meatballGray"
+          width={16}
+          height={16}
+          className="text-gray-500 cursor-pointer"
+        />
+      </div>
 
-      {/* 단일 선택 (라디오 버튼) */}
+      {type === 'text' && <p className="text-gray-700 text-sm">{value}</p>}
+
       {type === 'radio' && (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mt-1">
           {options.map((option) => (
-            <label key={option} className="flex items-center gap-3 text-black">
+            <label key={option} className="flex items-center gap-2 text-gray-800 text-sm">
               <input
                 type="radio"
                 name={label}
                 value={option}
                 checked={value === option}
                 onChange={() => onChange?.(option)}
-                className="w-4 h-4"
+                className="w-4 h-4 accent-black"
               />
               {option}
             </label>
@@ -44,11 +51,10 @@ export default function ChecklistItem({
         </div>
       )}
 
-      {/* 다중 선택 (체크박스) */}
       {type === 'checkbox' && (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mt-1">
           {options.map((option) => (
-            <label key={option} className="flex items-center gap-3 text-black">
+            <label key={option} className="flex items-center gap-2 text-gray-800 text-sm">
               <input
                 type="checkbox"
                 value={option}
@@ -60,7 +66,7 @@ export default function ChecklistItem({
                     : [...value, option];
                   onChange?.(newValue);
                 }}
-                className="w-4 h-4"
+                className="w-4 h-4 accent-black"
               />
               {option}
             </label>
