@@ -7,4 +7,5 @@ export const ICONS = {
   addListCheck: '/icons/add-list-check.svg',
   addListRadio: '/icons/add-list-radio.svg',
   addListText: '/icons/add-list-text.svg',
+  close: '/icons/close.svg',
 };
