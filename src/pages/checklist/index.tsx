@@ -16,8 +16,8 @@ export default function ChecklistPage() {
   };
 
   return (
-    <div className="px-4 pt-6 pb-4 bg-[#F6F5F2] min-h-screen">
-      <div className="relative flex items-center justify-center mb-6">
+    <div className="px-4 pt-6 pb-4 bg-[#F6F5F2]">
+      <div className="mb-3 relative flex items-center justify-center">
         <IconComponent
           name="arrowLeft"
           width={24}
@@ -29,7 +29,7 @@ export default function ChecklistPage() {
 
       <ProgressIndicator totalSteps={4} />
 
-      <div className="space-y-4">
+      <div className="mt-4 space-y-4">
         {checklist.map((item) => (
           <CheckListItem
             key={item.id}

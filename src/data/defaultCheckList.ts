@@ -86,6 +86,6 @@ export const DefaultChecklist = [
     ],
     value: [],
   },
-  { id: 11, label: '🏢건물 정보', type: 'text', value: '준공년도 00년, 0층' },
-  { id: 12, label: '💰보증금', type: 'checkbox', options: ['보증금 조정 가능 여부'], value: [] },
+  { id: 12, label: '🏢건물 정보', type: 'text', value: '준공년도 00년, 0층' },
+  { id: 13, label: '💰보증금', type: 'checkbox', options: ['보증금 조정 가능 여부'], value: [] },
 ];
