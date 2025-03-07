@@ -5,14 +5,35 @@ import { DefaultChecklist } from '@/data/defaultCheckList';
 import IconComponent from '@/components/Asset/Icon';
 import ChecklistAddButton from '@/components/Button/CheckListAddButton';
 import ProgressIndicator from '@/components/CheckList/ProgressIndicator';
+import { ChecklistItemType } from '@/types/checklist';
 
 export default function ChecklistPage() {
-  const [checklist, setChecklist] = useState(DefaultChecklist);
+  const [checklist, setChecklist] = useState<ChecklistItemType[]>(
+    () => DefaultChecklist.map((item) => ({ ...item })) as ChecklistItemType[],
+  );
 
   const handleChange = (id: number, newValue: string | string[]) => {
-    setChecklist((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, value: newValue } : item)),
-    );
+    setChecklist((prev) => {
+      const index = prev.findIndex((item) => item.id === id);
+      if (index === -1) return prev; 
+
+      const updatedItem = { ...prev[index] };
+
+      switch (updatedItem.type) {
+        case 'checkbox':
+          updatedItem.value = Array.isArray(newValue) ? [...newValue] : [];
+          break;
+        case 'radio':
+        case 'text':
+          updatedItem.value = String(newValue);
+          break;
+      }
+
+      const newChecklist = [...prev];
+      newChecklist[index] = updatedItem;
+
+      return newChecklist;
+    });
   };
 
   return (

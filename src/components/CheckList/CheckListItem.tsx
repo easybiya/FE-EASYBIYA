@@ -1,11 +1,7 @@
+import { ChecklistItemType } from '@/types/checklist';
 import IconComponent from '../Asset/Icon';
 
-interface ChecklistItemProps {
-  type: 'text' | 'radio' | 'checkbox';
-  label: string;
-  value?: string | string[];
-  options?: string[];
-  hasInfo?: boolean;
+interface ChecklistItemProps extends ChecklistItemType {
   onChange?: (value: string | string[]) => void;
 }
 
@@ -41,7 +37,7 @@ export default function ChecklistItem({
         />
       </div>
 
-      {/* 텍스트 값 */}
+      {/* 텍스트 */}
       {type === 'text' && <p className="text-gray-700 text-sm">{value}</p>}
 
       {/* 단일 선택 (라디오 버튼) */}
