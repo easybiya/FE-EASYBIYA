@@ -1,6 +1,7 @@
 export const ICONS = {
   arrowDown: '/icons/arrow-down.svg',
   arrowUp: '/icons/arrow-up.svg',
+  arrowRight: '/icons/arrow-right.svg',
   meatball: '/icons/meatball.svg',
   toastError: '/icons/toast-error.svg',
   toastSuccess: '/icons/toast-success.svg',
@@ -8,4 +9,5 @@ export const ICONS = {
   addListRadio: '/icons/add-list-radio.svg',
   addListText: '/icons/add-list-text.svg',
   close: '/icons/close.svg',
+  calendar: '/icons/calendar.svg',
 };
