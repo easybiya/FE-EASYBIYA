@@ -9,3 +9,11 @@ export const createRoomZodSchema = z.object({
     .max(20, { message: '상세 주소는 최대 20글자까지만 가능합니다.' }),
   nickName: z.string().trim().max(20, { message: '매물 이름은 최대 20글자까지만 가능합니다.' }),
 });
+
+export const roomInfoZodSchema = z.object({
+  contractType: z.enum(['JEONSE', 'BANJEONSE', 'MONTHLY_RENT']),
+  deposit: z.number(),
+  monthlyRent: z.number(),
+  maintenanceFee: z.number(),
+  available: z.string().trim(),
+});
