@@ -7,6 +7,7 @@ interface OptionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
 export default function OptionButton({ isSelected, children, icon, ...props }: OptionButtonProps) {
   return (
     <button
+      type="button"
       className={`w-full min-h-10 rounded-md border h-auto flex flex-col items-center justify-center ${
         isSelected ? 'border-gray-800' : 'border-gray-300'
       } ${
