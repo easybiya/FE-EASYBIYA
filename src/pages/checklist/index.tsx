@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import CheckListItem from '@/components/CheckList/CheckListItem';
+import ChecklistContainer from '@/components/CheckList/CheckListContainer';
 import CustomButton from '@/components/Button/CustomButton';
 import { DefaultChecklist } from '@/data/defaultCheckList';
 import ChecklistAddButton from '@/components/Button/CheckListAddButton';
 import { ChecklistItemType } from '@/types/checklist';
-import { DragDropContext, DropResult, Droppable } from '@hello-pangea/dnd';
 import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
+import { DropResult } from '@hello-pangea/dnd';
 
 export default function ChecklistPage() {
   const [checklist, setChecklist] = useState<ChecklistItemType[]>(() =>
@@ -15,9 +15,7 @@ export default function ChecklistPage() {
   useEffect(() => {
     const savedChecklist = localStorage.getItem('checklist');
     if (savedChecklist) {
-      setChecklist(JSON.parse(savedChecklist)); // 저장된 데이터가 있다면 불러오기
-    } else {
-      setChecklist(DefaultChecklist.map((item) => ({ ...item }))); // 기본값 설정
+      setChecklist(JSON.parse(savedChecklist));
     }
   }, []);
 
@@ -31,7 +29,6 @@ export default function ChecklistPage() {
             }
           : item,
       );
-
       localStorage.setItem('checklist', JSON.stringify(updatedChecklist));
       return updatedChecklist;
     });
@@ -39,7 +36,6 @@ export default function ChecklistPage() {
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
-
     const items = Array.from(checklist);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
@@ -52,23 +48,12 @@ export default function ChecklistPage() {
     <div className="px-4 pt-6 pb-4 bg-[#F6F5F2]">
       <HeaderWithProgress title="체크리스트 등록" totalSteps={4} />
 
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="checklist">
-          {(provided) => (
-            <div className="mt-4 space-y-4" ref={provided.innerRef} {...provided.droppableProps}>
-              {checklist.map((item, index) => (
-                <CheckListItem
-                  key={item.id}
-                  index={index}
-                  {...item}
-                  onChange={(value) => updateChecklistValue(item.id, value)}
-                />
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      {/* ✅ 공통 체크리스트 컴포넌트 사용 */}
+      <ChecklistContainer
+        checklist={checklist}
+        onUpdateChecklist={updateChecklistValue}
+        onReorderChecklist={handleDragEnd}
+      />
 
       <div className="mt-6">
         <h2 className="text-lg font-bold text-gray-900 mb-3">체크리스트 추가</h2>
