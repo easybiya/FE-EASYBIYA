@@ -34,6 +34,11 @@
   html {
     font-family: 'Pretendard', sans-serif;
   }
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 .text-r-15 {
