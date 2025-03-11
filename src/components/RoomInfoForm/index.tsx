@@ -1,6 +1,6 @@
 import { roomInfoZodSchema } from '@/lib/zodSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
 import { HouseType } from '@/types';
@@ -69,10 +69,6 @@ export default function RoomInfoForm() {
       form.trigger(field);
     }
   };
-
-  useEffect(() => {
-    console.log('isValid 상태 업데이트:', form.formState.isValid);
-  }, [form.formState.isValid]);
 
   return (
     <div className="p-5">
