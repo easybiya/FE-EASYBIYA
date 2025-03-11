@@ -12,4 +12,9 @@ export const ICONS = {
   addListText: '/icons/add-list-text.svg',
   close: '/icons/close.svg',
   calendar: '/icons/calender.svg',
+  kakao: '/icons/kakao.svg',
+  drag: '/icons/drag.svg',
+  infoCircle: '/icons/info-circle.svg',
+  checkCircle: '/icons/check-circle.svg',
+  plus: '/icons/plus.svg',
 };
