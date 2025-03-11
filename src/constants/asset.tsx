@@ -17,4 +17,5 @@ export const ICONS = {
   infoCircle: '/icons/info-circle.svg',
   checkCircle: '/icons/check-circle.svg',
   plus: '/icons/plus.svg',
+  search: '/icons/search.svg',
 };
