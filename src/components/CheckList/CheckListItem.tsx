@@ -45,6 +45,7 @@ export default function ChecklistItem({
               )}
             </div>
 
+            {/* TO DO: 미트볼 버튼에 기능 추가 */}
             <IconComponent
               name="meatballGray"
               width={16}
