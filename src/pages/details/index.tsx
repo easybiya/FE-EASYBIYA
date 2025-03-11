@@ -9,6 +9,7 @@ import { DropResult } from '@hello-pangea/dnd';
 import Header from '@/components/Layout/Header';
 import Chips from '@/components/Button/ChipsButton';
 
+// 임시 데이터
 const propertyData = {
   title: '합정동 A',
   rentalType: '월세',
@@ -29,7 +30,7 @@ const propertyData = {
 
 export default function ChecklistDetailPage() {
   const [checklist, setChecklist] = useState<ChecklistItemType[]>([]);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [, setActiveIndex] = useState(0);
 
   useEffect(() => {
     const savedChecklist = localStorage.getItem('checklist');
