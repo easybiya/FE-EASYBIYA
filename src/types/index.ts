@@ -12,3 +12,7 @@ export interface House {
   rentPrice: number;
   address: string;
 }
+
+export type HouseType = 'JEONSE' | 'BANJEONSE' | 'MONTHLY_RENT';
+
+export type FeeType = 'DEPOSIT' | 'MONTHLY_RENT' | 'MAINTENANCE_FEE';
