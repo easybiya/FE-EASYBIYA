@@ -1,8 +1,8 @@
 import { roomInfoZodSchema } from '@/lib/zodSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
 import { HouseType } from '@/types';
 import HouseTypeSelectContainer from './HouseTypeSelectContainer';
 import HouseFeeInput from './HouseFeeInput';
@@ -15,7 +15,7 @@ type roomInfoSchema = {
   contractType: HouseType;
   deposit: number;
   monthlyRent: number;
-  maintenanceFee: number;
+  maintenanceFee?: number;
   available: string;
 };
 
@@ -26,12 +26,12 @@ export default function RoomInfoForm() {
     resolver: zodResolver(roomInfoZodSchema),
     defaultValues: {
       contractType: 'MONTHLY_RENT',
-      deposit: 0,
-      monthlyRent: 0,
+      deposit: undefined,
+      monthlyRent: undefined,
       maintenanceFee: 0,
       available: formatDate(new Date()),
     },
-    mode: 'onBlur',
+    mode: 'all',
   });
 
   const currentType = useWatch({
@@ -43,17 +43,36 @@ export default function RoomInfoForm() {
 
   const onSubmit: SubmitHandler<roomInfoSchema> = (values) => {
     startTransition(async () => {
+      console.log(roomInfoZodSchema.safeParse(form.getValues()));
       console.log(values);
     });
   };
 
   const handleRoomType = (type: HouseType) => {
     form.setValue('contractType', type);
+    if (type === 'JEONSE') {
+      form.setValue('monthlyRent', 0);
+    }
   };
 
   const handleCalendar = (date: string) => {
     form.setValue('available', date);
+    form.trigger('available');
+    setIsOpen(false);
   };
+
+  const handleFeeChange = (field: keyof roomInfoSchema) => (fee?: number) => {
+    if (!fee) {
+      form.setValue(field, 0);
+    } else {
+      form.setValue(field, fee);
+      form.trigger(field);
+    }
+  };
+
+  useEffect(() => {
+    console.log('isValid 상태 업데이트:', form.formState.isValid);
+  }, [form.formState.isValid]);
 
   return (
     <div className="p-5">
@@ -71,7 +90,6 @@ export default function RoomInfoForm() {
                     value={form.getValues('contractType')}
                   />
                 </FormControl>
-                <FormMessage />
               </FormItem>
             )}
           />
@@ -86,10 +104,10 @@ export default function RoomInfoForm() {
                     <HouseFeeInput
                       type="DEPOSIT"
                       text="보증금"
-                      onChange={(fee: string) => form.setValue('deposit', Number(fee))}
+                      onChange={handleFeeChange('deposit')}
+                      value={form.watch('deposit')}
                     />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -103,10 +121,10 @@ export default function RoomInfoForm() {
                       <HouseFeeInput
                         type="MONTHLY_RENT"
                         text="월세"
-                        onChange={(fee: string) => form.setValue('monthlyRent', Number(fee))}
+                        onChange={handleFeeChange('monthlyRent')}
+                        value={form.watch('monthlyRent')}
                       />
                     </FormControl>
-                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -120,10 +138,10 @@ export default function RoomInfoForm() {
                     <HouseFeeInput
                       type="MAINTENANCE_FEE"
                       text="관리비"
-                      onChange={(fee: string) => form.setValue('maintenanceFee', Number(fee))}
+                      onChange={handleFeeChange('maintenanceFee')}
+                      value={form.watch('maintenanceFee')}
                     />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -144,11 +162,7 @@ export default function RoomInfoForm() {
               <AvailableCalendar handleCalendar={handleCalendar} currentDate={currentDate} />
             )}
           </div>
-          <Button
-            label="다음"
-            disabled={!form.formState.isValid && !isPending}
-            className="w-full"
-          />
+          <Button disabled={!form.formState.isValid || isPending} label="다음" className="w-full" />
         </form>
       </Form>
     </div>
