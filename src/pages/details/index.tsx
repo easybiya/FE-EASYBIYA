@@ -21,12 +21,15 @@ const propertyData = {
     '/images/room.png',
     '/images/room.png',
     '/images/room.png',
+    '/images/room.png',
+    '/images/room.png',
+    '/images/room.png',
   ],
 };
 
 export default function ChecklistDetailPage() {
   const [checklist, setChecklist] = useState<ChecklistItemType[]>([]);
-  const [activeIndex, setActiveIndex] = useState(0); 
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     const savedChecklist = localStorage.getItem('checklist');
@@ -67,6 +70,7 @@ export default function ChecklistDetailPage() {
           modules={[Pagination]}
           spaceBetween={10}
           slidesPerView={1}
+          pagination={{ clickable: true }}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
           className="h-full"
         >
@@ -76,20 +80,37 @@ export default function ChecklistDetailPage() {
             </SwiperSlide>
           ))}
         </Swiper>
-        
-        <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2">
-          {propertyData.images.map((_, index) => (
-            <div
-              key={index}
-              className={`w-2 h-2 rounded-full ${
-                activeIndex === index ? 'bg-black' : 'bg-white border border-black opacity-100'
-              }`}
-            />
-          ))}
-        </div>
+
+        <style jsx global>{`
+          .swiper-pagination {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            position: absolute !important;
+            width: 100% !important;
+            bottom: 12px !important;
+            left: 0 !important;
+            gap: 6px;
+            z-index: 10 !important;
+            opacity: 1 !important;
+          }
+
+          .swiper-pagination-bullet {
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border: 1px solid black;
+            opacity: 1;
+          }
+
+          .swiper-pagination-bullet-active {
+            background-color: #262626 !important;
+            border: none;
+          }
+        `}</style>
       </div>
 
-      <div className="px-4 mt-4">
+      <div className="px-4 mt-7">
         <Chips label={propertyData.rentalType} />
       </div>
 
