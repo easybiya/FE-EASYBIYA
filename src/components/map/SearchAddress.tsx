@@ -5,9 +5,9 @@ import DaumPostcodeEmbed, { Address } from 'react-daum-postcode';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
-import { Button } from '../ui/button';
 import Image from 'next/image';
 import { createRoomZodSchema } from '@/lib/zodSchema';
+import FixedBar from '../FixedBar';
 
 declare global {
   interface Window {
@@ -149,9 +149,7 @@ export default function SearchAddress() {
               </p>
             </div>
           </div>
-          <Button type="submit" className="w-full" disabled={!form.formState.isValid && !isPending}>
-            다음
-          </Button>
+          <FixedBar disabled={!form.formState.isValid && !isPending} skipRoute="/create/2" />
         </form>
       </Form>
       {isSearchModalOpen && (
