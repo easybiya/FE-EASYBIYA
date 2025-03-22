@@ -10,6 +10,7 @@ import AvailableCalendar from './AvaliableCalendar';
 import Button from '../Button/CustomButton';
 import IconComponent from '../Asset/Icon';
 import { formatDate } from '@/utils/formatDate';
+import Link from 'next/link';
 
 type roomInfoSchema = {
   contractType: HouseType;
@@ -71,7 +72,7 @@ export default function RoomInfoForm() {
   };
 
   return (
-    <div className="p-5">
+    <div className="px-5 pt-8">
       <Form {...form}>
         <form className="flex flex-col gap-14" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
@@ -145,7 +146,7 @@ export default function RoomInfoForm() {
           <div className="flex flex-col gap-3 cursor-pointer">
             <FormLabel className="text-[18px] font-bold">입주 가능 날짜</FormLabel>
             <div
-              className="flex items-center justify-between px-3 py-2 rounded border"
+              className="flex items-center justify-between px-3 py-2 rounded border bg-white"
               onClick={() => setIsOpen(!isOpen)}
             >
               <div className="flex gap-[6px] items-center">
@@ -158,7 +159,16 @@ export default function RoomInfoForm() {
               <AvailableCalendar handleCalendar={handleCalendar} currentDate={currentDate} />
             )}
           </div>
-          <Button disabled={!form.formState.isValid || isPending} label="다음" className="w-full" />
+          <div className="flex flex-col gap-5 items-center">
+            <Button
+              disabled={!form.formState.isValid || isPending}
+              label="다음"
+              className="w-full"
+            />
+            <Link href="/roomAddress" className="w-fit text-center font-semibold">
+              건너 뛰기
+            </Link>
+          </div>
         </form>
       </Form>
     </div>

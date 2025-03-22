@@ -8,8 +8,16 @@ interface LayoutProps {
 }
 
 // 숨길 페이지 목록
-const HIDDEN_TABBAR_PAGES = ['/login', '/map', '/add-photo', '/checklist', '/details', '/create'];
-const HIDDEN_HEADER_PAGES = ['/login', '/add-photo', '/checklist', '/details'];
+const HIDDEN_TABBAR_PAGES = [
+  '/login',
+  '/map',
+  '/add-photo',
+  '/checklist',
+  '/details',
+  '/create',
+  '/roomInfo',
+];
+const HIDDEN_HEADER_PAGES = ['/login', '/add-photo', '/checklist', '/details', '/roomInfo'];
 
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
