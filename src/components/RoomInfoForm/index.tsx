@@ -11,6 +11,7 @@ import Button from '../Button/CustomButton';
 import IconComponent from '../Asset/Icon';
 import { formatDate } from '@/utils/formatDate';
 import Link from 'next/link';
+import FixedBar from '../FixedBar';
 
 type roomInfoSchema = {
   contractType: HouseType;
@@ -80,7 +81,7 @@ export default function RoomInfoForm() {
             name="contractType"
             render={() => (
               <FormItem>
-                <FormLabel className="text-[18px] font-bold">계약 형태</FormLabel>
+                <FormLabel className="text-md font-bold">계약 형태</FormLabel>
                 <FormControl>
                   <HouseTypeSelectContainer
                     handleClick={handleRoomType}
@@ -91,7 +92,7 @@ export default function RoomInfoForm() {
             )}
           />
           <div className="flex flex-col gap-3">
-            <FormLabel className="text-[18px] font-bold">계약 금액</FormLabel>
+            <FormLabel className="text-md font-bold">계약 금액</FormLabel>
             <FormField
               control={form.control}
               name="deposit"
@@ -144,7 +145,7 @@ export default function RoomInfoForm() {
             />
           </div>
           <div className="flex flex-col gap-3 cursor-pointer">
-            <FormLabel className="text-[18px] font-bold">입주 가능 날짜</FormLabel>
+            <FormLabel className="text-md font-bold">입주 가능 날짜</FormLabel>
             <div
               className="flex items-center justify-between px-3 py-2 rounded border bg-white"
               onClick={() => setIsOpen(!isOpen)}
@@ -159,16 +160,7 @@ export default function RoomInfoForm() {
               <AvailableCalendar handleCalendar={handleCalendar} currentDate={currentDate} />
             )}
           </div>
-          <div className="flex flex-col gap-5 items-center">
-            <Button
-              disabled={!form.formState.isValid || isPending}
-              label="다음"
-              className="w-full"
-            />
-            <Link href="/roomAddress" className="w-fit text-center font-semibold">
-              건너 뛰기
-            </Link>
-          </div>
+          <FixedBar disabled={!form.formState.isValid || isPending} skipRoute="/room-address" />
         </form>
       </Form>
     </div>

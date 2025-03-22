@@ -28,7 +28,7 @@ export default function HouseFeeInput({ type, text, value = undefined, onChange 
   };
 
   return (
-    <div className="flex gap-4 text-nowrap items-center justify-between w-full">
+    <div className="flex gap-4 text-nowrap items-center justify-between w-full text-[14px]">
       <p className="min-w-[41px]">{text}</p>
       <div className="flex gap-2">
         {type === 'DEPOSIT' && (

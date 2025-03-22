@@ -2,8 +2,8 @@ import { useRouter } from 'next/router';
 import IconComponent from '../Asset/Icon';
 
 const stepMapping: { [key: string]: number } = {
-  '/roomInfo': 1,
-  '/example2': 2,
+  '/room-info': 1,
+  '/room-address': 2,
   '/add-photo': 3,
   '/checklist': 4,
 };

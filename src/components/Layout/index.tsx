@@ -15,9 +15,17 @@ const HIDDEN_TABBAR_PAGES = [
   '/checklist',
   '/details',
   '/create',
-  '/roomInfo',
+  '/room-info',
+  '/room-address',
 ];
-const HIDDEN_HEADER_PAGES = ['/login', '/add-photo', '/checklist', '/details', '/roomInfo'];
+const HIDDEN_HEADER_PAGES = [
+  '/login',
+  '/add-photo',
+  '/checklist',
+  '/details',
+  '/room-info',
+  '/room-address',
+];
 
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
