@@ -7,10 +7,8 @@ import { HouseType } from '@/types';
 import HouseTypeSelectContainer from './HouseTypeSelectContainer';
 import HouseFeeInput from './HouseFeeInput';
 import AvailableCalendar from './AvaliableCalendar';
-import Button from '../Button/CustomButton';
 import IconComponent from '../Asset/Icon';
 import { formatDate } from '@/utils/formatDate';
-import Link from 'next/link';
 import FixedBar from '../FixedBar';
 
 type roomInfoSchema = {
