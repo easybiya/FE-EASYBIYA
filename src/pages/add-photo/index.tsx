@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
 import CustomButton from '@/components/Button/CustomButton';
 import IconComponent from '@/components/Asset/Icon';
+import FixedBar from '@/components/FixedBar';
 
 export default function AddPhotoPage() {
   const [images, setImages] = useState<string[]>([]);
@@ -91,22 +92,7 @@ export default function AddPhotoPage() {
         multiple
         onChange={handleImageUpload}
       />
-
-      <div className="pb-6">
-        <CustomButton
-          label="다음"
-          fullWidth
-          disabled={images.length === 0}
-          onClick={goToChecklist}
-        />
-        <CustomButton
-          label="건너 뛰기"
-          variant="ghost"
-          fullWidth
-          className="mt-2"
-          onClick={goToChecklist}
-        />
-      </div>
+      <FixedBar disabled={images.length === 0} skipRoute="/checklist" onClick={goToChecklist} />
     </div>
   );
 }

@@ -11,7 +11,7 @@ export const ICONS = {
   addListRadio: '/icons/add-list-radio.svg',
   addListText: '/icons/add-list-text.svg',
   close: '/icons/close.svg',
-  calendar: '/icons/calender.svg',
+  calendar: '/icons/calendar.svg',
   kakao: '/icons/kakao.svg',
   drag: '/icons/drag.svg',
   infoCircle: '/icons/info-circle.svg',
