@@ -90,7 +90,7 @@ export default function SearchAddress() {
         >
           <div className="flex flex-col gap-14">
             <div className="flex flex-col gap-[6px]">
-              <FormLabel className="mb-2 text-[16px] font-bold">주소</FormLabel>
+              <FormLabel className="mb-2 text-[16px] font-bold">집 주소</FormLabel>
               <div onClick={() => setIsSearchModalOpen(true)} className="cursor-pointer relative">
                 <FormField
                   control={form.control}
@@ -101,8 +101,8 @@ export default function SearchAddress() {
                         <Input
                           disabled
                           {...field}
-                          placeholder="주소를 검색하세요"
-                          className="pointer-events-none bg-gray-100" // 클릭 이벤트 차단 및 스타일 변경
+                          placeholder="주소를 검색해 주세요"
+                          className="pointer-events-none bg-white py-2 h-10 disabled:opacity-100" // 클릭 이벤트 차단 및 스타일 변경
                         />
                       </FormControl>
                       <FormMessage />
@@ -114,7 +114,7 @@ export default function SearchAddress() {
                   alt="검색아이콘"
                   height={24}
                   width={24}
-                  className="absolute right-3 top-1.5"
+                  className="absolute right-3 top-2"
                 />
               </div>
               <FormField
@@ -123,7 +123,11 @@ export default function SearchAddress() {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input {...field} placeholder="상세 주소를 입력하세요" />
+                      <Input
+                        {...field}
+                        placeholder="상세 주소를 입력해 주세요"
+                        className="bg-white py-2 h-10"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -136,9 +140,13 @@ export default function SearchAddress() {
                 name="nickName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="mb-2 text-[16px] font-bold">매물 이름</FormLabel>
+                    <FormLabel className="mb-2 text-[16px] font-bold">집 별명</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="매물 이름을 입력하세요" />
+                      <Input
+                        {...field}
+                        placeholder="집 별명을 입력해 주세요"
+                        className="bg-white py-2 h-10"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -149,7 +157,7 @@ export default function SearchAddress() {
               </p>
             </div>
           </div>
-          <FixedBar disabled={!form.formState.isValid && !isPending} skipRoute="/create/2" />
+          <FixedBar disabled={!form.formState.isValid && !isPending} skipRoute="/add-photo" />
         </form>
       </Form>
       {isSearchModalOpen && (
