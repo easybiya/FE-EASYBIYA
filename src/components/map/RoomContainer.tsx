@@ -7,7 +7,7 @@ interface Props {
 
 export function RoomContainer({ roomList, handleTagClick }: Props) {
   return (
-    <ul className="flex gap-[10px] flex-col w-full p-4">
+    <ul className="flex gap-[10px] flex-col w-full">
       {roomList.map((item) => (
         <li key={item.id} className="flex gap-[6px] items-center">
           <div

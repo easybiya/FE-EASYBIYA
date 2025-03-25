@@ -6,6 +6,7 @@ import Header from '@/components/Layout/Header';
 import { mockHouserData, mockInstitutionData } from '@/data/mockHouseData';
 import { RoomContainer } from '@/components/map/RoomContainer';
 import { Map } from '@/components/map/Map';
+import CreateInstitutionButton from '@/components/map/CreateInstitutionButton';
 
 export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,7 +42,13 @@ export default function Page() {
   return (
     <div className="flex flex-col justify-center w-full">
       <Header type={5} title="지도" />
-      <RoomContainer roomList={mockHouserData} handleTagClick={handleTagClick} />
+      <div className="p-4">
+        {mockInstitutionData ? (
+          <RoomContainer roomList={mockHouserData} handleTagClick={handleTagClick} />
+        ) : (
+          <CreateInstitutionButton />
+        )}
+      </div>
       <Map
         roomList={mockHouserData}
         institution={mockInstitutionData}
