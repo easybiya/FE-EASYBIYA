@@ -8,29 +8,15 @@ interface LayoutProps {
 }
 
 // 숨길 페이지 목록
-const HIDDEN_TABBAR_PAGES = [
-  '/login',
-  '/map',
-  '/add-photo',
-  '/checklist',
-  '/details',
-  '/create',
-  '/room-info',
-  '/room-address',
-];
-const HIDDEN_HEADER_PAGES = [
-  '/login',
-  '/add-photo',
-  '/checklist',
-  '/details',
-  '/room-info',
-  '/room-address',
-];
+const HIDDEN_TABBAR_PAGES = ['/login', '/map', '/details', '/create'];
+const HIDDEN_HEADER_PAGES = ['/login', '/details', '/create'];
+const HIDEEN_LAYOUT_ROUTE = '/create';
 
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
-  const hideTabBar = HIDDEN_TABBAR_PAGES.includes(router.pathname);
-  const hideHeader = HIDDEN_HEADER_PAGES.includes(router.pathname);
+  const isCreatePage = router.pathname.startsWith(HIDEEN_LAYOUT_ROUTE);
+  const hideTabBar = HIDDEN_TABBAR_PAGES.includes(router.pathname) || isCreatePage;
+  const hideHeader = HIDDEN_HEADER_PAGES.includes(router.pathname) || isCreatePage;
 
   return (
     <div className="flex justify-center w-full min-h-screen bg-white">

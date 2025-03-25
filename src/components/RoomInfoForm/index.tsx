@@ -158,7 +158,10 @@ export default function RoomInfoForm() {
               <AvailableCalendar handleCalendar={handleCalendar} currentDate={currentDate} />
             )}
           </div>
-          <FixedBar disabled={!form.formState.isValid || isPending} skipRoute="/room-address" />
+          <FixedBar
+            disabled={!form.formState.isValid || isPending}
+            skipRoute="/create/room-address"
+          />
         </form>
       </Form>
     </div>
