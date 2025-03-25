@@ -75,7 +75,7 @@ export default function Header({ type, title }: HeaderProps) {
   };
 
   return (
-    <header className="flex items-center justify-between px-5 py-2 bg-white shadow-[inset_1px_0_#eee,inset_-1px_0_#eee]">
+    <header className="flex items-center justify-between px-5 py-2 bg-primary shadow-[inset_1px_0_#eee,inset_-1px_0_#eee]">
       {renderContent()}
     </header>
   );

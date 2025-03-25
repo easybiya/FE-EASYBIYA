@@ -3,7 +3,7 @@ import Link from 'next/link';
 export default function TabBar() {
   return (
     <div
-      className="fixed bottom-0 left-1/2 px-5 w-full max-w-[428px] -translate-x-1/2 bg-white border-t border-gray-200
+      className="fixed bottom-0 left-1/2 px-5 w-full z-50 max-w-[428px] -translate-x-1/2 bg-white border-t border-gray-200
 "
     >
       <div className="flex">
