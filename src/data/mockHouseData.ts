@@ -1,0 +1,96 @@
+import { Institution, Property } from '@/types';
+
+export const mockHouserData: Property[] = [
+  {
+    id: 4,
+    propertyName: '이집이야 오피스텔1',
+    leaseType: 'BANJEONSE',
+    deposit: 100000000,
+    monthlyFee: 200000,
+    maintenanceFee: 100000,
+    availableDate: '2025-01-02',
+    propertyAddress: '서울특별시 강남구 테헤란로 123',
+    propertyDetailedAddress: '101동 1203호',
+    propertyImages: [
+      {
+        imageId: 1,
+        imageUrl:
+          'https://easybiya-bucket.s3.amazonaws.com/1/property/d6e3b0c8-0692-4efb-8640-948da95651bf_스크린샷 2025-02-23 오후 1.20.37.png',
+        priority: 1,
+      },
+      {
+        imageId: 2,
+        imageUrl:
+          'https://easybiya-bucket.s3.amazonaws.com/1/property/b0843a59-3228-4f6b-a17a-9cd9d5543e94_스크린샷 2025-02-23 오후 1.20.56.png',
+        priority: 2,
+      },
+    ],
+  },
+  {
+    id: 6,
+    propertyName: '이집이야 오피스텔2',
+    leaseType: 'JEONSE',
+    deposit: 5000000,
+    monthlyFee: null,
+    maintenanceFee: null,
+    availableDate: '2025-02-10',
+    propertyAddress: '서울 강남구 테헤란로4길 6',
+    propertyDetailedAddress: '101동 1203호',
+    propertyImages: [],
+  },
+  {
+    id: 1,
+    propertyName: '이집이야 오피스텔3',
+    leaseType: 'BANJEONSE',
+    deposit: 100000000,
+    monthlyFee: 200000,
+    maintenanceFee: 100000,
+    availableDate: '2025-03-02',
+    propertyAddress: '서울 강남구 역삼동 831-11',
+    propertyDetailedAddress: '101동 1203호',
+    propertyImages: [],
+  },
+  {
+    id: 5,
+    propertyName: '이집이야 오피스텔4',
+    leaseType: 'MONTHLY_RENT',
+    deposit: 5000000,
+    monthlyFee: 200000,
+    maintenanceFee: 100000,
+    availableDate: '2025-03-31',
+    propertyAddress: '서울 서초구 서초동 1321-7',
+    propertyDetailedAddress: '101동 1203호',
+    propertyImages: [],
+  },
+  {
+    id: 2,
+    propertyName: '이집이야 오피스텔5',
+    leaseType: 'BANJEONSE',
+    deposit: 100000000,
+    monthlyFee: 200000,
+    maintenanceFee: 100000,
+    availableDate: '2025-04-02',
+    propertyAddress: '서울특별시 서초구 서초동 1316-5',
+    propertyDetailedAddress: '101동 1203호',
+    propertyImages: [],
+  },
+  {
+    id: 3,
+    propertyName: '이집이야 오피스텔6',
+    leaseType: 'BANJEONSE',
+    deposit: 100000000,
+    monthlyFee: 200000,
+    maintenanceFee: 100000,
+    availableDate: '2025-04-02',
+    propertyAddress: '서울특별시 서초구 서초동 1328-11',
+    propertyDetailedAddress: '101동 1203호',
+    propertyImages: [],
+  },
+];
+
+export const mockInstitutionData: Institution = {
+  institutionName: '집',
+  institutionAddress: '서울특별시 관악구 관악로 1',
+  institutionLatitude: 37.7749295,
+  institutionLongitude: 126.9784155,
+};
