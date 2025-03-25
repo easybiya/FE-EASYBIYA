@@ -220,10 +220,10 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
   }, [initMap]);
 
   return (
-    <div className="relative">
+    <div className="relative pt-10">
       <div id="map" className="w-full h-[calc(100vh-110px)]" />
       <div
-        className="absolute w-8 h-8 top-14 right-5 bg-white z-50 rounded-full cursor-pointer"
+        className="absolute w-8 h-8 bottom-5 right-5 bg-white z-50 rounded-full cursor-pointer"
         onClick={moveCurrentPosition}
       />
     </div>
