@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Institution, Item, Property } from '@/types';
+import { Institution, Property } from '@/types';
 import RouteInfo from './routeInfo';
 
 interface Props {

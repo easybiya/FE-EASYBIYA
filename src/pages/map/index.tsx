@@ -25,6 +25,7 @@ export default function Page() {
     setModalContent(null);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const settingMapObject = (object: any) => {
     setMap(object);
   };

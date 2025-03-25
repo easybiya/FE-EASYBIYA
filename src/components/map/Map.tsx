@@ -14,11 +14,13 @@ declare global {
 interface Props {
   roomList: Property[];
   institution: Institution;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   settingMapObject: (object: any) => void;
   handleMarkerClick: (content: Property) => void;
 }
 
 export function Map({ roomList, institution, settingMapObject, handleMarkerClick }: Props) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [map, setMap] = useState<any>(null);
   const [currentMarkter, setCurrentMarker] = useState(false);
 
