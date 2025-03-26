@@ -90,7 +90,7 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
           (result: AddressSearchResult[], status: AddressSearchStatus) => {
             if (status === window.kakao.maps.services.Status.OK) {
               const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-              const imageSrc: string = whiteMarkerIcon.src;
+              const imageSrc: string = markerIcon.src;
               const imageSize = new window.kakao.maps.Size(24, 24);
               const imageOption = { offset: new window.kakao.maps.Point(12, 24) };
               const markerImage = new window.kakao.maps.MarkerImage(
@@ -122,10 +122,10 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
                   align-items: center; 
                   padding: 6px 12px; 
                   font-size: 14px; 
-                  color: #000; 
+                  color: #fff; 
                   text-align: center; 
                   font-weight: 600; 
-                  background-color: white; 
+                  background-color: black; 
                   border-radius: 9999px; 
                   white-space: nowrap;
                   position: relative;
@@ -157,7 +157,7 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
         (result: AddressSearchResult[], status: AddressSearchStatus) => {
           if (status === window.kakao.maps.services.Status.OK) {
             const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-            const imageSrc: string = markerIcon.src;
+            const imageSrc: string = whiteMarkerIcon.src;
             const imageSize = new window.kakao.maps.Size(24, 24);
             const imageOption = { offset: new window.kakao.maps.Point(12, 24) };
             const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
@@ -186,10 +186,10 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
                 align-items: center; 
                 padding: 6px 12px; 
                 font-size: 14px; 
-                color: #fff; 
+                color: #000; 
                 text-align: center; 
                 font-weight: 600; 
-                background-color: black; 
+                background-color: white; 
                 border-radius: 9999px; 
                 white-space: nowrap;
                 position: relative;
