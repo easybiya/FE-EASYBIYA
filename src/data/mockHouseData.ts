@@ -34,7 +34,7 @@ export const mockHouserData: Property[] = [
     monthlyFee: null,
     maintenanceFee: null,
     availableDate: '2025-02-10',
-    propertyAddress: '서울 강남구 테헤란로4길 6',
+    propertyAddress: '서울특별시 성동구 성수동1가 656-1887',
     propertyDetailedAddress: '101동 1203호',
     propertyImages: [],
   },

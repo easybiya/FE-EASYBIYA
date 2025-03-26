@@ -50,7 +50,7 @@ export default function Page() {
     <div className="relative flex flex-col justify-center w-full">
       <div className="flex flex-col absolute top-0 right-0 left-0 z-10 bg-primary">
         <Header type={5} title="지도" />
-        <div className="p-4">
+        <div className="p-5">
           {mockInstitutionData ? (
             <RoomContainer roomList={mockHouserData} handleTagClick={handleTagClick} />
           ) : (

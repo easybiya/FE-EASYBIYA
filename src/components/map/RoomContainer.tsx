@@ -12,7 +12,7 @@ export function RoomContainer({ roomList, handleTagClick }: Props) {
         <li key={item.id} className="flex gap-[6px] items-center">
           <div
             onClick={() => handleTagClick(item)}
-            className={`px-[6px] py-[2px] rounded-full border border-black hover:bg-gray-300 cursor-pointer w-fit text-[12px] bg-white font-semibold leading-tight`}
+            className={`px-[6px] py-[2px] rounded-sm border border-black cursor-pointer w-fit text-[12px] bg-black text-white font-semibold leading-tight`}
           >
             {item.propertyName}
           </div>
