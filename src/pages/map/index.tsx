@@ -9,9 +9,14 @@ import { Map } from '@/components/map/Map';
 import CreateInstitutionButton from '@/components/map/CreateInstitutionButton';
 import CreateInsitutionModal from '@/components/map/CreateInstitutionModal';
 
+export interface ModalContent {
+  address: string;
+  name: string;
+}
+
 export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState<Property | null>(null);
+  const [modalContent, setModalContent] = useState<ModalContent | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [map, setMap] = useState<any>(null);
   const [isInstitutionModal, setIsInstitutionModal] = useState(false);
@@ -30,13 +35,14 @@ export default function Page() {
     setMap(object);
   };
 
-  const handleMarkerClick = (content: Property) => {
+  const handleMarkerClick = (content: ModalContent) => {
     setModalContent(content);
     setIsModalOpen(true);
   };
 
   const handleTagClick = async (item: Property) => {
-    setModalContent(item);
+    const transferContent = { address: item.propertyAddress, name: item.propertyName };
+    setModalContent(transferContent);
     setIsModalOpen(true);
     const houseCoorder = await getCoordinates(item.propertyAddress);
     const houseLocation = new window.kakao.maps.LatLng(houseCoorder.y, houseCoorder.x);

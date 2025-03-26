@@ -3,16 +3,17 @@ import RouteInfo from './routeInfo';
 import IconComponent from '../Asset/Icon';
 import { useState } from 'react';
 import DetailRouteModal from './DetailRouteModal';
+import { ModalContent } from '@/pages/map';
 
 interface Props {
-  modalContent: Property;
+  modalContent: ModalContent;
   institution: Institution;
   closeModal: () => void;
 }
 
 export default function InfoModal({ modalContent, closeModal, institution }: Props) {
   const [isDetail, setIsDetail] = useState(false);
-  const isInstitution = modalContent.propertyAddress === institution.institutionAddress;
+  const isInstitution = modalContent.address === institution.institutionAddress;
 
   return (
     <>
@@ -24,23 +25,25 @@ export default function InfoModal({ modalContent, closeModal, institution }: Pro
             height={28}
             alt="모달 아이콘"
           />
-          <p className="text-md font-bold">{modalContent?.propertyName}</p>
-          <p className="text-[15px]">{modalContent?.propertyAddress}</p>
-          <div
-            className="w-fit flex items-center gap-[2px] rounded-full border px-4 py-2.5 font-semibold cursor-pointer"
-            onClick={() => setIsDetail(true)}
-          >
-            <p className="h-5 leading-tight text-sm">대중교통 보기</p>
-            <div className="h-[14px] w-[14px]">
-              <IconComponent
-                name="arrowRight"
-                width={10}
-                height={10}
-                alt="오른쪽 화살표"
-                className="cursor-pointer"
-              />
+          <p className="text-md font-bold">{modalContent?.name}</p>
+          <p className="text-[15px]">{modalContent?.address}</p>
+          {!isInstitution && (
+            <div
+              className="w-fit flex items-center gap-[2px] rounded-full border px-4 py-2.5 font-semibold cursor-pointer"
+              onClick={() => setIsDetail(true)}
+            >
+              <p className="h-5 leading-tight text-sm">대중교통 보기</p>
+              <div className="h-[14px] w-[14px]">
+                <IconComponent
+                  name="arrowRight"
+                  width={10}
+                  height={10}
+                  alt="오른쪽 화살표"
+                  className="cursor-pointer"
+                />
+              </div>
             </div>
-          </div>
+          )}
           <IconComponent
             name="close"
             alt="닫기 아이콘"

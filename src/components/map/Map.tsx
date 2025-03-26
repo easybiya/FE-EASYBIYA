@@ -3,6 +3,7 @@ import { AddressSearchResult, AddressSearchStatus } from '@/utils/getCoordinates
 import { useCallback, useEffect, useState } from 'react';
 import markerIcon from '../../../public/icons/marker.svg';
 import whiteMarkerIcon from '../../../public/icons/marker-white.svg';
+import { ModalContent } from '@/pages/map';
 
 declare global {
   interface Window {
@@ -16,7 +17,7 @@ interface Props {
   institution: Institution;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   settingMapObject: (object: any) => void;
-  handleMarkerClick: (content: Property) => void;
+  handleMarkerClick: (content: ModalContent) => void;
 }
 
 export function Map({ roomList, institution, settingMapObject, handleMarkerClick }: Props) {
@@ -97,6 +98,7 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
                 imageSize,
                 imageOption,
               );
+              const formatContent = { address: house.propertyAddress, name: house.propertyName };
 
               const marker = new window.kakao.maps.Marker({
                 position: coords,
@@ -108,7 +110,7 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
               marker.setMap(newMap);
 
               window.kakao.maps.event.addListener(marker, 'click', () => {
-                handleMarkerClick(house);
+                handleMarkerClick(formatContent);
               });
 
               const customOverlayContent = document.createElement('div');
@@ -135,7 +137,7 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
               `;
 
               customOverlayContent.addEventListener('click', () => {
-                handleMarkerClick(house);
+                handleMarkerClick(formatContent);
               });
 
               const customOverlay = new window.kakao.maps.CustomOverlay({
@@ -158,11 +160,27 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
             const imageSrc: string = markerIcon.src;
             const imageSize = new window.kakao.maps.Size(24, 24);
             const imageOption = { offset: new window.kakao.maps.Point(12, 24) };
-
             const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+            const formatContent = {
+              address: institution.institutionAddress,
+              name: institution.institutionName,
+            };
 
-            const customOverlayContent = `
-              <div style="
+            const marker = new window.kakao.maps.Marker({
+              position: coords,
+              map: newMap,
+              title: institution.institutionName,
+              image: markerImage,
+            });
+
+            window.kakao.maps.event.addListener(marker, 'click', () => {
+              handleMarkerClick(formatContent);
+            });
+
+            const customOverlayContent = document.createElement('div');
+            customOverlayContent.innerHTML = `
+            <div style="
+                cursor: pointer;
                 display: flex; 
                 justify-content: center; 
                 align-items: center; 
@@ -182,11 +200,8 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
               </div>
             `;
 
-            new window.kakao.maps.Marker({
-              position: coords,
-              map: newMap,
-              title: institution.institutionName,
-              image: markerImage,
+            customOverlayContent.addEventListener('click', () => {
+              handleMarkerClick(formatContent);
             });
 
             const customOverlay = new window.kakao.maps.CustomOverlay({

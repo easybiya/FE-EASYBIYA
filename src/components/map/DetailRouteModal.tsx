@@ -5,6 +5,7 @@ import { searchPubTransPathAJAX } from '@/utils/searchPath';
 import { useQuery } from '@tanstack/react-query';
 import IconComponent from '../Asset/Icon';
 import { ICONS } from '@/constants/asset';
+import { ModalContent } from '@/pages/map';
 
 type Traffic = {
   name: string;
@@ -22,7 +23,7 @@ const STABLE_TIME_DAY = 1000 * 60 * 60 * 24;
 
 interface Props {
   institution: Institution;
-  currentAddress: Property;
+  currentAddress: ModalContent;
   isClose: () => void;
 }
 
@@ -31,7 +32,7 @@ export default function DetailRouteModal({ institution, currentAddress, isClose 
     queryKey: [institution.institutionAddress, currentAddress],
     queryFn: async () => {
       const fixedCoorder = await getCoordinates(institution.institutionAddress);
-      const spotCoorder = await getCoordinates(currentAddress.propertyAddress);
+      const spotCoorder = await getCoordinates(currentAddress.address);
       const result: Result = await searchPubTransPathAJAX({
         sx: String(spotCoorder.x),
         sy: String(spotCoorder.y),
@@ -130,8 +131,8 @@ export default function DetailRouteModal({ institution, currentAddress, isClose 
           </div>
           <IconComponent name="arrowDown" width={16} height={16} />
           <div className="flex flex-col gap-0.5 px-4 py-3 border rounded-lg">
-            <p className="text-[15px] font-bold">{currentAddress.propertyName}</p>
-            <p className="text-[14px]">{currentAddress.propertyAddress}</p>
+            <p className="text-[15px] font-bold">{currentAddress.name}</p>
+            <p className="text-[14px]">{currentAddress.address}</p>
           </div>
         </div>
       </div>
