@@ -24,4 +24,5 @@ export const ICONS = {
   bus: '/icons/bus-icon.svg',
   subway: '/icons/subway-icon.svg',
   walk: '/icons/walk-icon.svg',
+  pencil: '/icons/pencil.svg',
 };

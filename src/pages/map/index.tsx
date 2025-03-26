@@ -40,11 +40,11 @@ export default function Page() {
     setIsModalOpen(true);
   };
 
-  const handleTagClick = async (item: Property) => {
-    const transferContent = { address: item.propertyAddress, name: item.propertyName };
+  const handleTagClick = async (address: string, name: string) => {
+    const transferContent = { address: address, name: name };
     setModalContent(transferContent);
     setIsModalOpen(true);
-    const houseCoorder = await getCoordinates(item.propertyAddress);
+    const houseCoorder = await getCoordinates(address);
     const houseLocation = new window.kakao.maps.LatLng(houseCoorder.y, houseCoorder.x);
     if (map) {
       map.setCenter(houseLocation);
@@ -58,7 +58,11 @@ export default function Page() {
         <Header type={5} title="지도" />
         <div className="p-5">
           {mockInstitutionData ? (
-            <RoomContainer roomList={mockHouserData} handleTagClick={handleTagClick} />
+            <RoomContainer
+              roomList={mockHouserData}
+              handleTagClick={handleTagClick}
+              institution={mockInstitutionData}
+            />
           ) : (
             <CreateInstitutionButton handleClick={toggleModal} />
           )}
