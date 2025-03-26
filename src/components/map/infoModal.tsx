@@ -1,5 +1,4 @@
-import { Institution, Property } from '@/types';
-import RouteInfo from './routeInfo';
+import { Institution } from '@/types';
 import IconComponent from '../Asset/Icon';
 import { useState } from 'react';
 import DetailRouteModal from './DetailRouteModal';

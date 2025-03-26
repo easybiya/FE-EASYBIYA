@@ -1,4 +1,4 @@
-import { Institution, Property } from '@/types';
+import { Institution } from '@/types';
 import { Result } from '@/types/odsay';
 import { getCoordinates } from '@/utils/getCoordinates';
 import { searchPubTransPathAJAX } from '@/utils/searchPath';
