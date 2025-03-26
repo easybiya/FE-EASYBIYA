@@ -91,6 +91,6 @@ export const mockHouserData: Property[] = [
 export const mockInstitutionData: Institution = {
   institutionName: '집',
   institutionAddress: '서울특별시 관악구 관악로 1',
-  institutionLatitude: 37.7749295,
+  institutionLatitude: 37.4662872,
   institutionLongitude: 126.9784155,
 };
