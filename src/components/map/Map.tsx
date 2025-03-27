@@ -14,7 +14,7 @@ declare global {
 
 interface Props {
   roomList: Property[];
-  institution: Institution;
+  institution?: Institution;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   settingMapObject: (object: any) => void;
   handleMarkerClick: (content: ModalContent) => void;
@@ -152,69 +152,75 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
           },
         );
       });
-      geocoder.addressSearch(
-        institution.institutionAddress,
-        (result: AddressSearchResult[], status: AddressSearchStatus) => {
-          if (status === window.kakao.maps.services.Status.OK) {
-            const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-            const imageSrc: string = whiteMarkerIcon.src;
-            const imageSize = new window.kakao.maps.Size(24, 24);
-            const imageOption = { offset: new window.kakao.maps.Point(12, 24) };
-            const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
-            const formatContent = {
-              address: institution.institutionAddress,
-              name: institution.institutionName,
-            };
+      if (institution) {
+        geocoder.addressSearch(
+          institution.institutionAddress,
+          (result: AddressSearchResult[], status: AddressSearchStatus) => {
+            if (status === window.kakao.maps.services.Status.OK) {
+              const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+              const imageSrc: string = whiteMarkerIcon.src;
+              const imageSize = new window.kakao.maps.Size(24, 24);
+              const imageOption = { offset: new window.kakao.maps.Point(12, 24) };
+              const markerImage = new window.kakao.maps.MarkerImage(
+                imageSrc,
+                imageSize,
+                imageOption,
+              );
+              const formatContent = {
+                address: institution.institutionAddress,
+                name: institution.institutionName,
+              };
 
-            const marker = new window.kakao.maps.Marker({
-              position: coords,
-              map: newMap,
-              title: institution.institutionName,
-              image: markerImage,
-            });
+              const marker = new window.kakao.maps.Marker({
+                position: coords,
+                map: newMap,
+                title: institution.institutionName,
+                image: markerImage,
+              });
 
-            window.kakao.maps.event.addListener(marker, 'click', () => {
-              handleMarkerClick(formatContent);
-            });
+              window.kakao.maps.event.addListener(marker, 'click', () => {
+                handleMarkerClick(formatContent);
+              });
 
-            const customOverlayContent = document.createElement('div');
-            customOverlayContent.innerHTML = `
-            <div style="
-                cursor: pointer;
-                display: flex; 
-                justify-content: center; 
-                align-items: center; 
-                padding: 6px 12px; 
-                font-size: 14px; 
-                color: #000; 
-                text-align: center; 
-                font-weight: 600; 
-                background-color: white; 
-                border-radius: 9999px; 
-                white-space: nowrap;
-                position: relative;
-                top: -3px;
-                min-width: 50px;
-              ">
-                ${institution.institutionName}
-              </div>
-            `;
+              const customOverlayContent = document.createElement('div');
+              customOverlayContent.innerHTML = `
+              <div style="
+                  cursor: pointer;
+                  display: flex; 
+                  justify-content: center; 
+                  align-items: center; 
+                  padding: 6px 12px; 
+                  font-size: 14px; 
+                  color: #000; 
+                  text-align: center; 
+                  font-weight: 600; 
+                  background-color: white; 
+                  border-radius: 9999px; 
+                  white-space: nowrap;
+                  position: relative;
+                  top: -3px;
+                  min-width: 50px;
+                ">
+                  ${institution.institutionName}
+                </div>
+              `;
 
-            customOverlayContent.addEventListener('click', () => {
-              handleMarkerClick(formatContent);
-            });
+              customOverlayContent.addEventListener('click', () => {
+                handleMarkerClick(formatContent);
+              });
 
-            const customOverlay = new window.kakao.maps.CustomOverlay({
-              map: newMap,
-              position: coords,
-              content: customOverlayContent,
-              yAnchor: 1.2, // 마커 위쪽에 오도록 조정
-            });
+              const customOverlay = new window.kakao.maps.CustomOverlay({
+                map: newMap,
+                position: coords,
+                content: customOverlayContent,
+                yAnchor: 1.2, // 마커 위쪽에 오도록 조정
+              });
 
-            customOverlay.setMap(newMap);
-          }
-        },
-      );
+              customOverlay.setMap(newMap);
+            }
+          },
+        );
+      }
     });
   }, [map]);
 

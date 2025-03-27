@@ -5,7 +5,6 @@ import Header from '@/components/Layout/Header';
 import { mockHouserData, mockInstitutionData } from '@/data/mockHouseData';
 import { RoomContainer } from '@/components/map/RoomContainer';
 import { Map } from '@/components/map/Map';
-import CreateInstitutionButton from '@/components/map/CreateInstitutionButton';
 
 export interface ModalContent {
   address: string;
@@ -50,15 +49,11 @@ export default function Page() {
       <div className="flex flex-col absolute top-0 right-0 left-0 z-10 bg-primary">
         <Header type={5} title="지도" />
         <div className="p-5">
-          {mockInstitutionData ? (
-            <RoomContainer
-              roomList={mockHouserData}
-              handleTagClick={handleTagClick}
-              institution={mockInstitutionData}
-            />
-          ) : (
-            <CreateInstitutionButton />
-          )}
+          <RoomContainer
+            roomList={mockHouserData}
+            handleTagClick={handleTagClick}
+            institution={mockInstitutionData}
+          />
         </div>
       </div>
       <Map
