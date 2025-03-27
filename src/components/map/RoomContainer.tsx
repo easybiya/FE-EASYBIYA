@@ -1,5 +1,6 @@
 import { Institution, Property } from '@/types';
 import IconComponent from '../Asset/Icon';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   roomList: Property[];
@@ -8,6 +9,8 @@ interface Props {
 }
 
 export function RoomContainer({ roomList, institution, handleTagClick }: Props) {
+  const router = useRouter();
+
   return (
     <ul className="flex gap-2.5 flex-col w-full">
       <div
@@ -18,7 +21,14 @@ export function RoomContainer({ roomList, institution, handleTagClick }: Props) 
           <p className="font-bold">{institution.institutionName}</p>
           <p>{institution.institutionAddress}</p>
         </div>
-        <IconComponent name="pencil" width={16} height={16} alt="수정 아이콘" />
+        <IconComponent
+          name="pencil"
+          width={16}
+          height={16}
+          alt="수정 아이콘"
+          onClick={() => router.push('/create/institution')}
+          className="cursor-pointer"
+        />
       </div>
       {roomList.map((item) => (
         <li key={item.id} className="flex gap-[6px] items-center">

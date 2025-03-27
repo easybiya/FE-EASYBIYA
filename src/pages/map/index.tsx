@@ -6,7 +6,6 @@ import { mockHouserData, mockInstitutionData } from '@/data/mockHouseData';
 import { RoomContainer } from '@/components/map/RoomContainer';
 import { Map } from '@/components/map/Map';
 import CreateInstitutionButton from '@/components/map/CreateInstitutionButton';
-import CreateInsitutionModal from '@/components/map/CreateInstitutionModal';
 
 export interface ModalContent {
   address: string;
@@ -18,11 +17,6 @@ export default function Page() {
   const [modalContent, setModalContent] = useState<ModalContent | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [map, setMap] = useState<any>(null);
-  const [isInstitutionModal, setIsInstitutionModal] = useState(false);
-
-  const toggleModal = () => {
-    setIsInstitutionModal(!isInstitutionModal);
-  };
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -63,7 +57,7 @@ export default function Page() {
               institution={mockInstitutionData}
             />
           ) : (
-            <CreateInstitutionButton handleClick={toggleModal} />
+            <CreateInstitutionButton />
           )}
         </div>
       </div>
@@ -80,7 +74,6 @@ export default function Page() {
           closeModal={closeModal}
         />
       )}
-      {isInstitutionModal && <CreateInsitutionModal handleClick={toggleModal} />}
     </div>
   );
 }
