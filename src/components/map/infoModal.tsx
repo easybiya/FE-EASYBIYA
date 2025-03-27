@@ -8,16 +8,17 @@ import { getCoordinates } from '@/utils/getCoordinates';
 
 interface Props {
   modalContent: ModalContent;
-  institution: Institution;
+  institution?: Institution;
   closeModal: () => void;
 }
 
 export default function InfoModal({ modalContent, closeModal, institution }: Props) {
   const [distance, setDistance] = useState(0);
   const [isDetail, setIsDetail] = useState(false);
-  const isInstitution = modalContent.address === institution.institutionAddress;
+  const isInstitution = institution && modalContent.address === institution.institutionAddress;
 
   useEffect(() => {
+    if (!institution) return;
     const calculater = async () => {
       const spotCoorder = await getCoordinates(modalContent.address);
       const result = calculateDistance(
@@ -46,12 +47,12 @@ export default function InfoModal({ modalContent, closeModal, institution }: Pro
           />
           <p className="text-md font-bold">{modalContent?.name}</p>
           <p className="text-[15px]">{modalContent?.address}</p>
-          {!isInstitution && (
+          {!isInstitution && institution && (
             <p className="text-[15px] text-[#94896A] font-bold">
               {institution.institutionName}에서 {distance}m
             </p>
           )}
-          {!isInstitution && (
+          {!isInstitution && institution && (
             <div
               className="w-fit flex items-center gap-[2px] rounded-full border px-4 py-2.5 font-semibold cursor-pointer mt-2.5"
               onClick={() => setIsDetail(true)}
@@ -78,7 +79,7 @@ export default function InfoModal({ modalContent, closeModal, institution }: Pro
           />
         </div>
       </div>
-      {isDetail && !isInstitution && (
+      {isDetail && !isInstitution && institution && (
         <DetailRouteModal
           institution={institution}
           currentAddress={modalContent}

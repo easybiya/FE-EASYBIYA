@@ -5,8 +5,6 @@ import Header from '@/components/Layout/Header';
 import { mockHouserData, mockInstitutionData } from '@/data/mockHouseData';
 import { RoomContainer } from '@/components/map/RoomContainer';
 import { Map } from '@/components/map/Map';
-import CreateInstitutionButton from '@/components/map/CreateInstitutionButton';
-import CreateInsitutionModal from '@/components/map/CreateInstitutionModal';
 
 export interface ModalContent {
   address: string;
@@ -18,11 +16,6 @@ export default function Page() {
   const [modalContent, setModalContent] = useState<ModalContent | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [map, setMap] = useState<any>(null);
-  const [isInstitutionModal, setIsInstitutionModal] = useState(false);
-
-  const toggleModal = () => {
-    setIsInstitutionModal(!isInstitutionModal);
-  };
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -56,15 +49,11 @@ export default function Page() {
       <div className="flex flex-col absolute top-0 right-0 left-0 z-10 bg-primary">
         <Header type={5} title="지도" />
         <div className="p-5">
-          {mockInstitutionData ? (
-            <RoomContainer
-              roomList={mockHouserData}
-              handleTagClick={handleTagClick}
-              institution={mockInstitutionData}
-            />
-          ) : (
-            <CreateInstitutionButton handleClick={toggleModal} />
-          )}
+          <RoomContainer
+            roomList={mockHouserData}
+            handleTagClick={handleTagClick}
+            institution={mockInstitutionData}
+          />
         </div>
       </div>
       <Map
@@ -80,7 +69,6 @@ export default function Page() {
           closeModal={closeModal}
         />
       )}
-      {isInstitutionModal && <CreateInsitutionModal handleClick={toggleModal} />}
     </div>
   );
 }

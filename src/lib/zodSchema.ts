@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const createRoomZodSchema = z.object({
-  address: z.string().trim().min(1, { message: '주소는 필수 입니다.' }),
+  address: z.string().trim().min(1, { message: '주소는 필수입니다.' }),
   addressDetail: z
     .string()
     .trim()
@@ -16,4 +16,9 @@ export const roomInfoZodSchema = z.object({
   monthlyRent: z.number(),
   maintenanceFee: z.number().optional(),
   available: z.string().trim(),
+});
+
+export const createInstitutionZodSchema = z.object({
+  address: z.string().trim().min(1, { message: '주소는 필수입니다.' }),
+  nickName: z.string().trim().max(20, { message: '장소 이름은 최대 20글자까지만 가능합니다.' }),
 });
