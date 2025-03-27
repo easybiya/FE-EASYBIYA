@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Property } from '@/types';
 import { getCoordinates } from '@/utils/getCoordinates';
 import InfoModal from '@/components/map/infoModal';
 import Header from '@/components/Layout/Header';
