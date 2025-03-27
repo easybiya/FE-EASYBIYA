@@ -157,7 +157,10 @@ export default function SearchAddress() {
               </p>
             </div>
           </div>
-          <FixedBar disabled={!form.formState.isValid && !isPending} skipRoute="/add-photo" />
+          <FixedBar
+            disabled={!form.formState.isValid && !isPending}
+            skipRoute="/create/add-photo"
+          />
         </form>
       </Form>
       {isSearchModalOpen && (

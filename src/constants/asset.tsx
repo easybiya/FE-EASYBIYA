@@ -18,4 +18,11 @@ export const ICONS = {
   checkCircle: '/icons/check-circle.svg',
   plus: '/icons/plus.svg',
   search: '/icons/search.svg',
+  marker: '/icons/marker.svg',
+  property: '/icons/property.svg',
+  institution: '/icons/institution.svg',
+  bus: '/icons/bus-icon.svg',
+  subway: '/icons/subway-icon.svg',
+  walk: '/icons/walk-icon.svg',
+  pencil: '/icons/pencil.svg',
 };

@@ -2,10 +2,10 @@ import { useRouter } from 'next/router';
 import IconComponent from '../Asset/Icon';
 
 const stepMapping: { [key: string]: number } = {
-  '/room-info': 1,
-  '/room-address': 2,
-  '/add-photo': 3,
-  '/checklist': 4,
+  '/create/room-info': 1,
+  '/create/room-address': 2,
+  '/create/add-photo': 3,
+  '/create/checklist': 4,
 };
 
 export default function ProgressIndicator({ totalSteps }: { totalSteps: number }) {

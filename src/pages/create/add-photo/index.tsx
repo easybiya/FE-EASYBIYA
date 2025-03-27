@@ -92,7 +92,11 @@ export default function AddPhotoPage() {
         multiple
         onChange={handleImageUpload}
       />
-      <FixedBar disabled={images.length === 0} skipRoute="/checklist" onClick={goToChecklist} />
+      <FixedBar
+        disabled={images.length === 0}
+        skipRoute="/create/checklist"
+        onClick={goToChecklist}
+      />
     </div>
   );
 }
