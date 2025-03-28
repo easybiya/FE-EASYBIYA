@@ -1,6 +1,10 @@
+import { useRouter } from 'next/navigation';
+import IconComponent from '../Asset/Icon';
+
 interface HeaderProps {
   type: 1 | 2 | 3 | 4 | 5 | 6;
   title: string;
+  addAction?: () => void;
 }
 
 // type 형태
@@ -11,7 +15,8 @@ interface HeaderProps {
 // 5. 제　목 |       |
 // 6. 백버튼 | 제　목 | 생성버튼
 
-export default function Header({ type, title }: HeaderProps) {
+export default function Header({ type, title, addAction }: HeaderProps) {
+  const router = useRouter();
   const renderContent = () => {
     switch (type) {
       case 1:
@@ -63,10 +68,22 @@ export default function Header({ type, title }: HeaderProps) {
         return (
           <>
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-gray-300 rounded cursor-pointer" /> {/* 뒤로가기 */}
+              <IconComponent
+                name="arrowLeft"
+                width={24}
+                height={24}
+                onClick={() => router.back()}
+                className="cursor-pointer"
+              />
               <h1 className="text-b-20">{title}</h1>
             </div>
-            <div className="w-auto h-6 bg-gray-300 text-s-15 rounded cursor-pointer">생성</div>
+            <IconComponent
+              name="plus"
+              width={20}
+              height={20}
+              onClick={addAction}
+              className="cursor-pointer"
+            />
           </>
         );
       default:
