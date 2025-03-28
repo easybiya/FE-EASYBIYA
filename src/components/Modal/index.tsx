@@ -60,15 +60,15 @@ export default function Modal() {
 
   return createPortal(
     <div
-      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
       onClick={closeModal}
     >
       <div
         className="relative bg-white py-6 px-5 rounded-lg w-80"
         onClick={(e) => e.stopPropagation()}
       >
-        {title && <h2 className="text-b-16 text-gray-800 mb-[6px]">{title}</h2>}
-        {description && <p className="text-r-14 text-gray-800">{description}</p>}
+        {title && <h2 className="text-b-16 text-gray-800 mb-[6px] text-center">{title}</h2>}
+        {description && <p className="text-r-14 text-gray-800 text-center">{description}</p>}
 
         {type === 'input' && (
           <div className="flex flex-col gap-7 mt-[22px]">

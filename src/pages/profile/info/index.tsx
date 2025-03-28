@@ -1,7 +1,10 @@
 import IconComponent from '@/components/Asset/Icon';
 import Header from '@/components/Layout/Header';
+import { useModalStore } from '@/store/modalStore';
 
 export default function Page() {
+  const { openModal } = useModalStore();
+
   return (
     <div>
       <Header title="기본 정보" type={4} />
@@ -12,7 +15,14 @@ export default function Page() {
           </span>
           <p className="font-semibold text-base leading-tight">000000@gmail.com</p>
         </div>
-        <div className="font-semibold text-base leading-tight py-3">회원 탈퇴</div>
+        <div
+          className="font-semibold text-base leading-tight py-3"
+          onClick={() =>
+            openModal('confirm', { title: '확인', description: '회원 탈퇴 하시겠어요?' })
+          }
+        >
+          회원 탈퇴
+        </div>
       </div>
     </div>
   );
