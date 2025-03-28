@@ -6,10 +6,10 @@ export default function Page() {
     <div>
       <Header type={5} title="내정보" />
       <div className="flex flex-col px-5 py-2.5 gap-3">
-        <Link className="py-3 font-semibold" href="/mypage/info">
+        <Link className="py-3 font-semibold" href="/profile/info">
           기본 정보
         </Link>
-        <Link className="py-3 font-semibold" href="/mypage/checklist">
+        <Link className="py-3 font-semibold" href="/profile/checklist">
           체크리스트 관리
         </Link>
         <Link

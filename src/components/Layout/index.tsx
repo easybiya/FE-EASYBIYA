@@ -11,7 +11,7 @@ interface LayoutProps {
 const HIDDEN_TABBAR_PAGES = ['/login', '/details', '/create'];
 const HIDDEN_HEADER_PAGES = ['/login', '/details', '/create', '/map'];
 const HIDEEN_LAYOUT_ROUTE = '/create';
-const MYPAGE_ROUTE = '/mypage';
+const MYPAGE_ROUTE = '/profile';
 
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
