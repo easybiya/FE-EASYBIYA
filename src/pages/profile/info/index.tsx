@@ -6,7 +6,7 @@ export default function Page() {
   const { openModal } = useModalStore();
 
   return (
-    <div>
+    <>
       <Header title="기본 정보" type={4} />
       <div className="flex flex-col gap-3 px-5 py-2.5">
         <div className="flex items-center gap-2.5 py-3">
@@ -15,15 +15,15 @@ export default function Page() {
           </span>
           <p className="font-semibold text-base leading-tight">000000@gmail.com</p>
         </div>
-        <div
-          className="font-semibold text-base leading-tight py-3"
+        <button
+          className="font-semibold text-base leading-tight py-3 text-start"
           onClick={() =>
             openModal('confirm', { title: '확인', description: '회원 탈퇴 하시겠어요?' })
           }
         >
           회원 탈퇴
-        </div>
+        </button>
       </div>
-    </div>
+    </>
   );
 }

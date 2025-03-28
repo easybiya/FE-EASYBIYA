@@ -1,7 +1,10 @@
 import Header from '@/components/Layout/Header';
+import { useModalStore } from '@/store/modalStore';
 import Link from 'next/link';
 
 export default function Page() {
+  const { openModal } = useModalStore();
+
   return (
     <div>
       <Header type={5} title="내정보" />
@@ -18,7 +21,14 @@ export default function Page() {
         >
           이용 약관
         </Link>
-        <div className="py-3 font-semibold">로그아웃</div>
+        <button
+          className="py-3 font-semibold text-start"
+          onClick={() =>
+            openModal('confirm', { title: '확인', description: '로그아웃 하시겠어요?' })
+          }
+        >
+          로그아웃
+        </button>
       </div>
     </div>
   );
