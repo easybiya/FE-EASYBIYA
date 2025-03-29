@@ -11,12 +11,14 @@ interface LayoutProps {
 const HIDDEN_TABBAR_PAGES = ['/login', '/details', '/create'];
 const HIDDEN_HEADER_PAGES = ['/login', '/details', '/create', '/map'];
 const HIDEEN_LAYOUT_ROUTE = '/create';
+const MYPAGE_ROUTE = '/profile';
 
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
   const isCreatePage = router.pathname.startsWith(HIDEEN_LAYOUT_ROUTE);
+  const isMyPage = router.pathname.startsWith(MYPAGE_ROUTE);
   const hideTabBar = HIDDEN_TABBAR_PAGES.includes(router.pathname) || isCreatePage;
-  const hideHeader = HIDDEN_HEADER_PAGES.includes(router.pathname) || isCreatePage;
+  const hideHeader = HIDDEN_HEADER_PAGES.includes(router.pathname) || isCreatePage || isMyPage;
 
   return (
     <div className="flex justify-center w-full min-h-screen bg-white">
