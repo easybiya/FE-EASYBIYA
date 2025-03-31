@@ -52,7 +52,7 @@ export default function HouseCard({ info, onDelete, onAdd, isFixed }: Props) {
           />
         </div>
       </div>
-      <Link href={`/detail/${info.id}`}>
+      <Link href={`/details/${info.id}`}>
         <div className="flex w-full justify-between items-center rounded-lg bg-white border p-5">
           <div className="flex flex-col gap-1">
             <HouseTypeTag type={info.leaseType} />
