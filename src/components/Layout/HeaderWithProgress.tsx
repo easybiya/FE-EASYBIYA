@@ -11,8 +11,8 @@ export default function HeaderWithProgress({ title, totalSteps }: HeaderWithProg
   const router = useRouter();
 
   return (
-    <div className="w-full px-4">
-      <div className="mb-3 relative flex items-center justify-center">
+    <div className="w-full">
+      <div className="relative flex items-center justify-center py-2">
         <IconComponent
           name="arrowLeft"
           width={24}

@@ -24,16 +24,22 @@ export default function Header({ type, title, addAction }: HeaderProps) {
           <>
             <div className="w-6" />
             <h1 className="text-b-20">{title}</h1>
-            <div className="w-6 h-6 bg-gray-300 rounded cursor-pointer" /> {/* 닫기 */}
+            <IconComponent name="close" width={16} height={16} className="cursor-pointer" />
           </>
         );
       case 2:
         return (
           <>
             <h1 className="text-b-20">{title}</h1>
-            <div className="flex gap-2">
-              <div className="w-6 h-6 bg-gray-300 rounded cursor-pointer" /> {/* 공유 */}
-              <div className="w-6 h-6 bg-gray-300 rounded cursor-pointer" /> {/* 매물 추가 */}
+            <div className="flex gap-5">
+              <IconComponent name="share" width={16} height={16} className="cursor-pointer" />
+              <IconComponent
+                name="plus"
+                width={18}
+                height={18}
+                onClick={() => router.push('/create/room-info')}
+                className="cursor-pointer"
+              />
             </div>
           </>
         );
@@ -41,9 +47,9 @@ export default function Header({ type, title, addAction }: HeaderProps) {
         return (
           <>
             <h1 className="text-b-20">{title}</h1>
-            <div className="flex gap-2">
-              <div className="w-6 h-6 bg-gray-300 rounded cursor-pointer" /> {/* 공유 */}
-              <div className="w-6 h-6 bg-gray-300 rounded cursor-pointer" /> {/* 케밥 */}
+            <div className="flex gap-5">
+              <IconComponent name="share" width={16} height={16} className="cursor-pointer" />
+              <IconComponent name="meatball" width={27} height={27} className="cursor-pointer" />
             </div>
           </>
         );
@@ -51,7 +57,13 @@ export default function Header({ type, title, addAction }: HeaderProps) {
         return (
           <>
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-gray-300 rounded cursor-pointer" /> {/* 뒤로가기 */}
+              <IconComponent
+                name="arrowLeft"
+                width={24}
+                height={24}
+                onClick={() => router.back()}
+                className="cursor-pointer"
+              />
               <h1 className="text-b-20">{title}</h1>
             </div>
             <div className="w-6" />
@@ -79,8 +91,8 @@ export default function Header({ type, title, addAction }: HeaderProps) {
             </div>
             <IconComponent
               name="plus"
-              width={20}
-              height={20}
+              width={18}
+              height={18}
               onClick={addAction}
               className="cursor-pointer"
             />
@@ -92,7 +104,7 @@ export default function Header({ type, title, addAction }: HeaderProps) {
   };
 
   return (
-    <header className="flex items-center justify-between px-5 py-2 bg-primary shadow-[inset_1px_0_#eee,inset_-1px_0_#eee]">
+    <header className="flex items-center h-11 justify-between px-5 py-2 bg-primary shadow-[inset_1px_0_#eee,inset_-1px_0_#eee]">
       {renderContent()}
     </header>
   );

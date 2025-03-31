@@ -29,10 +29,7 @@ export default function AddPhotoPage() {
 
   return (
     <div className="px-4 h-screen bg-[#F6F5F2] flex flex-col">
-      <div className="pt-10">
-        <HeaderWithProgress title="사진 등록" totalSteps={4} />
-      </div>
-
+      <HeaderWithProgress title="사진 등록" totalSteps={4} />
       <div className="flex-grow flex flex-col items-center pt-8">
         {images.length === 0 ? (
           <label
