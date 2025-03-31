@@ -25,4 +25,5 @@ export const ICONS = {
   subway: '/icons/subway-icon.svg',
   walk: '/icons/walk-icon.svg',
   pencil: '/icons/pencil.svg',
+  pin: '/icons/pin-icon.svg',
 };

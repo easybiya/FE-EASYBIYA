@@ -2,21 +2,54 @@ import Link from 'next/link';
 import Dropdown from '../Dropdown';
 import HouseTypeTag from './HouseTypeTag';
 import { Property } from '@/types';
+import { useEffect, useState } from 'react';
+import IconComponent from '../Asset/Icon';
 
 interface Props {
   info: Property;
+  onDelete: (id: number) => void;
+  onAdd: (id: number) => void;
+  isFixed: boolean;
 }
 
-const menuList = ['수정', '삭제'];
+const defaultMenuList = ['고정하기', '수정하기', '삭제하기'];
+const cancelOptionMenuList = ['고정 해제하기', '수정하기', '삭제하기'];
 
-export default function HouseCard({ info }: Props) {
+export default function HouseCard({ info, onDelete, onAdd, isFixed }: Props) {
+  const handleSelect = (option: string) => {
+    switch (option) {
+      case '고정 해제하기':
+        if (onDelete) {
+          onDelete(info.id);
+        }
+        break;
+      case '고정하기':
+        if (onAdd) {
+          onAdd(info.id);
+        }
+        break;
+      case '수정하기':
+        console.log('수정 기능 실행');
+        break;
+      case '삭제하기':
+        console.log('삭제 기능 실행');
+        break;
+      default:
+        console.log('알 수 없는 옵션');
+    }
+  };
+
   return (
     <div className="w-full flex flex-col gap-2">
       <div className="flex justify-between items-center">
         <h1 className="font-bold text-lg">{info.propertyName}</h1>
-        <div className="flex gap-1">
-          <input type="checkbox" />
-          <Dropdown options={menuList} type="meatball" />
+        <div className="flex gap-5">
+          {isFixed && <IconComponent name="pin" width={20} height={20} />}
+          <Dropdown
+            options={isFixed ? cancelOptionMenuList : defaultMenuList}
+            type="meatball"
+            onSelect={handleSelect}
+          />
         </div>
       </div>
       <Link href={`/detail/${info.id}`}>
