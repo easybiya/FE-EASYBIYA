@@ -9,7 +9,7 @@ interface Props {
 
 export default function AvailableCalendar({ handleCalendar, currentDate }: Props) {
   return (
-    <div className="relative left-0 top-full z-10 flex w-full items-center justify-center bg-white p-12 shadow-lg rounded">
+    <div className="relative left-0 top-full z-10 flex w-full items-center justify-center bg-white py-10 shadow-lg rounded">
       <DatePicker
         selected={new Date(currentDate) ? new Date(currentDate) : null}
         onChange={(e) => handleCalendar(formatDate(e!))}

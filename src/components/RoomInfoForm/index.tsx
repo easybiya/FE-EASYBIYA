@@ -73,7 +73,7 @@ export default function RoomInfoForm() {
   return (
     <div className="px-5 pt-8">
       <Form {...form}>
-        <form className="flex flex-col gap-14" onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-14 mb-52" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name="contractType"
