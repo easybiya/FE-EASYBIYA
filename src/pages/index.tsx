@@ -1,14 +1,23 @@
-// 임시로 만들어둔 mockData입니다.
-// import HouseCard from '@/components/DashBoard/HouseCard';
-// import { House } from '@/types';
-// const mockData: House[] = [
-//   { name: '매물 1', type: 1, rentPrice: 8000, address: '서울시 중랑구' },
-//   { name: '매물 2', type: 2, rentPrice: 1000, monthPrice: 50, address: '서울시 중랑구' },
-//   { name: '매물 3', type: 3, rentPrice: 6000, monthPrice: 20, address: '서울시 중랑구' },
-//   { name: '매물 4', type: 2, rentPrice: 2000, monthPrice: 40, address: '서울시 중랑구' },
-//   { name: '매물 5', type: 1, rentPrice: 10000, address: '서울시 중랑구' },
-// ];
+import HouseCard from '@/components/DashBoard/HouseCard';
+import Dropdown from '@/components/Dropdown';
+import { mockHouserData } from '@/data/mockHouseData';
+
+const DROPDOWN_OPTION = ['최신순', '입주 빠른 순'];
 
 export default function Home() {
-  return <></>;
+  return (
+    <div className="flex flex-col px-5 py-2 gap-2">
+      <div className="flex w-full justify-between items-center">
+        <p className="text-gray-500 text-[14px]">전체 {mockHouserData.length}</p>
+        <Dropdown options={DROPDOWN_OPTION} type="select" selectedOption="최신순" />
+      </div>
+      <ul className="flex flex-col gap-4">
+        {mockHouserData.map((item) => (
+          <li key={item.id}>
+            <HouseCard info={item} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
