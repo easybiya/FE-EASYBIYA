@@ -2,8 +2,8 @@ import Link from 'next/link';
 import Dropdown from '../Dropdown';
 import HouseTypeTag from './HouseTypeTag';
 import { Property } from '@/types';
-import { useEffect, useState } from 'react';
 import IconComponent from '../Asset/Icon';
+import { formatWon } from '@/utils/formatWon';
 
 interface Props {
   info: Property;
@@ -56,10 +56,10 @@ export default function HouseCard({ info, onDelete, onAdd, isFixed }: Props) {
         <div className="flex w-full justify-between items-center rounded-lg bg-white border p-5">
           <div className="flex flex-col gap-1">
             <HouseTypeTag type={info.leaseType} />
-            <div className="flex font-bold text-base">
-              <p>보증금 {info.deposit}</p>
+            <div className="flex font-bold text-base gap-1">
+              <p>보증금 {formatWon(info.deposit)}</p>
               {info.leaseType !== 'JEONSE' && <p>/</p>}
-              {info.monthlyFee && <p>월세 {info.monthlyFee}</p>}
+              {info.monthlyFee && <p>월세 {formatWon(info.monthlyFee)}</p>}
             </div>
             <p className="text-gray-500 text-sm">{info.propertyAddress}</p>
           </div>
