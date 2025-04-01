@@ -45,7 +45,7 @@ export default function ChecklistPage() {
   };
 
   return (
-    <div className="px-4 pt-6 pb-4 bg-[#F6F5F2]">
+    <div className="px-4 pb-4 bg-[#F6F5F2]">
       <HeaderWithProgress title="체크리스트 등록" totalSteps={4} />
 
       {/* ✅ 공통 체크리스트 컴포넌트 사용 */}

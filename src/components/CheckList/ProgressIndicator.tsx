@@ -13,7 +13,7 @@ export default function ProgressIndicator({ totalSteps }: { totalSteps: number }
   const currentStep = stepMapping[router.pathname] || 1; // 현재 경로에 맞는 스텝 번호 가져오기
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center py-1">
       {[...Array(totalSteps)].map((_, index) => {
         const stepNumber = index + 1;
         const isCompleted = stepNumber < currentStep;

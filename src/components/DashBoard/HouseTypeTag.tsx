@@ -1,12 +1,15 @@
-const HOUSE_TYPE: Record<number, string> = {
-  1: '전세',
-  2: '월세',
-  3: '반전세',
+import { LeaseType } from '@/types';
+
+const HOUSE_TYPE: Record<LeaseType, string> = {
+  JEONSE: '전세',
+  MONTHLY_RENT: '월세',
+  BANJEONSE: '반전세',
 };
 
-// 어떤 식으로 타입이 올지 몰라서 일단 숫자로 타입 구분하도록 만들어뒀습니다.
-export default function HouseTypeTag({ type }: { type: number }) {
+export default function HouseTypeTag({ type }: { type: LeaseType }) {
   return (
-    <div className="px-2 py-1 rounded-md bg-slate-900 w-fit text-white">{HOUSE_TYPE[type]}</div>
+    <div className="px-1 py-[1px] h-[18px] flex items-center rounded-sm bg-gray-700 w-fit text-white text-[11px]">
+      {HOUSE_TYPE[type]}
+    </div>
   );
 }

@@ -42,7 +42,7 @@ export default function Dropdown({ options, selectedOption, onSelect, type }: Dr
           <button
             type="button"
             onClick={toggleDropdown}
-            className="flex justify-center items-center pl-4 pr-2 py-2 text-r-14 rounded-md border border-gray-300 text-gray-800 bg-white hover:bg-gray-100 focus:outline-none"
+            className="flex justify-center items-center pl-4 pr-2.5 py-2 text-r-14 rounded-md border border-gray-300 text-gray-800 bg-white hover:bg-gray-100 focus:outline-none"
           >
             {selectedOption || 'Select an option'}
             <IconComponent name={isOpen ? 'arrowUp' : 'arrowDown'} width={24} height={24} isBtn />

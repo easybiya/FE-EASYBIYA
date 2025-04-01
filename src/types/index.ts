@@ -23,7 +23,7 @@ interface PropertyImage {
   priority: number;
 }
 
-type LeaseType = 'BANJEONSE' | 'JEONSE' | 'MONTHLY_RENT';
+export type LeaseType = 'BANJEONSE' | 'JEONSE' | 'MONTHLY_RENT';
 
 export interface Property {
   id: number;
