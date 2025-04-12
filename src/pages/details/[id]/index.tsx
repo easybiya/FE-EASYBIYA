@@ -15,6 +15,7 @@ import Image from 'next/image';
 import { formatDate } from '@/utils/formatDate';
 
 export default function ChecklistDetailPage() {
+  const [isEdit, setIsEdit] = useState(false);
   const [checklist, setChecklist] = useState<CheckList>([]);
   const [, setActiveIndex] = useState(0);
   const router = useRouter();
@@ -48,6 +49,7 @@ export default function ChecklistDetailPage() {
       }
       return item;
     });
+    setIsEdit(true);
     setChecklist(updatedChecklist);
   };
 
@@ -145,7 +147,6 @@ export default function ChecklistDetailPage() {
           </div>
         </div>
       </div>
-
       <div className="flex-grow px-4 pb-10">
         <ChecklistContainer
           checklist={checklist}
@@ -153,6 +154,7 @@ export default function ChecklistDetailPage() {
           onReorderChecklist={handleDragEnd}
         />
       </div>
+      {isEdit && <div>체크리스트 수정됨</div>}
     </div>
   );
 }
