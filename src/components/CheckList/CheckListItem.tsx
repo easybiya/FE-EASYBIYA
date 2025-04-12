@@ -1,24 +1,23 @@
-import { ChecklistItemType } from '@/types/checklist';
+import { CheckItem, CheckListItem } from '@/types/checklist';
 import IconComponent from '../Asset/Icon';
 import { Draggable } from '@hello-pangea/dnd';
 
-interface ChecklistItemProps extends ChecklistItemType {
-  onChange?: (value: string | string[]) => void;
+interface ChecklistItemProps extends CheckListItem {
+  onChange: (id: number, checkItem: CheckItem) => void;
   index: number;
 }
 
 export default function ChecklistItem({
-  id,
-  type,
-  label,
-  value,
-  options = [],
-  hasInfo,
+  priority,
+  checkType,
+  title,
+  checkItems,
+  content,
   onChange,
   index,
 }: ChecklistItemProps) {
   return (
-    <Draggable draggableId={id.toString()} index={index}>
+    <Draggable draggableId={priority.toString()} index={index}>
       {(provided) => (
         <div
           {...provided.draggableProps}
@@ -34,15 +33,15 @@ export default function ChecklistItem({
                 height={16}
                 className="text-gray-400 cursor-grab"
               />
-              <p className="text-b-15">{label}</p>
-              {hasInfo && (
+              <p className="text-b-15">{title}</p>
+              {/* {hasInfo && (
                 <IconComponent
                   name="infoCircle"
                   width={16}
                   height={16}
                   className="text-gray-500 cursor-pointer"
                 />
-              )}
+              )} */}
             </div>
 
             {/* TO DO: 미트볼 버튼에 기능 추가 */}
@@ -55,46 +54,40 @@ export default function ChecklistItem({
           </div>
 
           {/* 텍스트 */}
-          {type === 'text' && <p className="text-r-14">{value}</p>}
+          {checkType === 'TEXT' && <p className="text-r-14">{content}</p>}
 
           {/* 단일 선택 (라디오 버튼) */}
-          {type === 'radio' && (
+          {checkType === 'RADIO' && (
             <div className="flex flex-col gap-2 mt-1">
-              {options.map((option) => (
-                <label key={option} className="flex items-center gap-2 text-r-14">
+              {checkItems.map((option) => (
+                <label key={option.priority} className="flex items-center gap-2 text-r-14">
                   <input
                     type="radio"
-                    name={label}
-                    value={option}
-                    checked={value === option}
-                    onChange={() => onChange?.(option)}
+                    name={option.description}
+                    checked={option.checked}
+                    onChange={() => {
+                      onChange(priority, option);
+                    }}
                     className="w-4 h-4 accent-black"
                   />
-                  {option}
+                  {option.description}
                 </label>
               ))}
             </div>
           )}
 
           {/* 다중 선택 (체크박스) */}
-          {type === 'checkbox' && (
+          {checkType === 'CHECKBOX' && (
             <div className="flex flex-col gap-2 mt-1">
-              {options.map((option) => (
-                <label key={option} className="flex items-center gap-2 text-r-14">
+              {checkItems.map((option) => (
+                <label key={option.priority} className="flex items-center gap-2 text-r-14">
                   <input
                     type="checkbox"
-                    value={option}
-                    checked={Array.isArray(value) && value.includes(option)}
-                    onChange={() => {
-                      if (!Array.isArray(value)) return;
-                      const newValue = value.includes(option)
-                        ? value.filter((v) => v !== option)
-                        : [...value, option];
-                      onChange?.(newValue);
-                    }}
+                    checked={option.checked}
+                    onChange={() => onChange(priority, option)}
                     className="w-4 h-4 accent-black"
                   />
-                  {option}
+                  {option.description}
                 </label>
               ))}
             </div>

@@ -4,68 +4,72 @@ import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import ChecklistContainer from '@/components/CheckList/CheckListContainer';
-import { ChecklistItemType } from '@/types/checklist';
+import { CheckItem, CheckList } from '@/types/checklist';
 import { DropResult } from '@hello-pangea/dnd';
 import Header from '@/components/Layout/Header';
-import Chips from '@/components/Button/ChipsButton';
-
-// 임시 데이터
-const propertyData = {
-  title: '합정동 A',
-  rentalType: '월세',
-  deposit: '3,000',
-  monthlyRent: '80',
-  address: '서울시 마포구 합정동 343',
-  images: [
-    '/images/room.png',
-    '/images/room.png',
-    '/images/room.png',
-    '/images/room.png',
-    '/images/room.png',
-    '/images/room.png',
-    '/images/room.png',
-    '/images/room.png',
-  ],
-};
+import { mockCheckList, mockHouserData } from '@/data/mockHouseData';
+import { useRouter } from 'next/router';
+import { formatWon } from '@/utils/formatWon';
+import HouseTypeTag from '@/components/DashBoard/HouseTypeTag';
+import Image from 'next/image';
+import { formatDate } from '@/utils/formatDate';
 
 export default function ChecklistDetailPage() {
-  const [checklist, setChecklist] = useState<ChecklistItemType[]>([]);
+  const [checklist, setChecklist] = useState<CheckList>([]);
   const [, setActiveIndex] = useState(0);
+  const router = useRouter();
+  const { id } = router.query;
+  const propertyData = mockHouserData.find((item) => item.id === Number(id));
 
   useEffect(() => {
-    const savedChecklist = localStorage.getItem('checklist');
-    if (savedChecklist) {
-      setChecklist(JSON.parse(savedChecklist));
+    const checkListData = mockCheckList;
+    if (checkListData) {
+      setChecklist(mockCheckList);
     }
   }, []);
 
-  const updateChecklistValue = (id: number, newValue: string | string[]) => {
-    setChecklist((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              value: item.type === 'checkbox' && Array.isArray(newValue) ? [...newValue] : newValue,
-            }
-          : item,
-      ),
-    );
-    localStorage.setItem('checklist', JSON.stringify(checklist));
+  const updateChecklistValue = (id: number, checkItem: CheckItem) => {
+    const updatedChecklist = checklist.map((item) => {
+      if (item.priority !== id) return item;
+      // CHECKBOX 타입: 해당 항목만 checked 상태 토글
+      if (item.checkType === 'CHECKBOX') {
+        const updatedCheckItems = item.checkItems.map((ci) =>
+          ci.priority === checkItem.priority ? { ...ci, checked: !ci.checked } : ci,
+        );
+        return { ...item, checkItems: updatedCheckItems };
+      }
+      // RADIO 타입: 해당 항목만 checked = true, 나머지는 false
+      if (item.checkType === 'RADIO') {
+        const updatedCheckItems = item.checkItems.map((ci) => ({
+          ...ci,
+          checked: ci.priority === checkItem.priority,
+        }));
+        return { ...item, checkItems: updatedCheckItems };
+      }
+      return item;
+    });
+    setChecklist(updatedChecklist);
   };
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
-    const items = Array.from(checklist);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    setChecklist([...items]);
-    localStorage.setItem('checklist', JSON.stringify(items));
+    const updatedChecklist = [...checklist];
+    const [movedItem] = updatedChecklist.splice(result.source.index, 1);
+    updatedChecklist.splice(result.destination.index, 0, movedItem);
+    const reorderedWithPriority = updatedChecklist.map((item, index) => ({
+      ...item,
+      priority: index + 1,
+    }));
+    setChecklist(reorderedWithPriority);
   };
+
+  if (!propertyData) {
+    return <div>매물 정보가 없습니다.</div>;
+  }
 
   return (
     <div className="h-full flex flex-col bg-[#F6F5F2]">
-      <Header type={3} title={propertyData.title} />
-
+      <Header type={3} title={propertyData.propertyName!} />
       <div className="w-full h-[202px] relative">
         <Swiper
           modules={[Pagination]}
@@ -75,13 +79,16 @@ export default function ChecklistDetailPage() {
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
           className="h-full"
         >
-          {propertyData.images.map((src, index) => (
+          {propertyData.propertyImages.map((image, index) => (
             <SwiperSlide key={index}>
-              <img src={src} alt={`room-${index}`} className="w-full h-full object-cover" />
+              <img
+                src={image.imageUrl}
+                alt={`roomImage${index}`}
+                className="w-full h-full object-cover"
+              />
             </SwiperSlide>
           ))}
         </Swiper>
-
         <style jsx global>{`
           .swiper-pagination {
             display: flex !important;
@@ -110,16 +117,33 @@ export default function ChecklistDetailPage() {
           }
         `}</style>
       </div>
-
-      <div className="px-4 mt-7">
-        <Chips label={propertyData.rentalType} />
-      </div>
-
-      <div className="px-4 mt-1">
-        <h2 className="text-b-18">
-          보증금 {propertyData.deposit} / 월세 {propertyData.monthlyRent}
-        </h2>
-        <p className="text-r-15 mt-1">{propertyData.address}</p>
+      <div className="flex flex-col gap-2.5 px-4 mt-7">
+        <div className=" flex flex-col gap-1">
+          <HouseTypeTag type={propertyData.leaseType} />
+          {propertyData.leaseType === 'JEONSE' ? (
+            <h2 className="text-b-18">보증금 {formatWon(propertyData.deposit)}</h2>
+          ) : (
+            <h2 className="text-b-18">
+              보증금 {formatWon(propertyData.deposit!)} / 월세 {formatWon(propertyData.monthlyFee!)}
+            </h2>
+          )}
+          <p className="text-r-15 text-[15px]">{propertyData?.propertyAddress}</p>
+        </div>
+        <div className="flex gap-1 items-center">
+          <Image
+            src="/icons/calendar-brown.svg"
+            color="#94896A"
+            width={10}
+            height={10}
+            alt="캘린더 아이콘"
+          />
+          <div className="flex gap-2 text-brownText text-r-12">
+            <span className="font-semibold">입주 가능 일자</span>
+            <p className="flex items-center ">
+              {formatDate(new Date(propertyData.availableDate), 2)}
+            </p>
+          </div>
+        </div>
       </div>
 
       <div className="flex-grow px-4 pb-10">

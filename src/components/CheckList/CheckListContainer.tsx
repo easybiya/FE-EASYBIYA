@@ -1,11 +1,11 @@
 import React from 'react';
 import CheckListItem from '@/components/CheckList/CheckListItem';
 import { DragDropContext, DropResult, Droppable } from '@hello-pangea/dnd';
-import { ChecklistItemType } from '@/types/checklist';
+import { CheckItem, CheckList } from '@/types/checklist';
 
 interface ChecklistContainerProps {
-  checklist: ChecklistItemType[];
-  onUpdateChecklist: (id: number, newValue: string | string[]) => void;
+  checklist: CheckList;
+  onUpdateChecklist: (id: number, checkItem: CheckItem) => void;
   onReorderChecklist: (result: DropResult) => void;
 }
 
@@ -21,10 +21,10 @@ export default function ChecklistContainer({
           <div className="mt-4 space-y-4" ref={provided.innerRef} {...provided.droppableProps}>
             {checklist.map((item, index) => (
               <CheckListItem
-                key={item.id}
+                key={item.priority}
                 index={index}
                 {...item}
-                onChange={(value) => onUpdateChecklist(item.id, value)}
+                onChange={onUpdateChecklist}
               />
             ))}
             {provided.placeholder}
