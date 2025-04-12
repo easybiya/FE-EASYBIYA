@@ -7,15 +7,31 @@ export type ChecklistItemType = {
   hasInfo?: boolean;
 };
 
-type CheckType = 'TEXT' | 'RADIO' | 'CHECKBOX';
+export type CheckType = 'TEXT' | 'RADIO' | 'CHECKBOX';
 
-type ChecklistItem = {
+type ChecklistTemplateItem = {
   title: string;
   checkType: CheckType;
   checkItems: string[];
 };
 
+export type CheckItem = {
+  description: string;
+  checked: boolean;
+  priority: number;
+};
+
+export type CheckListItem = {
+  title: string;
+  checkType: CheckType;
+  content: string;
+  priority: number;
+  checkItems: CheckItem[];
+};
+
+export type CheckList = CheckListItem[];
+
 export type ChecklistTemplate = {
   name: string;
-  checklists: ChecklistItem[];
+  checklists: ChecklistTemplateItem[];
 };
