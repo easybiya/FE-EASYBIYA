@@ -6,8 +6,18 @@ import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
 import { DropResult } from '@hello-pangea/dnd';
 import { ChecklistItem, ChecklistItemType } from '@/types/checklist';
 
+interface ChecklistApiResponse {
+  isSuccess: boolean;
+  message: string;
+  result?: {
+    name: string;
+    checklists: ChecklistItem[];
+  };
+}
+
 export default function ChecklistPage() {
   const [checklist, setChecklist] = useState<ChecklistItemType[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const transformApiChecklist = (apiData: ChecklistItem[]): ChecklistItemType[] => {
     return apiData.map((item, index) => ({
@@ -24,25 +34,28 @@ export default function ChecklistPage() {
     }));
   };
 
-  useEffect(() => {
-    const fetchTemplate = async () => {
-      try {
-        const response = await fetch('/api/template/default');
-        const data = await response.json();
+  const fetchTemplate = async (signal: AbortSignal) => {
+    try {
+      const response = await fetch('/api/template/default', { signal });
+      const data: ChecklistApiResponse = await response.json();
 
-        console.log('API 응답:', data);
-
-        if (data.isSuccess && data.result?.checklists) {
-          const transformed = transformApiChecklist(data.result.checklists);
-          console.log('변환된 checklist:', transformed);
-          setChecklist(transformed);
-        }
-      } catch (error) {
-        console.error('체크리스트 템플릿 불러오기 실패:', error);
+      if (!data.isSuccess || !data.result?.checklists) {
+        throw new Error('템플릿 데이터를 불러오지 못했습니다.');
       }
-    };
 
-    fetchTemplate();
+      const transformed = transformApiChecklist(data.result.checklists);
+      setChecklist(transformed);
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') return;
+      setError('체크리스트 템플릿을 불러오는 중 문제가 발생했습니다.');
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchTemplate(controller.signal);
+    return () => controller.abort();
   }, []);
 
   const updateChecklistValue = (id: number, newValue: string | string[]) => {
@@ -71,6 +84,8 @@ export default function ChecklistPage() {
   return (
     <div className="px-4 pb-4 bg-[#F6F5F2]">
       <HeaderWithProgress title="체크리스트 등록" totalSteps={4} />
+
+      {error && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-md">{error}</div>}
 
       <ChecklistContainer
         checklist={checklist}
