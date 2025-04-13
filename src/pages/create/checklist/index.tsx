@@ -82,27 +82,38 @@ export default function ChecklistPage() {
   };
 
   return (
-    <div className="px-4 pb-4 bg-[#F6F5F2]">
-      <HeaderWithProgress title="체크리스트 등록" totalSteps={4} />
+    <div className="flex justify-center bg-[#F6F5F2]">
+      <div className="relative w-full max-w-[430px] h-screen flex flex-col">
+        <HeaderWithProgress title="체크리스트 등록" totalSteps={4} />
 
-      {error && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-md">{error}</div>}
+        <div className="flex-1 overflow-y-auto px-4 pb-48 no-scrollbar">
+          {error && (
+            <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-md">{error}</div>
+          )}
 
-      <ChecklistContainer
-        checklist={checklist}
-        onUpdateChecklist={updateChecklistValue}
-        onReorderChecklist={handleDragEnd}
-      />
+          <ChecklistContainer
+            checklist={checklist}
+            onUpdateChecklist={updateChecklistValue}
+            onReorderChecklist={handleDragEnd}
+          />
 
-      <div className="mt-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-3">체크리스트 추가</h2>
-        <div className="grid grid-cols-3 gap-3">
-          <ChecklistAddButton label="중복 선택" iconName="addListCheck" />
-          <ChecklistAddButton label="단일 선택" iconName="addListRadio" />
-          <ChecklistAddButton label="텍스트" iconName="addListText" />
+          <div className="mt-6">
+            <h2 className="text-lg font-bold text-gray-900 mb-3">체크리스트 추가</h2>
+            <div className="grid grid-cols-3 gap-3">
+              <ChecklistAddButton label="중복 선택" iconName="addListCheck" />
+              <ChecklistAddButton label="단일 선택" iconName="addListRadio" />
+              <ChecklistAddButton label="텍스트" iconName="addListText" />
+            </div>
+          </div>
+        </div>
+
+        <div className="pointer-events-none fixed bottom-[128px] left-1/2 -translate-x-1/2 w-full max-w-[430px] h-10 bg-gradient-to-t from-[#F6F5F2] to-transparent z-20" />
+
+        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-[#F6F5F2] z-30 px-4 pt-2 pb-6">
+          <CustomButton label="완료" variant="primary" fullWidth />
+          <CustomButton label="건너뛰기" variant="ghost" fullWidth />
         </div>
       </div>
-
-      <CustomButton label="템플릿 저장" variant="secondary" fullWidth className="mt-5 mb-6" />
     </div>
   );
 }
