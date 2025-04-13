@@ -11,6 +11,7 @@ const previousRouteMap: { [key: string]: string } = {
   '/create/checklist': '/create/add-photo',
   '/create/add-photo': '/create/room-address',
   '/create/room-address': '/create/room-info',
+  '/create/room-info': '/',
 };
 
 export default function HeaderWithProgress({ title, totalSteps }: HeaderWithProgressProps) {
@@ -23,7 +24,7 @@ export default function HeaderWithProgress({ title, totalSteps }: HeaderWithProg
     if (prevPath) {
       router.push(prevPath);
     } else {
-      router.back(); 
+      router.back();
     }
   };
 
