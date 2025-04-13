@@ -3,6 +3,7 @@ import ChecklistContainer from '@/components/CheckList/CheckListContainer';
 import CustomButton from '@/components/Button/CustomButton';
 import ChecklistAddButton from '@/components/Button/CheckListAddButton';
 import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
+import ChecklistModal from '@/components/Modal/checkListEditModal';
 import { DropResult } from '@hello-pangea/dnd';
 import { ChecklistItem, ChecklistItemType } from '@/types/checklist';
 
@@ -18,6 +19,9 @@ interface ChecklistApiResponse {
 export default function ChecklistPage() {
   const [checklist, setChecklist] = useState<ChecklistItemType[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [editingItemId, setEditingItemId] = useState<number | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMode, setModalMode] = useState<'edit' | 'confirm'>('edit');
 
   const transformApiChecklist = (apiData: ChecklistItem[]): ChecklistItemType[] => {
     return apiData.map((item, index) => ({
@@ -72,15 +76,27 @@ export default function ChecklistPage() {
   };
 
   const handleEditChecklist = (id: number) => {
-    const newLabel = prompt('새 제목을 입력하세요');
-    if (!newLabel) return;
+    setEditingItemId(id);
+    setModalMode('edit');
+    setShowModal(true);
+  };
+
+  const handleEditSubmit = (newLabel: string) => {
     setChecklist((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, label: newLabel } : item)),
+      prev.map((item) => (item.id === editingItemId ? { ...item, label: newLabel } : item)),
     );
   };
 
   const handleDeleteChecklist = (id: number) => {
-    setChecklist((prev) => prev.filter((item) => item.id !== id));
+    setEditingItemId(id);
+    setModalMode('confirm');
+    setShowModal(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (editingItemId !== null) {
+      setChecklist((prev) => prev.filter((item) => item.id !== editingItemId));
+    }
   };
 
   const handleDragEnd = (result: DropResult) => {
@@ -134,6 +150,24 @@ export default function ChecklistPage() {
           />
           <CustomButton label="건너뛰기" variant="ghost" fullWidth className="mt-2 h-10 text-sm" />
         </div>
+
+        {showModal && editingItemId !== null && (
+          <ChecklistModal
+            mode={modalMode}
+            title={modalMode === 'edit' ? '수정하시겠습니까?' : '정말 삭제하시겠습니까?'}
+            defaultValue={
+              modalMode === 'edit'
+                ? checklist.find((item) => item.id === editingItemId)?.label ?? ''
+                : ''
+            }
+            confirmText={modalMode === 'edit' ? '확인' : '삭제'}
+            onClose={() => setShowModal(false)}
+            onConfirm={(value) => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+              modalMode === 'edit' ? handleEditSubmit(value as string) : handleConfirmDelete();
+            }}
+          />
+        )}
       </div>
     </div>
   );
