@@ -28,4 +28,6 @@ export const ICONS = {
   pin: '/icons/pin-icon.svg',
   share: '/icons/share-icon.svg',
   bigCheck: '/icons/big-check.svg',
+  yellowCheck: 'icons/yellow-check.svg',
+  logo: 'icons/logo.svg',
 };
