@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ChecklistTemplate } from '@/types/checklist';
 
+// TO DO: 서버 열리면 수정하기
+
 const defaultTemplate: ChecklistTemplate = {
   name: '기본 템플릿',
   checklists: [

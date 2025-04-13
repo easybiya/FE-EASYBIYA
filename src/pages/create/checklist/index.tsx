@@ -3,7 +3,7 @@ import ChecklistContainer from '@/components/CheckList/CheckListContainer';
 import CustomButton from '@/components/Button/CustomButton';
 import ChecklistAddButton from '@/components/Button/CheckListAddButton';
 import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
-import ChecklistModal from '@/components/Modal/checkListEditModal';
+import ChecklistModal from '@/components/Modal/ChecklistModal';
 import { DropResult } from '@hello-pangea/dnd';
 import { ChecklistItem, ChecklistItemType } from '@/types/checklist';
 
