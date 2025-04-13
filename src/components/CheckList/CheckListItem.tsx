@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from 'react';
 import { ChecklistItemType } from '@/types/checklist';
 import IconComponent from '../Asset/Icon';
 import { Draggable } from '@hello-pangea/dnd';
@@ -5,6 +6,8 @@ import { Draggable } from '@hello-pangea/dnd';
 interface ChecklistItemProps extends ChecklistItemType {
   onChange?: (value: string | string[]) => void;
   index: number;
+  onEdit?: (id: number) => void; 
+  onDelete?: (id: number) => void; 
 }
 
 export default function ChecklistItem({
@@ -16,7 +19,26 @@ export default function ChecklistItem({
   hasInfo,
   onChange,
   index,
+  onEdit,
+  onDelete,
 }: ChecklistItemProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // 메뉴 외부 클릭 시 닫기
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <Draggable draggableId={id.toString()} index={index}>
       {(provided) => (
@@ -26,7 +48,7 @@ export default function ChecklistItem({
           ref={provided.innerRef}
           className="flex flex-col pt-4 pr-2 pb-4 pl-4 border border-gray-300 rounded-lg bg-white shadow-sm"
         >
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-2 relative">
             <div className="flex items-center gap-2">
               <IconComponent
                 name="drag"
@@ -45,13 +67,39 @@ export default function ChecklistItem({
               )}
             </div>
 
-            {/* TO DO: 미트볼 버튼에 기능 추가 */}
-            <IconComponent
-              name="meatballGray"
-              width={16}
-              height={16}
-              className="text-gray-500 cursor-pointer"
-            />
+            {/* 미트볼 버튼 + 드롭다운 */}
+            <div className="relative" ref={menuRef}>
+              <IconComponent
+                name="meatballGray"
+                width={16}
+                height={16}
+                className="text-gray-500 cursor-pointer"
+                onClick={() => setIsMenuOpen((prev) => !prev)}
+              />
+
+              {isMenuOpen && (
+                <div className="absolute right-0 z-10 mt-2 w-28 bg-white border border-gray-200 rounded shadow-md">
+                  <button
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
+                    onClick={() => {
+                      onEdit?.(id);
+                      setIsMenuOpen(false);
+                    }}
+                  >
+                    수정하기
+                  </button>
+                  <button
+                    className="w-full px-4 py-2 text-left text-sm text-red-500 hover:bg-gray-100"
+                    onClick={() => {
+                      onDelete?.(id);
+                      setIsMenuOpen(false);
+                    }}
+                  >
+                    삭제하기
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* 텍스트 */}

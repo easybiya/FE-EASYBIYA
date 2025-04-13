@@ -71,6 +71,18 @@ export default function ChecklistPage() {
     );
   };
 
+  const handleEditChecklist = (id: number) => {
+    const newLabel = prompt('새 제목을 입력하세요');
+    if (!newLabel) return;
+    setChecklist((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, label: newLabel } : item)),
+    );
+  };
+
+  const handleDeleteChecklist = (id: number) => {
+    setChecklist((prev) => prev.filter((item) => item.id !== id));
+  };
+
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
@@ -95,6 +107,8 @@ export default function ChecklistPage() {
             checklist={checklist}
             onUpdateChecklist={updateChecklistValue}
             onReorderChecklist={handleDragEnd}
+            onEditChecklist={handleEditChecklist}
+            onDeleteChecklist={handleDeleteChecklist}
           />
 
           <div className="mt-6">
