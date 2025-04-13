@@ -16,3 +16,31 @@ export interface House {
 export type HouseType = 'JEONSE' | 'BANJEONSE' | 'MONTHLY_RENT';
 
 export type FeeType = 'DEPOSIT' | 'MONTHLY_RENT' | 'MAINTENANCE_FEE';
+
+interface PropertyImage {
+  imageId: number;
+  imageUrl: string;
+  priority: number;
+}
+
+export type LeaseType = 'BANJEONSE' | 'JEONSE' | 'MONTHLY_RENT';
+
+export interface Property {
+  id: number;
+  propertyName: string;
+  leaseType: LeaseType;
+  deposit: number;
+  monthlyFee: number | null;
+  maintenanceFee: number | null;
+  availableDate: string; // ISO 날짜 문자열
+  propertyAddress: string;
+  propertyDetailedAddress: string;
+  propertyImages: PropertyImage[];
+}
+
+export interface Institution {
+  institutionName: string;
+  institutionAddress: string;
+  institutionLatitude: number;
+  institutionLongitude: number;
+}

@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
 import CustomButton from '@/components/Button/CustomButton';
 import IconComponent from '@/components/Asset/Icon';
+import FixedBar from '@/components/FixedBar';
 
 export default function AddPhotoPage() {
   const [images, setImages] = useState<string[]>([]);
@@ -28,10 +29,7 @@ export default function AddPhotoPage() {
 
   return (
     <div className="px-4 h-screen bg-[#F6F5F2] flex flex-col">
-      <div className="pt-10">
-        <HeaderWithProgress title="사진 등록" totalSteps={4} />
-      </div>
-
+      <HeaderWithProgress title="사진 등록" totalSteps={4} />
       <div className="flex-grow flex flex-col items-center pt-8">
         {images.length === 0 ? (
           <label
@@ -91,22 +89,11 @@ export default function AddPhotoPage() {
         multiple
         onChange={handleImageUpload}
       />
-
-      <div className="pb-6">
-        <CustomButton
-          label="다음"
-          fullWidth
-          disabled={images.length === 0}
-          onClick={goToChecklist}
-        />
-        <CustomButton
-          label="건너 뛰기"
-          variant="ghost"
-          fullWidth
-          className="mt-2"
-          onClick={goToChecklist}
-        />
-      </div>
+      <FixedBar
+        disabled={images.length === 0}
+        skipRoute="/create/checklist"
+        onClick={goToChecklist}
+      />
     </div>
   );
 }

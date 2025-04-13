@@ -6,3 +6,16 @@ export type ChecklistItemType = {
   options?: string[];
   hasInfo?: boolean;
 };
+
+type CheckType = 'TEXT' | 'RADIO' | 'CHECKBOX';
+
+type ChecklistItem = {
+  title: string;
+  checkType: CheckType;
+  checkItems: string[];
+};
+
+export type ChecklistTemplate = {
+  name: string;
+  checklists: ChecklistItem[];
+};

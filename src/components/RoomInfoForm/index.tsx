@@ -7,9 +7,9 @@ import { HouseType } from '@/types';
 import HouseTypeSelectContainer from './HouseTypeSelectContainer';
 import HouseFeeInput from './HouseFeeInput';
 import AvailableCalendar from './AvaliableCalendar';
-import Button from '../Button/CustomButton';
 import IconComponent from '../Asset/Icon';
 import { formatDate } from '@/utils/formatDate';
+import FixedBar from '../FixedBar';
 
 type roomInfoSchema = {
   contractType: HouseType;
@@ -71,15 +71,15 @@ export default function RoomInfoForm() {
   };
 
   return (
-    <div className="p-5">
+    <div className="px-5 pt-8">
       <Form {...form}>
-        <form className="flex flex-col gap-14" onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-14 mb-52" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name="contractType"
             render={() => (
               <FormItem>
-                <FormLabel className="text-[18px] font-bold">계약 형태</FormLabel>
+                <FormLabel className="text-md font-bold">계약 형태</FormLabel>
                 <FormControl>
                   <HouseTypeSelectContainer
                     handleClick={handleRoomType}
@@ -90,7 +90,7 @@ export default function RoomInfoForm() {
             )}
           />
           <div className="flex flex-col gap-3">
-            <FormLabel className="text-[18px] font-bold">계약 금액</FormLabel>
+            <FormLabel className="text-md font-bold">계약 금액</FormLabel>
             <FormField
               control={form.control}
               name="deposit"
@@ -143,9 +143,9 @@ export default function RoomInfoForm() {
             />
           </div>
           <div className="flex flex-col gap-3 cursor-pointer">
-            <FormLabel className="text-[18px] font-bold">입주 가능 날짜</FormLabel>
+            <FormLabel className="text-md font-bold">입주 가능 날짜</FormLabel>
             <div
-              className="flex items-center justify-between px-3 py-2 rounded border"
+              className="flex items-center justify-between px-3 py-2 rounded border bg-white"
               onClick={() => setIsOpen(!isOpen)}
             >
               <div className="flex gap-[6px] items-center">
@@ -158,7 +158,10 @@ export default function RoomInfoForm() {
               <AvailableCalendar handleCalendar={handleCalendar} currentDate={currentDate} />
             )}
           </div>
-          <Button disabled={!form.formState.isValid || isPending} label="다음" className="w-full" />
+          <FixedBar
+            disabled={!form.formState.isValid || isPending}
+            skipRoute="/create/room-address"
+          />
         </form>
       </Form>
     </div>

@@ -1,3 +1,4 @@
+import { Institution } from '@/types';
 import { Result } from '@/types/odsay';
 import { getCoordinates } from '@/utils/getCoordinates';
 import { searchPubTransPathAJAX } from '@/utils/searchPath';
@@ -22,14 +23,14 @@ export default function RouteInfo({
   fixedSpot,
   spotAddress,
 }: {
-  fixedSpot: Item;
+  fixedSpot: Institution;
   spotAddress: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const { data, isLoading } = useQuery({
-    queryKey: [fixedSpot.address, spotAddress],
+    queryKey: [fixedSpot.institutionAddress, spotAddress],
     queryFn: async () => {
-      const fixedCoorder = await getCoordinates(fixedSpot.address);
+      const fixedCoorder = await getCoordinates(fixedSpot.institutionAddress);
       const spotCoorder = await getCoordinates(spotAddress);
       const result: Result = await searchPubTransPathAJAX({
         sx: String(spotCoorder.x),
@@ -53,7 +54,7 @@ export default function RouteInfo({
         className="flex h-20 justify-between items-center p-4"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <p>{fixedSpot.name}</p>
+        <p>{fixedSpot.institutionName}</p>
         소요시간: {data?.info.totalTime}분
       </div>
       {isOpen && (

@@ -6,7 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
 import Image from 'next/image';
-import { createRoomZodSchema } from '@/lib/zodSchema';
+import { createInstitutionZodSchema } from '@/lib/zodSchema';
 import FixedBar from '../FixedBar';
 
 declare global {
@@ -16,28 +16,26 @@ declare global {
   }
 }
 
-type CreateRoomSchema = {
+type InstitutionSchema = {
   address: string;
-  addressDetail: string;
   nickName: string;
 };
 
-export default function SearchAddress() {
+export default function InstitutionForm() {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [addressCoordinate, setAddressCoordinate] = useState({ x: '', y: '' });
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<CreateRoomSchema>({
-    resolver: zodResolver(createRoomZodSchema),
+  const form = useForm<InstitutionSchema>({
+    resolver: zodResolver(createInstitutionZodSchema),
     defaultValues: {
       address: '',
-      addressDetail: '',
       nickName: '',
     },
     mode: 'onBlur',
   });
 
-  const onSubmit: SubmitHandler<CreateRoomSchema> = (values) => {
+  const onSubmit: SubmitHandler<InstitutionSchema> = (values) => {
     startTransition(async () => {
       console.log(values, addressCoordinate); // 주소 및 좌표 설정 API
     });
@@ -53,7 +51,7 @@ export default function SearchAddress() {
       // 카카오맵 API활용, 주소 -> 좌표 변환 로직
       if (status === window.kakao.maps.services.Status.OK) {
         setAddressCoordinate({ x: result[0].x, y: result[0].y });
-        form.setValue('nickName', result[0].road_address.region_3depth_name); // 행정동을 기본 매물 이름으로 설정
+        form.setValue('nickName', result[0].road_address.building_name); // 건물 이름을 기본 값으로 설정
         form.trigger('nickName');
         setIsSearchModalOpen(false);
       }
@@ -82,15 +80,20 @@ export default function SearchAddress() {
   }, [initMap]);
 
   return (
-    <div className="relative h-[calc(100vh-110px)]">
+    <div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="py-8 px-5 h-full flex flex-col justify-between"
+          className="h-full flex flex-col justify-between"
         >
           <div className="flex flex-col gap-14">
             <div className="flex flex-col gap-[6px]">
-              <FormLabel className="mb-2 text-[16px] font-bold">집 주소</FormLabel>
+              <div className="flex gap-1.5">
+                <FormLabel className="mb-2 text-[16px] font-bold">직장/학교 주소</FormLabel>
+                <p className="text-[12px] text-gray-500 mb-2 justify-center flex flex-col">
+                  상세 주소 생략
+                </p>
+              </div>
               <div onClick={() => setIsSearchModalOpen(true)} className="cursor-pointer relative">
                 <FormField
                   control={form.control}
@@ -117,50 +120,22 @@ export default function SearchAddress() {
                   className="absolute right-3 top-2"
                 />
               </div>
-              <FormField
-                control={form.control}
-                name="addressDetail"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="상세 주소를 입력해 주세요"
-                        className="bg-white py-2 h-10"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
-            <div className="flex flex-col gap-[6px]">
-              <FormField
-                control={form.control}
-                name="nickName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="mb-2 text-[16px] font-bold">집 별명</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="집 별명을 입력해 주세요"
-                        className="bg-white py-2 h-10"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <p className="text-[12px] text-gray-500 h-6 justify-center flex flex-col">
-                예&#41; 합정동 매물 1
-              </p>
-            </div>
+            <FormField
+              control={form.control}
+              name="nickName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="mb-2 text-[16px] font-bold">직장/학교명</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="직장명/학교명" className="bg-white py-2 h-10" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
-          <FixedBar
-            disabled={!form.formState.isValid && !isPending}
-            skipRoute="/create/add-photo"
-          />
+          <FixedBar disabled={!form.formState.isValid && !isPending} skipRoute="/" />
         </form>
       </Form>
       {isSearchModalOpen && (
