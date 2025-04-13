@@ -8,6 +8,7 @@ import { DropResult } from '@hello-pangea/dnd';
 import { ChecklistItem, ChecklistItemType } from '@/types/checklist';
 import Toast from '@/components/Toast';
 import { useToastStore } from '@/store/toastStore';
+import ChecklistComplete from '@/components/CompletePage';
 
 interface ChecklistApiResponse {
   isSuccess: boolean;
@@ -25,6 +26,7 @@ export default function ChecklistPage() {
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<'edit' | 'confirm'>('edit');
   const [showSaveModal, setShowSaveModal] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const transformApiChecklist = (apiData: ChecklistItem[]): ChecklistItemType[] => {
     return apiData.map((item, index) => ({
@@ -115,86 +117,97 @@ export default function ChecklistPage() {
   return (
     <div className="flex justify-center bg-[#F6F5F2]">
       <div className="relative w-full max-w-[430px] h-screen flex flex-col">
-        <HeaderWithProgress title="체크리스트 등록" totalSteps={4} />
+        {isCompleted ? (
+          <ChecklistComplete />
+        ) : (
+          <>
+            <HeaderWithProgress title="체크리스트 등록" totalSteps={4} />
 
-        <div className="flex-1 overflow-y-auto px-4 pb-48 no-scrollbar">
-          {error && (
-            <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-md">{error}</div>
-          )}
+            <div className="flex-1 overflow-y-auto px-4 pb-48 no-scrollbar">
+              {error && (
+                <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-md">{error}</div>
+              )}
 
-          <ChecklistContainer
-            checklist={checklist}
-            onUpdateChecklist={updateChecklistValue}
-            onReorderChecklist={handleDragEnd}
-            onEditChecklist={handleEditChecklist}
-            onDeleteChecklist={handleDeleteChecklist}
-          />
+              <ChecklistContainer
+                checklist={checklist}
+                onUpdateChecklist={updateChecklistValue}
+                onReorderChecklist={handleDragEnd}
+                onEditChecklist={handleEditChecklist}
+                onDeleteChecklist={handleDeleteChecklist}
+              />
 
-          <div className="mt-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-3">체크리스트 추가</h2>
-            <div className="grid grid-cols-3 gap-3">
-              <ChecklistAddButton label="중복 선택" iconName="addListCheck" />
-              <ChecklistAddButton label="단일 선택" iconName="addListRadio" />
-              <ChecklistAddButton label="텍스트" iconName="addListText" />
+              <div className="mt-6">
+                <h2 className="text-lg font-bold text-gray-900 mb-3">체크리스트 추가</h2>
+                <div className="grid grid-cols-3 gap-3">
+                  <ChecklistAddButton label="중복 선택" iconName="addListCheck" />
+                  <ChecklistAddButton label="단일 선택" iconName="addListRadio" />
+                  <ChecklistAddButton label="텍스트" iconName="addListText" />
+                </div>
+              </div>
+
+              <CustomButton
+                label="템플릿 저장"
+                variant="secondary"
+                fullWidth
+                className="mt-5 mb-6"
+                onClick={() => setShowSaveModal(true)}
+              />
             </div>
-          </div>
 
-          <CustomButton
-            label="템플릿 저장"
-            variant="secondary"
-            fullWidth
-            className="mt-5 mb-6"
-            onClick={() => setShowSaveModal(true)}
-          />
-        </div>
+            <div className="pointer-events-none fixed bottom-[136px] left-1/2 -translate-x-1/2 w-full max-w-[430px] h-10 bg-gradient-to-t from-[#F6F5F2] to-transparent z-20" />
 
-        <div className="pointer-events-none fixed bottom-[136px] left-1/2 -translate-x-1/2 w-full max-w-[430px] h-10 bg-gradient-to-t from-[#F6F5F2] to-transparent z-20" />
+            <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-[#F6F5F2] z-30 px-4 pt-2 pb-6">
+              <CustomButton
+                label="완료"
+                variant="primary"
+                fullWidth
+                className="h-11 text-sm rounded-md"
+                onClick={() => setIsCompleted(true)}
+              />
+              <CustomButton
+                label="건너뛰기"
+                variant="ghost"
+                fullWidth
+                className="mt-2 h-10 text-sm"
+              />
+            </div>
 
-        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-[#F6F5F2] z-30 px-4 pt-2 pb-6">
-          <CustomButton
-            label="완료"
-            variant="primary"
-            fullWidth
-            className="h-11 text-sm rounded-md"
-          />
-          <CustomButton label="건너뛰기" variant="ghost" fullWidth className="mt-2 h-10 text-sm" />
-        </div>
+            {showModal && editingItemId !== null && (
+              <ChecklistModal
+                mode={modalMode}
+                title={modalMode === 'edit' ? '수정하시겠습니까?' : '정말 삭제하시겠습니까?'}
+                defaultValue={
+                  modalMode === 'edit'
+                    ? checklist.find((item) => item.id === editingItemId)?.label ?? ''
+                    : ''
+                }
+                confirmText={modalMode === 'edit' ? '확인' : '삭제'}
+                onClose={() => setShowModal(false)}
+                onConfirm={(value) => {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                  modalMode === 'edit' ? handleEditSubmit(value as string) : handleConfirmDelete();
+                }}
+              />
+            )}
 
-        {showModal && editingItemId !== null && (
-          <ChecklistModal
-            mode={modalMode}
-            title={modalMode === 'edit' ? '수정하시겠습니까?' : '정말 삭제하시겠습니까?'}
-            defaultValue={
-              modalMode === 'edit'
-                ? checklist.find((item) => item.id === editingItemId)?.label ?? ''
-                : ''
-            }
-            confirmText={modalMode === 'edit' ? '확인' : '삭제'}
-            onClose={() => setShowModal(false)}
-            onConfirm={(value) => {
-              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-              modalMode === 'edit' ? handleEditSubmit(value as string) : handleConfirmDelete();
-            }}
-          />
+            {showSaveModal && (
+              <ChecklistModal
+                mode="edit"
+                title="새 템플릿 생성"
+                defaultValue={`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`}
+                confirmText="저장"
+                onClose={() => setShowSaveModal(false)}
+                onConfirm={(value) => {
+                  console.log('저장된 템플릿 이름:', value);
+                  setShowSaveModal(false);
+                  useToastStore.getState().showToast('새 템플릿 생성 완료', 'success');
+                }}
+              />
+            )}
+          </>
         )}
 
-        {showSaveModal && (
-          <ChecklistModal
-            mode="edit"
-            title="새 템플릿 생성"
-            defaultValue={`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`}
-            confirmText="저장"
-            onClose={() => setShowSaveModal(false)}
-            onConfirm={(value) => {
-              console.log('저장된 템플릿 이름:', value);
-              // TO DO: API 호출 위치
-              setShowSaveModal(false);
-              useToastStore.getState().showToast('새 템플릿 생성 완료', 'success');
-            }}
-          />
-        )}
-
-        {<Toast />}
+        <Toast />
       </div>
     </div>
   );

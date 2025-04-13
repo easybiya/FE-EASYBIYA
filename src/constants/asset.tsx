@@ -27,4 +27,5 @@ export const ICONS = {
   pencil: '/icons/pencil.svg',
   pin: '/icons/pin-icon.svg',
   share: '/icons/share-icon.svg',
+  bigCheck: '/icons/big-check.svg',
 };
