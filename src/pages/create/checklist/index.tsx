@@ -6,6 +6,8 @@ import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
 import ChecklistModal from '@/components/Modal/ChecklistModal';
 import { DropResult } from '@hello-pangea/dnd';
 import { ChecklistItem, ChecklistItemType } from '@/types/checklist';
+import Toast from '@/components/Toast';
+import { useToastStore } from '@/store/toastStore';
 
 interface ChecklistApiResponse {
   isSuccess: boolean;
@@ -187,9 +189,12 @@ export default function ChecklistPage() {
               console.log('저장된 템플릿 이름:', value);
               // TO DO: API 호출 위치
               setShowSaveModal(false);
+              useToastStore.getState().showToast('새 템플릿 생성 완료', 'success');
             }}
           />
         )}
+
+        {<Toast />}
       </div>
     </div>
   );
