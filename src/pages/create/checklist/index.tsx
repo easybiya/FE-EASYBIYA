@@ -105,13 +105,20 @@ export default function ChecklistPage() {
               <ChecklistAddButton label="텍스트" iconName="addListText" />
             </div>
           </div>
+
+          <CustomButton label="템플릿 저장" variant="secondary" fullWidth className="mt-5 mb-6" />
         </div>
 
-        <div className="pointer-events-none fixed bottom-[128px] left-1/2 -translate-x-1/2 w-full max-w-[430px] h-10 bg-gradient-to-t from-[#F6F5F2] to-transparent z-20" />
+        <div className="pointer-events-none fixed bottom-[136px] left-1/2 -translate-x-1/2 w-full max-w-[430px] h-10 bg-gradient-to-t from-[#F6F5F2] to-transparent z-20" />
 
         <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-[#F6F5F2] z-30 px-4 pt-2 pb-6">
-          <CustomButton label="완료" variant="primary" fullWidth />
-          <CustomButton label="건너뛰기" variant="ghost" fullWidth />
+          <CustomButton
+            label="완료"
+            variant="primary"
+            fullWidth
+            className="h-11 text-sm rounded-md"
+          />
+          <CustomButton label="건너뛰기" variant="ghost" fullWidth className="mt-2 h-10 text-sm" />
         </div>
       </div>
     </div>
