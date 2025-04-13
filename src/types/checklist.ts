@@ -12,7 +12,7 @@ export type CheckType = 'TEXT' | 'RADIO' | 'CHECKBOX';
 export type ChecklistItem = {
   title: string;
   checkType: CheckType;
-  checkItems: string[]; 
+  checkItems: string[];
 };
 
 export type ChecklistTemplate = {

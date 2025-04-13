@@ -104,6 +104,19 @@ export default function ChecklistPage() {
     }
   };
 
+  const handleOptionEdit = (id: number, optionIndex: number, newValue: string) => {
+    setChecklist((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              options: item.options?.map((opt, idx) => (idx === optionIndex ? newValue : opt)),
+            }
+          : item,
+      ),
+    );
+  };
+
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
@@ -148,6 +161,7 @@ export default function ChecklistPage() {
                 onReorderChecklist={handleDragEnd}
                 onEditChecklist={handleEditChecklist}
                 onDeleteChecklist={handleDeleteChecklist}
+                onOptionEdit={handleOptionEdit}
               />
 
               <div className="mt-6">

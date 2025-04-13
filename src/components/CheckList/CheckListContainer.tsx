@@ -6,6 +6,7 @@ import { ChecklistItemType } from '@/types/checklist';
 interface ChecklistContainerProps {
   checklist: ChecklistItemType[];
   onUpdateChecklist: (id: number, newValue: string | string[]) => void;
+  onOptionEdit: (id: number, optionIndex: number, newValue: string) => void;
   onReorderChecklist: (result: DropResult) => void;
   onEditChecklist: (id: number) => void;
   onDeleteChecklist: (id: number) => void;
@@ -14,6 +15,7 @@ interface ChecklistContainerProps {
 export default function ChecklistContainer({
   checklist,
   onUpdateChecklist,
+  onOptionEdit,
   onReorderChecklist,
   onEditChecklist,
   onDeleteChecklist,
@@ -29,6 +31,7 @@ export default function ChecklistContainer({
                 index={index}
                 {...item}
                 onChange={(value) => onUpdateChecklist(item.id, value)}
+                onOptionEdit={onOptionEdit}
                 onEdit={() => onEditChecklist(item.id)}
                 onDelete={() => onDeleteChecklist(item.id)}
               />

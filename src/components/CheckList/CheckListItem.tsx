@@ -5,9 +5,10 @@ import { Draggable } from '@hello-pangea/dnd';
 
 interface ChecklistItemProps extends ChecklistItemType {
   onChange?: (value: string | string[]) => void;
+  onOptionEdit?: (id: number, optionIndex: number, newValue: string) => void;
   index: number;
-  onEdit?: (id: number) => void; 
-  onDelete?: (id: number) => void; 
+  onEdit?: (id: number) => void;
+  onDelete?: (id: number) => void;
 }
 
 export default function ChecklistItem({
@@ -18,25 +19,24 @@ export default function ChecklistItem({
   options = [],
   hasInfo,
   onChange,
+  onOptionEdit,
   index,
   onEdit,
   onDelete,
 }: ChecklistItemProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingText, setEditingText] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // 메뉴 외부 클릭 시 닫기
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsMenuOpen(false);
       }
     }
-
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
@@ -58,16 +58,10 @@ export default function ChecklistItem({
               />
               <p className="text-b-15">{label}</p>
               {hasInfo && (
-                <IconComponent
-                  name="infoCircle"
-                  width={16}
-                  height={16}
-                  className="text-gray-500 cursor-pointer"
-                />
+                <IconComponent name="infoCircle" width={16} height={16} className="text-gray-500" />
               )}
             </div>
 
-            {/* 미트볼 버튼 + 드롭다운 */}
             <div className="relative" ref={menuRef}>
               <IconComponent
                 name="meatballGray"
@@ -76,7 +70,6 @@ export default function ChecklistItem({
                 className="text-gray-500 cursor-pointer"
                 onClick={() => setIsMenuOpen((prev) => !prev)}
               />
-
               {isMenuOpen && (
                 <div className="absolute right-0 z-10 mt-2 w-28 bg-white border border-gray-200 rounded shadow-md">
                   <button
@@ -102,48 +95,110 @@ export default function ChecklistItem({
             </div>
           </div>
 
-          {/* 텍스트 */}
-          {type === 'text' && <p className="text-r-14">{value}</p>}
+          {type === 'text' && (
+            <div className="flex items-center justify-between text-r-14">
+              {editingText ? (
+                <input
+                  value={typeof value === 'string' ? value : ''}
+                  autoFocus
+                  onChange={(e) => onChange?.(e.target.value)}
+                  onBlur={() => setEditingText(false)}
+                  onKeyDown={(e) => e.key === 'Enter' && setEditingText(false)}
+                  className="w-full text-sm border-b border-gray-300 mr-2"
+                />
+              ) : (
+                <div
+                  className="flex justify-between items-center w-full"
+                  onClick={() => setEditingText(true)}
+                >
+                  <span>{value || <span className="text-gray-400">입력 없음</span>}</span>
+                  <span className="text-gray-400 text-xs">🖉</span>
+                </div>
+              )}
+            </div>
+          )}
 
-          {/* 단일 선택 (라디오 버튼) */}
           {type === 'radio' && (
             <div className="flex flex-col gap-2 mt-1">
-              {options.map((option) => (
-                <label key={option} className="flex items-center gap-2 text-r-14">
-                  <input
-                    type="radio"
-                    name={label}
-                    value={option}
-                    checked={value === option}
-                    onChange={() => onChange?.(option)}
-                    className="w-4 h-4 accent-black"
-                  />
-                  {option}
-                </label>
+              {options.map((option, i) => (
+                <div key={option} className="flex items-center justify-between text-r-14 gap-2">
+                  <label className="flex items-center gap-2 w-full">
+                    <input
+                      type="radio"
+                      name={`radio-${id}`}
+                      value={option}
+                      checked={value === option}
+                      onChange={() => onChange?.(option)}
+                      className="w-4 h-4 accent-black"
+                    />
+                    {editingIndex === i ? (
+                      <input
+                        value={option}
+                        autoFocus
+                        onChange={(e) => onOptionEdit?.(id, i, e.target.value)}
+                        onBlur={() => setEditingIndex(null)}
+                        onKeyDown={(e) => e.key === 'Enter' && setEditingIndex(null)}
+                        className="text-sm border-b border-gray-300"
+                      />
+                    ) : (
+                      <span>{option}</span>
+                    )}
+                  </label>
+                  {editingIndex !== i && (
+                    <button
+                      onClick={() => setEditingIndex(i)}
+                      className="text-gray-400 text-xs cursor-pointer hover:underline"
+                      aria-label="옵션 수정"
+                    >
+                      🖉
+                    </button>
+                  )}
+                </div>
               ))}
             </div>
           )}
 
-          {/* 다중 선택 (체크박스) */}
           {type === 'checkbox' && (
             <div className="flex flex-col gap-2 mt-1">
-              {options.map((option) => (
-                <label key={option} className="flex items-center gap-2 text-r-14">
-                  <input
-                    type="checkbox"
-                    value={option}
-                    checked={Array.isArray(value) && value.includes(option)}
-                    onChange={() => {
-                      if (!Array.isArray(value)) return;
-                      const newValue = value.includes(option)
-                        ? value.filter((v) => v !== option)
-                        : [...value, option];
-                      onChange?.(newValue);
-                    }}
-                    className="w-4 h-4 accent-black"
-                  />
-                  {option}
-                </label>
+              {options.map((option, i) => (
+                <div key={option} className="flex items-center justify-between text-r-14 gap-2">
+                  <label className="flex items-center gap-2 w-full">
+                    <input
+                      type="checkbox"
+                      value={option}
+                      checked={Array.isArray(value) && value.includes(option)}
+                      onChange={() => {
+                        if (!Array.isArray(value)) return;
+                        const newValue = value.includes(option)
+                          ? value.filter((v) => v !== option)
+                          : [...value, option];
+                        onChange?.(newValue);
+                      }}
+                      className="w-4 h-4 accent-black"
+                    />
+                    {editingIndex === i ? (
+                      <input
+                        value={option}
+                        autoFocus
+                        onChange={(e) => onOptionEdit?.(id, i, e.target.value)}
+                        onBlur={() => setEditingIndex(null)}
+                        onKeyDown={(e) => e.key === 'Enter' && setEditingIndex(null)}
+                        className="text-sm border-b border-gray-300"
+                      />
+                    ) : (
+                      <span>{option}</span>
+                    )}
+                  </label>
+                  {editingIndex !== i && (
+                    <button
+                      onClick={() => setEditingIndex(i)}
+                      className="text-gray-400 text-xs cursor-pointer hover:underline"
+                      aria-label="옵션 수정"
+                    >
+                      🖉
+                    </button>
+                  )}
+                </div>
               ))}
             </div>
           )}
