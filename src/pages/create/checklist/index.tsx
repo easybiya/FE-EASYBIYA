@@ -1,22 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import ChecklistContainer from '@/components/CheckList/CheckListContainer';
 import CustomButton from '@/components/Button/CustomButton';
-import { DefaultChecklist } from '@/data/defaultCheckList';
 import ChecklistAddButton from '@/components/Button/CheckListAddButton';
-import { ChecklistItemType } from '@/types/checklist';
 import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
 import { DropResult } from '@hello-pangea/dnd';
+import { ChecklistItem, ChecklistItemType } from '@/types/checklist';
 
 export default function ChecklistPage() {
-  const [checklist, setChecklist] = useState<ChecklistItemType[]>(() =>
-    DefaultChecklist.map((item) => ({ ...item })),
-  );
+  const [checklist, setChecklist] = useState<ChecklistItemType[]>([]);
+
+  const transformApiChecklist = (apiData: ChecklistItem[]): ChecklistItemType[] => {
+    return apiData.map((item, index) => ({
+      id: index + 1,
+      label: item.title,
+      type: item.checkType.toLowerCase() as 'text' | 'radio' | 'checkbox',
+      options: item.checkItems,
+      value:
+        item.checkType === 'CHECKBOX'
+          ? []
+          : item.checkType === 'RADIO'
+          ? item.checkItems?.[0] ?? ''
+          : '',
+    }));
+  };
 
   useEffect(() => {
-    const savedChecklist = localStorage.getItem('checklist');
-    if (savedChecklist) {
-      setChecklist(JSON.parse(savedChecklist));
-    }
+    const fetchTemplate = async () => {
+      try {
+        const savedChecklist = localStorage.getItem('checklist');
+        if (savedChecklist) {
+          setChecklist(JSON.parse(savedChecklist));
+          return;
+        }
+
+        const response = await fetch('/api/template/default');
+        const data = await response.json();
+
+        if (data.isSuccess && data.result?.checklists) {
+          const transformed = transformApiChecklist(data.result.checklists);
+          setChecklist(transformed);
+          localStorage.setItem('checklist', JSON.stringify(transformed));
+        }
+      } catch (error) {
+        console.error('체크리스트 템플릿 불러오기 실패:', error);
+      }
+    };
+
+    fetchTemplate();
   }, []);
 
   const updateChecklistValue = (id: number, newValue: string | string[]) => {
@@ -48,7 +78,6 @@ export default function ChecklistPage() {
     <div className="px-4 pb-4 bg-[#F6F5F2]">
       <HeaderWithProgress title="체크리스트 등록" totalSteps={4} />
 
-      {/* ✅ 공통 체크리스트 컴포넌트 사용 */}
       <ChecklistContainer
         checklist={checklist}
         onUpdateChecklist={updateChecklistValue}

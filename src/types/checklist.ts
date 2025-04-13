@@ -1,15 +1,15 @@
-export type ChecklistItemType = {
+export interface ChecklistItemType {
   id: number;
   label: string;
   type: 'text' | 'radio' | 'checkbox';
   value: string | string[];
   options?: string[];
   hasInfo?: boolean;
-};
+}
 
 type CheckType = 'TEXT' | 'RADIO' | 'CHECKBOX';
 
-type ChecklistItem = {
+export type ChecklistItem = {
   title: string;
   checkType: CheckType;
   checkItems: string[];
