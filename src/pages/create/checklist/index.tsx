@@ -27,19 +27,15 @@ export default function ChecklistPage() {
   useEffect(() => {
     const fetchTemplate = async () => {
       try {
-        const savedChecklist = localStorage.getItem('checklist');
-        if (savedChecklist) {
-          setChecklist(JSON.parse(savedChecklist));
-          return;
-        }
-
         const response = await fetch('/api/template/default');
         const data = await response.json();
 
+        console.log('API 응답:', data);
+
         if (data.isSuccess && data.result?.checklists) {
           const transformed = transformApiChecklist(data.result.checklists);
+          console.log('변환된 checklist:', transformed);
           setChecklist(transformed);
-          localStorage.setItem('checklist', JSON.stringify(transformed));
         }
       } catch (error) {
         console.error('체크리스트 템플릿 불러오기 실패:', error);
@@ -50,28 +46,26 @@ export default function ChecklistPage() {
   }, []);
 
   const updateChecklistValue = (id: number, newValue: string | string[]) => {
-    setChecklist((prev) => {
-      const updatedChecklist = prev.map((item) =>
+    setChecklist((prev) =>
+      prev.map((item) =>
         item.id === id
           ? {
               ...item,
               value: item.type === 'checkbox' && Array.isArray(newValue) ? [...newValue] : newValue,
             }
           : item,
-      );
-      localStorage.setItem('checklist', JSON.stringify(updatedChecklist));
-      return updatedChecklist;
-    });
+      ),
+    );
   };
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
+
     const items = Array.from(checklist);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
 
-    setChecklist([...items]);
-    localStorage.setItem('checklist', JSON.stringify(items));
+    setChecklist(items);
   };
 
   return (
