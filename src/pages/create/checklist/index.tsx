@@ -22,6 +22,7 @@ export default function ChecklistPage() {
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<'edit' | 'confirm'>('edit');
+  const [showSaveModal, setShowSaveModal] = useState(false);
 
   const transformApiChecklist = (apiData: ChecklistItem[]): ChecklistItemType[] => {
     return apiData.map((item, index) => ({
@@ -136,7 +137,13 @@ export default function ChecklistPage() {
             </div>
           </div>
 
-          <CustomButton label="템플릿 저장" variant="secondary" fullWidth className="mt-5 mb-6" />
+          <CustomButton
+            label="템플릿 저장"
+            variant="secondary"
+            fullWidth
+            className="mt-5 mb-6"
+            onClick={() => setShowSaveModal(true)}
+          />
         </div>
 
         <div className="pointer-events-none fixed bottom-[136px] left-1/2 -translate-x-1/2 w-full max-w-[430px] h-10 bg-gradient-to-t from-[#F6F5F2] to-transparent z-20" />
@@ -165,6 +172,21 @@ export default function ChecklistPage() {
             onConfirm={(value) => {
               // eslint-disable-next-line @typescript-eslint/no-unused-expressions
               modalMode === 'edit' ? handleEditSubmit(value as string) : handleConfirmDelete();
+            }}
+          />
+        )}
+
+        {showSaveModal && (
+          <ChecklistModal
+            mode="edit"
+            title="새 템플릿 생성"
+            defaultValue={`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`}
+            confirmText="저장"
+            onClose={() => setShowSaveModal(false)}
+            onConfirm={(value) => {
+              console.log('저장된 템플릿 이름:', value);
+              // TO DO: API 호출 위치
+              setShowSaveModal(false);
             }}
           />
         )}
