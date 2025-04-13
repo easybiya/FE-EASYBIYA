@@ -5,10 +5,11 @@ import ChecklistAddButton from '@/components/Button/CheckListAddButton';
 import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
 import ChecklistModal from '@/components/Modal/ChecklistModal';
 import { DropResult } from '@hello-pangea/dnd';
-import { ChecklistItem, ChecklistItemType } from '@/types/checklist';
+import { ChecklistItem, ChecklistItemType, ChecklistTemplate } from '@/types/checklist';
 import Toast from '@/components/Toast';
 import { useToastStore } from '@/store/toastStore';
 import ChecklistComplete from '@/components/CompletePage';
+import { useTemplateStore } from '@/store/templateStore';
 
 interface ChecklistApiResponse {
   isSuccess: boolean;
@@ -238,7 +239,20 @@ export default function ChecklistPage() {
                 confirmText="저장"
                 onClose={() => setShowSaveModal(false)}
                 onConfirm={(value) => {
-                  console.log('저장된 템플릿 이름:', value);
+                  const template: ChecklistTemplate = {
+                    name: value!,
+                    checklists: checklist.map(({ label, type, options }) => ({
+                      title: label,
+                      checkType: type.toUpperCase() as 'TEXT' | 'RADIO' | 'CHECKBOX',
+                      checkItems: options ?? [],
+                    })),
+                  };
+
+                  // 템플릿 목록에 추가하고 선택된 템플릿으로 설정
+                  const store = useTemplateStore.getState();
+                  store.addTemplate(template);
+                  store.setSelectedTemplate(template);
+
                   setShowSaveModal(false);
                   useToastStore.getState().showToast('새 템플릿 생성 완료', 'success');
                 }}
