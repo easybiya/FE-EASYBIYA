@@ -114,6 +114,20 @@ export default function ChecklistPage() {
     setChecklist(items);
   };
 
+  const handleAddChecklist = (type: 'checkbox' | 'radio' | 'text') => {
+    const newId = checklist.length > 0 ? checklist[checklist.length - 1].id + 1 : 1;
+
+    const newItem: ChecklistItemType = {
+      id: newId,
+      label: '새 체크리스트 항목',
+      type,
+      value: type === 'checkbox' ? [] : '',
+      options: type === 'text' ? [] : ['옵션 1'],
+    };
+
+    setChecklist((prev) => [...prev, newItem]);
+  };
+
   return (
     <div className="flex justify-center bg-[#F6F5F2]">
       <div className="relative w-full max-w-[430px] h-screen flex flex-col">
@@ -139,9 +153,21 @@ export default function ChecklistPage() {
               <div className="mt-6">
                 <h2 className="text-lg font-bold text-gray-900 mb-3">체크리스트 추가</h2>
                 <div className="grid grid-cols-3 gap-3">
-                  <ChecklistAddButton label="중복 선택" iconName="addListCheck" />
-                  <ChecklistAddButton label="단일 선택" iconName="addListRadio" />
-                  <ChecklistAddButton label="텍스트" iconName="addListText" />
+                  <ChecklistAddButton
+                    label="중복 선택"
+                    iconName="addListCheck"
+                    onClick={() => handleAddChecklist('checkbox')}
+                  />
+                  <ChecklistAddButton
+                    label="단일 선택"
+                    iconName="addListRadio"
+                    onClick={() => handleAddChecklist('radio')}
+                  />
+                  <ChecklistAddButton
+                    label="텍스트"
+                    iconName="addListText"
+                    onClick={() => handleAddChecklist('text')}
+                  />
                 </div>
               </div>
 

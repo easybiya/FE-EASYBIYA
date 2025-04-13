@@ -12,7 +12,7 @@ export type CheckType = 'TEXT' | 'RADIO' | 'CHECKBOX';
 export type ChecklistItem = {
   title: string;
   checkType: CheckType;
-  checkItems: string[]; // GET용 간단 구조
+  checkItems: string[]; 
 };
 
 export type ChecklistTemplate = {
@@ -20,7 +20,6 @@ export type ChecklistTemplate = {
   checklists: ChecklistItem[];
 };
 
-// ✅ PUT 요청용 타입 추가
 export interface CheckItemPayload {
   description: string;
   checked: boolean;

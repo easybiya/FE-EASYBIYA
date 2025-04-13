@@ -1,12 +1,19 @@
 import KakaoLoginButton from '@/components/Button/KakaoLoginButton';
 import IconComponent from '@/components/Asset/Icon';
 import Image from 'next/image';
+import router from 'next/router';
 
 export default function LoginPage() {
   return (
     <div className="flex flex-col justify-between items-center h-screen bg-[#F6F5F2] relative px-6 py-10">
       <button className="absolute top-4 right-4">
-        <IconComponent name="close" width={16} height={16} className="text-gray-600" />
+        <IconComponent
+          name="close"
+          width={16}
+          height={16}
+          onClick={() => router.push('/')}
+          className="cursor-pointer"
+        />
       </button>
 
       <div className="mt-[76px] flex flex-col items-center">
