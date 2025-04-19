@@ -29,7 +29,7 @@ export default function RoomInfoForm() {
       deposit: undefined,
       monthlyRent: undefined,
       maintenanceFee: 0,
-      available: formatDate(new Date()),
+      available: formatDate(new Date(), 1),
     },
     mode: 'all',
   });
