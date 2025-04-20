@@ -30,4 +30,5 @@ export const ICONS = {
   bigCheck: '/icons/big-check.svg',
   yellowCheck: 'icons/yellow-check.svg',
   logo: 'icons/logo.svg',
+  chevronRight: 'icons/chevron-right.svg',
 };

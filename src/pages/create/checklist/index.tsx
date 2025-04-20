@@ -4,6 +4,7 @@ import CustomButton from '@/components/Button/CustomButton';
 import ChecklistAddButton from '@/components/Button/CheckListAddButton';
 import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
 import ChecklistModal from '@/components/Modal/ChecklistModal';
+import TemplateSelectModal from '@/components/Modal/TemplateSelectModal';
 import { DropResult } from '@hello-pangea/dnd';
 import { ChecklistItemType, ChecklistTemplate } from '@/types/checklist';
 import Toast from '@/components/Toast';
@@ -18,8 +19,9 @@ export default function ChecklistPage() {
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<'edit' | 'confirm'>('edit');
-  const [showSaveModal, setShowSaveModal] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [showTemplateSelectModal, setShowTemplateSelectModal] = useState(false);
+  const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
 
   useEffect(() => {
     setChecklist(DefaultChecklist);
@@ -127,7 +129,7 @@ export default function ChecklistPage() {
     const store = useTemplateStore.getState();
     store.addTemplate(template);
     store.setSelectedTemplate(template);
-    setShowSaveModal(false);
+    setShowNewTemplateModal(false);
     useToastStore.getState().showToast('새 템플릿 생성 완료', 'success');
   };
 
@@ -181,7 +183,7 @@ export default function ChecklistPage() {
                 variant="secondary"
                 fullWidth
                 className="mt-5 mb-6"
-                onClick={() => setShowSaveModal(true)}
+                onClick={() => setShowTemplateSelectModal(true)}
               />
             </div>
 
@@ -221,13 +223,24 @@ export default function ChecklistPage() {
               />
             )}
 
-            {showSaveModal && (
+            {showTemplateSelectModal && (
+              <TemplateSelectModal
+                onClose={() => setShowTemplateSelectModal(false)}
+                onCreateNew={() => {
+                  setShowTemplateSelectModal(false);
+                  setShowNewTemplateModal(true);
+                }}
+                onCancel={() => setShowTemplateSelectModal(false)}
+              />
+            )}
+
+            {showNewTemplateModal && (
               <ChecklistModal
                 mode="edit"
                 title="새 템플릿 생성"
                 defaultValue={`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`}
                 confirmText="저장"
-                onClose={() => setShowSaveModal(false)}
+                onClose={() => setShowNewTemplateModal(false)}
                 onConfirm={(value) => handleSaveTemplate(value!)}
               />
             )}
