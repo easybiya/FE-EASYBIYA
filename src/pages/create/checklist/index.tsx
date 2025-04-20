@@ -5,67 +5,24 @@ import ChecklistAddButton from '@/components/Button/CheckListAddButton';
 import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
 import ChecklistModal from '@/components/Modal/ChecklistModal';
 import { DropResult } from '@hello-pangea/dnd';
-import { ChecklistItem, ChecklistItemType, ChecklistTemplate } from '@/types/checklist';
+import { ChecklistItemType, ChecklistTemplate } from '@/types/checklist';
 import Toast from '@/components/Toast';
 import { useToastStore } from '@/store/toastStore';
 import ChecklistComplete from '@/components/CompletePage';
 import { useTemplateStore } from '@/store/templateStore';
-
-interface ChecklistApiResponse {
-  isSuccess: boolean;
-  message: string;
-  result?: {
-    name: string;
-    checklists: ChecklistItem[];
-  };
-}
+import { DefaultChecklist } from '@/data/defaultCheckList';
 
 export default function ChecklistPage() {
   const [checklist, setChecklist] = useState<ChecklistItemType[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<'edit' | 'confirm'>('edit');
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
 
-  const transformApiChecklist = (apiData: ChecklistItem[]): ChecklistItemType[] => {
-    return apiData.map((item, index) => ({
-      id: index + 1,
-      label: item.title,
-      type: item.checkType.toLowerCase() as 'text' | 'radio' | 'checkbox',
-      options: item.checkItems,
-      value:
-        item.checkType === 'CHECKBOX'
-          ? []
-          : item.checkType === 'RADIO'
-          ? item.checkItems?.[0] ?? ''
-          : '',
-    }));
-  };
-
-  const fetchTemplate = async (signal: AbortSignal) => {
-    try {
-      const response = await fetch('/api/template/default', { signal });
-      const data: ChecklistApiResponse = await response.json();
-
-      if (!data.isSuccess || !data.result?.checklists) {
-        throw new Error('템플릿 데이터를 불러오지 못했습니다.');
-      }
-
-      const transformed = transformApiChecklist(data.result.checklists);
-      setChecklist(transformed);
-    } catch (err) {
-      if (err instanceof DOMException && err.name === 'AbortError') return;
-      setError('체크리스트 템플릿을 불러오는 중 문제가 발생했습니다.');
-      console.error(err);
-    }
-  };
-
   useEffect(() => {
-    const controller = new AbortController();
-    fetchTemplate(controller.signal);
-    return () => controller.abort();
+    setChecklist(DefaultChecklist);
   }, []);
 
   const updateChecklistValue = (id: number, newValue: string | string[]) => {
@@ -120,16 +77,14 @@ export default function ChecklistPage() {
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
-
     const items = Array.from(checklist);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-
     setChecklist(items);
   };
 
   const handleAddChecklist = (type: 'checkbox' | 'radio' | 'text') => {
-    const newId = checklist.length > 0 ? checklist[checklist.length - 1].id + 1 : 1;
+    const newId = checklist.reduce((max, cur) => Math.max(max, cur.id), 0) + 1;
 
     const newItem: ChecklistItemType = {
       id: newId,
