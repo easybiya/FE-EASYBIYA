@@ -51,4 +51,22 @@ export const mockCheckList: ChecklistPayloadItem[] = [
       },
     ],
   },
+  {
+    title: '설비 상태 체크',
+    checkType: 'RADIO',
+    content: '',
+    priority: 5,
+    checkItems: [
+      {
+        description: '가스레인지 정상 작동',
+        checked: true,
+        priority: 1,
+      },
+      {
+        description: '전등 정상 작동',
+        checked: false,
+        priority: 2,
+      },
+    ],
+  },
 ];

@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
-import { ChecklistItemType } from '@/types/checklist';
+import { CheckItemPayload, ChecklistPayloadItem } from '@/types/checklist';
 import IconComponent from '../Asset/Icon';
 import { Draggable } from '@hello-pangea/dnd';
 import InfoModal from '@/components/Modal/InfoModal';
 import { checklistInfoMap } from '@/constants/checkListInfo';
 import { stripEmoji } from '@/utils/stripEmoji';
 
-interface ChecklistItemProps extends ChecklistItemType {
-  onChange?: (value: string | string[]) => void;
+interface ChecklistItemProps extends ChecklistPayloadItem {
+  onChange?: (id: number, checkItem: CheckItemPayload) => void;
   onOptionEdit?: (id: number, optionIndex: number, newValue: string) => void;
   onOptionAdd?: (id: number) => void;
   index: number;
@@ -16,12 +16,11 @@ interface ChecklistItemProps extends ChecklistItemType {
 }
 
 export default function ChecklistItem({
-  id,
-  type,
-  label,
-  value,
-  options = [],
-  hasInfo,
+  priority,
+  title,
+  checkType,
+  content,
+  checkItems,
   onChange,
   onOptionEdit,
   onOptionAdd,
@@ -46,7 +45,7 @@ export default function ChecklistItem({
   }, []);
 
   return (
-    <Draggable draggableId={id.toString()} index={index}>
+    <Draggable draggableId={priority.toString()} index={index}>
       {(provided) => (
         <div
           {...provided.draggableProps}
@@ -62,8 +61,9 @@ export default function ChecklistItem({
                 height={16}
                 className="text-gray-400 cursor-grab"
               />
-              <p className="text-b-15">{label}</p>
-              {hasInfo && (
+              <p className="text-b-15">{title}</p>
+              {/* 애매해서 일단 주석처리함, 정보 리스트 나오면 정리해야 할듯 */}
+              {/* {hasInfo && (
                 <IconComponent
                   name="infoCircle"
                   width={16}
@@ -71,7 +71,7 @@ export default function ChecklistItem({
                   className="text-gray-500 cursor-pointer"
                   onClick={() => setShowInfoModal(true)}
                 />
-              )}
+              )} */}
             </div>
 
             <div className="relative" ref={menuRef}>
@@ -84,11 +84,11 @@ export default function ChecklistItem({
               />
               {isMenuOpen && (
                 <div className="absolute right-0 z-10 mt-2 w-28 bg-white border border-gray-200 rounded shadow-md">
-                  {(type === 'radio' || type === 'checkbox') && (
+                  {(checkType === 'RADIO' || checkType === 'CHECKBOX') && (
                     <button
                       className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
                       onClick={() => {
-                        onOptionAdd?.(id);
+                        onOptionAdd?.(priority);
                         setIsMenuOpen(false);
                       }}
                     >
@@ -98,7 +98,7 @@ export default function ChecklistItem({
                   <button
                     className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
                     onClick={() => {
-                      onEdit?.(id);
+                      onEdit?.(priority);
                       setIsMenuOpen(false);
                     }}
                   >
@@ -107,7 +107,7 @@ export default function ChecklistItem({
                   <button
                     className="w-full px-4 py-2 text-left text-sm text-red-500 hover:bg-gray-100"
                     onClick={() => {
-                      onDelete?.(id);
+                      onDelete?.(priority);
                       setIsMenuOpen(false);
                     }}
                   >
@@ -118,13 +118,13 @@ export default function ChecklistItem({
             </div>
           </div>
 
-          {type === 'text' && (
+          {checkType === 'TEXT' && (
             <div className="flex items-center justify-between text-r-14">
               {editingText ? (
                 <input
-                  value={typeof value === 'string' ? value : ''}
+                  value={content ?? ''}
                   autoFocus
-                  onChange={(e) => onChange?.(e.target.value)}
+                  onChange={(e) => onEdit?.(priority)}
                   onBlur={() => setEditingText(false)}
                   onKeyDown={(e) => e.key === 'Enter' && setEditingText(false)}
                   className="w-full text-sm border-b border-gray-300 mr-2"
@@ -134,40 +134,40 @@ export default function ChecklistItem({
                   className="flex justify-between items-center w-full"
                   onClick={() => setEditingText(true)}
                 >
-                  <span>{value || <span className="text-gray-400">입력 없음</span>}</span>
-                  <span className="text-gray-400 text-xs">🖉</span>
+                  <span>{content || <span className="text-gray-400">입력 없음</span>}</span>
+                  <span className="text-gray-400 text-xs">✏️</span>
                 </div>
               )}
             </div>
           )}
 
-          {type === 'radio' && (
+          {checkType === 'RADIO' && (
             <div className="flex flex-col gap-2 mt-1">
-              {options.map((option, i) => (
+              {checkItems.map((option, i) => (
                 <div
-                  key={`${option}-${i}`}
+                  key={option.priority}
                   className="flex items-center justify-between text-r-14 gap-2"
                 >
                   <label className="flex items-center gap-2 w-full">
                     <input
                       type="radio"
-                      name={`radio-${id}`}
-                      value={option}
-                      checked={value === option}
-                      onChange={() => onChange?.(option)}
+                      name={`radio-group-${priority}`}
+                      value={option.description}
+                      checked={option.checked}
+                      onChange={() => onChange?.(priority, option)}
                       className="w-4 h-4 accent-black"
                     />
                     {editingIndex === i ? (
                       <input
-                        value={option}
+                        value={option.description}
                         autoFocus
-                        onChange={(e) => onOptionEdit?.(id, i, e.target.value)}
+                        onChange={(e) => onOptionEdit?.(priority, option.priority, e.target.value)}
                         onBlur={() => setEditingIndex(null)}
                         onKeyDown={(e) => e.key === 'Enter' && setEditingIndex(null)}
                         className="text-sm border-b border-gray-300"
                       />
                     ) : (
-                      <span>{option}</span>
+                      <span>{option.description}</span>
                     )}
                   </label>
                   {editingIndex !== i && (
@@ -176,7 +176,7 @@ export default function ChecklistItem({
                       className="text-gray-400 text-xs cursor-pointer hover:underline"
                       aria-label="옵션 수정"
                     >
-                      🖉
+                      ✏️
                     </button>
                   )}
                 </div>
@@ -184,38 +184,32 @@ export default function ChecklistItem({
             </div>
           )}
 
-          {type === 'checkbox' && (
+          {checkType === 'CHECKBOX' && (
             <div className="flex flex-col gap-2 mt-1">
-              {options.map((option, i) => (
+              {checkItems.map((option, i) => (
                 <div
-                  key={`${option}-${i}`}
+                  key={option.priority}
                   className="flex items-center justify-between text-r-14 gap-2"
                 >
                   <label className="flex items-center gap-2 w-full">
                     <input
                       type="checkbox"
-                      value={option}
-                      checked={Array.isArray(value) && value.includes(option)}
-                      onChange={() => {
-                        if (!Array.isArray(value)) return;
-                        const newValue = value.includes(option)
-                          ? value.filter((v) => v !== option)
-                          : [...value, option];
-                        onChange?.(newValue);
-                      }}
+                      value={option.description}
+                      checked={option.checked}
+                      onChange={() => onChange?.(priority, option)}
                       className="w-4 h-4 accent-black"
                     />
                     {editingIndex === i ? (
                       <input
-                        value={option}
+                        value={option.description}
                         autoFocus
-                        onChange={(e) => onOptionEdit?.(id, i, e.target.value)}
+                        onChange={(e) => onOptionEdit?.(priority, option.priority, e.target.value)}
                         onBlur={() => setEditingIndex(null)}
                         onKeyDown={(e) => e.key === 'Enter' && setEditingIndex(null)}
                         className="text-sm border-b border-gray-300"
                       />
                     ) : (
-                      <span>{option}</span>
+                      <span>{option.description}</span>
                     )}
                   </label>
                   {editingIndex !== i && (
@@ -224,7 +218,7 @@ export default function ChecklistItem({
                       className="text-gray-400 text-xs cursor-pointer hover:underline"
                       aria-label="옵션 수정"
                     >
-                      🖉
+                      ✏️
                     </button>
                   )}
                 </div>
@@ -234,8 +228,8 @@ export default function ChecklistItem({
 
           {showInfoModal && (
             <InfoModal
-              title={stripEmoji(label)}
-              description={checklistInfoMap[stripEmoji(label)] || '정보가 없습니다.'}
+              title={stripEmoji(title)}
+              description={checklistInfoMap[stripEmoji(title)] || '정보가 없습니다.'}
               onClose={() => setShowInfoModal(false)}
             />
           )}

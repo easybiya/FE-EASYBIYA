@@ -1,3 +1,4 @@
+// 사용 금지 한번에 정리 예정
 export interface ChecklistItemType {
   id: number;
   label: string;
