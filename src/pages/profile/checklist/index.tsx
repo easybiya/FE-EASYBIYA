@@ -32,7 +32,8 @@ export default function Page() {
 
   const handleTemplateSelect = (template: ChecklistTemplate) => {
     setSelectedTemplate(template);
-    router.push('/create/checklist');
+    const returnTo = (router.query.returnTo as string) || '/create/checklist';
+    router.push({ pathname: returnTo, query: { saved: 'true' } });
   };
 
   return (

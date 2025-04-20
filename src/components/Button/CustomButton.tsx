@@ -8,6 +8,7 @@ interface ButtonProps {
   fullWidth?: boolean;
   disabled?: boolean;
   icon?: React.ReactNode;
+  iconPosition?: 'left' | 'right';
   className?: string;
 }
 
@@ -19,6 +20,7 @@ export default function Button({
   fullWidth = false,
   disabled = false,
   icon,
+  iconPosition = 'left',
   className = '',
 }: ButtonProps) {
   const baseStyles = 'flex items-center justify-center rounded-md font-medium transition text-s-15';
@@ -42,8 +44,9 @@ export default function Button({
         disabled ? 'opacity-50 cursor-not-allowed' : ''
       } ${className}`}
     >
-      {icon && <span className="ml-2 stroke-gray-700">{icon}</span>}
+      {icon && iconPosition === 'left' && <span className="mr-2 stroke-gray-700">{icon}</span>}
       {label}
+      {icon && iconPosition === 'right' && <span className="ml-2 stroke-gray-700">{icon}</span>}
     </button>
   );
 }

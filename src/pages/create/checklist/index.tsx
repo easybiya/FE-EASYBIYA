@@ -1,72 +1,42 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import ChecklistContainer from '@/components/CheckList/CheckListContainer';
 import CustomButton from '@/components/Button/CustomButton';
 import ChecklistAddButton from '@/components/Button/CheckListAddButton';
 import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
 import ChecklistModal from '@/components/Modal/ChecklistModal';
+import TemplateSelectModal from '@/components/Modal/TemplateSelectModal';
 import { DropResult } from '@hello-pangea/dnd';
-import { ChecklistItem, ChecklistItemType, ChecklistTemplate } from '@/types/checklist';
+import { ChecklistItemType, ChecklistTemplate } from '@/types/checklist';
 import Toast from '@/components/Toast';
 import { useToastStore } from '@/store/toastStore';
 import ChecklistComplete from '@/components/CompletePage';
 import { useTemplateStore } from '@/store/templateStore';
-
-interface ChecklistApiResponse {
-  isSuccess: boolean;
-  message: string;
-  result?: {
-    name: string;
-    checklists: ChecklistItem[];
-  };
-}
+import { DefaultChecklist } from '@/data/defaultCheckList';
 
 export default function ChecklistPage() {
+  const router = useRouter();
   const [checklist, setChecklist] = useState<ChecklistItemType[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<'edit' | 'confirm'>('edit');
-  const [showSaveModal, setShowSaveModal] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
-
-  const transformApiChecklist = (apiData: ChecklistItem[]): ChecklistItemType[] => {
-    return apiData.map((item, index) => ({
-      id: index + 1,
-      label: item.title,
-      type: item.checkType.toLowerCase() as 'text' | 'radio' | 'checkbox',
-      options: item.checkItems,
-      value:
-        item.checkType === 'CHECKBOX'
-          ? []
-          : item.checkType === 'RADIO'
-          ? item.checkItems?.[0] ?? ''
-          : '',
-    }));
-  };
-
-  const fetchTemplate = async (signal: AbortSignal) => {
-    try {
-      const response = await fetch('/api/template/default', { signal });
-      const data: ChecklistApiResponse = await response.json();
-
-      if (!data.isSuccess || !data.result?.checklists) {
-        throw new Error('템플릿 데이터를 불러오지 못했습니다.');
-      }
-
-      const transformed = transformApiChecklist(data.result.checklists);
-      setChecklist(transformed);
-    } catch (err) {
-      if (err instanceof DOMException && err.name === 'AbortError') return;
-      setError('체크리스트 템플릿을 불러오는 중 문제가 발생했습니다.');
-      console.error(err);
-    }
-  };
+  const [showTemplateSelectModal, setShowTemplateSelectModal] = useState(false);
+  const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
 
   useEffect(() => {
-    const controller = new AbortController();
-    fetchTemplate(controller.signal);
-    return () => controller.abort();
+    setChecklist(DefaultChecklist);
   }, []);
+
+  useEffect(() => {
+    if (router.query.saved === 'true') {
+      useToastStore.getState().showToast('기존 템플릿에 저장 완료', 'success');
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { saved, ...rest } = router.query;
+      router.replace({ pathname: router.pathname, query: rest }, undefined, { shallow: true });
+    }
+  }, [router.query]);
 
   const updateChecklistValue = (id: number, newValue: string | string[]) => {
     setChecklist((prev) =>
@@ -118,18 +88,33 @@ export default function ChecklistPage() {
     );
   };
 
+  const handleOptionAdd = (id: number) => {
+    setChecklist((prev) =>
+      prev.map((item) => {
+        if (item.id !== id) return item;
+        if (item.type === 'radio' || item.type === 'checkbox') {
+          const nextIndex = item.options?.length ? item.options.length + 1 : 1;
+          const newOption = `옵션 ${nextIndex}`;
+          return {
+            ...item,
+            options: [...(item.options ?? []), newOption],
+          };
+        }
+        return item;
+      }),
+    );
+  };
+
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
-
     const items = Array.from(checklist);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-
     setChecklist(items);
   };
 
   const handleAddChecklist = (type: 'checkbox' | 'radio' | 'text') => {
-    const newId = checklist.length > 0 ? checklist[checklist.length - 1].id + 1 : 1;
+    const newId = checklist.reduce((max, cur) => Math.max(max, cur.id), 0) + 1;
 
     const newItem: ChecklistItemType = {
       id: newId,
@@ -140,6 +125,27 @@ export default function ChecklistPage() {
     };
 
     setChecklist((prev) => [...prev, newItem]);
+  };
+
+  const handleSaveTemplate = (name: string) => {
+    const template: ChecklistTemplate = {
+      name,
+      checklists: checklist.map(({ label, type, options }) => ({
+        title: label,
+        checkType: type.toUpperCase() as 'TEXT' | 'RADIO' | 'CHECKBOX',
+        checkItems: options ?? [],
+      })),
+    };
+
+    const store = useTemplateStore.getState();
+    store.addTemplate(template);
+    store.setSelectedTemplate(template);
+    setShowNewTemplateModal(false);
+    useToastStore.getState().showToast('새 템플릿 생성 완료', 'success');
+  };
+
+  const handleNavigateToProfileChecklist = () => {
+    router.push({ pathname: '/profile/checklist', query: { returnTo: '/create/checklist' } });
   };
 
   return (
@@ -163,6 +169,7 @@ export default function ChecklistPage() {
                 onEditChecklist={handleEditChecklist}
                 onDeleteChecklist={handleDeleteChecklist}
                 onOptionEdit={handleOptionEdit}
+                onOptionAdd={handleOptionAdd}
               />
 
               <div className="mt-6">
@@ -191,7 +198,7 @@ export default function ChecklistPage() {
                 variant="secondary"
                 fullWidth
                 className="mt-5 mb-6"
-                onClick={() => setShowSaveModal(true)}
+                onClick={() => setShowTemplateSelectModal(true)}
               />
             </div>
 
@@ -231,31 +238,26 @@ export default function ChecklistPage() {
               />
             )}
 
-            {showSaveModal && (
+            {showTemplateSelectModal && (
+              <TemplateSelectModal
+                onClose={() => setShowTemplateSelectModal(false)}
+                onCreateNew={() => {
+                  setShowTemplateSelectModal(false);
+                  setShowNewTemplateModal(true);
+                }}
+                onCancel={() => setShowTemplateSelectModal(false)}
+                onNavigate={handleNavigateToProfileChecklist}
+              />
+            )}
+
+            {showNewTemplateModal && (
               <ChecklistModal
                 mode="edit"
                 title="새 템플릿 생성"
                 defaultValue={`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`}
                 confirmText="저장"
-                onClose={() => setShowSaveModal(false)}
-                onConfirm={(value) => {
-                  const template: ChecklistTemplate = {
-                    name: value!,
-                    checklists: checklist.map(({ label, type, options }) => ({
-                      title: label,
-                      checkType: type.toUpperCase() as 'TEXT' | 'RADIO' | 'CHECKBOX',
-                      checkItems: options ?? [],
-                    })),
-                  };
-
-                  // 템플릿 목록에 추가하고 선택된 템플릿으로 설정
-                  const store = useTemplateStore.getState();
-                  store.addTemplate(template);
-                  store.setSelectedTemplate(template);
-
-                  setShowSaveModal(false);
-                  useToastStore.getState().showToast('새 템플릿 생성 완료', 'success');
-                }}
+                onClose={() => setShowNewTemplateModal(false)}
+                onConfirm={(value) => handleSaveTemplate(value!)}
               />
             )}
           </>
