@@ -6,9 +6,10 @@ interface Props {
   onClose: () => void;
   onCreateNew: () => void;
   onCancel: () => void;
+  onNavigate: () => void;
 }
 
-export default function TemplateSelectModal({ onClose, onCreateNew, onCancel }: Props) {
+export default function TemplateSelectModal({ onClose, onCreateNew, onCancel, onNavigate }: Props) {
   return (
     <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
       <div className="relative bg-white rounded-[12px] w-[360px] px-6 pt-6 pb-5 shadow-lg">
@@ -29,7 +30,7 @@ export default function TemplateSelectModal({ onClose, onCreateNew, onCancel }: 
           iconPosition="right"
           onClick={() => {
             onClose();
-            // TODO: 기존 템플릿 저장 연결
+            onNavigate();
           }}
         />
 

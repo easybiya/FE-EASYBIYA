@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import ChecklistContainer from '@/components/CheckList/CheckListContainer';
 import CustomButton from '@/components/Button/CustomButton';
 import ChecklistAddButton from '@/components/Button/CheckListAddButton';
@@ -14,6 +15,7 @@ import { useTemplateStore } from '@/store/templateStore';
 import { DefaultChecklist } from '@/data/defaultCheckList';
 
 export default function ChecklistPage() {
+  const router = useRouter();
   const [checklist, setChecklist] = useState<ChecklistItemType[]>([]);
   const [error] = useState<string | null>(null);
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
@@ -26,6 +28,15 @@ export default function ChecklistPage() {
   useEffect(() => {
     setChecklist(DefaultChecklist);
   }, []);
+
+  useEffect(() => {
+    if (router.query.saved === 'true') {
+      useToastStore.getState().showToast('기존 템플릿에 저장 완료', 'success');
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { saved, ...rest } = router.query;
+      router.replace({ pathname: router.pathname, query: rest }, undefined, { shallow: true });
+    }
+  }, [router.query]);
 
   const updateChecklistValue = (id: number, newValue: string | string[]) => {
     setChecklist((prev) =>
@@ -133,6 +144,10 @@ export default function ChecklistPage() {
     useToastStore.getState().showToast('새 템플릿 생성 완료', 'success');
   };
 
+  const handleNavigateToProfileChecklist = () => {
+    router.push({ pathname: '/profile/checklist', query: { returnTo: '/create/checklist' } });
+  };
+
   return (
     <div className="flex justify-center bg-[#F6F5F2]">
       <div className="relative w-full max-w-[430px] h-screen flex flex-col">
@@ -231,6 +246,7 @@ export default function ChecklistPage() {
                   setShowNewTemplateModal(true);
                 }}
                 onCancel={() => setShowTemplateSelectModal(false)}
+                onNavigate={handleNavigateToProfileChecklist}
               />
             )}
 
