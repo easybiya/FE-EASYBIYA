@@ -75,6 +75,23 @@ export default function ChecklistPage() {
     );
   };
 
+  const handleOptionAdd = (id: number) => {
+    setChecklist((prev) =>
+      prev.map((item) => {
+        if (item.id !== id) return item;
+        if (item.type === 'radio' || item.type === 'checkbox') {
+          const nextIndex = item.options?.length ? item.options.length + 1 : 1;
+          const newOption = `옵션 ${nextIndex}`;
+          return {
+            ...item,
+            options: [...(item.options ?? []), newOption],
+          };
+        }
+        return item;
+      }),
+    );
+  };
+
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
     const items = Array.from(checklist);
@@ -95,6 +112,23 @@ export default function ChecklistPage() {
     };
 
     setChecklist((prev) => [...prev, newItem]);
+  };
+
+  const handleSaveTemplate = (name: string) => {
+    const template: ChecklistTemplate = {
+      name,
+      checklists: checklist.map(({ label, type, options }) => ({
+        title: label,
+        checkType: type.toUpperCase() as 'TEXT' | 'RADIO' | 'CHECKBOX',
+        checkItems: options ?? [],
+      })),
+    };
+
+    const store = useTemplateStore.getState();
+    store.addTemplate(template);
+    store.setSelectedTemplate(template);
+    setShowSaveModal(false);
+    useToastStore.getState().showToast('새 템플릿 생성 완료', 'success');
   };
 
   return (
@@ -118,6 +152,7 @@ export default function ChecklistPage() {
                 onEditChecklist={handleEditChecklist}
                 onDeleteChecklist={handleDeleteChecklist}
                 onOptionEdit={handleOptionEdit}
+                onOptionAdd={handleOptionAdd}
               />
 
               <div className="mt-6">
@@ -193,24 +228,7 @@ export default function ChecklistPage() {
                 defaultValue={`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`}
                 confirmText="저장"
                 onClose={() => setShowSaveModal(false)}
-                onConfirm={(value) => {
-                  const template: ChecklistTemplate = {
-                    name: value!,
-                    checklists: checklist.map(({ label, type, options }) => ({
-                      title: label,
-                      checkType: type.toUpperCase() as 'TEXT' | 'RADIO' | 'CHECKBOX',
-                      checkItems: options ?? [],
-                    })),
-                  };
-
-                  // 템플릿 목록에 추가하고 선택된 템플릿으로 설정
-                  const store = useTemplateStore.getState();
-                  store.addTemplate(template);
-                  store.setSelectedTemplate(template);
-
-                  setShowSaveModal(false);
-                  useToastStore.getState().showToast('새 템플릿 생성 완료', 'success');
-                }}
+                onConfirm={(value) => handleSaveTemplate(value!)}
               />
             )}
           </>
