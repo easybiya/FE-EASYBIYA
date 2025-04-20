@@ -23,7 +23,7 @@ import { mockCheckList } from '@/data/mockHouseData';
 export default function ChecklistPage() {
   const router = useRouter();
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<'edit' | 'confirm'>('edit');

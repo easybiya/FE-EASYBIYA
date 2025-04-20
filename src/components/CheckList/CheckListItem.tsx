@@ -124,7 +124,7 @@ export default function ChecklistItem({
                 <input
                   value={content ?? ''}
                   autoFocus
-                  onChange={(e) => onEdit?.(priority)}
+                  onChange={() => onEdit?.(priority)}
                   onBlur={() => setEditingText(false)}
                   onKeyDown={(e) => e.key === 'Enter' && setEditingText(false)}
                   className="w-full text-sm border-b border-gray-300 mr-2"
