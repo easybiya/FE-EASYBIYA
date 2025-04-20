@@ -2,6 +2,9 @@ import { useState, useRef, useEffect } from 'react';
 import { ChecklistItemType } from '@/types/checklist';
 import IconComponent from '../Asset/Icon';
 import { Draggable } from '@hello-pangea/dnd';
+import InfoModal from '@/components/Modal/InfoModal';
+import { checklistInfoMap } from '@/constants/checkListInfo';
+import { stripEmoji } from '@/utils/stripEmoji';
 
 interface ChecklistItemProps extends ChecklistItemType {
   onChange?: (value: string | string[]) => void;
@@ -29,6 +32,7 @@ export default function ChecklistItem({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editingText, setEditingText] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -60,7 +64,13 @@ export default function ChecklistItem({
               />
               <p className="text-b-15">{label}</p>
               {hasInfo && (
-                <IconComponent name="infoCircle" width={16} height={16} className="text-gray-500" />
+                <IconComponent
+                  name="infoCircle"
+                  width={16}
+                  height={16}
+                  className="text-gray-500 cursor-pointer"
+                  onClick={() => setShowInfoModal(true)}
+                />
               )}
             </div>
 
@@ -220,6 +230,14 @@ export default function ChecklistItem({
                 </div>
               ))}
             </div>
+          )}
+
+          {showInfoModal && (
+            <InfoModal
+              title={stripEmoji(label)}
+              description={checklistInfoMap[stripEmoji(label)] || '정보가 없습니다.'}
+              onClose={() => setShowInfoModal(false)}
+            />
           )}
         </div>
       )}
