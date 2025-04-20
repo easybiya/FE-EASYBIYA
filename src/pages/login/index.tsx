@@ -11,7 +11,7 @@ export default function LoginPage() {
           name="close"
           width={16}
           height={16}
-          onClick={() => router.push('/')}
+          onClick={() => router.push('/onboarding')}
           className="cursor-pointer"
         />
       </button>
