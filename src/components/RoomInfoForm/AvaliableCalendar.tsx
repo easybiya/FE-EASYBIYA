@@ -12,7 +12,7 @@ export default function AvailableCalendar({ handleCalendar, currentDate }: Props
     <div className="relative left-0 top-full z-10 flex w-full items-center justify-center bg-white py-10 shadow-lg rounded">
       <DatePicker
         selected={new Date(currentDate) ? new Date(currentDate) : null}
-        onChange={(e) => handleCalendar(formatDate(e!))}
+        onChange={(e) => handleCalendar(formatDate(e!, 1))}
         minDate={new Date()}
         isClearable
         dateFormat="yyyy-MM-dd"

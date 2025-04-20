@@ -46,6 +46,13 @@ export default function Header({ type, title, addAction }: HeaderProps) {
       case 3:
         return (
           <>
+            <IconComponent
+              name="arrowLeft"
+              width={24}
+              height={24}
+              onClick={() => router.back()}
+              className="cursor-pointer"
+            />
             <h1 className="text-b-20">{title}</h1>
             <div className="flex gap-5">
               <IconComponent name="share" width={16} height={16} className="cursor-pointer" />

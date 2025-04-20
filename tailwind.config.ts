@@ -19,6 +19,7 @@ const config: Config = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: '#F6F5F2',
+        brownText: '#94896A',
         violet: {
           '100': '#EDE7F6',
           '200': '#D1C4E9',
