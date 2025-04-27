@@ -7,26 +7,68 @@ import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
 import ChecklistModal from '@/components/Modal/ChecklistModal';
 import TemplateSelectModal from '@/components/Modal/TemplateSelectModal';
 import { DropResult } from '@hello-pangea/dnd';
-import { ChecklistItemType, ChecklistTemplate } from '@/types/checklist';
+import {
+  CheckItemPayload,
+  ChecklistItem,
+  ChecklistPayloadItem,
+  ChecklistTemplate,
+  CheckType,
+} from '@/types/checklist';
 import Toast from '@/components/Toast';
 import { useToastStore } from '@/store/toastStore';
 import ChecklistComplete from '@/components/CompletePage';
 import { useTemplateStore } from '@/store/templateStore';
-import { DefaultChecklist } from '@/data/defaultCheckList';
+import { mockCheckList } from '@/data/mockHouseData';
 
 export default function ChecklistPage() {
   const router = useRouter();
-  const [checklist, setChecklist] = useState<ChecklistItemType[]>([]);
+  const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const [error] = useState<string | null>(null);
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<'edit' | 'confirm'>('edit');
-  const [isCompleted, setIsCompleted] = useState(false);
   const [showTemplateSelectModal, setShowTemplateSelectModal] = useState(false);
   const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+
+  const transformApiChecklist = (apiData: ChecklistItem[]): ChecklistPayloadItem[] => {
+    return apiData.map((item, index) => ({
+      priority: index + 1,
+      title: item.title,
+      checkType: item.checkType,
+      content: null,
+      checkItems: item.checkItems.map((checkItemDesc, checkItemIndex) => ({
+        description: checkItemDesc,
+        checked: checkItemIndex === 0, // 첫 번째만 true로 예시
+        priority: checkItemIndex + 1,
+      })),
+    }));
+  };
+
+  // 나중에 패칭할 로직 남겨두었음
+  // const fetchTemplate = async (signal: AbortSignal) => {
+  //   try {
+  //     const response = await fetch('/api/template/default', { signal });
+  //     const data = await response.json();
+
+  //     if (!data.isSuccess || !data.result?.checklists) {
+  //       throw new Error('템플릿 데이터를 불러오지 못했습니다.');
+  //     }
+
+  //     const transformed = transformApiChecklist(data.result.checklists);
+  //     console.log(transformed);
+  //     setChecklist(transformed);
+  //   } catch (err) {
+  //     if (err instanceof DOMException && err.name === 'AbortError') return;
+  //     setError('체크리스트 템플릿을 불러오는 중 문제가 발생했습니다.');
+  //     console.error(err);
+  //   }
+  // };
 
   useEffect(() => {
-    setChecklist(DefaultChecklist);
+    const testData = mockCheckList;
+    const transformedTemplate = transformApiChecklist(testData.checklists);
+    setChecklist(transformedTemplate);
   }, []);
 
   useEffect(() => {
@@ -38,17 +80,31 @@ export default function ChecklistPage() {
     }
   }, [router.query]);
 
-  const updateChecklistValue = (id: number, newValue: string | string[]) => {
-    setChecklist((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              value: item.type === 'checkbox' && Array.isArray(newValue) ? [...newValue] : newValue,
-            }
-          : item,
-      ),
-    );
+  const updateChecklistValue = (id: number, checkItem: CheckItemPayload) => {
+    const updatedChecklist = checklist.map((item) => {
+      if (item.priority !== id) return item;
+
+      // CHECKBOX 타입: 해당 항목만 checked 상태 토글
+      if (item.checkType === 'CHECKBOX') {
+        const updatedCheckItems = item.checkItems.map((ci) =>
+          ci.priority === checkItem.priority ? { ...ci, checked: !ci.checked } : ci,
+        );
+        return { ...item, checkItems: updatedCheckItems };
+      }
+
+      // RADIO 타입: 해당 항목만 checked = true, 나머지는 false
+      if (item.checkType === 'RADIO') {
+        const updatedCheckItems = item.checkItems.map((ci) => ({
+          ...ci,
+          checked: ci.priority === checkItem.priority,
+        }));
+        return { ...item, checkItems: updatedCheckItems };
+      }
+
+      return item;
+    });
+
+    setChecklist(updatedChecklist);
   };
 
   const handleEditChecklist = (id: number) => {
@@ -59,7 +115,7 @@ export default function ChecklistPage() {
 
   const handleEditSubmit = (newLabel: string) => {
     setChecklist((prev) =>
-      prev.map((item) => (item.id === editingItemId ? { ...item, label: newLabel } : item)),
+      prev.map((item) => (item.priority === editingItemId ? { ...item, title: newLabel } : item)),
     );
   };
 
@@ -71,35 +127,48 @@ export default function ChecklistPage() {
 
   const handleConfirmDelete = () => {
     if (editingItemId !== null) {
-      setChecklist((prev) => prev.filter((item) => item.id !== editingItemId));
+      setChecklist((prev) => prev.filter((item) => item.priority !== editingItemId));
     }
   };
 
-  const handleOptionEdit = (id: number, optionIndex: number, newValue: string) => {
-    setChecklist((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              options: item.options?.map((opt, idx) => (idx === optionIndex ? newValue : opt)),
-            }
-          : item,
-      ),
-    );
+  const updateCheckItemDescription = (
+    priority: number,
+    checkItemPriority: number,
+    newDescription: string,
+  ) => {
+    const updatedChecklist = checklist.map((item) => {
+      if (item.priority !== priority) return item;
+
+      const updatedCheckItems = item.checkItems.map((checkItem) =>
+        checkItem.priority === checkItemPriority
+          ? { ...checkItem, description: newDescription }
+          : checkItem,
+      );
+
+      return { ...item, checkItems: updatedCheckItems };
+    });
+
+    setChecklist(updatedChecklist);
   };
 
-  const handleOptionAdd = (id: number) => {
+  const handleOptionAdd = (priority: number) => {
     setChecklist((prev) =>
       prev.map((item) => {
-        if (item.id !== id) return item;
-        if (item.type === 'radio' || item.type === 'checkbox') {
-          const nextIndex = item.options?.length ? item.options.length + 1 : 1;
-          const newOption = `옵션 ${nextIndex}`;
+        if (item.priority !== priority) return item;
+
+        if (item.checkType === 'RADIO' || item.checkType === 'CHECKBOX') {
+          const nextPriority = item.checkItems.length + 1;
+          const newOption = {
+            description: `옵션 ${nextPriority}`,
+            checked: false,
+            priority: nextPriority,
+          };
           return {
             ...item,
-            options: [...(item.options ?? []), newOption],
+            checkItems: [...item.checkItems, newOption],
           };
         }
+
         return item;
       }),
     );
@@ -113,15 +182,24 @@ export default function ChecklistPage() {
     setChecklist(items);
   };
 
-  const handleAddChecklist = (type: 'checkbox' | 'radio' | 'text') => {
-    const newId = checklist.reduce((max, cur) => Math.max(max, cur.id), 0) + 1;
+  const handleAddChecklist = (type: CheckType) => {
+    const newId = checklist.length > 0 ? checklist[checklist.length - 1].priority + 1 : 1;
 
-    const newItem: ChecklistItemType = {
-      id: newId,
-      label: '새 체크리스트 항목',
-      type,
-      value: type === 'checkbox' ? [] : '',
-      options: type === 'text' ? [] : ['옵션 1'],
+    const newItem: ChecklistPayloadItem = {
+      priority: newId,
+      title: '새 체크리스트 항목',
+      content: type === 'TEXT' ? '옵션1' : null,
+      checkType: type,
+      checkItems:
+        type === 'TEXT'
+          ? []
+          : [
+              {
+                description: '옵션1',
+                checked: false,
+                priority: 1,
+              },
+            ],
     };
 
     setChecklist((prev) => [...prev, newItem]);
@@ -130,17 +208,18 @@ export default function ChecklistPage() {
   const handleSaveTemplate = (name: string) => {
     const template: ChecklistTemplate = {
       name,
-      checklists: checklist.map(({ label, type, options }) => ({
-        title: label,
-        checkType: type.toUpperCase() as 'TEXT' | 'RADIO' | 'CHECKBOX',
-        checkItems: options ?? [],
+      checklists: checklist.map(({ title, checkType, checkItems, content }) => ({
+        title,
+        checkType: checkType,
+        content,
+        checkItems: checkItems.map((item) => item.description),
       })),
     };
-
     const store = useTemplateStore.getState();
     store.addTemplate(template);
     store.setSelectedTemplate(template);
     setShowNewTemplateModal(false);
+    console.log(template);
     useToastStore.getState().showToast('새 템플릿 생성 완료', 'success');
   };
 
@@ -164,12 +243,12 @@ export default function ChecklistPage() {
 
               <ChecklistContainer
                 checklist={checklist}
-                onUpdateChecklist={updateChecklistValue}
-                onReorderChecklist={handleDragEnd}
-                onEditChecklist={handleEditChecklist}
-                onDeleteChecklist={handleDeleteChecklist}
-                onOptionEdit={handleOptionEdit}
+                onUpdateChecklist={updateChecklistValue} // 체크리스트 onchange 이벤트
+                onReorderChecklist={handleDragEnd} // 드레그 이벤트
+                onEditChecklist={handleEditChecklist} //
+                onDeleteChecklist={handleDeleteChecklist} // 체크리스트 삭제 이벤트
                 onOptionAdd={handleOptionAdd}
+                onOptionEdit={updateCheckItemDescription}
               />
 
               <div className="mt-6">
@@ -178,17 +257,17 @@ export default function ChecklistPage() {
                   <ChecklistAddButton
                     label="중복 선택"
                     iconName="addListCheck"
-                    onClick={() => handleAddChecklist('checkbox')}
+                    onClick={() => handleAddChecklist('CHECKBOX')}
                   />
                   <ChecklistAddButton
                     label="단일 선택"
                     iconName="addListRadio"
-                    onClick={() => handleAddChecklist('radio')}
+                    onClick={() => handleAddChecklist('RADIO')}
                   />
                   <ChecklistAddButton
                     label="텍스트"
                     iconName="addListText"
-                    onClick={() => handleAddChecklist('text')}
+                    onClick={() => handleAddChecklist('TEXT')}
                   />
                 </div>
               </div>
@@ -226,7 +305,7 @@ export default function ChecklistPage() {
                 title={modalMode === 'edit' ? '수정하시겠습니까?' : '정말 삭제하시겠습니까?'}
                 defaultValue={
                   modalMode === 'edit'
-                    ? checklist.find((item) => item.id === editingItemId)?.label ?? ''
+                    ? checklist.find((item) => item.priority === editingItemId)?.title ?? ''
                     : ''
                 }
                 confirmText={modalMode === 'edit' ? '확인' : '삭제'}

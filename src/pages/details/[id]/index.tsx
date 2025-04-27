@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import ChecklistContainer from '@/components/CheckList/CheckListContainer';
-import { ChecklistItemType } from '@/types/checklist';
+import { CheckItemPayload, ChecklistPayloadItem } from '@/types/checklist';
 import { DropResult } from '@hello-pangea/dnd';
 import Header from '@/components/Layout/Header';
 import { mockHouserData } from '@/data/mockHouseData';
@@ -14,40 +14,136 @@ import { formatWon } from '@/utils/formatWon';
 import HouseTypeTag from '@/components/DashBoard/HouseTypeTag';
 import Image from 'next/image';
 import EditButtonContainer from '@/components/EditButtonContainer';
+import { mockCheckList } from '@/data/mockCheckList';
+import ChecklistModal from '@/components/Modal/ChecklistModal';
 
 export default function ChecklistDetailPage() {
-  const [isEdit, setIsEdit] = useState(true);
-  const [checklist, setChecklist] = useState<ChecklistItemType[]>([]);
+  const [isEdit, setIsEdit] = useState(false);
+  const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const [, setActiveIndex] = useState(0);
   const router = useRouter();
   const { id } = router.query;
   const propertyData = mockHouserData.find((item) => item.id === Number(id));
+  const [showModal, setShowModal] = useState(false);
+  const [modalMode, setModalMode] = useState<'edit' | 'confirm'>('edit');
+  const [editingItemId, setEditingItemId] = useState<number | null>(null);
 
-  const updateChecklistValue = (id: number, newValue: string | string[]) => {
+  const updateCheckItemDescription = (
+    priority: number,
+    checkItemPriority: number,
+    newDescription: string,
+  ) => {
+    const updatedChecklist = checklist.map((item) => {
+      if (item.priority !== priority) return item;
+
+      const updatedCheckItems = item.checkItems.map((checkItem) =>
+        checkItem.priority === checkItemPriority
+          ? { ...checkItem, description: newDescription }
+          : checkItem,
+      );
+
+      return { ...item, checkItems: updatedCheckItems };
+    });
+
+    setChecklist(updatedChecklist);
     setIsEdit(true);
+  };
+
+  const updateChecklistValue = (id: number, checkItem: CheckItemPayload) => {
+    const updatedChecklist = checklist.map((item) => {
+      if (item.priority !== id) return item;
+
+      // CHECKBOX 타입: 해당 항목만 checked 상태 토글
+      if (item.checkType === 'CHECKBOX') {
+        const updatedCheckItems = item.checkItems.map((ci) =>
+          ci.priority === checkItem.priority ? { ...ci, checked: !ci.checked } : ci,
+        );
+        return { ...item, checkItems: updatedCheckItems };
+      }
+
+      // RADIO 타입: 해당 항목만 checked = true, 나머지는 false
+      if (item.checkType === 'RADIO') {
+        const updatedCheckItems = item.checkItems.map((ci) => ({
+          ...ci,
+          checked: ci.priority === checkItem.priority,
+        }));
+        return { ...item, checkItems: updatedCheckItems };
+      }
+
+      return item;
+    });
+
+    setChecklist(updatedChecklist);
+    setIsEdit(true);
+  };
+
+  const handleEditChecklist = (id: number) => {
+    setEditingItemId(id);
+    setModalMode('edit');
+    setShowModal(true);
+  };
+
+  const handleDeleteChecklist = (id: number) => {
+    setEditingItemId(id);
+    setModalMode('confirm');
+    setShowModal(true);
+  };
+
+  const handleEditSubmit = (newLabel: string) => {
     setChecklist((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              value: item.type === 'checkbox' && Array.isArray(newValue) ? [...newValue] : newValue,
-            }
-          : item,
-      ),
+      prev.map((item) => (item.priority === editingItemId ? { ...item, title: newLabel } : item)),
     );
-    localStorage.setItem('checklist', JSON.stringify(checklist));
+    setIsEdit(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (editingItemId !== null) {
+      setChecklist((prev) => prev.filter((item) => item.priority !== editingItemId));
+    }
+    setIsEdit(true);
+  };
+
+  const handleOptionAdd = (priority: number) => {
+    setChecklist((prev) =>
+      prev.map((item) => {
+        if (item.priority !== priority) return item;
+
+        if (item.checkType === 'RADIO' || item.checkType === 'CHECKBOX') {
+          const nextPriority = item.checkItems.length + 1;
+          const newOption = {
+            description: `옵션 ${nextPriority}`,
+            checked: false,
+            priority: nextPriority,
+          };
+          return {
+            ...item,
+            checkItems: [...item.checkItems, newOption],
+          };
+        }
+
+        return item;
+      }),
+    );
     setIsEdit(true);
   };
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
-    const items = Array.from(checklist);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    setChecklist([...items]);
-    localStorage.setItem('checklist', JSON.stringify(items));
+    const updatedChecklist = [...checklist];
+    const [movedItem] = updatedChecklist.splice(result.source.index, 1);
+    updatedChecklist.splice(result.destination.index, 0, movedItem);
+    const reorderedWithPriority = updatedChecklist.map((item, index) => ({
+      ...item,
+      priority: index + 1,
+    }));
+    setChecklist(reorderedWithPriority);
     setIsEdit(true);
   };
+
+  useEffect(() => {
+    const testData = mockCheckList;
+    setChecklist([...testData]);
+  }, []);
 
   if (!propertyData) {
     return <div>매물 정보가 없습니다.</div>;
@@ -138,10 +234,31 @@ export default function ChecklistDetailPage() {
       <div className="flex-grow px-4 pb-10">
         <ChecklistContainer
           checklist={checklist}
-          onUpdateChecklist={updateChecklistValue}
-          onReorderChecklist={handleDragEnd}
+          onUpdateChecklist={updateChecklistValue} // 체크리스트 onchange 이벤트
+          onReorderChecklist={handleDragEnd} // 드레그 이벤트
+          onEditChecklist={handleEditChecklist} //
+          onDeleteChecklist={handleDeleteChecklist} // 체크리스트 삭제 이벤트
+          onOptionAdd={handleOptionAdd}
+          onOptionEdit={updateCheckItemDescription}
         />
       </div>
+      {showModal && editingItemId !== null && (
+        <ChecklistModal
+          mode={modalMode}
+          title={modalMode === 'edit' ? '수정하시겠습니까?' : '정말 삭제하시겠습니까?'}
+          defaultValue={
+            modalMode === 'edit'
+              ? checklist.find((item) => item.priority === editingItemId)?.title ?? ''
+              : ''
+          }
+          confirmText={modalMode === 'edit' ? '확인' : '삭제'}
+          onClose={() => setShowModal(false)}
+          onConfirm={(value) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+            modalMode === 'edit' ? handleEditSubmit(value as string) : handleConfirmDelete();
+          }}
+        />
+      )}
     </div>
   );
 }
