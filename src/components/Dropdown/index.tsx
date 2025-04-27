@@ -62,7 +62,7 @@ export default function Dropdown({ options, selectedOption, onSelect, type }: Dr
                   }
                   setIsOpen(false);
                 }}
-                className="w-full p-2 rounded-[4px] text-r-14 text-left text-gray-700 hover:bg-gray-100"
+                className="w-full p-2 rounded-[4px] text-r-14 text-left text-gray-800 hover:bg-secondary"
               >
                 {option}
               </button>
