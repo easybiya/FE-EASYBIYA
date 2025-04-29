@@ -1,5 +1,4 @@
 import HouseCard from '@/components/DashBoard/HouseCard';
-import ShareCard from '@/components/DashBoard/ShareCard';
 import Dropdown from '@/components/Dropdown';
 import Header from '@/components/Layout/Header';
 import { mockHouserData } from '@/data/mockHouseData';
