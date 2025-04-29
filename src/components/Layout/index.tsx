@@ -8,8 +8,8 @@ interface LayoutProps {
 }
 
 // 숨길 페이지 목록
-const HIDDEN_TABBAR_PAGES = ['/login', '/details', '/create'];
-const HIDDEN_HEADER_PAGES = ['/login', '/details', '/create', '/map'];
+const HIDDEN_TABBAR_PAGES = ['/login', '/details', '/create', '/share', '/view'];
+const HIDDEN_HEADER_PAGES = ['/login', '/details', '/create', '/map', '/share', '/view'];
 const HIDEEN_LAYOUT_ROUTE = '/create';
 const MYPAGE_ROUTE = '/profile';
 const DETAIL_ROUTE = '/details';
