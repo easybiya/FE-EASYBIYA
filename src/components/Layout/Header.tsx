@@ -6,6 +6,7 @@ interface HeaderProps {
   type: 1 | 2 | 3 | 4 | 5 | 6 | 7;
   title: string;
   addAction?: () => void;
+  isFixed?: boolean;
 }
 
 // type 형태
@@ -19,7 +20,7 @@ interface HeaderProps {
 
 const ROOM_DETAIL_OPTION = ['매물 정보 수정', '사진 수정', '삭제'];
 
-export default function Header({ type, title, addAction }: HeaderProps) {
+export default function Header({ type, title, addAction, isFixed }: HeaderProps) {
   const router = useRouter();
   const roomDeatilhandleSelect = (option: string) => {
     switch (option) {
@@ -91,7 +92,9 @@ export default function Header({ type, title, addAction }: HeaderProps) {
               <h1 className="text-b-20 text-start">{title}</h1>
             </div>
             <div className="flex gap-3">
-              <IconComponent name="pin" width={24} height={24} className="cursor-pointer" />
+              {isFixed && (
+                <IconComponent name="pin" width={24} height={24} className="cursor-pointer" />
+              )}
               <IconComponent name="share" width={16} height={16} className="cursor-pointer" />
               <Dropdown
                 options={ROOM_DETAIL_OPTION}

@@ -151,7 +151,7 @@ export default function ChecklistDetailPage() {
 
   return (
     <div className="h-full flex flex-col bg-[#F6F5F2] relative">
-      <Header type={3} title={propertyData.propertyName} />
+      <Header type={3} title={propertyData.propertyName} isFixed={propertyData.isBookmarked} />
       {isEdit && <EditButtonContainer onClick={() => setIsEdit(false)} />}
       <div className="w-full h-[202px] relative">
         <Swiper

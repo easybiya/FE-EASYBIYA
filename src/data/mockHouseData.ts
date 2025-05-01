@@ -26,6 +26,7 @@ export const mockHouserData: Property[] = [
         priority: 2,
       },
     ],
+    isBookmarked: false,
   },
   {
     id: 6,
@@ -38,6 +39,7 @@ export const mockHouserData: Property[] = [
     propertyAddress: '서울특별시 성동구 성수동1가 656-1887',
     propertyDetailedAddress: '101동 1203호',
     propertyImages: [],
+    isBookmarked: false,
   },
   {
     id: 1,
@@ -50,6 +52,7 @@ export const mockHouserData: Property[] = [
     propertyAddress: '서울 강남구 역삼동 831-11',
     propertyDetailedAddress: '101동 1203호',
     propertyImages: [],
+    isBookmarked: false,
   },
   {
     id: 5,
@@ -62,6 +65,7 @@ export const mockHouserData: Property[] = [
     propertyAddress: '서울 서초구 서초동 1321-7',
     propertyDetailedAddress: '101동 1203호',
     propertyImages: [],
+    isBookmarked: false,
   },
   {
     id: 2,
@@ -74,6 +78,7 @@ export const mockHouserData: Property[] = [
     propertyAddress: '서울특별시 서초구 서초동 1316-5',
     propertyDetailedAddress: '101동 1203호',
     propertyImages: [],
+    isBookmarked: true,
   },
   {
     id: 3,
@@ -86,6 +91,7 @@ export const mockHouserData: Property[] = [
     propertyAddress: '서울특별시 서초구 서초동 1328-11',
     propertyDetailedAddress: '101동 1203호',
     propertyImages: [],
+    isBookmarked: true,
   },
 ];
 

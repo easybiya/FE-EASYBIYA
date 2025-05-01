@@ -7,51 +7,22 @@ import { useEffect, useState } from 'react';
 const DROPDOWN_OPTION = ['최신순', '입주 빠른 순'];
 
 export default function Home() {
-  const [fixedList, setFixedList] = useState<number[]>([]);
+  const [fixedList, setFixedList] = useState<Property[]>([]);
   const [propertyList, setPropertyList] = useState<Property[]>([]);
 
-  const fixedItems = propertyList.filter((item) => fixedList.includes(item.id)); // 고정된 리스트
-  const nonFixedItems = propertyList.filter((item) => !fixedList.includes(item.id)); // 고정되지 않은 리스트
+  const addFixedList = (id: number) => {
+    console.log('add', id);
+  };
 
   const deleteFixedList = (id: number) => {
-    setFixedList((prev) => [...prev, id]);
-    const localData = localStorage.getItem('property');
-    let existingData: number[] = [];
-    if (localData) {
-      existingData = JSON.parse(localData);
-      const newList = existingData.filter((item) => item !== id);
-      setFixedList(newList);
-      localStorage.setItem('property', JSON.stringify(newList));
-    }
-  };
-
-  const addFixedList = (id: number) => {
-    const localData = localStorage.getItem('property');
-    let existingData: number[] = [];
-    if (localData) {
-      existingData = JSON.parse(localData);
-      const addList = [...existingData, id];
-      localStorage.setItem('property', JSON.stringify(addList));
-    } else {
-      const addList = [id];
-      localStorage.setItem('property', JSON.stringify(addList));
-    }
-    setFixedList((prev) => [...prev, id]);
+    console.log('delete', id);
   };
 
   useEffect(() => {
-    const localData = localStorage.getItem('property');
-    let storedIds: number[] = [];
-    if (localData) {
-      storedIds = JSON.parse(localData);
-      if (storedIds.length > 0) {
-        setFixedList(storedIds);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    setPropertyList(mockHouserData);
+    const bookmarkData = mockHouserData.filter((item) => item.isBookmarked); // 북마크 데이터
+    const normalData = mockHouserData.filter((item) => !item.isBookmarked); // 일반 데이터
+    setFixedList(bookmarkData);
+    setPropertyList(normalData);
   }, []);
 
   return (
@@ -61,12 +32,12 @@ export default function Home() {
         <Dropdown options={DROPDOWN_OPTION} type="select" selectedOption="최신순" />
       </div>
       <ul className="flex flex-col gap-4">
-        {fixedItems.map((item) => (
+        {fixedList.map((item) => (
           <li key={item.id}>
             <HouseCard info={item} onAdd={addFixedList} onDelete={deleteFixedList} isFixed />
           </li>
         ))}
-        {nonFixedItems.map((item) => (
+        {propertyList.map((item) => (
           <li key={item.id}>
             <HouseCard
               info={item}
