@@ -21,9 +21,9 @@ export function RoomContainer({ roomList, institution, handleTagClick }: Props) 
           }
           className={`px-2.5 py-1.5 w-full rounded-sm cursor-pointer text-[14px] bg-white leading-tight flex justify-between mb-2.5`}
         >
-          <div className="flex gap-1.5">
-            <p className="font-bold">{institution.institutionName}</p>
-            <p>{institution.institutionAddress}</p>
+          <div className="flex gap-1.5 ">
+            <p className="font-bold text-brownText">{institution.institutionName}</p>
+            <p className="text-gray-700">{institution.institutionAddress}</p>
           </div>
           <IconComponent
             name="pencil"
@@ -41,11 +41,11 @@ export function RoomContainer({ roomList, institution, handleTagClick }: Props) 
         <li key={item.id} className="flex gap-[6px] items-center">
           <div
             onClick={() => handleTagClick(item.propertyAddress, item.propertyName)}
-            className={`px-[6px] py-[2px] rounded-sm border border-black cursor-pointer w-fit text-[12px] bg-black text-white font-semibold leading-tight`}
+            className={`px-[6px] py-[2px] rounded-full border border-black cursor-pointer w-fit text-[12px] bg-black text-white font-semibold leading-tight`}
           >
             {item.propertyName}
           </div>
-          <p className="text-sm">{item.propertyAddress}</p>
+          <p className="text-sm font-semibold ">{item.propertyAddress}</p>
         </li>
       ))}
     </ul>

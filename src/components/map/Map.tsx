@@ -2,7 +2,7 @@ import { Institution, Property } from '@/types';
 import { AddressSearchResult, AddressSearchStatus } from '@/utils/getCoordinates';
 import { useCallback, useEffect, useState } from 'react';
 import markerIcon from '../../../public/icons/marker.svg';
-import whiteMarkerIcon from '../../../public/icons/marker-white.svg';
+import borwnMarkerIcon from '../../../public/icons/marker-brown.svg';
 import { ModalContent } from '@/pages/map';
 
 declare global {
@@ -158,7 +158,7 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
           (result: AddressSearchResult[], status: AddressSearchStatus) => {
             if (status === window.kakao.maps.services.Status.OK) {
               const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-              const imageSrc: string = whiteMarkerIcon.src;
+              const imageSrc: string = borwnMarkerIcon.src;
               const imageSize = new window.kakao.maps.Size(24, 24);
               const imageOption = { offset: new window.kakao.maps.Point(12, 24) };
               const markerImage = new window.kakao.maps.MarkerImage(
@@ -191,10 +191,10 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
                   align-items: center; 
                   padding: 6px 12px; 
                   font-size: 14px; 
-                  color: #000; 
+                  color: #ffffff; 
                   text-align: center; 
                   font-weight: 600; 
-                  background-color: white; 
+                  background-color: #94896A; 
                   border-radius: 9999px; 
                   white-space: nowrap;
                   position: relative;

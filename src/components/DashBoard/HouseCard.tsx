@@ -7,15 +7,16 @@ import { formatWon } from '@/utils/formatWon';
 
 interface Props {
   info: Property;
-  onDelete: (id: number) => void;
-  onAdd: (id: number) => void;
-  isFixed: boolean;
+  onDelete?: (id: number) => void;
+  onAdd?: (id: number) => void;
+  isFixed?: boolean;
+  isShared?: boolean;
 }
 
 const defaultMenuList = ['고정하기', '수정하기', '삭제하기'];
 const cancelOptionMenuList = ['고정 해제하기', '수정하기', '삭제하기'];
 
-export default function HouseCard({ info, onDelete, onAdd, isFixed }: Props) {
+export default function HouseCard({ info, onDelete, onAdd, isFixed, isShared }: Props) {
   const handleSelect = (option: string) => {
     switch (option) {
       case '고정 해제하기':
@@ -43,14 +44,16 @@ export default function HouseCard({ info, onDelete, onAdd, isFixed }: Props) {
     <div className="w-full flex flex-col gap-2">
       <div className="flex justify-between items-center">
         <h1 className="font-bold text-lg">{info.propertyName}</h1>
-        <div className="flex gap-5">
-          {isFixed && <IconComponent name="pin" width={20} height={20} />}
-          <Dropdown
-            options={isFixed ? cancelOptionMenuList : defaultMenuList}
-            type="meatball"
-            onSelect={handleSelect}
-          />
-        </div>
+        {!isShared && (
+          <div className="flex gap-5">
+            {isFixed && <IconComponent name="pin" width={20} height={20} />}
+            <Dropdown
+              options={isFixed ? cancelOptionMenuList : defaultMenuList}
+              type="meatball"
+              onSelect={handleSelect}
+            />
+          </div>
+        )}
       </div>
       <Link href={`/details/${info.id}`}>
         <div className="flex w-full justify-between items-center rounded-lg bg-white border p-5">
