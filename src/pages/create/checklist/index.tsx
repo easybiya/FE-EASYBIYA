@@ -36,6 +36,9 @@ export default function ChecklistPage() {
   const { property, images, resetAll } = usePropertyStore();
   const store = useTemplateStore();
 
+  // TO DO
+  // hasInfo, 항목 & 세부사항 삭제 로직 돌려놓기
+
   useEffect(() => {
     const transformApiChecklist = (apiData: ChecklistItem[]): ChecklistPayloadItem[] => {
       return apiData.map((item, index) => ({
