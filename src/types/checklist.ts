@@ -34,3 +34,9 @@ export interface ChecklistPayloadItem {
   content: string | null;
   checkItems: CheckItemPayload[];
 }
+
+// 템플릿 관련 새로 추가가
+export interface TemplatePreview {
+  templateId: number;
+  name: string;
+}

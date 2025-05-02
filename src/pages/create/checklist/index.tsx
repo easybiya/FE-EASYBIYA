@@ -19,6 +19,7 @@ import { useToastStore } from '@/store/toastStore';
 import { useTemplateStore } from '@/store/templateStore';
 import { usePropertyStore } from '@/store/usePropertyStore';
 import { mockCheckList } from '@/data/mockHouseData';
+import { postProperty } from '@/lib/api/property';
 
 export default function ChecklistPage() {
   const router = useRouter();
@@ -165,8 +166,7 @@ export default function ChecklistPage() {
     );
     images.forEach((img) => formData.append('images', img));
     try {
-      const res = await fetch('/api/property', { method: 'POST', body: formData });
-      if (!res.ok) throw new Error('등록 실패');
+      await postProperty(formData);
       resetAll();
       setIsCompleted(true);
       setShowTemplateSelectModal(true);
