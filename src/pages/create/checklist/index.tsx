@@ -20,6 +20,7 @@ import { useTemplateStore } from '@/store/templateStore';
 import { usePropertyStore } from '@/store/usePropertyStore';
 import { mockCheckList } from '@/data/mockHouseData';
 import { postProperty } from '@/lib/api/property';
+import { postTemplate } from '@/lib/api/template';
 
 export default function ChecklistPage() {
   const router = useRouter();
@@ -175,7 +176,7 @@ export default function ChecklistPage() {
     }
   };
 
-  const handleNewTemplateSave = (name: string) => {
+  const handleNewTemplateSave = async (name: string) => {
     const template: ChecklistTemplate = {
       name,
       checklists: checklist.map(({ title, checkType, content, checkItems }) => ({
@@ -185,10 +186,18 @@ export default function ChecklistPage() {
         checkItems: checkItems.map((i) => i.description),
       })),
     };
-    store.addTemplate(template);
-    store.setSelectedTemplate(template);
-    setShowNewTemplateModal(false);
-    useToastStore.getState().showToast('새 템플릿 생성 완료', 'success');
+
+    try {
+      await postTemplate(template); 
+
+      store.addTemplate(template);
+      store.setSelectedTemplate(template);
+      setShowNewTemplateModal(false);
+      useToastStore.getState().showToast('새 템플릿 생성 완료', 'success');
+    } catch (error) {
+      useToastStore.getState().showToast('템플릿 저장 실패', 'error');
+      console.error(error);
+    }
   };
 
   return (

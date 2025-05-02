@@ -6,7 +6,7 @@ export async function updateChecklistToServer(
 ) {
   const response = await fetch(
     // TO DO: 서버 도메인에 맞게 URL 변경하기
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/property/${propertyId}/checklist`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/property/${propertyId}`,
     {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
