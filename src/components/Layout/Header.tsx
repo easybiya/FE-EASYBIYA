@@ -7,6 +7,7 @@ interface HeaderProps {
   title: string;
   addAction?: () => void;
   isFixed?: boolean;
+  propertyId?: number;
 }
 
 // type 형태
@@ -20,7 +21,7 @@ interface HeaderProps {
 
 const ROOM_DETAIL_OPTION = ['매물 정보 수정', '사진 수정', '삭제'];
 
-export default function Header({ type, title, addAction, isFixed }: HeaderProps) {
+export default function Header({ type, title, addAction, isFixed, propertyId }: HeaderProps) {
   const router = useRouter();
   const roomDeatilhandleSelect = (option: string) => {
     switch (option) {
@@ -29,7 +30,8 @@ export default function Header({ type, title, addAction, isFixed }: HeaderProps)
 
         break;
       case '사진 수정':
-        router.push('/create/add-photo');
+        if (!propertyId) return;
+        router.push(`/create/add-photo?mode=edit&propertyId=${propertyId}`);
         console.log('사진 수정 기능 실행');
 
         break;

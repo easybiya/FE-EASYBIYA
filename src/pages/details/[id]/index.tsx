@@ -96,6 +96,11 @@ export default function ChecklistDetailPage() {
     setIsEdit(true);
   };
 
+  const handleEditImages = () => {
+    if (!id) return;
+    router.push(`/create/add-photo?mode=edit&propertyId=${id}`);
+  };
+
   const handleConfirmDelete = () => {
     if (editingItemId !== null) {
       setChecklist((prev) => prev.filter((item) => item.priority !== editingItemId));
@@ -151,8 +156,16 @@ export default function ChecklistDetailPage() {
 
   return (
     <div className="h-full flex flex-col bg-[#F6F5F2] relative">
-      <Header type={3} title={propertyData.propertyName} isFixed={propertyData.isBookmarked} />
-      {isEdit && <EditButtonContainer onClick={() => setIsEdit(false)} />}
+      <Header
+        type={3}
+        title={propertyData.propertyName}
+        isFixed={propertyData.isBookmarked}
+        propertyId={propertyData.id}
+      />
+      {isEdit && (
+        <EditButtonContainer onClick={() => setIsEdit(false)} onEditImage={handleEditImages} />
+      )}
+
       <div className="w-full h-[202px] relative">
         <Swiper
           modules={[Pagination]}
