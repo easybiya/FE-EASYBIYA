@@ -29,6 +29,7 @@ export default function Header({ type, title, addAction, isFixed }: HeaderProps)
 
         break;
       case '사진 수정':
+        router.push('/create/add-photo');
         console.log('사진 수정 기능 실행');
 
         break;

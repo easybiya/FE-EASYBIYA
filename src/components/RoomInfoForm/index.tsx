@@ -10,6 +10,8 @@ import AvailableCalendar from './AvaliableCalendar';
 import IconComponent from '../Asset/Icon';
 import { formatDate } from '@/utils/formatDate';
 import FixedBar from '../FixedBar';
+import { usePropertyStore } from '@/store/usePropertyStore';
+import router from 'next/router';
 
 type roomInfoSchema = {
   contractType: HouseType;
@@ -41,10 +43,19 @@ export default function RoomInfoForm() {
 
   const currentDate = useWatch({ control: form.control, name: 'available' });
 
+  const { setProperty } = usePropertyStore();
+
   const onSubmit: SubmitHandler<roomInfoSchema> = (values) => {
-    startTransition(async () => {
-      console.log(roomInfoZodSchema.safeParse(form.getValues()));
-      console.log(values);
+    startTransition(() => {
+      setProperty({
+        leaseType: values.contractType,
+        deposit: values.deposit,
+        monthlyFee: values.monthlyRent,
+        maintenanceFee: values.maintenanceFee || 0,
+        availableDate: values.available,
+      });
+
+      router.push('/create/room-address');
     });
   };
 
