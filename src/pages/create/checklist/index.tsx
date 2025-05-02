@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import ChecklistContainer from '@/components/CheckList/CheckListContainer';
-import CustomButton from '@/components/Button/CustomButton';
-import ChecklistAddButton from '@/components/Button/CheckListAddButton';
 import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
 import ChecklistModal from '@/components/Modal/ChecklistModal';
 import TemplateSelectModal from '@/components/Modal/TemplateSelectModal';
+import Toast from '@/components/Toast';
+import ChecklistComplete from '@/components/CompletePage';
+import ChecklistContent from '@/components/CheckList/CheckListContent';
+import CustomButton from '@/components/Button/CustomButton';
 import { DropResult } from '@hello-pangea/dnd';
 import {
   CheckItemPayload,
@@ -14,16 +15,14 @@ import {
   ChecklistTemplate,
   CheckType,
 } from '@/types/checklist';
-import Toast from '@/components/Toast';
 import { useToastStore } from '@/store/toastStore';
-import ChecklistComplete from '@/components/CompletePage';
 import { useTemplateStore } from '@/store/templateStore';
+import { usePropertyStore } from '@/store/usePropertyStore';
 import { mockCheckList } from '@/data/mockHouseData';
 
 export default function ChecklistPage() {
   const router = useRouter();
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
-  const [error] = useState<string | null>(null);
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
   const [editingOption, setEditingOption] = useState<{
     itemPriority: number;
@@ -34,60 +33,46 @@ export default function ChecklistPage() {
   const [showTemplateSelectModal, setShowTemplateSelectModal] = useState(false);
   const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
-
-  const transformApiChecklist = (apiData: ChecklistItem[]): ChecklistPayloadItem[] => {
-    return apiData.map((item, index) => ({
-      priority: index + 1,
-      title: item.title,
-      checkType: item.checkType,
-      content: null,
-      checkItems: item.checkItems.map((checkItemDesc, checkItemIndex) => ({
-        description: checkItemDesc,
-        checked: checkItemIndex === 0, // 첫 번째만 true로 예시
-        priority: checkItemIndex + 1,
-      })),
-    }));
-  };
+  const { property, images, resetAll } = usePropertyStore();
+  const store = useTemplateStore();
 
   useEffect(() => {
-    const testData = mockCheckList;
-    const transformedTemplate = transformApiChecklist(testData.checklists);
-    setChecklist(transformedTemplate);
+    const transformApiChecklist = (apiData: ChecklistItem[]): ChecklistPayloadItem[] => {
+      return apiData.map((item, index) => ({
+        priority: index + 1,
+        title: item.title,
+        checkType: item.checkType,
+        content: null,
+        checkItems: item.checkItems.map((desc, idx) => ({
+          description: desc,
+          checked: idx === 0,
+          priority: idx + 1,
+        })),
+      }));
+    };
+
+    const transformed = transformApiChecklist(mockCheckList.checklists);
+    setChecklist(transformed);
   }, []);
-
-  useEffect(() => {
-    if (router.query.saved === 'true') {
-      useToastStore.getState().showToast('기존 템플릿에 저장 완료', 'success');
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { saved, ...rest } = router.query;
-      router.replace({ pathname: router.pathname, query: rest }, undefined, { shallow: true });
-    }
-  }, [router.query]);
 
   const updateChecklistValue = (id: number, checkItem: CheckItemPayload) => {
     const updatedChecklist = checklist.map((item) => {
       if (item.priority !== id) return item;
-
-      // CHECKBOX 타입: 해당 항목만 checked 상태 토글
       if (item.checkType === 'CHECKBOX') {
-        const updatedCheckItems = item.checkItems.map((ci) =>
+        const updated = item.checkItems.map((ci) =>
           ci.priority === checkItem.priority ? { ...ci, checked: !ci.checked } : ci,
         );
-        return { ...item, checkItems: updatedCheckItems };
+        return { ...item, checkItems: updated };
       }
-
-      // RADIO 타입: 해당 항목만 checked = true, 나머지는 false
       if (item.checkType === 'RADIO') {
-        const updatedCheckItems = item.checkItems.map((ci) => ({
+        const updated = item.checkItems.map((ci) => ({
           ...ci,
           checked: ci.priority === checkItem.priority,
         }));
-        return { ...item, checkItems: updatedCheckItems };
+        return { ...item, checkItems: updated };
       }
-
       return item;
     });
-
     setChecklist(updatedChecklist);
   };
 
@@ -118,97 +103,16 @@ export default function ChecklistPage() {
   const updateCheckItemDescription = (
     priority: number,
     checkItemPriority: number,
-    newDescription: string,
+    newDesc: string,
   ) => {
-    const updatedChecklist = checklist.map((item) => {
+    const updated = checklist.map((item) => {
       if (item.priority !== priority) return item;
-
-      const updatedCheckItems = item.checkItems.map((checkItem) =>
-        checkItem.priority === checkItemPriority
-          ? { ...checkItem, description: newDescription }
-          : checkItem,
+      const checkItems = item.checkItems.map((ci) =>
+        ci.priority === checkItemPriority ? { ...ci, description: newDesc } : ci,
       );
-
-      return { ...item, checkItems: updatedCheckItems };
+      return { ...item, checkItems };
     });
-
-    setChecklist(updatedChecklist);
-  };
-
-  const handleOptionAdd = (priority: number) => {
-    setChecklist((prev) =>
-      prev.map((item) => {
-        if (item.priority !== priority) return item;
-
-        if (item.checkType === 'RADIO' || item.checkType === 'CHECKBOX') {
-          const nextPriority = item.checkItems.length + 1;
-          const newOption = {
-            description: `옵션 ${nextPriority}`,
-            checked: false,
-            priority: nextPriority,
-          };
-          return {
-            ...item,
-            checkItems: [...item.checkItems, newOption],
-          };
-        }
-
-        return item;
-      }),
-    );
-  };
-
-  const handleDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
-    const items = Array.from(checklist);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    setChecklist(items);
-  };
-
-  const handleAddChecklist = (type: CheckType) => {
-    const newId = checklist.length > 0 ? checklist[checklist.length - 1].priority + 1 : 1;
-
-    const newItem: ChecklistPayloadItem = {
-      priority: newId,
-      title: '새 체크리스트 항목',
-      content: type === 'TEXT' ? '옵션1' : null,
-      checkType: type,
-      checkItems:
-        type === 'TEXT'
-          ? []
-          : [
-              {
-                description: '옵션1',
-                checked: false,
-                priority: 1,
-              },
-            ],
-    };
-
-    setChecklist((prev) => [...prev, newItem]);
-  };
-
-  const handleSaveTemplate = (name: string) => {
-    const template: ChecklistTemplate = {
-      name,
-      checklists: checklist.map(({ title, checkType, checkItems, content }) => ({
-        title,
-        checkType: checkType,
-        content,
-        checkItems: checkItems.map((item) => item.description),
-      })),
-    };
-    const store = useTemplateStore.getState();
-    store.addTemplate(template);
-    store.setSelectedTemplate(template);
-    setShowNewTemplateModal(false);
-    console.log(template);
-    useToastStore.getState().showToast('새 템플릿 생성 완료', 'success');
-  };
-
-  const handleNavigateToProfileChecklist = () => {
-    router.push({ pathname: '/profile/checklist', query: { returnTo: '/create/checklist' } });
+    setChecklist(updated);
   };
 
   const handleOptionEdit = (itemPriority: number, checkItemPriority: number) => {
@@ -217,10 +121,71 @@ export default function ChecklistPage() {
     setShowModal(true);
   };
 
+  const handleOptionAdd = (priority: number) => {
+    setChecklist((prev) =>
+      prev.map((item) => {
+        if (item.priority !== priority) return item;
+        const next = item.checkItems.length + 1;
+        const newOption = { description: `옵션 ${next}`, checked: false, priority: next };
+        return { ...item, checkItems: [...item.checkItems, newOption] };
+      }),
+    );
+  };
+
+  const handleAddChecklist = (type: CheckType) => {
+    const newId = checklist.length > 0 ? checklist[checklist.length - 1].priority + 1 : 1;
+    const newItem: ChecklistPayloadItem = {
+      priority: newId,
+      title: '새 체크리스트 항목',
+      content: type === 'TEXT' ? '옵션1' : null,
+      checkType: type,
+      checkItems: type === 'TEXT' ? [] : [{ description: '옵션1', checked: false, priority: 1 }],
+    };
+    setChecklist((prev) => [...prev, newItem]);
+  };
+
+  const handleReorderChecklist = (result: DropResult) => {
+    if (!result.destination) return;
+    const items = Array.from(checklist);
+    const [reordered] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reordered);
+    setChecklist(items);
+  };
+
+  const handleSaveTemplate = () => setShowTemplateSelectModal(true);
+
   const handleComplete = async () => {
-    // 여기에 API 요청 처리 가능
-    setIsCompleted(true);
-    setShowTemplateSelectModal(true);
+    const formData = new FormData();
+    formData.append(
+      'request',
+      new Blob([JSON.stringify({ property, checklists: checklist })], { type: 'application/json' }),
+    );
+    images.forEach((img) => formData.append('images', img));
+    try {
+      const res = await fetch('/api/property', { method: 'POST', body: formData });
+      if (!res.ok) throw new Error('등록 실패');
+      resetAll();
+      setIsCompleted(true);
+      setShowTemplateSelectModal(true);
+    } catch {
+      useToastStore.getState().showToast('등록에 실패했습니다', 'error');
+    }
+  };
+
+  const handleNewTemplateSave = (name: string) => {
+    const template: ChecklistTemplate = {
+      name,
+      checklists: checklist.map(({ title, checkType, content, checkItems }) => ({
+        title,
+        checkType,
+        content,
+        checkItems: checkItems.map((i) => i.description),
+      })),
+    };
+    store.addTemplate(template);
+    store.setSelectedTemplate(template);
+    setShowNewTemplateModal(false);
+    useToastStore.getState().showToast('새 템플릿 생성 완료', 'success');
   };
 
   return (
@@ -231,52 +196,17 @@ export default function ChecklistPage() {
         ) : (
           <>
             <HeaderWithProgress title="체크리스트 등록" totalSteps={4} />
-
-            <div className="flex-1 overflow-y-auto px-4 pb-48 no-scrollbar">
-              {error && (
-                <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-md">{error}</div>
-              )}
-
-              <ChecklistContainer
-                checklist={checklist}
-                onUpdateChecklist={updateChecklistValue}
-                onReorderChecklist={handleDragEnd}
-                onEditChecklist={handleEditChecklist}
-                onDeleteChecklist={handleDeleteChecklist}
-                onOptionAdd={handleOptionAdd}
-                onOptionEdit={handleOptionEdit}
-              />
-
-              <div className="mt-6">
-                <h2 className="text-lg font-bold text-gray-900 mb-3">체크리스트 추가</h2>
-                <div className="grid grid-cols-3 gap-3">
-                  <ChecklistAddButton
-                    label="중복 선택"
-                    iconName="addListCheck"
-                    onClick={() => handleAddChecklist('CHECKBOX')}
-                  />
-                  <ChecklistAddButton
-                    label="단일 선택"
-                    iconName="addListRadio"
-                    onClick={() => handleAddChecklist('RADIO')}
-                  />
-                  <ChecklistAddButton
-                    label="텍스트"
-                    iconName="addListText"
-                    onClick={() => handleAddChecklist('TEXT')}
-                  />
-                </div>
-              </div>
-
-              <CustomButton
-                label="템플릿 저장"
-                variant="secondary"
-                fullWidth
-                className="mt-5 mb-6"
-                onClick={() => setShowTemplateSelectModal(true)}
-              />
-            </div>
-
+            <ChecklistContent
+              checklist={checklist}
+              onUpdateChecklist={updateChecklistValue}
+              onReorderChecklist={handleReorderChecklist}
+              onEditChecklist={handleEditChecklist}
+              onDeleteChecklist={handleDeleteChecklist}
+              onOptionAdd={handleOptionAdd}
+              onOptionEdit={handleOptionEdit}
+              onAddChecklist={handleAddChecklist}
+              onSaveTemplate={handleSaveTemplate}
+            />
             <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-[#F6F5F2] z-30 px-4 pt-2 pb-6">
               <CustomButton
                 label="완료"
@@ -292,70 +222,69 @@ export default function ChecklistPage() {
                 className="mt-2 h-10 text-sm"
               />
             </div>
-
-            {showModal && (editingItemId !== null || editingOption !== null) && (
-              <ChecklistModal
-                mode={modalMode === 'edit' || modalMode === 'confirm' ? modalMode : 'edit'}
-                title={
-                  modalMode === 'edit'
-                    ? '항목명을 수정하시겠습니까?'
-                    : modalMode === 'option-edit'
-                    ? '옵션 설명을 수정하시겠습니까?'
-                    : '정말 삭제하시겠습니까?'
-                }
-                defaultValue={
-                  modalMode === 'option-edit'
-                    ? checklist
-                        .find((item) => item.priority === editingOption?.itemPriority)
-                        ?.checkItems.find(
-                          (opt) => opt.priority === editingOption?.checkItemPriority,
-                        )?.description ?? ''
-                    : checklist.find((item) => item.priority === editingItemId)?.title ?? ''
-                }
-                confirmText={modalMode === 'confirm' ? '삭제' : '확인'}
-                onClose={() => {
-                  setShowModal(false);
-                  setEditingItemId(null);
-                  setEditingOption(null);
-                }}
-                onConfirm={(value) => {
-                  if (modalMode === 'edit') handleEditSubmit(value as string);
-                  else if (modalMode === 'option-edit' && editingOption) {
-                    updateCheckItemDescription(
-                      editingOption.itemPriority,
-                      editingOption.checkItemPriority,
-                      value as string,
-                    );
-                  } else if (modalMode === 'confirm') {
-                    handleConfirmDelete();
-                  }
-                }}
-              />
-            )}
-
-            {showTemplateSelectModal && (
-              <TemplateSelectModal
-                onClose={() => setShowTemplateSelectModal(false)}
-                onCreateNew={() => {
-                  setShowTemplateSelectModal(false);
-                  setShowNewTemplateModal(true);
-                }}
-                onCancel={() => setShowTemplateSelectModal(false)}
-                onNavigate={handleNavigateToProfileChecklist}
-              />
-            )}
-
-            {showNewTemplateModal && (
-              <ChecklistModal
-                mode="edit"
-                title="새 템플릿 생성"
-                defaultValue={`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`}
-                confirmText="저장"
-                onClose={() => setShowNewTemplateModal(false)}
-                onConfirm={(value) => handleSaveTemplate(value!)}
-              />
-            )}
           </>
+        )}
+
+        {showModal && (editingItemId !== null || editingOption !== null) && (
+          <ChecklistModal
+            mode={modalMode === 'edit' || modalMode === 'confirm' ? modalMode : 'edit'}
+            title={
+              modalMode === 'edit'
+                ? '항목명을 수정하시겠습니까?'
+                : modalMode === 'option-edit'
+                ? '옵션 설명을 수정하시겠습니까?'
+                : '정말 삭제하시겠습니까?'
+            }
+            defaultValue={
+              modalMode === 'option-edit'
+                ? checklist
+                    .find((i) => i.priority === editingOption?.itemPriority)
+                    ?.checkItems.find((opt) => opt.priority === editingOption?.checkItemPriority)
+                    ?.description ?? ''
+                : checklist.find((i) => i.priority === editingItemId)?.title ?? ''
+            }
+            confirmText={modalMode === 'confirm' ? '삭제' : '확인'}
+            onClose={() => {
+              setShowModal(false);
+              setEditingItemId(null);
+              setEditingOption(null);
+            }}
+            onConfirm={(value) => {
+              if (modalMode === 'edit') handleEditSubmit(value as string);
+              else if (modalMode === 'option-edit' && editingOption) {
+                updateCheckItemDescription(
+                  editingOption.itemPriority,
+                  editingOption.checkItemPriority,
+                  value as string,
+                );
+              } else if (modalMode === 'confirm') {
+                handleConfirmDelete();
+              }
+            }}
+          />
+        )}
+
+        {showTemplateSelectModal && (
+          <TemplateSelectModal
+            onClose={() => setShowTemplateSelectModal(false)}
+            onCreateNew={() => {
+              setShowTemplateSelectModal(false);
+              setShowNewTemplateModal(true);
+            }}
+            onCancel={() => setShowTemplateSelectModal(false)}
+            onNavigate={() => router.push('/profile/checklist')}
+          />
+        )}
+
+        {showNewTemplateModal && (
+          <ChecklistModal
+            mode="edit"
+            title="새 템플릿 생성"
+            defaultValue={`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`}
+            confirmText="저장"
+            onClose={() => setShowNewTemplateModal(false)}
+            onConfirm={(value) => handleNewTemplateSave(value as string)}
+          />
         )}
 
         <Toast />
