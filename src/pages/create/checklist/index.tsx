@@ -25,8 +25,12 @@ export default function ChecklistPage() {
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const [error] = useState<string | null>(null);
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
+  const [editingOption, setEditingOption] = useState<{
+    itemPriority: number;
+    checkItemPriority: number;
+  } | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const [modalMode, setModalMode] = useState<'edit' | 'confirm'>('edit');
+  const [modalMode, setModalMode] = useState<'edit' | 'option-edit' | 'confirm'>('edit');
   const [showTemplateSelectModal, setShowTemplateSelectModal] = useState(false);
   const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -44,26 +48,6 @@ export default function ChecklistPage() {
       })),
     }));
   };
-
-  // 나중에 패칭할 로직 남겨두었음
-  // const fetchTemplate = async (signal: AbortSignal) => {
-  //   try {
-  //     const response = await fetch('/api/template/default', { signal });
-  //     const data = await response.json();
-
-  //     if (!data.isSuccess || !data.result?.checklists) {
-  //       throw new Error('템플릿 데이터를 불러오지 못했습니다.');
-  //     }
-
-  //     const transformed = transformApiChecklist(data.result.checklists);
-  //     console.log(transformed);
-  //     setChecklist(transformed);
-  //   } catch (err) {
-  //     if (err instanceof DOMException && err.name === 'AbortError') return;
-  //     setError('체크리스트 템플릿을 불러오는 중 문제가 발생했습니다.');
-  //     console.error(err);
-  //   }
-  // };
 
   useEffect(() => {
     const testData = mockCheckList;
@@ -227,6 +211,18 @@ export default function ChecklistPage() {
     router.push({ pathname: '/profile/checklist', query: { returnTo: '/create/checklist' } });
   };
 
+  const handleOptionEdit = (itemPriority: number, checkItemPriority: number) => {
+    setEditingOption({ itemPriority, checkItemPriority });
+    setModalMode('option-edit');
+    setShowModal(true);
+  };
+
+  const handleComplete = async () => {
+    // 여기에 API 요청 처리 가능
+    setIsCompleted(true);
+    setShowTemplateSelectModal(true);
+  };
+
   return (
     <div className="flex justify-center bg-[#F6F5F2]">
       <div className="relative w-full max-w-[430px] h-screen flex flex-col">
@@ -243,12 +239,12 @@ export default function ChecklistPage() {
 
               <ChecklistContainer
                 checklist={checklist}
-                onUpdateChecklist={updateChecklistValue} // 체크리스트 onchange 이벤트
-                onReorderChecklist={handleDragEnd} // 드레그 이벤트
-                onEditChecklist={handleEditChecklist} //
-                onDeleteChecklist={handleDeleteChecklist} // 체크리스트 삭제 이벤트
+                onUpdateChecklist={updateChecklistValue}
+                onReorderChecklist={handleDragEnd}
+                onEditChecklist={handleEditChecklist}
+                onDeleteChecklist={handleDeleteChecklist}
                 onOptionAdd={handleOptionAdd}
-                onOptionEdit={updateCheckItemDescription}
+                onOptionEdit={handleOptionEdit}
               />
 
               <div className="mt-6">
@@ -281,15 +277,13 @@ export default function ChecklistPage() {
               />
             </div>
 
-            <div className="pointer-events-none fixed bottom-[136px] left-1/2 -translate-x-1/2 w-full max-w-[430px] h-10 bg-gradient-to-t from-[#F6F5F2] to-transparent z-20" />
-
             <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-[#F6F5F2] z-30 px-4 pt-2 pb-6">
               <CustomButton
                 label="완료"
                 variant="primary"
                 fullWidth
                 className="h-11 text-sm rounded-md"
-                onClick={() => setIsCompleted(true)}
+                onClick={handleComplete}
               />
               <CustomButton
                 label="건너뛰기"
@@ -299,20 +293,42 @@ export default function ChecklistPage() {
               />
             </div>
 
-            {showModal && editingItemId !== null && (
+            {showModal && (editingItemId !== null || editingOption !== null) && (
               <ChecklistModal
-                mode={modalMode}
-                title={modalMode === 'edit' ? '수정하시겠습니까?' : '정말 삭제하시겠습니까?'}
-                defaultValue={
+                mode={modalMode === 'edit' || modalMode === 'confirm' ? modalMode : 'edit'}
+                title={
                   modalMode === 'edit'
-                    ? checklist.find((item) => item.priority === editingItemId)?.title ?? ''
-                    : ''
+                    ? '항목명을 수정하시겠습니까?'
+                    : modalMode === 'option-edit'
+                    ? '옵션 설명을 수정하시겠습니까?'
+                    : '정말 삭제하시겠습니까?'
                 }
-                confirmText={modalMode === 'edit' ? '확인' : '삭제'}
-                onClose={() => setShowModal(false)}
+                defaultValue={
+                  modalMode === 'option-edit'
+                    ? checklist
+                        .find((item) => item.priority === editingOption?.itemPriority)
+                        ?.checkItems.find(
+                          (opt) => opt.priority === editingOption?.checkItemPriority,
+                        )?.description ?? ''
+                    : checklist.find((item) => item.priority === editingItemId)?.title ?? ''
+                }
+                confirmText={modalMode === 'confirm' ? '삭제' : '확인'}
+                onClose={() => {
+                  setShowModal(false);
+                  setEditingItemId(null);
+                  setEditingOption(null);
+                }}
                 onConfirm={(value) => {
-                  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-                  modalMode === 'edit' ? handleEditSubmit(value as string) : handleConfirmDelete();
+                  if (modalMode === 'edit') handleEditSubmit(value as string);
+                  else if (modalMode === 'option-edit' && editingOption) {
+                    updateCheckItemDescription(
+                      editingOption.itemPriority,
+                      editingOption.checkItemPriority,
+                      value as string,
+                    );
+                  } else if (modalMode === 'confirm') {
+                    handleConfirmDelete();
+                  }
                 }}
               />
             )}
