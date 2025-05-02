@@ -36,6 +36,7 @@ export interface Property {
   propertyAddress: string;
   propertyDetailedAddress: string;
   propertyImages: PropertyImage[];
+  isBookmarked: boolean;
 }
 
 export interface Institution {
