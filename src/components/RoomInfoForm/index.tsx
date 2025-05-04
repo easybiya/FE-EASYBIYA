@@ -172,6 +172,7 @@ export default function RoomInfoForm() {
           <FixedBar
             disabled={!form.formState.isValid || isPending}
             skipRoute="/create/room-address"
+            preventSkip={true}
           />
         </form>
       </Form>

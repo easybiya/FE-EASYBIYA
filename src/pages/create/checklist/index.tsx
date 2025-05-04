@@ -21,6 +21,7 @@ import { usePropertyStore } from '@/store/usePropertyStore';
 import { mockCheckList } from '@/data/mockHouseData';
 import { postProperty } from '@/lib/api/property';
 import { postTemplate } from '@/lib/api/template';
+import FixedBar from '@/components/FixedBar';
 
 export default function ChecklistPage() {
   const router = useRouter();
@@ -188,7 +189,7 @@ export default function ChecklistPage() {
     };
 
     try {
-      await postTemplate(template); 
+      await postTemplate(template);
 
       store.addTemplate(template);
       store.setSelectedTemplate(template);
@@ -219,21 +220,7 @@ export default function ChecklistPage() {
               onAddChecklist={handleAddChecklist}
               onSaveTemplate={handleSaveTemplate}
             />
-            <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-[#F6F5F2] z-30 px-4 pt-2 pb-6">
-              <CustomButton
-                label="완료"
-                variant="primary"
-                fullWidth
-                className="h-11 text-sm rounded-md"
-                onClick={handleComplete}
-              />
-              <CustomButton
-                label="건너뛰기"
-                variant="ghost"
-                fullWidth
-                className="mt-2 h-10 text-sm"
-              />
-            </div>
+            <FixedBar onClick={handleComplete} skipRoute="/" preventSkip={false} disabled={false} />
           </>
         )}
 

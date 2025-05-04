@@ -178,6 +178,7 @@ export default function SearchAddress() {
           <FixedBar
             disabled={!form.formState.isValid && !isPending}
             skipRoute="/create/add-photo"
+            preventSkip={true}
           />
         </form>
       </Form>

@@ -103,6 +103,7 @@ export default function AddPhotoPage() {
         disabled={previewImages.length === 0}
         skipRoute="/create/checklist"
         onClick={goToChecklist}
+        preventSkip={false}
       />
     </div>
   );
