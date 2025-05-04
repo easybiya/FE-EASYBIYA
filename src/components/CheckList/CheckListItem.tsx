@@ -13,6 +13,7 @@ interface ChecklistItemProps extends ChecklistPayloadItem {
   index: number;
   onEdit?: (id: number) => void;
   onDelete?: (id: number) => void;
+  onTextEdit?: (id: number, content: string) => void;
 }
 
 export default function ChecklistItem({
@@ -24,6 +25,7 @@ export default function ChecklistItem({
   onChange,
   onOptionEdit,
   onOptionAdd,
+  onTextEdit,
   index,
   onEdit,
   onDelete,
@@ -124,7 +126,7 @@ export default function ChecklistItem({
                 <input
                   value={content ?? ''}
                   autoFocus
-                  onChange={() => onEdit?.(priority)}
+                  onChange={(e) => onTextEdit?.(priority, e.target.value)}
                   onBlur={() => setEditingText(false)}
                   onKeyDown={(e) => e.key === 'Enter' && setEditingText(false)}
                   className="w-full text-sm border-b border-gray-300 mr-2"

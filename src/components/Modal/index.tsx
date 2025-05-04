@@ -4,13 +4,21 @@ import Input from '../Input';
 import IconComponent from '../Asset/Icon';
 import CustomButton from '../Button/CustomButton';
 import { usePreventScroll } from '@/hooks/usePreventScroll';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 export default function Modal() {
-  const { isOpen, type, title, description, onConfirm, onCancel, closeModal } = useModalStore();
+  const { isOpen, type, title, description, defaultValue, onConfirm, onCancel, closeModal } =
+    useModalStore();
+  const [inputValue, setInputValue] = useState(defaultValue || '');
   const router = useRouter();
   usePreventScroll(isOpen);
+
+  useEffect(() => {
+    if (isOpen) {
+      setInputValue(defaultValue || '');
+    }
+  }, [isOpen, defaultValue]);
 
   useEffect(() => {
     if (isOpen) {
@@ -72,11 +80,15 @@ export default function Modal() {
 
         {type === 'input' && (
           <div className="flex flex-col gap-7 mt-[22px]">
-            <Input placeholder="값을 입력하세요" />
+            <Input
+              placeholder="값을 입력하세요"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+            />
             <button onClick={closeModal} className="absolute right-5 top-6">
               <IconComponent name="close" width={14} height={14} isBtn />
             </button>
-            <CustomButton label="저장" fullWidth onClick={onConfirm} />
+            <CustomButton label="저장" fullWidth onClick={() => onConfirm?.(inputValue)} />
           </div>
         )}
 

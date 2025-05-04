@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
 import CustomButton from '@/components/Button/CustomButton';
 import IconComponent from '@/components/Asset/Icon';
@@ -60,8 +61,9 @@ export default function AddPhotoPage() {
             <div className="grid grid-cols-3 gap-3 w-full max-w-md">
               {previewImages.map((image, index) => (
                 <div key={index} className="relative w-full aspect-square bg-gray-100 rounded-lg">
-                  <img
+                  <Image
                     src={image}
+                    fill
                     alt={`Uploaded ${index}`}
                     className="w-full h-full object-cover rounded-lg border border-gray-300"
                   />
