@@ -8,6 +8,8 @@ import { Input } from '../ui/input';
 import Image from 'next/image';
 import { createRoomZodSchema } from '@/lib/zodSchema';
 import FixedBar from '../FixedBar';
+import { useRouter } from 'next/router';
+import { usePropertyStore } from '@/store/usePropertyStore';
 
 declare global {
   interface Window {
@@ -37,9 +39,25 @@ export default function SearchAddress() {
     mode: 'onBlur',
   });
 
+  const router = useRouter();
+  const { setProperty } = usePropertyStore();
+
   const onSubmit: SubmitHandler<CreateRoomSchema> = (values) => {
-    startTransition(async () => {
-      console.log(values, addressCoordinate); // 주소 및 좌표 설정 API
+    startTransition(() => {
+      if (!addressCoordinate.x || !addressCoordinate.y) {
+        alert('좌표를 찾을 수 없습니다.');
+        return;
+      }
+
+      setProperty({
+        propertyName: values.nickName,
+        propertyAddress: values.address,
+        propertyDetailedAddress: values.addressDetail,
+        propertyLatitude: parseFloat(addressCoordinate.y), // y = 위도
+        propertyLongitude: parseFloat(addressCoordinate.x), // x = 경도
+      });
+
+      router.push('/create/add-photo');
     });
   };
 

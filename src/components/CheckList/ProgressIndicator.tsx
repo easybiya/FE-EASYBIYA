@@ -1,7 +1,14 @@
 import { useRouter } from 'next/router';
 import IconComponent from '../Asset/Icon';
 
-const stepMapping: { [key: string]: number } = {
+const stepMapping: { [key: number]: string } = {
+  1: '/create/room-info',
+  2: '/create/room-address',
+  3: '/create/add-photo',
+  4: '/create/checklist',
+};
+
+const reverseMapping: { [key: string]: number } = {
   '/create/room-info': 1,
   '/create/room-address': 2,
   '/create/add-photo': 3,
@@ -10,7 +17,14 @@ const stepMapping: { [key: string]: number } = {
 
 export default function ProgressIndicator({ totalSteps }: { totalSteps: number }) {
   const router = useRouter();
-  const currentStep = stepMapping[router.pathname] || 1; // 현재 경로에 맞는 스텝 번호 가져오기
+  const currentStep = reverseMapping[router.pathname] || 1;
+
+  const handleClickStep = (stepNumber: number) => {
+    const path = stepMapping[stepNumber];
+    if (path) {
+      router.push(path);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center py-1">
@@ -21,7 +35,11 @@ export default function ProgressIndicator({ totalSteps }: { totalSteps: number }
         const isUpcoming = stepNumber > currentStep;
 
         return (
-          <div key={stepNumber} className="flex items-center">
+          <div
+            key={stepNumber}
+            className="flex items-center cursor-pointer"
+            onClick={() => handleClickStep(stepNumber)}
+          >
             <div
               className={`w-[18px] h-[18px] flex items-center justify-center rounded-full border border-gray-700
                 ${isCurrent ? 'bg-gray-700 text-white text-b-13' : 'text-gray-700'}

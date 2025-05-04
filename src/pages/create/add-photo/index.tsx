@@ -4,34 +4,44 @@ import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
 import CustomButton from '@/components/Button/CustomButton';
 import IconComponent from '@/components/Asset/Icon';
 import FixedBar from '@/components/FixedBar';
+import { usePropertyStore } from '@/store/usePropertyStore';
 
 export default function AddPhotoPage() {
-  const [images, setImages] = useState<string[]>([]);
   const router = useRouter();
+
+  const { setImages } = usePropertyStore();
+
+  // 미리보기용 URL
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      const newImages = Array.from(files).slice(0, 8);
-      const imageUrls = newImages.map((file) => URL.createObjectURL(file));
-      setImages((prev) => [...prev, ...imageUrls]);
+      const fileArray = Array.from(files).slice(0, 8 - previewImages.length); // 최대 8장 제한
+
+      setImages(fileArray);
+
+      // 미리보기용 URL 저장
+      const imageUrls = fileArray.map((file) => URL.createObjectURL(file));
+      setPreviewImages((prev) => [...prev, ...imageUrls]);
     }
   };
 
   const handleRemoveImage = (index: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
+    setPreviewImages((prev) => prev.filter((_, i) => i !== index));
+    // 상태에서는 삭제하지 않아도 됨
   };
 
   const goToChecklist = () => {
-    router.push('/checklist');
+    router.push('/create/checklist');
   };
 
   return (
     <div className="px-4 h-screen bg-[#F6F5F2] flex flex-col">
       <HeaderWithProgress title="사진 등록" totalSteps={4} />
       <div className="flex-grow flex flex-col items-center pt-8">
-        {images.length === 0 ? (
+        {previewImages.length === 0 ? (
           <label
             className="w-full h-40 p-6 border border-gray-300 bg-white rounded-lg flex flex-col justify-center items-center cursor-pointer shadow-sm hover:bg-gray-100 transition"
             onClick={() => fileInputRef.current?.click()}
@@ -48,7 +58,7 @@ export default function AddPhotoPage() {
         ) : (
           <>
             <div className="grid grid-cols-3 gap-3 w-full max-w-md">
-              {images.map((image, index) => (
+              {previewImages.map((image, index) => (
                 <div key={index} className="relative w-full aspect-square bg-gray-100 rounded-lg">
                   <img
                     src={image}
@@ -66,7 +76,7 @@ export default function AddPhotoPage() {
               ))}
             </div>
 
-            {images.length < 8 && (
+            {previewImages.length < 8 && (
               <div className="w-full max-w-md mt-4">
                 <CustomButton
                   label="+ 사진 추가"
@@ -90,7 +100,7 @@ export default function AddPhotoPage() {
         onChange={handleImageUpload}
       />
       <FixedBar
-        disabled={images.length === 0}
+        disabled={previewImages.length === 0}
         skipRoute="/create/checklist"
         onClick={goToChecklist}
       />
