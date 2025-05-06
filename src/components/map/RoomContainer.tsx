@@ -1,15 +1,14 @@
-import { Institution, Property } from '@/types';
+import { Institution } from '@/types';
 import IconComponent from '../Asset/Icon';
 import { useRouter } from 'next/navigation';
 import CreateInstitutionButton from './CreateInstitutionButton';
 
 interface Props {
-  roomList: Property[];
   institution?: Institution;
   handleTagClick: (address: string, name: string) => Promise<void>;
 }
 
-export function RoomContainer({ roomList, institution, handleTagClick }: Props) {
+export function RoomContainer({ institution, handleTagClick }: Props) {
   const router = useRouter();
 
   return (
@@ -37,17 +36,6 @@ export function RoomContainer({ roomList, institution, handleTagClick }: Props) 
       ) : (
         <CreateInstitutionButton />
       )}
-      {roomList.map((item) => (
-        <li key={item.id} className="flex gap-[6px] items-center">
-          <div
-            onClick={() => handleTagClick(item.propertyAddress, item.propertyName)}
-            className={`px-[6px] py-[2px] rounded-full border border-black cursor-pointer w-fit text-[12px] bg-black text-white font-semibold leading-tight`}
-          >
-            {item.propertyName}
-          </div>
-          <p className="text-sm font-semibold ">{item.propertyAddress}</p>
-        </li>
-      ))}
     </ul>
   );
 }

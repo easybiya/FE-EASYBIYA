@@ -5,6 +5,7 @@ import Header from '@/components/Layout/Header';
 import { mockHouserData, mockInstitutionData } from '@/data/mockHouseData';
 import { RoomContainer } from '@/components/map/RoomContainer';
 import { Map } from '@/components/map/Map';
+import RoomFloatButton from '@/components/map/RoomFloatButton';
 
 export interface ModalContent {
   address: string;
@@ -48,9 +49,9 @@ export default function Page() {
     <div className="relative flex flex-col justify-center w-full">
       <div className="flex flex-col absolute top-0 right-0 left-0 z-10 bg-primary">
         <Header type={5} title="지도" />
-        <div className="p-5">
+        <div className="px-5">
           <RoomContainer
-            roomList={mockHouserData}
+            // roomList={mockHouserData}
             handleTagClick={handleTagClick}
             institution={mockInstitutionData}
           />
@@ -69,6 +70,7 @@ export default function Page() {
           closeModal={closeModal}
         />
       )}
+      <RoomFloatButton roomList={mockHouserData} handleTagClick={handleTagClick} />
     </div>
   );
 }
