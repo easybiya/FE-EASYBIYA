@@ -7,7 +7,8 @@ interface ModalState {
   type: ModalType | null;
   title?: string;
   description?: string;
-  onConfirm?: () => void;
+  defaultValue?: string;
+  onConfirm?: (value?: string) => void;
   onCancel?: () => void;
 
   openModal: (
@@ -22,10 +23,18 @@ export const useModalStore = create<ModalState>((set) => ({
   type: null,
   title: '',
   description: '',
+  defaultValue: '',
   onConfirm: undefined,
   onCancel: undefined,
 
   openModal: (type, options = {}) => set({ isOpen: true, type, ...options }),
 
-  closeModal: () => set({ isOpen: false, type: null, title: '', description: '' }),
+  closeModal: () =>
+    set({
+      isOpen: false,
+      type: null,
+      title: '',
+      description: '',
+      defaultValue: '',
+    }),
 }));

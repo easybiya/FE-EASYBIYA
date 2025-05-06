@@ -135,7 +135,11 @@ export default function InstitutionForm() {
               )}
             />
           </div>
-          <FixedBar disabled={!form.formState.isValid && !isPending} skipRoute="/" />
+          <FixedBar
+            disabled={!form.formState.isValid && !isPending}
+            skipRoute="/"
+            preventSkip={false}
+          />
         </form>
       </Form>
       {isSearchModalOpen && (
