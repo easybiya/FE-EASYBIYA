@@ -26,7 +26,7 @@ type CreateRoomSchema = {
 };
 
 interface Props {
-  isEdit: boolean;
+  isEdit?: boolean;
   id?: string;
 }
 
