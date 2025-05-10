@@ -7,9 +7,14 @@ import { useModalStore } from '@/store/modalStore';
 interface ChecklistContainerProps {
   checklist: ChecklistPayloadItem[]; // 체크리스트 데이터
   setter: React.Dispatch<SetStateAction<ChecklistPayloadItem[]>>; // 체크리스트 상태 setter 함수
+  handleEdit?: () => void;
 }
 
-export default function CheckListContainer({ checklist, setter }: ChecklistContainerProps) {
+export default function CheckListContainer({
+  checklist,
+  setter,
+  handleEdit,
+}: ChecklistContainerProps) {
   const { openModal, closeModal } = useModalStore();
 
   // 체크리스트 항목 체크 상태 업데이트 함수
@@ -38,6 +43,7 @@ export default function CheckListContainer({ checklist, setter }: ChecklistConta
     });
 
     setter(updatedChecklist);
+    handleEdit?.();
   };
 
   // 체크리스트 항목 드래그 앤 드롭 핸들러
@@ -51,6 +57,7 @@ export default function CheckListContainer({ checklist, setter }: ChecklistConta
       priority: index + 1,
     }));
     setter(reorderedWithPriority);
+    handleEdit?.();
   };
 
   // 체크리스트 항목 추가 핸들러
@@ -75,6 +82,7 @@ export default function CheckListContainer({ checklist, setter }: ChecklistConta
         return item;
       }),
     );
+    handleEdit?.();
   };
 
   // 체크리스트 항목 옵션 수정 핸들러
@@ -92,6 +100,7 @@ export default function CheckListContainer({ checklist, setter }: ChecklistConta
     });
 
     setter(updatedChecklist);
+    handleEdit?.();
   };
 
   // 체크리스트 텍스트 항목 수정 핸들러
@@ -101,6 +110,7 @@ export default function CheckListContainer({ checklist, setter }: ChecklistConta
     );
 
     setter(updatedChecklist);
+    handleEdit?.();
   };
 
   // 체크리스트 항목 타이틀 옵션 수정 핸들러
@@ -112,6 +122,7 @@ export default function CheckListContainer({ checklist, setter }: ChecklistConta
         setter((prev) =>
           prev.map((item) => (item.priority === id ? { ...item, title: value ?? '' } : item)),
         );
+        handleEdit?.();
         closeModal();
       },
     });
@@ -125,6 +136,7 @@ export default function CheckListContainer({ checklist, setter }: ChecklistConta
         if (id !== null) {
           setter((prev) => prev.filter((item) => item.priority !== id));
         }
+        handleEdit?.();
         closeModal();
       },
     });

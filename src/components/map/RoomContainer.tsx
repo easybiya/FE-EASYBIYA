@@ -29,7 +29,7 @@ export function RoomContainer({ institution, handleTagClick }: Props) {
             width={16}
             height={16}
             alt="수정 아이콘"
-            onClick={() => router.push('/create/institution')}
+            onClick={() => router.push('/property/institution')}
             className="cursor-pointer"
           />
         </div>

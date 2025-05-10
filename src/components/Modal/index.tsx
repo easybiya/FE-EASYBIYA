@@ -6,10 +6,21 @@ import CustomButton from '../Button/CustomButton';
 import { usePreventScroll } from '@/hooks/usePreventScroll';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { cn } from '@/lib/utils';
 
 export default function Modal() {
-  const { isOpen, type, title, description, defaultValue, onConfirm, onCancel, closeModal } =
-    useModalStore();
+  const {
+    isOpen,
+    type,
+    title,
+    description,
+    defaultValue,
+    buttonStyle,
+    buttonText,
+    onConfirm,
+    onCancel,
+    closeModal,
+  } = useModalStore();
   const [inputValue, setInputValue] = useState(defaultValue || '');
   const router = useRouter();
   usePreventScroll(isOpen);
@@ -94,9 +105,14 @@ export default function Modal() {
 
         {type === 'confirm' && (
           <div className="flex flex-col mt-6">
-            <CustomButton label="네" fullWidth onClick={onConfirm} />
+            <CustomButton
+              label={buttonText || '네'}
+              fullWidth
+              onClick={onConfirm}
+              className={buttonStyle}
+            />
             <button
-              className="pt-3 flex items-center justify-center text-s-15"
+              className={cn('pt-3 flex items-center justify-center text-s-15')}
               onClick={onCancel || closeModal}
             >
               아니오

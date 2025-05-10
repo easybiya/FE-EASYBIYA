@@ -2,17 +2,17 @@ import { useRouter } from 'next/router';
 import IconComponent from '../Asset/Icon';
 
 const stepMapping: { [key: number]: string } = {
-  1: '/create/room-info',
-  2: '/create/room-address',
-  3: '/create/add-photo',
-  4: '/create/checklist',
+  1: '/property/room-info',
+  2: '/property/room-address',
+  3: '/property/add-photo',
+  4: '/property/checklist',
 };
 
 const reverseMapping: { [key: string]: number } = {
-  '/create/room-info': 1,
-  '/create/room-address': 2,
-  '/create/add-photo': 3,
-  '/create/checklist': 4,
+  '/property/room-info': 1,
+  '/property/room-address': 2,
+  '/property/add-photo': 3,
+  '/property/checklist': 4,
 };
 
 export default function ProgressIndicator({ totalSteps }: { totalSteps: number }) {

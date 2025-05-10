@@ -1,6 +1,6 @@
 import { roomInfoZodSchema } from '@/lib/zodSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
 import { HouseType } from '@/types';
@@ -12,6 +12,7 @@ import { formatDate } from '@/utils/formatDate';
 import FixedBar from '../FixedBar';
 import { usePropertyStore } from '@/store/usePropertyStore';
 import router from 'next/router';
+import { mockHouserData } from '@/data/mockHouseData';
 
 type roomInfoSchema = {
   contractType: HouseType;
@@ -21,7 +22,12 @@ type roomInfoSchema = {
   available: string;
 };
 
-export default function RoomInfoForm() {
+interface Props {
+  isEdit: boolean;
+  id?: string;
+}
+
+export default function RoomInfoForm({ isEdit = false, id }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const form = useForm<roomInfoSchema>({
@@ -55,7 +61,9 @@ export default function RoomInfoForm() {
         availableDate: values.available,
       });
 
-      router.push('/create/room-address');
+      router.push(
+        isEdit ? `/property/room-address?mode=edit&propertyId=${id}` : '/property/room-address',
+      );
     });
   };
 
@@ -80,6 +88,21 @@ export default function RoomInfoForm() {
       form.trigger(field);
     }
   };
+
+  useEffect(() => {
+    if (isEdit && id) {
+      const propertyData = mockHouserData.find((item) => item.id === Number(id));
+      if (!propertyData) return;
+      setProperty(propertyData);
+      form.reset({
+        contractType: propertyData.leaseType,
+        deposit: propertyData.deposit,
+        monthlyRent: propertyData.monthlyFee ?? 0,
+        maintenanceFee: propertyData.maintenanceFee ?? 0,
+        available: formatDate(new Date(propertyData.availableDate), 1),
+      });
+    }
+  }, [id, isEdit]);
 
   return (
     <div className="px-5 pt-8">
@@ -171,7 +194,7 @@ export default function RoomInfoForm() {
           </div>
           <FixedBar
             disabled={!form.formState.isValid || isPending}
-            skipRoute="/create/room-address"
+            skipRoute="/property/room-address"
             preventSkip={true}
           />
         </form>
