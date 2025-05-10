@@ -25,7 +25,12 @@ export default function ChecklistDetailPage() {
 
   const handleEditImages = () => {
     if (!id) return;
-    router.push(`/create/add-photo?mode=edit&propertyId=${id}`);
+    router.push(`/property/add-photo?mode=edit&propertyId=${id}`);
+  };
+
+  const handleEdit = () => {
+    if (isEdit) return;
+    setIsEdit(true);
   };
 
   useEffect(() => {
@@ -129,7 +134,7 @@ export default function ChecklistDetailPage() {
       </div>
 
       <div className="flex-grow px-4 pb-10">
-        <CheckListContainer checklist={checklist} setter={setChecklist} />
+        <CheckListContainer checklist={checklist} setter={setChecklist} handleEdit={handleEdit} />
       </div>
     </div>
   );

@@ -8,10 +8,10 @@ interface HeaderWithProgressProps {
 }
 
 const previousRouteMap: { [key: string]: string } = {
-  '/create/checklist': '/create/add-photo',
-  '/create/add-photo': '/create/room-address',
-  '/create/room-address': '/create/room-info',
-  '/create/room-info': '/',
+  '/property/checklist': '/property/add-photo',
+  '/property/add-photo': '/property/room-address',
+  '/property/room-address': '/property/room-info',
+  '/property/room-info': '/',
 };
 
 export default function HeaderWithProgress({ title, totalSteps }: HeaderWithProgressProps) {

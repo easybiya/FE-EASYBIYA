@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FeeType } from '@/types';
 import Input from '../Input';
 
@@ -10,10 +10,18 @@ interface Props {
 }
 
 export default function HouseFeeInput({ type, text, value = undefined, onChange }: Props) {
-  const [billion, setBillion] = useState(value ? Math.floor(value / 100_000_000) : undefined);
-  const [million, setMillion] = useState(
-    value ? Math.floor((value % 100_000_000) / 10_000) : undefined,
-  );
+  const [billion, setBillion] = useState<number | undefined>();
+  const [million, setMillion] = useState<number | undefined>();
+
+  useEffect(() => {
+    if (value !== undefined) {
+      setBillion(Math.floor(value / 100_000_000));
+      setMillion(Math.floor((value % 100_000_000) / 10_000));
+    } else {
+      setBillion(undefined);
+      setMillion(undefined);
+    }
+  }, [value]);
 
   const handleBillionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newBillion = e.target.value ? Number(e.target.value) : undefined;

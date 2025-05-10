@@ -8,6 +8,8 @@ interface ModalState {
   title?: string;
   description?: string;
   defaultValue?: string;
+  buttonText?: string;
+  buttonStyle?: string;
   onConfirm?: (value?: string) => void;
   onCancel?: () => void;
 
@@ -24,6 +26,8 @@ export const useModalStore = create<ModalState>((set) => ({
   title: '',
   description: '',
   defaultValue: '',
+  buttonText: '',
+  buttonStyle: '',
   onConfirm: undefined,
   onCancel: undefined,
 
@@ -36,5 +40,6 @@ export const useModalStore = create<ModalState>((set) => ({
       title: '',
       description: '',
       defaultValue: '',
+      buttonText: '',
     }),
 }));

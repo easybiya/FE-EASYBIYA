@@ -15,18 +15,23 @@ import {
 import { useToastStore } from '@/store/toastStore';
 import { useTemplateStore } from '@/store/templateStore';
 import { usePropertyStore } from '@/store/usePropertyStore';
-import { mockCheckList } from '@/data/mockHouseData';
+import { mockCheckList, mockHouserData } from '@/data/mockHouseData';
+import { mockCheckList as mockPropertyCheckList } from '@/data/mockCheckList';
 import { postProperty } from '@/lib/api/property';
 import { postTemplate } from '@/lib/api/template';
 import FixedBar from '@/components/FixedBar';
+import { useSearchParams } from 'next/navigation';
 
 export default function ChecklistPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const propertyId = searchParams.get('propertyId');
+  const isEdit = searchParams.get('mode') === 'edit';
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const [showTemplateSelectModal, setShowTemplateSelectModal] = useState(false);
   const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
-  const { property, images, resetAll } = usePropertyStore();
+  const { property, images, resetAll, setProperty } = usePropertyStore();
   const store = useTemplateStore();
 
   // TO DO
@@ -46,10 +51,19 @@ export default function ChecklistPage() {
         })),
       }));
     };
-
-    const transformed = transformApiChecklist(mockCheckList.checklists);
-    setChecklist(transformed);
-  }, []);
+    if (isEdit) {
+      // 편집 모드 일때, 해당 매물 정보 저장 및 체크리스트 저장
+      const propertyData = mockHouserData.find((item) => item.id === Number(propertyId));
+      const testCheckList = mockPropertyCheckList;
+      if (!propertyData) return;
+      setProperty(propertyData);
+      setChecklist(testCheckList);
+    } else {
+      // 신규 모드일때는 템플릿 변환
+      const transformed = transformApiChecklist(mockCheckList.checklists);
+      setChecklist(transformed);
+    }
+  }, [isEdit, propertyId]);
 
   const handleAddChecklist = (type: CheckType) => {
     const newId = checklist.length > 0 ? checklist[checklist.length - 1].priority + 1 : 1;
@@ -107,7 +121,7 @@ export default function ChecklistPage() {
   };
 
   return (
-    <div className="flex justify-center bg-[#F6F5F2]">
+    <div className="flex justify-center bg-[#F6F5F2] px-4">
       <div className="relative w-full max-w-[430px] h-screen flex flex-col">
         {isCompleted ? (
           <ChecklistComplete />

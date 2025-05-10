@@ -31,7 +31,7 @@ export default function Page() {
         checklists: detailedTemplate.checklists,
       });
 
-      const returnTo = (router.query.returnTo as string) || '/create/checklist';
+      const returnTo = (router.query.returnTo as string) || '/property/checklist';
       router.push({ pathname: returnTo, query: { saved: 'true' } });
     } catch (err) {
       console.error('템플릿 상세 조회 실패:', err);

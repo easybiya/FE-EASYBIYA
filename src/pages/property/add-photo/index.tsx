@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
@@ -6,8 +6,13 @@ import CustomButton from '@/components/Button/CustomButton';
 import IconComponent from '@/components/Asset/Icon';
 import FixedBar from '@/components/FixedBar';
 import { usePropertyStore } from '@/store/usePropertyStore';
+import { useSearchParams } from 'next/navigation';
+import { mockHouserData } from '@/data/mockHouseData';
 
 export default function AddPhotoPage() {
+  const searchParams = useSearchParams();
+  const propertyId = searchParams.get('propertyId');
+  const isEdit = searchParams.get('mode') === 'edit';
   const router = useRouter();
 
   const { setImages } = usePropertyStore();
@@ -35,8 +40,18 @@ export default function AddPhotoPage() {
   };
 
   const goToChecklist = () => {
-    router.push('/create/checklist');
+    router.push(
+      isEdit ? `/property/checklist?mode=edit&propertyId=${propertyId}` : '/property/checklist',
+    );
   };
+
+  useEffect(() => {
+    if (isEdit && propertyId) {
+      const propertyData = mockHouserData.find((item) => item.id === Number(propertyId));
+      if (!propertyData) return;
+      // 이미지 수정은 다시 확인해봐야할듯
+    }
+  }, [propertyId, isEdit]);
 
   return (
     <div className="px-4 h-screen bg-[#F6F5F2] flex flex-col">
@@ -103,7 +118,7 @@ export default function AddPhotoPage() {
       />
       <FixedBar
         disabled={previewImages.length === 0}
-        skipRoute="/create/checklist"
+        skipRoute="/property/checklist"
         onClick={goToChecklist}
         preventSkip={false}
       />

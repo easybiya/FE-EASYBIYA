@@ -10,6 +10,7 @@ import { createRoomZodSchema } from '@/lib/zodSchema';
 import FixedBar from '../FixedBar';
 import { useRouter } from 'next/router';
 import { usePropertyStore } from '@/store/usePropertyStore';
+import { mockHouserData } from '@/data/mockHouseData';
 
 declare global {
   interface Window {
@@ -24,7 +25,12 @@ type CreateRoomSchema = {
   nickName: string;
 };
 
-export default function SearchAddress() {
+interface Props {
+  isEdit: boolean;
+  id?: string;
+}
+
+export default function SearchAddress({ isEdit = false, id }: Props) {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [addressCoordinate, setAddressCoordinate] = useState({ x: '', y: '' });
   const [isPending, startTransition] = useTransition();
@@ -40,11 +46,14 @@ export default function SearchAddress() {
   });
 
   const router = useRouter();
-  const { setProperty } = usePropertyStore();
+  const { setProperty, property } = usePropertyStore();
 
   const onSubmit: SubmitHandler<CreateRoomSchema> = (values) => {
     startTransition(() => {
-      if (!addressCoordinate.x || !addressCoordinate.y) {
+      if (
+        property.propertyAddress !== values.address && // edit일 경우 처음에 전역 상태에 데이터를 저장하기 때문에 form의 address와 비교해서 다른 경우에만 좌표 필요 조건
+        (!addressCoordinate.x || !addressCoordinate.y)
+      ) {
         alert('좌표를 찾을 수 없습니다.');
         return;
       }
@@ -57,7 +66,9 @@ export default function SearchAddress() {
         propertyLongitude: parseFloat(addressCoordinate.x), // x = 경도
       });
 
-      router.push('/create/add-photo');
+      router.push(
+        isEdit ? `/property/add-photo?mode=edit&propertyId=${id}` : '/property/add-photo',
+      );
     });
   };
 
@@ -98,6 +109,19 @@ export default function SearchAddress() {
       };
     }
   }, [initMap]);
+
+  useEffect(() => {
+    if (isEdit && id) {
+      const propertyData = mockHouserData.find((item) => item.id === Number(id));
+      if (!propertyData) return;
+      setProperty(propertyData);
+      form.reset({
+        nickName: propertyData.propertyName,
+        address: propertyData.propertyAddress,
+        addressDetail: propertyData.propertyDetailedAddress,
+      });
+    }
+  }, [id, isEdit]);
 
   return (
     <div className="relative h-[calc(100vh-110px)]">
@@ -177,7 +201,7 @@ export default function SearchAddress() {
           </div>
           <FixedBar
             disabled={!form.formState.isValid && !isPending}
-            skipRoute="/create/add-photo"
+            skipRoute="/property/add-photo"
             preventSkip={true}
           />
         </form>
