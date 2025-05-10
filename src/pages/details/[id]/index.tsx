@@ -14,6 +14,7 @@ import Image from 'next/image';
 import EditButtonContainer from '@/components/EditButtonContainer';
 import { mockCheckList } from '@/data/mockCheckList';
 import CheckListContainer from '@/components/CheckList/CheckListContainer';
+import IconComponent from '@/components/Asset/Icon';
 
 export default function ChecklistDetailPage() {
   const [isEdit, setIsEdit] = useState(false);
@@ -54,54 +55,66 @@ export default function ChecklistDetailPage() {
         <EditButtonContainer onClick={() => setIsEdit(false)} onEditImage={handleEditImages} />
       )}
 
-      <div className="w-full h-[202px] relative">
-        <Swiper
-          modules={[Pagination]}
-          spaceBetween={10}
-          slidesPerView={1}
-          pagination={{ clickable: true }}
-          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-          className="h-full"
-        >
-          {propertyData.propertyImages.map((item, index) => (
-            <SwiperSlide key={index} className="relative">
-              <Image
-                fill
-                src={item.imageUrl}
-                alt={`room-${index}`}
-                className="w-full h-full object-cover"
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+      <div className="w-full aspect-[1.8/1] relative">
+        {propertyData.propertyImages.length > 0 ? (
+          <>
+            <Swiper
+              modules={[Pagination]}
+              spaceBetween={10}
+              slidesPerView={1}
+              pagination={{ clickable: true }}
+              onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+              className="h-full"
+            >
+              {propertyData.propertyImages.map((item, index) => (
+                <SwiperSlide key={index} className="relative">
+                  <Image
+                    fill
+                    src={item.imageUrl}
+                    alt={`room-${index}`}
+                    className="w-full h-full object-cover"
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            <style jsx global>{`
+              .swiper-pagination {
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+                position: absolute !important;
+                width: 100% !important;
+                bottom: 12px !important;
+                left: 0 !important;
+                gap: 6px;
+                z-index: 10 !important;
+                opacity: 1 !important;
+              }
 
-        <style jsx global>{`
-          .swiper-pagination {
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            position: absolute !important;
-            width: 100% !important;
-            bottom: 12px !important;
-            left: 0 !important;
-            gap: 6px;
-            z-index: 10 !important;
-            opacity: 1 !important;
-          }
+              .swiper-pagination-bullet {
+                width: 8px;
+                height: 8px;
+                background-color: white;
+                border: 1px solid black;
+                opacity: 1;
+              }
 
-          .swiper-pagination-bullet {
-            width: 8px;
-            height: 8px;
-            background-color: white;
-            border: 1px solid black;
-            opacity: 1;
-          }
-
-          .swiper-pagination-bullet-active {
-            background-color: #262626 !important;
-            border: none;
-          }
-        `}</style>
+              .swiper-pagination-bullet-active {
+                background-color: #262626 !important;
+                border: none;
+              }
+            `}</style>
+          </>
+        ) : (
+          <div className="bg-gray-300 h-full">
+            <IconComponent
+              name="plus"
+              width={24}
+              height={24}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+            />
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col gap-2.5 px-4 mt-7">
@@ -133,7 +146,7 @@ export default function ChecklistDetailPage() {
         </div>
       </div>
 
-      <div className="flex-grow px-4 pb-10">
+      <div className="flex-grow px-4 pb-20">
         <CheckListContainer checklist={checklist} setter={setChecklist} handleEdit={handleEdit} />
       </div>
     </div>
