@@ -31,4 +31,5 @@ export const ICONS = {
   yellowCheck: 'icons/yellow-check.svg',
   logo: 'icons/logo.svg',
   chevronRight: 'icons/chevron-right.svg',
+  hamburger: 'icons/hanburger.svg',
 };
