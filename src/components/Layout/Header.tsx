@@ -1,6 +1,7 @@
 import { useRouter } from 'next/navigation';
 import IconComponent from '../Asset/Icon';
 import Dropdown from '../Dropdown';
+import { useModalStore } from '@/store/modalStore';
 
 interface HeaderProps {
   type: 1 | 2 | 3 | 4 | 5 | 6 | 7;
@@ -23,24 +24,58 @@ const ROOM_DETAIL_OPTION = ['매물 정보 수정', '사진 수정', '삭제'];
 
 export default function Header({ type, title, addAction, isFixed, propertyId }: HeaderProps) {
   const router = useRouter();
+  const { openModal, closeModal } = useModalStore();
   const roomDeatilhandleSelect = (option: string) => {
     switch (option) {
       case '매물 정보 수정':
-        console.log('매물 정보 수정 기능 실행');
-
+        router.push(`/property/room-info?mode=edit&propertyId=${propertyId}`);
         break;
       case '사진 수정':
         if (!propertyId) return;
-        router.push(`/create/add-photo?mode=edit&propertyId=${propertyId}`);
-        console.log('사진 수정 기능 실행');
-
+        router.push(`/property/add-photo?mode=edit&propertyId=${propertyId}`);
         break;
       case '삭제':
-        console.log('삭제 기능 실행');
+        openModal('confirm', {
+          title: '체크리스트 항목 삭제',
+          onConfirm: () => {
+            console.log('삭제');
+            closeModal();
+          },
+          buttonStyle: 'bg-red-500 hover:bg-red-400 active:bg-red-300',
+        });
         break;
       default:
         console.log('알 수 없는 옵션');
     }
+  };
+
+  // 카카오 공유
+  const shareKakao = () => {
+    const { Kakao } = window;
+
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/detail/${propertyId}}`;
+
+    Kakao.Share.sendDefault({
+      objectType: 'feed',
+      content: {
+        title: '집 좀 같이 봐줘요!',
+        description: `내가 살 집에 대한 피드백을 주세요!`,
+        imageUrl: '', // 기본 이미지 필요함
+        link: {
+          mobileWebUrl: url,
+          webUrl: url,
+        },
+      },
+      buttons: [
+        {
+          title: '집 같이 보기',
+          link: {
+            mobileWebUrl: url,
+            webUrl: url,
+          },
+        },
+      ],
+    });
   };
 
   const renderContent = () => {
@@ -75,7 +110,7 @@ export default function Header({ type, title, addAction, isFixed, propertyId }: 
                 name="plus"
                 width={18}
                 height={18}
-                onClick={() => router.push('/create/room-info')}
+                onClick={() => router.push('/property/room-info')}
                 className="cursor-pointer"
               />
             </div>
@@ -98,7 +133,13 @@ export default function Header({ type, title, addAction, isFixed, propertyId }: 
               {isFixed && (
                 <IconComponent name="pin" width={24} height={24} className="cursor-pointer" />
               )}
-              <IconComponent name="share" width={16} height={16} className="cursor-pointer" />
+              <IconComponent
+                name="share"
+                width={16}
+                height={16}
+                className="cursor-pointer"
+                onClick={shareKakao}
+              />
               <Dropdown
                 options={ROOM_DETAIL_OPTION}
                 type="meatball"

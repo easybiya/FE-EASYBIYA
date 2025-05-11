@@ -4,6 +4,8 @@ import HouseTypeTag from './HouseTypeTag';
 import { Property } from '@/types';
 import IconComponent from '../Asset/Icon';
 import { formatWon } from '@/utils/formatWon';
+import { useRouter } from 'next/router';
+import { useModalStore } from '@/store/modalStore';
 
 interface Props {
   info: Property;
@@ -17,6 +19,8 @@ const defaultMenuList = ['고정하기', '수정하기', '삭제하기'];
 const cancelOptionMenuList = ['고정 해제하기', '수정하기', '삭제하기'];
 
 export default function HouseCard({ info, onDelete, onAdd, isFixed, isShared }: Props) {
+  const router = useRouter();
+  const { openModal, closeModal } = useModalStore();
   const handleSelect = (option: string) => {
     switch (option) {
       case '고정 해제하기':
@@ -30,10 +34,17 @@ export default function HouseCard({ info, onDelete, onAdd, isFixed, isShared }: 
         }
         break;
       case '수정하기':
-        console.log('수정 기능 실행');
+        router.push(`/property/room-info?mode=edit&propertyId=${info.id}`);
         break;
       case '삭제하기':
-        console.log('삭제 기능 실행');
+        openModal('confirm', {
+          title: '체크리스트 항목 삭제',
+          onConfirm: () => {
+            console.log('삭제');
+            closeModal();
+          },
+          buttonStyle: 'bg-red-500 hover:bg-red-400 active:bg-red-300',
+        });
         break;
       default:
         console.log('알 수 없는 옵션');
