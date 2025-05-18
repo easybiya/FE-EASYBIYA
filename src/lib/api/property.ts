@@ -30,7 +30,11 @@ export const postProperty = async (formData: FormData) => {
       'Content-Type': 'multipart/form-data',
     },
   });
+  return result.data;
+};
 
+export const toggleBookmark = async (id: string) => {
+  const result = await instance.patch(`/api/property/${id}/bookmark`);
   return result.data;
 };
 

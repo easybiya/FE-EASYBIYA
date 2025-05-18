@@ -10,8 +10,7 @@ import Image from 'next/image';
 
 interface Props {
   info: Property;
-  onDelete?: (id: number) => void;
-  onAdd?: (id: number) => void;
+  toggleBookmark: (id: number) => void;
   isFixed?: boolean;
   isShared?: boolean;
 }
@@ -19,20 +18,16 @@ interface Props {
 const defaultMenuList = ['고정하기', '수정하기', '삭제하기'];
 const cancelOptionMenuList = ['고정 해제하기', '수정하기', '삭제하기'];
 
-export default function HouseCard({ info, onDelete, onAdd, isFixed, isShared }: Props) {
+export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: Props) {
   const router = useRouter();
   const { openModal, closeModal } = useModalStore();
   const handleSelect = (option: string) => {
     switch (option) {
       case '고정 해제하기':
-        if (onDelete) {
-          onDelete(info.id);
-        }
+        toggleBookmark(info.id);
         break;
       case '고정하기':
-        if (onAdd) {
-          onAdd(info.id);
-        }
+        toggleBookmark(info.id);
         break;
       case '수정하기':
         router.push(`/property/room-info?mode=edit&propertyId=${info.id}`);
