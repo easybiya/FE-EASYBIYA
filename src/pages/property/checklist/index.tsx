@@ -30,7 +30,7 @@ export default function ChecklistPage() {
   const [showTemplateSelectModal, setShowTemplateSelectModal] = useState(false);
   const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
-  const { property, images, resetAll, setProperty } = usePropertyStore();
+  const { property, images, resetAll } = usePropertyStore();
   const store = useTemplateStore();
 
   // TO DO

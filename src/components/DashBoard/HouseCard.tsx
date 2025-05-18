@@ -10,7 +10,7 @@ import Image from 'next/image';
 
 interface Props {
   info: Property;
-  toggleBookmark: (id: number) => void;
+  toggleBookmark?: (id: number) => void;
   isFixed?: boolean;
   isShared?: boolean;
 }
@@ -24,10 +24,10 @@ export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: P
   const handleSelect = (option: string) => {
     switch (option) {
       case '고정 해제하기':
-        toggleBookmark(info.id);
+        toggleBookmark && toggleBookmark(info.id);
         break;
       case '고정하기':
-        toggleBookmark(info.id);
+        toggleBookmark && toggleBookmark(info.id);
         break;
       case '수정하기':
         router.push(`/property/room-info?mode=edit&propertyId=${info.id}`);

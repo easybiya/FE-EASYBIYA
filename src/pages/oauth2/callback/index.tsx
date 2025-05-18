@@ -4,7 +4,7 @@ import { useCookies } from 'react-cookie';
 
 export default function KakaoLoginProcess() {
   const [isLoading, setIsLoading] = useState(true);
-  const [_, setCookie] = useCookies(['accessToken', 'isNewMember']);
+  const [, setCookie] = useCookies(['accessToken', 'isNewMember']);
   const router = useRouter();
 
   useEffect(() => {

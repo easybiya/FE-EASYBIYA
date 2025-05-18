@@ -16,7 +16,7 @@ export interface ModalContent {
 export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<ModalContent | null>(null);
-  const [istitution, setInstitution] = useState<Institution>();
+  const [istitution] = useState<Institution>();
   const [propertyList, setPropertyList] = useState<Property[]>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [map, setMap] = useState<any>(null);
