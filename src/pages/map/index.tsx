@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getCoordinates } from '@/utils/getCoordinates';
 import InfoModal from '@/components/map/infoModal';
 import Header from '@/components/Layout/Header';
-import { mockHouserData, mockInstitutionData } from '@/data/mockHouseData';
 import { RoomContainer } from '@/components/map/RoomContainer';
 import { Map } from '@/components/map/Map';
 import RoomFloatButton from '@/components/map/RoomFloatButton';
+import { Institution, Property } from '@/types';
+import { getBookmarkedPropertyList, getNonBookmarkedPropertyList } from '@/lib/api/property';
 
 export interface ModalContent {
   address: string;
@@ -15,6 +16,8 @@ export interface ModalContent {
 export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<ModalContent | null>(null);
+  const [istitution, setInstitution] = useState<Institution>();
+  const [propertyList, setPropertyList] = useState<Property[]>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [map, setMap] = useState<any>(null);
 
@@ -45,32 +48,39 @@ export default function Page() {
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const bookmarkedData = await getBookmarkedPropertyList();
+      const notBookmarkedData = await getNonBookmarkedPropertyList({
+        page: 1,
+        size: 10,
+        sortBy: 'LATEST',
+      });
+      setPropertyList([...bookmarkedData, ...notBookmarkedData]);
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className="relative flex flex-col justify-center w-full">
       <div className="flex flex-col absolute top-0 right-0 left-0 z-10 bg-primary">
         <Header type={5} title="지도" />
-        <div className="px-5">
-          <RoomContainer
-            // roomList={mockHouserData}
-            handleTagClick={handleTagClick}
-            institution={mockInstitutionData}
-          />
+        <div className="p-4">
+          <RoomContainer handleTagClick={handleTagClick} institution={istitution} />
         </div>
       </div>
       <Map
-        roomList={mockHouserData}
-        institution={mockInstitutionData}
+        roomList={propertyList}
+        institution={istitution}
         settingMapObject={settingMapObject}
         handleMarkerClick={handleMarkerClick}
       />
       {isModalOpen && modalContent && (
-        <InfoModal
-          modalContent={modalContent}
-          institution={mockInstitutionData}
-          closeModal={closeModal}
-        />
+        <InfoModal modalContent={modalContent} institution={istitution} closeModal={closeModal} />
       )}
-      <RoomFloatButton roomList={mockHouserData} handleTagClick={handleTagClick} />
+      {propertyList && propertyList.length > 0 && (
+        <RoomFloatButton roomList={propertyList} handleTagClick={handleTagClick} />
+      )}
     </div>
   );
 }
