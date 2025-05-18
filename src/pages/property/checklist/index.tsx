@@ -43,12 +43,15 @@ export default function ChecklistPage() {
         priority: index + 1,
         title: item.title,
         checkType: item.checkType,
-        content: null,
-        checkItems: item.checkItems.map((desc, idx) => ({
-          description: desc,
-          checked: idx === 0,
-          priority: idx + 1,
-        })),
+        content: item.checkType === 'TEXT' ? '' : null,
+        checkItems:
+          item.checkType === 'TEXT'
+            ? []
+            : item.checkItems.map((desc, idx) => ({
+                description: desc,
+                checked: idx === 0,
+                priority: idx + 1,
+              })),
       }));
     };
     if (isEdit) {
@@ -87,6 +90,7 @@ export default function ChecklistPage() {
     );
     images.forEach((img) => formData.append('images', img));
     try {
+      console.log(checklist);
       await postProperty(formData);
       resetAll();
       setIsCompleted(true);

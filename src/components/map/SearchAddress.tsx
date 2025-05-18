@@ -62,8 +62,8 @@ export default function SearchAddress({ isEdit = false, id }: Props) {
         propertyName: values.nickName,
         propertyAddress: values.address,
         propertyDetailedAddress: values.addressDetail,
-        propertyLatitude: parseFloat(addressCoordinate.y), // y = 위도
-        propertyLongitude: parseFloat(addressCoordinate.x), // x = 경도
+        propertyLatitude: Number(parseFloat(addressCoordinate.y).toFixed(7)), // y = 위도
+        propertyLongitude: Number(parseFloat(addressCoordinate.x).toFixed(7)), // x = 경도
       });
 
       router.push(

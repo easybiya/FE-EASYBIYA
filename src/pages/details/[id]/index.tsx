@@ -15,14 +15,18 @@ import EditButtonContainer from '@/components/EditButtonContainer';
 import { mockCheckList } from '@/data/mockCheckList';
 import CheckListContainer from '@/components/CheckList/CheckListContainer';
 import IconComponent from '@/components/Asset/Icon';
+import { getPropertyById } from '@/lib/api/property';
+import { Property } from '@/types';
+import { getPropertyChecklistById } from '@/lib/api/checklist';
 
 export default function ChecklistDetailPage() {
   const [isEdit, setIsEdit] = useState(false);
+  const [propertyData, setPropertyData] = useState<Property>();
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const [, setActiveIndex] = useState(0);
   const router = useRouter();
   const { id } = router.query;
-  const propertyData = mockHouserData.find((item) => item.id === Number(id));
+  // const propertyData = mockHouserData.find((item) => item.id === Number(id));
 
   const handleEditImages = () => {
     if (!id) return;
@@ -35,8 +39,14 @@ export default function ChecklistDetailPage() {
   };
 
   useEffect(() => {
-    const testData = mockCheckList;
-    setChecklist([...testData]);
+    const fetchData = async () => {
+      if (!id) return;
+      const data = await getPropertyById(id as string);
+      const checklistData = await getPropertyChecklistById(id as string);
+      setPropertyData(data);
+      setChecklist(checklistData);
+    };
+    fetchData();
   }, []);
 
   if (!propertyData) {
