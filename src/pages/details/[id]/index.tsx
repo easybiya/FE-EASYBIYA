@@ -116,11 +116,11 @@ export default function ChecklistDetailPage() {
             `}</style>
           </>
         ) : (
-          <div className="bg-gray-300 h-full">
+          <div className="bg-primary2 h-full">
             <IconComponent
-              name="plus"
-              width={24}
-              height={24}
+              name="home"
+              width={64}
+              height={64}
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
             />
           </div>

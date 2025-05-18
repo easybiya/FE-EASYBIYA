@@ -6,6 +6,7 @@ import IconComponent from '../Asset/Icon';
 import { formatWon } from '@/utils/formatWon';
 import { useRouter } from 'next/router';
 import { useModalStore } from '@/store/modalStore';
+import Image from 'next/image';
 
 interface Props {
   info: Property;
@@ -79,7 +80,18 @@ export default function HouseCard({ info, onDelete, onAdd, isFixed, isShared }: 
             </div>
             <p className="text-gray-500 text-sm">{info.propertyAddress}</p>
           </div>
-          <div className="bg-gray-200 w-16 h-16 rounded"></div>
+          {info.propertyImages.length > 0 ? (
+            <Image src={info.propertyImages[0].imageUrl} sizes="16" alt="thumbnail" />
+          ) : (
+            <div className="bg-primary2 w-16 h-16 rounded relative">
+              <IconComponent
+                name="home"
+                width={28}
+                height={28}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+              />
+            </div>
+          )}
         </div>
       </Link>
     </div>
