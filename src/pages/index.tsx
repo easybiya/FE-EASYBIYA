@@ -1,6 +1,7 @@
 import HouseCard from '@/components/DashBoard/HouseCard';
 import Dropdown from '@/components/Dropdown';
 import { mockHouserData } from '@/data/mockHouseData';
+import { getBookmarkedPropertyList, getNonBookmarkedPropertyList } from '@/lib/api/property';
 import { Property } from '@/types';
 import { useEffect, useState } from 'react';
 
@@ -19,10 +20,17 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const bookmarkData = mockHouserData.filter((item) => item.isBookmarked); // 북마크 데이터
-    const normalData = mockHouserData.filter((item) => !item.isBookmarked); // 일반 데이터
-    setFixedList(bookmarkData);
-    setPropertyList(normalData);
+    const fetchData = async () => {
+      const bookmarkedData = await getBookmarkedPropertyList();
+      const notBookmarkedData = await getNonBookmarkedPropertyList({
+        page: 1,
+        size: 10,
+        sortBy: 'LATEST',
+      });
+      setFixedList(bookmarkedData);
+      setPropertyList(notBookmarkedData);
+    };
+    fetchData();
   }, []);
 
   return (
@@ -31,22 +39,29 @@ export default function Home() {
         <p className="text-gray-500 text-[14px]">전체 {mockHouserData.length}</p>
         <Dropdown options={DROPDOWN_OPTION} type="select" selectedOption="최신순" />
       </div>
+      {fixedList.length === 0 && propertyList.length === 0 && (
+        <div className="text-gray-400 text-center py-4">등록한 매물이 없습니다.</div>
+      )}
+
       <ul className="flex flex-col gap-4">
-        {fixedList.map((item) => (
-          <li key={item.id}>
-            <HouseCard info={item} onAdd={addFixedList} onDelete={deleteFixedList} isFixed />
-          </li>
-        ))}
-        {propertyList.map((item) => (
-          <li key={item.id}>
-            <HouseCard
-              info={item}
-              onAdd={addFixedList}
-              onDelete={deleteFixedList}
-              isFixed={false}
-            />
-          </li>
-        ))}
+        {fixedList.length > 0 &&
+          fixedList.map((item) => (
+            <li key={item.id}>
+              <HouseCard info={item} onAdd={addFixedList} onDelete={deleteFixedList} isFixed />
+            </li>
+          ))}
+
+        {propertyList.length > 0 &&
+          propertyList.map((item) => (
+            <li key={item.id}>
+              <HouseCard
+                info={item}
+                onAdd={addFixedList}
+                onDelete={deleteFixedList}
+                isFixed={false}
+              />
+            </li>
+          ))}
       </ul>
     </div>
   );
