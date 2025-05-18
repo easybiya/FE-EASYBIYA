@@ -12,7 +12,7 @@ import { formatDate } from '@/utils/formatDate';
 import FixedBar from '../FixedBar';
 import { usePropertyStore } from '@/store/usePropertyStore';
 import router from 'next/router';
-import { mockHouserData } from '@/data/mockHouseData';
+import { getPropertyById } from '@/lib/api/property';
 
 type roomInfoSchema = {
   contractType: HouseType;
@@ -90,17 +90,20 @@ export default function RoomInfoForm({ isEdit = false, id }: Props) {
   };
 
   useEffect(() => {
-    if (isEdit && id) {
-      const propertyData = mockHouserData.find((item) => item.id === Number(id));
-      if (!propertyData) return;
-      setProperty(propertyData);
+    const fetchData = async () => {
+      if (!id) return;
+      const result = await getPropertyById(id);
+      setProperty(result);
       form.reset({
-        contractType: propertyData.leaseType,
-        deposit: propertyData.deposit,
-        monthlyRent: propertyData.monthlyFee ?? 0,
-        maintenanceFee: propertyData.maintenanceFee ?? 0,
-        available: formatDate(new Date(propertyData.availableDate), 1),
+        contractType: result.leaseType,
+        deposit: result.deposit,
+        monthlyRent: result.monthlyFee ?? 0,
+        maintenanceFee: result.maintenanceFee ?? 0,
+        available: formatDate(new Date(result.availableDate), 1),
       });
+    };
+    if (isEdit && id) {
+      fetchData();
     }
   }, [id, isEdit]);
 

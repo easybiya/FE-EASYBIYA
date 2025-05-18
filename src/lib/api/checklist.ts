@@ -1,4 +1,4 @@
-import { ChecklistPayloadItem } from '@/types/checklist';
+import { ChecklistItem, ChecklistPayloadItem } from '@/types/checklist';
 import instance from './axiosInstance';
 
 export async function updateChecklistToServer(
@@ -19,6 +19,11 @@ export async function updateChecklistToServer(
   if (!data.isSuccess) throw new Error(data.message);
   return data;
 }
+
+export const getChecklistTemplate = async (): Promise<ChecklistItem[]> => {
+  const result = await instance.get('/api/template/default');
+  return result.data.result;
+};
 
 export const getPropertyChecklistById = async (id: string): Promise<ChecklistPayloadItem[]> => {
   const result = await instance.get(`/api/checklist/property/${id}`);
