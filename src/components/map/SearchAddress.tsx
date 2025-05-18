@@ -203,6 +203,7 @@ export default function SearchAddress({ isEdit = false, id }: Props) {
             disabled={!form.formState.isValid && !isPending}
             skipRoute="/property/add-photo"
             preventSkip={true}
+            text="다음"
           />
         </form>
       </Form>

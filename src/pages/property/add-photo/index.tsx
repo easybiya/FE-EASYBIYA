@@ -121,6 +121,7 @@ export default function AddPhotoPage() {
         skipRoute="/property/checklist"
         onClick={goToChecklist}
         preventSkip={false}
+        text="다음"
       />
     </div>
   );

@@ -138,7 +138,13 @@ export default function ChecklistPage() {
               onAddChecklist={handleAddChecklist}
               onSaveTemplate={handleSaveTemplate}
             />
-            <FixedBar onClick={handleComplete} skipRoute="/" preventSkip={false} disabled={false} />
+            <FixedBar
+              onClick={handleComplete}
+              skipRoute="/"
+              preventSkip={true}
+              disabled={property.monthlyFee === null && property.propertyLatitude === null} // 매물 정보, 매물 주소 등록 안한경우 생성 못함
+              text="완료"
+            />
           </>
         )}
 

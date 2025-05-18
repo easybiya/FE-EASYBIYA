@@ -196,6 +196,7 @@ export default function RoomInfoForm({ isEdit = false, id }: Props) {
             disabled={!form.formState.isValid || isPending}
             skipRoute="/property/room-address"
             preventSkip={true}
+            text="다음"
           />
         </form>
       </Form>
