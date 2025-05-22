@@ -55,7 +55,7 @@ export default function ChecklistPage() {
     };
     const fetchTemplate = async () => {
       const result = await getChecklistTemplate();
-      const transformed = transformApiChecklist(result);
+      const transformed = transformApiChecklist(result.checklists);
       setChecklist(transformed);
     };
     const fetchData = async () => {
@@ -137,7 +137,7 @@ export default function ChecklistPage() {
           <ChecklistComplete />
         ) : (
           <>
-            <HeaderWithProgress title="체크리스트 등록" totalSteps={4} />
+            <HeaderWithProgress title="체크리스트 등록" />
             <ChecklistContent
               checklist={checklist}
               setter={setChecklist}

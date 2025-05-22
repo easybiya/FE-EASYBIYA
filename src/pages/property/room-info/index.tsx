@@ -10,7 +10,7 @@ export default function RoomInfoPage() {
 
   return (
     <div className="px-4 bg-[#F6F5F2] h-full">
-      <HeaderWithProgress title="계약 정보 입력" totalSteps={4} />
+      <HeaderWithProgress title="계약 정보 입력" />
       <RoomInfoForm isEdit={isEdit} id={propertyId ?? ''} />
     </div>
   );
