@@ -3,7 +3,7 @@ import { useState } from 'react';
 import IconComponent from '../Asset/Icon';
 
 interface Props {
-  roomList: Property[];
+  roomList?: Property[];
   handleTagClick: (address: string, name: string) => Promise<void>;
 }
 
@@ -36,7 +36,7 @@ export default function RoomFloatButton({ roomList, handleTagClick }: Props) {
             />
           </div>
           <ul className="gap-1.5 flex flex-col max-h-[186px] overflow-y-auto pb-5">
-            {roomList.map((item) => (
+            {roomList?.map((item) => (
               <li
                 onClick={() => handleClickTag(item.propertyAddress, item.propertyName)}
                 key={item.id}

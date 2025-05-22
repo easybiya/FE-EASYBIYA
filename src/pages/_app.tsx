@@ -10,6 +10,7 @@ import Head from 'next/head';
 import { useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import KakaoScript from '@/components/Layout/KakaoScript';
+import { CookiesProvider } from 'react-cookie';
 
 const queryClient = new QueryClient();
 
@@ -30,15 +31,17 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </Head>
-      <QueryClientProvider client={queryClient}>
-        <Layout>
-          <Component {...pageProps} />
-          <Toast />
-          <Modal />
-        </Layout>
-        <KakaoScript />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
+      <CookiesProvider>
+        <QueryClientProvider client={queryClient}>
+          <Layout>
+            <Component {...pageProps} />
+            <Toast />
+            <Modal />
+          </Layout>
+          <KakaoScript />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </CookiesProvider>
     </>
   );
 }

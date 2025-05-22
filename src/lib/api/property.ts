@@ -1,16 +1,41 @@
-import instance from "./axiosInstance";
+import { Property } from '@/types';
+import instance from './axiosInstance';
+
+export const getBookmarkedPropertyList = async (): Promise<Property[]> => {
+  const result = await instance.get('/api/property/bookmarked');
+  return result.data.result ?? [];
+};
+
+interface GetPropertyListParams {
+  page: number;
+  size: number;
+  sortBy: 'LATEST' | 'AVAILABLE_DATE_ASC';
+}
+
+export const getNonBookmarkedPropertyList = async (
+  params: GetPropertyListParams,
+): Promise<Property[]> => {
+  const result = await instance.get('/api/property/not-bookmarked', { params });
+  return result.data.result ?? [];
+};
+
+export const getPropertyById = async (id: string): Promise<Property> => {
+  const result = await instance.get(`/api/property/${id}`);
+  return result.data.result;
+};
 
 export const postProperty = async (formData: FormData) => {
-  const res = await fetch('http://localhost:8080/api/property', {
-    method: 'POST',
-    body: formData,
+  const result = await instance.post('/api/property', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
   });
+  return result.data;
+};
 
-  if (!res.ok) {
-    throw new Error('매물 등록 실패');
-  }
-
-  return await res.json();
+export const toggleBookmark = async (id: string) => {
+  const result = await instance.patch(`/api/property/${id}/bookmark`);
+  return result.data;
 };
 
 export const updatePropertyImages = async (propertyId: number, formData: FormData) => {

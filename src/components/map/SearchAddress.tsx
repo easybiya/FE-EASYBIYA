@@ -10,7 +10,6 @@ import { createRoomZodSchema } from '@/lib/zodSchema';
 import FixedBar from '../FixedBar';
 import { useRouter } from 'next/router';
 import { usePropertyStore } from '@/store/usePropertyStore';
-import { mockHouserData } from '@/data/mockHouseData';
 
 declare global {
   interface Window {
@@ -62,12 +61,12 @@ export default function SearchAddress({ isEdit = false, id }: Props) {
         propertyName: values.nickName,
         propertyAddress: values.address,
         propertyDetailedAddress: values.addressDetail,
-        propertyLatitude: parseFloat(addressCoordinate.y), // y = 위도
-        propertyLongitude: parseFloat(addressCoordinate.x), // x = 경도
+        propertyLatitude: Number(parseFloat(addressCoordinate.y).toFixed(7)), // y = 위도
+        propertyLongitude: Number(parseFloat(addressCoordinate.x).toFixed(7)), // x = 경도
       });
 
       router.push(
-        isEdit ? `/property/add-photo?mode=edit&propertyId=${id}` : '/property/add-photo',
+        isEdit ? `/property/checklist?mode=edit&propertyId=${id}` : '/property/add-photo',
       );
     });
   };
@@ -112,13 +111,10 @@ export default function SearchAddress({ isEdit = false, id }: Props) {
 
   useEffect(() => {
     if (isEdit && id) {
-      const propertyData = mockHouserData.find((item) => item.id === Number(id));
-      if (!propertyData) return;
-      setProperty(propertyData);
       form.reset({
-        nickName: propertyData.propertyName,
-        address: propertyData.propertyAddress,
-        addressDetail: propertyData.propertyDetailedAddress,
+        nickName: property.propertyName,
+        address: property.propertyAddress,
+        addressDetail: property.propertyDetailedAddress,
       });
     }
   }, [id, isEdit]);
@@ -201,8 +197,9 @@ export default function SearchAddress({ isEdit = false, id }: Props) {
           </div>
           <FixedBar
             disabled={!form.formState.isValid && !isPending}
-            skipRoute="/property/add-photo"
+            skipRoute={isEdit ? `/property?mode=edit&propertyId=${id}` : '/property/add-photo'}
             preventSkip={true}
+            text="다음"
           />
         </form>
       </Form>

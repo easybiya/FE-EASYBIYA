@@ -15,12 +15,11 @@ import {
 import { useToastStore } from '@/store/toastStore';
 import { useTemplateStore } from '@/store/templateStore';
 import { usePropertyStore } from '@/store/usePropertyStore';
-import { mockCheckList, mockHouserData } from '@/data/mockHouseData';
-import { mockCheckList as mockPropertyCheckList } from '@/data/mockCheckList';
 import { postProperty } from '@/lib/api/property';
 import { postTemplate } from '@/lib/api/template';
 import FixedBar from '@/components/FixedBar';
 import { useSearchParams } from 'next/navigation';
+import { getChecklistTemplate, getPropertyChecklistById } from '@/lib/api/checklist';
 
 export default function ChecklistPage() {
   const router = useRouter();
@@ -31,7 +30,7 @@ export default function ChecklistPage() {
   const [showTemplateSelectModal, setShowTemplateSelectModal] = useState(false);
   const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
-  const { property, images, resetAll, setProperty } = usePropertyStore();
+  const { property, images, resetAll } = usePropertyStore();
   const store = useTemplateStore();
 
   // TO DO
@@ -43,25 +42,33 @@ export default function ChecklistPage() {
         priority: index + 1,
         title: item.title,
         checkType: item.checkType,
-        content: null,
-        checkItems: item.checkItems.map((desc, idx) => ({
-          description: desc,
-          checked: idx === 0,
-          priority: idx + 1,
-        })),
+        content: item.checkType === 'TEXT' ? '' : null,
+        checkItems:
+          item.checkType === 'TEXT'
+            ? []
+            : item.checkItems.map((desc, idx) => ({
+                description: desc,
+                checked: idx === 0,
+                priority: idx + 1,
+              })),
       }));
+    };
+    const fetchTemplate = async () => {
+      const result = await getChecklistTemplate();
+      const transformed = transformApiChecklist(result);
+      setChecklist(transformed);
+    };
+    const fetchData = async () => {
+      if (!propertyId) return;
+      const result = await getPropertyChecklistById(propertyId);
+      setChecklist(result);
     };
     if (isEdit) {
       // 편집 모드 일때, 해당 매물 정보 저장 및 체크리스트 저장
-      const propertyData = mockHouserData.find((item) => item.id === Number(propertyId));
-      const testCheckList = mockPropertyCheckList;
-      if (!propertyData) return;
-      setProperty(propertyData);
-      setChecklist(testCheckList);
+      fetchData();
     } else {
       // 신규 모드일때는 템플릿 변환
-      const transformed = transformApiChecklist(mockCheckList.checklists);
-      setChecklist(transformed);
+      fetchTemplate();
     }
   }, [isEdit, propertyId]);
 
@@ -87,7 +94,10 @@ export default function ChecklistPage() {
     );
     images.forEach((img) => formData.append('images', img));
     try {
-      await postProperty(formData);
+      if (isEdit) {
+      } else {
+        await postProperty(formData);
+      }
       resetAll();
       setIsCompleted(true);
       setShowTemplateSelectModal(true);
@@ -134,7 +144,13 @@ export default function ChecklistPage() {
               onAddChecklist={handleAddChecklist}
               onSaveTemplate={handleSaveTemplate}
             />
-            <FixedBar onClick={handleComplete} skipRoute="/" preventSkip={false} disabled={false} />
+            <FixedBar
+              onClick={handleComplete}
+              skipRoute="/"
+              preventSkip={true}
+              disabled={property.monthlyFee === null && property.propertyLatitude === null} // 매물 정보, 매물 주소 등록 안한경우 생성 못함
+              text="완료"
+            />
           </>
         )}
 

@@ -139,6 +139,7 @@ export default function InstitutionForm() {
             disabled={!form.formState.isValid && !isPending}
             skipRoute="/"
             preventSkip={false}
+            text="완료"
           />
         </form>
       </Form>

@@ -5,24 +5,26 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { ChecklistPayloadItem } from '@/types/checklist';
 import Header from '@/components/Layout/Header';
-import { mockHouserData } from '@/data/mockHouseData';
 import { useRouter } from 'next/router';
 import { formatDate } from '@/utils/formatDate';
 import { formatWon } from '@/utils/formatWon';
 import HouseTypeTag from '@/components/DashBoard/HouseTypeTag';
 import Image from 'next/image';
 import EditButtonContainer from '@/components/EditButtonContainer';
-import { mockCheckList } from '@/data/mockCheckList';
 import CheckListContainer from '@/components/CheckList/CheckListContainer';
 import IconComponent from '@/components/Asset/Icon';
+import { getPropertyById } from '@/lib/api/property';
+import { Property } from '@/types';
+import { getPropertyChecklistById } from '@/lib/api/checklist';
 
 export default function ChecklistDetailPage() {
   const [isEdit, setIsEdit] = useState(false);
+  const [propertyData, setPropertyData] = useState<Property>();
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const [, setActiveIndex] = useState(0);
   const router = useRouter();
   const { id } = router.query;
-  const propertyData = mockHouserData.find((item) => item.id === Number(id));
+  // const propertyData = mockHouserData.find((item) => item.id === Number(id));
 
   const handleEditImages = () => {
     if (!id) return;
@@ -35,8 +37,14 @@ export default function ChecklistDetailPage() {
   };
 
   useEffect(() => {
-    const testData = mockCheckList;
-    setChecklist([...testData]);
+    const fetchData = async () => {
+      if (!id) return;
+      const data = await getPropertyById(id as string);
+      const checklistData = await getPropertyChecklistById(id as string);
+      setPropertyData(data);
+      setChecklist(checklistData);
+    };
+    fetchData();
   }, []);
 
   if (!propertyData) {
@@ -106,11 +114,11 @@ export default function ChecklistDetailPage() {
             `}</style>
           </>
         ) : (
-          <div className="bg-gray-300 h-full">
+          <div className="bg-primary2 h-full">
             <IconComponent
-              name="plus"
-              width={24}
-              height={24}
+              name="home"
+              width={64}
+              height={64}
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
             />
           </div>
