@@ -75,18 +75,18 @@ export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: P
             </div>
             <p className="text-gray-500 text-sm">{info.propertyAddress}</p>
           </div>
-          {info.propertyImages.length > 0 ? (
-            <Image src={info.propertyImages[0].imageUrl} sizes="16" alt="thumbnail" />
-          ) : (
-            <div className="bg-primary2 w-16 h-16 rounded relative">
+          <div className="bg-primary2 w-16 h-16 rounded relative">
+            {info.propertyImages.length > 0 ? (
+              <Image src={info.propertyImages[0].imageUrl} fill alt="thumbnail" />
+            ) : (
               <IconComponent
                 name="home"
                 width={28}
                 height={28}
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
               />
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </Link>
     </div>
