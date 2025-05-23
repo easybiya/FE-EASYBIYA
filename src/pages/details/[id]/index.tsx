@@ -15,7 +15,8 @@ import CheckListContainer from '@/components/CheckList/CheckListContainer';
 import IconComponent from '@/components/Asset/Icon';
 import { getPropertyById } from '@/lib/api/property';
 import { Property } from '@/types';
-import { getPropertyChecklistById } from '@/lib/api/checklist';
+import { getPropertyChecklistById, updateChecklist } from '@/lib/api/checklist';
+import { useToastStore } from '@/store/toastStore';
 
 export default function ChecklistDetailPage() {
   const [isEdit, setIsEdit] = useState(false);
@@ -24,7 +25,7 @@ export default function ChecklistDetailPage() {
   const [, setActiveIndex] = useState(0);
   const router = useRouter();
   const { id } = router.query;
-  // const propertyData = mockHouserData.find((item) => item.id === Number(id));
+  const { showToast } = useToastStore();
 
   const handleEditImages = () => {
     if (!id) return;
@@ -34,6 +35,13 @@ export default function ChecklistDetailPage() {
   const handleEdit = () => {
     if (isEdit) return;
     setIsEdit(true);
+  };
+
+  const submitUpdateChecklist = async () => {
+    if (!id) return;
+    const result = await updateChecklist(id as string, checklist);
+    showToast(result.message, 'success');
+    setIsEdit(false);
   };
 
   useEffect(() => {
@@ -60,7 +68,7 @@ export default function ChecklistDetailPage() {
         propertyId={propertyData.id}
       />
       {isEdit && (
-        <EditButtonContainer onClick={() => setIsEdit(false)} onEditImage={handleEditImages} />
+        <EditButtonContainer onClick={submitUpdateChecklist} onEditImage={handleEditImages} />
       )}
 
       <div className="w-full aspect-[1.8/1] relative">
@@ -154,7 +162,7 @@ export default function ChecklistDetailPage() {
         </div>
       </div>
 
-      <div className="flex-grow px-4 pb-20">
+      <div className={`flex-grow px-4 ${isEdit ? 'pb-28' : 'pb-20'}`}>
         <CheckListContainer checklist={checklist} setter={setChecklist} handleEdit={handleEdit} />
       </div>
     </div>

@@ -33,4 +33,7 @@ export const ICONS = {
   chevronRight: '/icons/chevron-right.svg',
   hamburger: '/icons/hanburger.svg',
   home: '/icons/home.svg',
+  navHouse: '/icons/house.svg',
+  navMap: '/icons/map.svg',
+  navUser: '/icons/user.svg',
 };
