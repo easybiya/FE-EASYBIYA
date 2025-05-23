@@ -1,28 +1,38 @@
 import { useRouter } from 'next/router';
 import IconComponent from '../Asset/Icon';
+import { useSearchParams } from 'next/navigation';
 
-const stepMapping: { [key: number]: string } = {
-  1: '/property/room-info',
-  2: '/property/room-address',
-  3: '/property/add-photo',
-  4: '/property/checklist',
-};
+interface Props {
+  isEdit: boolean;
+  totalSteps: number;
+}
 
-const reverseMapping: { [key: string]: number } = {
-  '/property/room-info': 1,
-  '/property/room-address': 2,
-  '/property/add-photo': 3,
-  '/property/checklist': 4,
-};
-
-export default function ProgressIndicator({ totalSteps }: { totalSteps: number }) {
+export default function ProgressIndicator({ totalSteps, isEdit }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const queryString = searchParams.toString();
+
+  const stepMapping: { [key: number]: string } = {
+    1: '/property/room-info',
+    2: '/property/room-address',
+    3: isEdit ? '/property/checklist' : '/property/add-photo',
+    4: '/property/checklist',
+  };
+
+  const reverseMapping: { [key: string]: number } = {
+    '/property/room-info': 1,
+    '/property/room-address': 2,
+    '/property/add-photo': isEdit ? 0 : 3,
+    '/property/checklist': isEdit ? 3 : 4,
+  };
+
   const currentStep = reverseMapping[router.pathname] || 1;
 
   const handleClickStep = (stepNumber: number) => {
     const path = stepMapping[stepNumber];
     if (path) {
-      router.push(path);
+      const url = isEdit ? `${path}?${queryString}` : path;
+      router.push(url);
     }
   };
 
