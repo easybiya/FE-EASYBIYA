@@ -2,6 +2,8 @@ import { useRouter } from 'next/navigation';
 import IconComponent from '../Asset/Icon';
 import Dropdown from '../Dropdown';
 import { useModalStore } from '@/store/modalStore';
+import { toggleBookmark } from '@/lib/api/property';
+import { useToastStore } from '@/store/toastStore';
 
 interface HeaderProps {
   type: 1 | 2 | 3 | 4 | 5 | 6 | 7;
@@ -20,19 +22,16 @@ interface HeaderProps {
 // 6. 백버튼 | 제　목 | 생성버튼
 // 7. 　　　 | 제　목 |
 
-const ROOM_DETAIL_OPTION = ['매물 정보 수정', '사진 수정', '삭제'];
+const ROOM_DETAIL_OPTION = ['매물 정보 수정', '삭제'];
 
 export default function Header({ type, title, addAction, isFixed, propertyId }: HeaderProps) {
   const router = useRouter();
   const { openModal, closeModal } = useModalStore();
+  const { showToast } = useToastStore();
   const roomDeatilhandleSelect = (option: string) => {
     switch (option) {
       case '매물 정보 수정':
         router.push(`/property/room-info?mode=edit&propertyId=${propertyId}`);
-        break;
-      case '사진 수정':
-        if (!propertyId) return;
-        router.push(`/property/add-photo?mode=edit&propertyId=${propertyId}`);
         break;
       case '삭제':
         openModal('confirm', {
@@ -76,6 +75,12 @@ export default function Header({ type, title, addAction, isFixed, propertyId }: 
         },
       ],
     });
+  };
+
+  const toggleBookMark = async () => {
+    if (!propertyId) return;
+    const result = await toggleBookmark(String(propertyId));
+    showToast(result.message, 'success');
   };
 
   const renderContent = () => {
@@ -131,7 +136,13 @@ export default function Header({ type, title, addAction, isFixed, propertyId }: 
             </div>
             <div className="flex gap-3">
               {isFixed && (
-                <IconComponent name="pin" width={24} height={24} className="cursor-pointer" />
+                <IconComponent
+                  name="pin"
+                  width={24}
+                  height={24}
+                  className="cursor-pointer"
+                  onClick={toggleBookMark}
+                />
               )}
               <IconComponent
                 name="share"

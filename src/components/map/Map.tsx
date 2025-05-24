@@ -23,37 +23,15 @@ interface Props {
 export function Map({ roomList, institution, settingMapObject, handleMarkerClick }: Props) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [map, setMap] = useState<any>(null);
-  const [currentMarkter, setCurrentMarker] = useState(false);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const createCurrentMarker = (currentLocation: any) => {
-    const imageSrc: string = '/images/CurrentPosition.png';
-    const imageSize = new window.kakao.maps.Size(50);
-    const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
+  const createCurrentMarker = (currentLocation: any, map: any) => {
     const marker = new window.kakao.maps.Marker({
       position: currentLocation,
-      image: markerImage,
+      map,
     });
-    return marker;
-  };
 
-  const moveCurrentPosition = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        // 브라우저 접속 위치
-        const currentLocation = new window.kakao.maps.LatLng(
-          position.coords.latitude,
-          position.coords.longitude,
-        );
-        if (!currentMarkter) {
-          const newMarker = createCurrentMarker(currentLocation);
-          newMarker.setMap(map);
-          setCurrentMarker(true);
-        }
-        map.setCenter(currentLocation);
-        map.setLevel(3);
-      });
-    }
+    marker.setMap(map);
   };
 
   const initMap = useCallback(() => {
@@ -79,9 +57,7 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
             position.coords.longitude,
           );
           newMap.setCenter(currentLocation);
-          const currentMarker = createCurrentMarker(currentLocation);
-          currentMarker.setMap(newMap);
-          setCurrentMarker(true);
+          createCurrentMarker(currentLocation, newMap);
         });
       }
     });
@@ -253,11 +229,7 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
 
   return (
     <div className="relative pt-10">
-      <div id="map" className="w-full h-[calc(100vh-110px)]" />
-      <div
-        className="absolute w-8 h-8 bottom-5 right-5 bg-white z-20 rounded-full cursor-pointer"
-        onClick={moveCurrentPosition}
-      />
+      <div id="map" className="w-full h-[calc(100vh-100px)]" />
     </div>
   );
 }
