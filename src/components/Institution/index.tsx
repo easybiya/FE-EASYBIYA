@@ -8,6 +8,8 @@ import { Input } from '../ui/input';
 import Image from 'next/image';
 import { createInstitutionZodSchema } from '@/lib/zodSchema';
 import FixedBar from '../FixedBar';
+import { fetchInstitution } from '@/lib/api/institutuion';
+import { useRouter } from 'next/navigation';
 
 declare global {
   interface Window {
@@ -25,6 +27,7 @@ export default function InstitutionForm() {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [addressCoordinate, setAddressCoordinate] = useState({ x: '', y: '' });
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm<InstitutionSchema>({
     resolver: zodResolver(createInstitutionZodSchema),
@@ -35,9 +38,15 @@ export default function InstitutionForm() {
     mode: 'onBlur',
   });
 
-  const onSubmit: SubmitHandler<InstitutionSchema> = (values) => {
+  const onSubmit: SubmitHandler<InstitutionSchema> = async (values) => {
     startTransition(async () => {
-      console.log(values, addressCoordinate); // 주소 및 좌표 설정 API
+      await fetchInstitution({
+        institutionName: values.nickName,
+        institutionAddress: values.address,
+        institutionLatitude: Number(parseFloat(addressCoordinate.y).toFixed(7)),
+        institutionLongitude: Number(parseFloat(addressCoordinate.x).toFixed(7)),
+      });
+      router.push('/');
     });
   };
 

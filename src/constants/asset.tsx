@@ -26,7 +26,7 @@ export const ICONS = {
   walk: '/icons/walk-icon.svg',
   pencil: '/icons/pencil.svg',
   pin: '/icons/pin-icon.svg',
-  share: '/icons/share-icon.svg',
+  share: '/icons/share-Icon.svg',
   bigCheck: '/icons/big-check.svg',
   yellowCheck: '/icons/yellow-check.svg',
   logo: '/icons/logo.svg',
