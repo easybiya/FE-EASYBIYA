@@ -4,11 +4,12 @@ import Dropdown from '../Dropdown';
 import { useModalStore } from '@/store/modalStore';
 import { toggleBookmark } from '@/lib/api/property';
 import { useToastStore } from '@/store/toastStore';
+import Button from '../Button/CustomButton';
 
 interface HeaderProps {
-  type: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+  type: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
   title: string;
-  addAction?: () => void;
+  action?: () => void;
   isFixed?: boolean;
   propertyId?: number;
 }
@@ -21,10 +22,11 @@ interface HeaderProps {
 // 5. 제　목 |       |
 // 6. 백버튼 | 제　목 | 생성버튼
 // 7. 　　　 | 제　목 |
+// 8. 취 소 | 제 목 | 저장버튼
 
 const ROOM_DETAIL_OPTION = ['매물 정보 수정', '삭제'];
 
-export default function Header({ type, title, addAction, isFixed, propertyId }: HeaderProps) {
+export default function Header({ type, title, action, isFixed, propertyId }: HeaderProps) {
   const router = useRouter();
   const { openModal, closeModal } = useModalStore();
   const { showToast } = useToastStore();
@@ -199,7 +201,7 @@ export default function Header({ type, title, addAction, isFixed, propertyId }: 
               name="plus"
               width={18}
               height={18}
-              onClick={addAction}
+              onClick={action}
               className="cursor-pointer"
             />
           </>
@@ -212,6 +214,26 @@ export default function Header({ type, title, addAction, isFixed, propertyId }: 
             <div className="w-6" />
           </>
         );
+      case 8:
+        return (
+          <>
+            <button
+              className="text-[15px] font-semibold"
+              type="button"
+              onClick={() => router.back()}
+            >
+              취소
+            </button>
+            <h1 className="text-b-20">{title}</h1>
+            <Button
+              label="저장"
+              onClick={action}
+              size="small"
+              className="rounded-full px-3 py-0.5 h-full"
+            />
+          </>
+        );
+
       default:
         return <h1 className="text-b-20">{title}</h1>;
     }

@@ -53,7 +53,7 @@ export default function Page() {
 
   return (
     <div>
-      <Header title="체크리스트 관리" type={6} addAction={createTemplate} />
+      <Header title="체크리스트 관리" type={6} action={createTemplate} />
       <div className="py-6 px-5 grid grid-cols-2 gap-3">
         {allTemplates.map((template) => (
           <div
