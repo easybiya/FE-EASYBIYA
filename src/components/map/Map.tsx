@@ -209,22 +209,26 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
     );
   }, [map, institution]);
 
-  // 스크립트 삽입 로직
   useEffect(() => {
-    if (window.kakao && window.kakao.maps) {
-      initMap();
-    } else {
-      const mapScript = document.createElement('script');
-      mapScript.async = true;
-      mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&autoload=false&libraries=services,clusterer,drawing`;
-      document.head.appendChild(mapScript);
-      mapScript.addEventListener('load', initMap);
+    const loadKakaoMap = () => {
+      if (window.kakao && window.kakao.maps) {
+        window.kakao.maps.load(() => {
+          initMap();
+        });
+      } else {
+        const mapScript = document.createElement('script');
+        mapScript.async = true;
+        mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&autoload=false&libraries=services,clusterer,drawing`;
+        document.head.appendChild(mapScript);
+        mapScript.addEventListener('load', () => {
+          window.kakao.maps.load(() => {
+            initMap();
+          });
+        });
+      }
+    };
 
-      return () => {
-        mapScript.removeEventListener('load', initMap);
-        document.head.removeChild(mapScript);
-      };
-    }
+    loadKakaoMap();
   }, [initMap]);
 
   return (
