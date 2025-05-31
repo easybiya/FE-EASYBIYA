@@ -1,19 +1,18 @@
 import HouseCard from '@/components/DashBoard/HouseCard';
 import Dropdown from '@/components/Dropdown';
-import {
-  getBookmarkedPropertyList,
-  getNonBookmarkedPropertyList,
-  toggleBookmark,
-} from '@/lib/api/property';
+import { PropertySortBy, toggleBookmark } from '@/lib/api/property';
 import { useToastStore } from '@/store/toastStore';
-import { Property } from '@/types';
-import { useEffect, useState } from 'react';
+import { useProperty } from './hooks/useProperty';
+import { useDispatch } from './hooks/useDispatch';
 
-const DROPDOWN_OPTION = ['최신순', '입주 빠른 순'];
+const DROPDOWN_OPTION = [
+  { label: '최신순', value: 'LATEST' },
+  { label: '입주 빠른 순', value: 'AVAILABLE_DATE_ASC' },
+];
 
 export default function Home() {
-  const [fixedList, setFixedList] = useState<Property[]>([]);
-  const [propertyList, setPropertyList] = useState<Property[]>([]);
+  const { params, setSortBy } = useDispatch();
+  const { bookmarked, nonBookmarked } = useProperty(params);
   const { showToast } = useToastStore();
 
   const toggleBookMark = async (id: number) => {
@@ -21,40 +20,40 @@ export default function Home() {
     showToast(result.message, 'success');
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const bookmarkedData = await getBookmarkedPropertyList();
-      const notBookmarkedData = await getNonBookmarkedPropertyList({
-        page: 1,
-        size: 10,
-        sortBy: 'LATEST',
-      });
-      setFixedList(bookmarkedData);
-      setPropertyList(notBookmarkedData);
-    };
-    fetchData();
-  }, []);
+  const handleSelect = (option: string) => {
+    const selectedOption = DROPDOWN_OPTION.find((item) => item.label === option);
+    if (selectedOption) {
+      setSortBy(selectedOption.value as PropertySortBy);
+    }
+  };
 
   return (
     <div className="flex flex-col px-5 py-2 gap-2 mb-20">
       <div className="flex w-full justify-between items-center">
-        <p className="text-gray-500 text-[14px]">전체 {fixedList.length + propertyList.length}</p>
-        <Dropdown options={DROPDOWN_OPTION} type="select" selectedOption="최신순" />
+        <p className="text-gray-500 text-[14px]">전체 {bookmarked.length + nonBookmarked.length}</p>
+        <Dropdown
+          options={DROPDOWN_OPTION.map((item) => item.label)}
+          type="select"
+          selectedOption={
+            DROPDOWN_OPTION.find((item) => item.value === params.sortBy)?.label || '최신순'
+          }
+          onSelect={handleSelect}
+        />
       </div>
-      {fixedList.length === 0 && propertyList.length === 0 && (
+      {bookmarked.length === 0 && nonBookmarked.length === 0 && (
         <div className="text-gray-400 text-center py-4">등록한 매물이 없습니다.</div>
       )}
 
       <ul className="flex flex-col gap-4">
-        {fixedList.length > 0 &&
-          fixedList.map((item) => (
+        {bookmarked.length > 0 &&
+          bookmarked.map((item) => (
             <li key={item.id}>
               <HouseCard info={item} toggleBookmark={toggleBookMark} isFixed />
             </li>
           ))}
 
-        {propertyList.length > 0 &&
-          propertyList.map((item) => (
+        {nonBookmarked.length > 0 &&
+          nonBookmarked.map((item) => (
             <li key={item.id}>
               <HouseCard info={item} toggleBookmark={toggleBookMark} isFixed={false} />
             </li>
