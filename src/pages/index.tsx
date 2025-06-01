@@ -1,9 +1,9 @@
 import HouseCard from '@/components/DashBoard/HouseCard';
 import Dropdown from '@/components/Dropdown';
+import { useDispatch } from '@/hooks/property/useDispatch';
+import { useProperty } from '@/hooks/property/useProperty';
 import { PropertySortBy, toggleBookmark } from '@/lib/api/property';
 import { useToastStore } from '@/store/toastStore';
-import { useProperty } from './hooks/property/useProperty';
-import { useDispatch } from './hooks/property/useDispatch';
 
 const DROPDOWN_OPTION = [
   { label: '최신순', value: 'LATEST' },

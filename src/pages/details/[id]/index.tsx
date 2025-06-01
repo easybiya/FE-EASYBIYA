@@ -16,7 +16,7 @@ import IconComponent from '@/components/Asset/Icon';
 import { updateChecklist } from '@/lib/api/checklist';
 import { useToastStore } from '@/store/toastStore';
 import Link from 'next/link';
-import { usePropertyDetail } from '@/pages/hooks/propertyDetail/usePropertyDetail';
+import { usePropertyDetail } from '@/hooks/propertyDetail/usePropertyDetail';
 
 export default function ChecklistDetailPage() {
   const router = useRouter();
