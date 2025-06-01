@@ -8,7 +8,7 @@ import { getCoordinates } from '@/utils/getCoordinates';
 
 interface Props {
   modalContent: ModalContent;
-  institution?: Institution;
+  institution?: Institution | null;
   closeModal: () => void;
 }
 
@@ -37,7 +37,7 @@ export default function InfoModal({ modalContent, closeModal, institution }: Pro
 
   return (
     <>
-      <div className="absolute top-5 right-0 left-0 z-50 m-5">
+      <div className="absolute top-5 right-0 left-0 z-50 mx-4 my-5">
         <div className="relative flex flex-col items-start p-5 gap-2 h-fit bg-white rounded-xl shadow">
           <IconComponent
             name={`${isInstitution ? 'institution' : 'property'}`}

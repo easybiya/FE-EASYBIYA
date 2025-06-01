@@ -14,7 +14,7 @@ declare global {
 
 interface Props {
   roomList?: Property[];
-  institution?: Institution;
+  institution?: Institution | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   settingMapObject: (object: any) => void;
   handleMarkerClick: (content: ModalContent) => void;

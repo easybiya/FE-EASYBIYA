@@ -1,7 +1,7 @@
 import instance from './axiosInstance';
 
 export const getInstitutions = async () => {
-  const result = await instance.get('api/member/institutions');
+  const result = await instance.get('/api/member/institution');
   return result.data.result;
 };
 

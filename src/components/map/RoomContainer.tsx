@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import CreateInstitutionButton from './CreateInstitutionButton';
 
 interface Props {
-  institution?: Institution;
+  institution?: Institution | null;
   handleTagClick: (address: string, name: string) => Promise<void>;
 }
 
