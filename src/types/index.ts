@@ -17,7 +17,7 @@ export type HouseType = 'JEONSE' | 'BANJEONSE' | 'MONTHLY_RENT';
 
 export type FeeType = 'DEPOSIT' | 'MONTHLY_RENT' | 'MAINTENANCE_FEE';
 
-interface PropertyImage {
+export interface PropertyImage {
   imageId: number;
   imageUrl: string;
   priority: number;

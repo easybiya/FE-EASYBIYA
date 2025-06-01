@@ -13,19 +13,20 @@ import Image from 'next/image';
 import EditButtonContainer from '@/components/EditButtonContainer';
 import CheckListContainer from '@/components/CheckList/CheckListContainer';
 import IconComponent from '@/components/Asset/Icon';
-import { getPropertyById } from '@/lib/api/property';
-import { Property } from '@/types';
-import { getPropertyChecklistById, updateChecklist } from '@/lib/api/checklist';
+import { updateChecklist } from '@/lib/api/checklist';
 import { useToastStore } from '@/store/toastStore';
+import Link from 'next/link';
+import { usePropertyDetail } from '@/hooks/propertyDetail/usePropertyDetail';
 
 export default function ChecklistDetailPage() {
-  const [isEdit, setIsEdit] = useState(false);
-  const [propertyData, setPropertyData] = useState<Property>();
-  const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
-  const [, setActiveIndex] = useState(0);
   const router = useRouter();
   const { id } = router.query;
+  const propertyId = typeof id === 'string' ? id : undefined;
+  const { propertyChecklist, propertyDetail } = usePropertyDetail(propertyId);
   const { showToast } = useToastStore();
+  const [isEdit, setIsEdit] = useState(false);
+  const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
+  const [, setActiveIndex] = useState(0);
 
   const handleEditImages = () => {
     if (!id) return;
@@ -45,17 +46,12 @@ export default function ChecklistDetailPage() {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!id) return;
-      const data = await getPropertyById(id as string);
-      const checklistData = await getPropertyChecklistById(id as string);
-      setPropertyData(data);
-      setChecklist(checklistData);
-    };
-    fetchData();
-  }, []);
+    if (propertyChecklist.length > 0 && checklist.length === 0) {
+      setChecklist(propertyChecklist);
+    }
+  }, [propertyChecklist]);
 
-  if (!propertyData) {
+  if (!propertyDetail) {
     return <div>매물 정보가 없습니다.</div>;
   }
 
@@ -63,16 +59,22 @@ export default function ChecklistDetailPage() {
     <div className="h-full flex flex-col bg-[#F6F5F2] relative">
       <Header
         type={3}
-        title={propertyData.propertyName}
-        isFixed={propertyData.isBookmarked}
-        propertyId={propertyData.id}
+        title={propertyDetail.propertyName}
+        isFixed={propertyDetail.isBookmarked}
+        propertyId={propertyDetail.id}
       />
       {isEdit && (
         <EditButtonContainer onClick={submitUpdateChecklist} onEditImage={handleEditImages} />
       )}
 
       <div className="w-full aspect-[1.8/1] relative">
-        {propertyData.propertyImages.length > 0 ? (
+        <Link
+          href={`/property/edit-photo?mode=edit&propertyId=${id}`}
+          className="absolute right-[14px] top-[15px] z-10 px-2 py-1 rounded-full border-gray-300 bg-white text-sm"
+        >
+          사진 수정
+        </Link>
+        {propertyDetail.propertyImages.length > 0 ? (
           <>
             <Swiper
               modules={[Pagination]}
@@ -82,14 +84,9 @@ export default function ChecklistDetailPage() {
               onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
               className="h-full"
             >
-              {propertyData.propertyImages.map((item, index) => (
+              {propertyDetail.propertyImages.map((item, index) => (
                 <SwiperSlide key={index} className="relative">
-                  <Image
-                    fill
-                    src={item.imageUrl}
-                    alt={`room-${index}`}
-                    className="w-full h-full object-cover"
-                  />
+                  <Image fill src={item.imageUrl} alt={`room-${index}`} objectFit="cover" />
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -135,15 +132,16 @@ export default function ChecklistDetailPage() {
 
       <div className="flex flex-col gap-2.5 px-4 mt-7">
         <div className=" flex flex-col gap-1">
-          <HouseTypeTag type={propertyData.leaseType} />
-          {propertyData.leaseType === 'JEONSE' ? (
-            <h2 className="text-b-18">보증금 {formatWon(propertyData.deposit)}</h2>
+          <HouseTypeTag type={propertyDetail.leaseType} />
+          {propertyDetail.leaseType === 'JEONSE' ? (
+            <h2 className="text-b-18">보증금 {formatWon(propertyDetail.deposit)}</h2>
           ) : (
             <h2 className="text-b-18">
-              보증금 {formatWon(propertyData.deposit!)} / 월세 {formatWon(propertyData.monthlyFee!)}
+              보증금 {formatWon(propertyDetail.deposit!)} / 월세{' '}
+              {formatWon(propertyDetail.monthlyFee!)}
             </h2>
           )}
-          <p className="text-r-15 text-[15px]">{propertyData?.propertyAddress}</p>
+          <p className="text-r-15 text-[15px]">{propertyDetail?.propertyAddress}</p>
         </div>
         <div className="flex gap-1 items-center">
           <Image
@@ -156,7 +154,7 @@ export default function ChecklistDetailPage() {
           <div className="flex gap-2 text-brownText text-r-12">
             <span className="font-semibold">입주 가능 일자</span>
             <p className="flex items-center ">
-              {formatDate(new Date(propertyData.availableDate), 2)}
+              {formatDate(new Date(propertyDetail.availableDate), 2)}
             </p>
           </div>
         </div>

@@ -6,10 +6,12 @@ export const getBookmarkedPropertyList = async (): Promise<Property[]> => {
   return result.data.result ?? [];
 };
 
-interface GetPropertyListParams {
+export type PropertySortBy = 'LATEST' | 'AVAILABLE_DATE_ASC';
+
+export interface GetPropertyListParams {
   page: number;
   size: number;
-  sortBy: 'LATEST' | 'AVAILABLE_DATE_ASC';
+  sortBy: PropertySortBy;
 }
 
 export const getNonBookmarkedPropertyList = async (
@@ -38,7 +40,7 @@ export const toggleBookmark = async (id: string) => {
   return result.data;
 };
 
-export const updatePropertyImages = async (propertyId: number, formData: FormData) => {
+export const updatePropertyImages = async (propertyId: string, formData: FormData) => {
   const res = await instance.put(`/api/property/${propertyId}/images`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
