@@ -13,7 +13,7 @@ export const createRoomZodSchema = z.object({
 export const roomInfoZodSchema = z.object({
   contractType: z.enum(['JEONSE', 'BANJEONSE', 'MONTHLY_RENT']),
   deposit: z.number(),
-  monthlyRent: z.number(),
+  monthlyRent: z.number().nullable(),
   maintenanceFee: z.number().optional(),
   available: z.string().trim(),
 });

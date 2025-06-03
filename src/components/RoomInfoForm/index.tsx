@@ -17,7 +17,7 @@ import { getPropertyById } from '@/lib/api/property';
 type roomInfoSchema = {
   contractType: HouseType;
   deposit: number;
-  monthlyRent: number;
+  monthlyRent: number | null;
   maintenanceFee?: number;
   available: string;
 };
@@ -35,7 +35,7 @@ export default function RoomInfoForm({ isEdit = false, id }: Props) {
     defaultValues: {
       contractType: 'MONTHLY_RENT',
       deposit: undefined,
-      monthlyRent: undefined,
+      monthlyRent: null,
       maintenanceFee: 0,
       available: formatDate(new Date(), 1),
     },
@@ -70,7 +70,7 @@ export default function RoomInfoForm({ isEdit = false, id }: Props) {
   const handleRoomType = (type: HouseType) => {
     form.setValue('contractType', type);
     if (type === 'JEONSE') {
-      form.setValue('monthlyRent', 0);
+      form.setValue('monthlyRent', null);
     }
   };
 

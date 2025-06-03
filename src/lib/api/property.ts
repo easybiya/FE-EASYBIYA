@@ -56,3 +56,8 @@ export const updatePropertyImages = async (propertyId: string, formData: FormDat
   if (!res.data) throw new Error('이미지 수정 실패');
   return res.data;
 };
+
+export const deleteProperty = async (id: string) => {
+  const result = await instance.delete(`/api/property/${id}`);
+  return result.data;
+};

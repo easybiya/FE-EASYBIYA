@@ -7,6 +7,9 @@ import { formatWon } from '@/utils/formatWon';
 import { useRouter } from 'next/router';
 import { useModalStore } from '@/store/modalStore';
 import Image from 'next/image';
+import { deleteProperty } from '@/lib/api/property';
+import { useToastStore } from '@/store/toastStore';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   info: Property;
@@ -21,6 +24,8 @@ const cancelOptionMenuList = ['고정 해제하기', '수정하기', '삭제하�
 export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: Props) {
   const router = useRouter();
   const { openModal, closeModal } = useModalStore();
+  const { showToast } = useToastStore();
+  const queryClient = useQueryClient();
   const handleSelect = (option: string) => {
     switch (option) {
       case '고정 해제하기':
@@ -35,8 +40,11 @@ export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: P
       case '삭제하기':
         openModal('confirm', {
           title: '체크리스트 항목 삭제',
-          onConfirm: () => {
-            console.log('삭제');
+          onConfirm: async () => {
+            await deleteProperty(String(info.id));
+            queryClient.invalidateQueries({ queryKey: ['bookmarkedProperty'] });
+            queryClient.invalidateQueries({ queryKey: ['propertyList'] });
+            showToast('매물이 삭제되었습니다.', 'success');
             closeModal();
           },
           buttonStyle: 'bg-red-500 hover:bg-red-400 active:bg-red-300',
