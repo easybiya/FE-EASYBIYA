@@ -1,5 +1,6 @@
 import { Property } from '@/types';
 import instance from './axiosInstance';
+import { PropertyData } from '@/store/usePropertyStore';
 
 export const getBookmarkedPropertyList = async (): Promise<Property[]> => {
   const result = await instance.get('/api/property/bookmarked');
@@ -35,6 +36,11 @@ export const postProperty = async (formData: FormData) => {
   return result.data;
 };
 
+export const updateProperty = async (property: PropertyData, id: string) => {
+  const result = await instance.patch(`/api/property/${id}`, property);
+  return result.data;
+};
+
 export const toggleBookmark = async (id: string) => {
   const result = await instance.patch(`/api/property/${id}/bookmark`);
   return result.data;
@@ -49,4 +55,9 @@ export const updatePropertyImages = async (propertyId: string, formData: FormDat
 
   if (!res.data) throw new Error('이미지 수정 실패');
   return res.data;
+};
+
+export const deleteProperty = async (id: string) => {
+  const result = await instance.delete(`/api/property/${id}`);
+  return result.data;
 };
