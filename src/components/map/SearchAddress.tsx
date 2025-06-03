@@ -124,6 +124,7 @@ export default function SearchAddress({ isEdit = false, id }: Props) {
       const geocoder = new window.kakao.maps.services.Geocoder();
       geocoder.addressSearch(
         property.propertyAddress,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (result: any, status: AddressSearchStatus) => {
           if (status === window.kakao.maps.services.Status.OK) {
             setAddressCoordinate({ x: result[0].x, y: result[0].y });
