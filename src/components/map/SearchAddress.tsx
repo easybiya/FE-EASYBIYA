@@ -93,21 +93,51 @@ export default function SearchAddress({ isEdit = false, id }: Props) {
   }, []);
 
   useEffect(() => {
-    if (window.kakao && window.kakao.maps) {
-      initMap();
-    } else {
-      const mapScript = document.createElement('script');
-      mapScript.async = true;
-      mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&autoload=false&libraries=services`;
-      document.head.appendChild(mapScript);
-      mapScript.addEventListener('load', initMap);
+    const loadMap = async () => {
+      if (window.kakao && window.kakao.maps) {
+        initMap();
+        handleGeocode();
+      } else {
+        const mapScript = document.createElement('script');
+        mapScript.async = true;
+        mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&autoload=false&libraries=services`;
 
-      return () => {
-        mapScript.removeEventListener('load', initMap);
-        document.head.removeChild(mapScript);
-      };
-    }
-  }, [initMap]);
+        mapScript.addEventListener('load', () => {
+          window.kakao.maps.load(() => {
+            initMap();
+            handleGeocode();
+          });
+        });
+
+        document.head.appendChild(mapScript);
+
+        return () => {
+          mapScript.removeEventListener('load', initMap);
+          document.head.removeChild(mapScript);
+        };
+      }
+    };
+
+    const handleGeocode = () => {
+      if (!isEdit || !id || !property?.propertyAddress) return;
+
+      const geocoder = new window.kakao.maps.services.Geocoder();
+      geocoder.addressSearch(
+        property.propertyAddress,
+        (result: any, status: AddressSearchStatus) => {
+          if (status === window.kakao.maps.services.Status.OK) {
+            setAddressCoordinate({ x: result[0].x, y: result[0].y });
+            setProperty({
+              propertyLatitude: Number(parseFloat(result[0].y).toFixed(7)),
+              propertyLongitude: Number(parseFloat(result[0].x).toFixed(7)),
+            });
+          }
+        },
+      );
+    };
+
+    loadMap();
+  }, [initMap, isEdit, id, property?.propertyAddress]);
 
   useEffect(() => {
     if (isEdit && id) {
@@ -196,7 +226,9 @@ export default function SearchAddress({ isEdit = false, id }: Props) {
             </div>
           </div>
           <FixedBar
-            disabled={!form.formState.isValid && !isPending}
+            disabled={
+              !form.formState.isValid || isPending || !addressCoordinate.x || !addressCoordinate.y
+            }
             skipRoute={isEdit ? `/property?mode=edit&propertyId=${id}` : '/property/add-photo'}
             preventSkip={true}
             text="다음"

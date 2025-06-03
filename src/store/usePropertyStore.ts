@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-interface PropertyData {
+export interface PropertyData {
   leaseType: 'JEONSE' | 'BANJEONSE' | 'MONTHLY_RENT' | '';
   deposit: number | null;
   monthlyFee: number | null;

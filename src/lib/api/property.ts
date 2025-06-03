@@ -1,5 +1,6 @@
 import { Property } from '@/types';
 import instance from './axiosInstance';
+import { PropertyData } from '@/store/usePropertyStore';
 
 export const getBookmarkedPropertyList = async (): Promise<Property[]> => {
   const result = await instance.get('/api/property/bookmarked');
@@ -32,6 +33,11 @@ export const postProperty = async (formData: FormData) => {
       'Content-Type': 'multipart/form-data',
     },
   });
+  return result.data;
+};
+
+export const updateProperty = async (property: PropertyData, id: string) => {
+  const result = await instance.patch(`/api/property/${id}`, property);
   return result.data;
 };
 

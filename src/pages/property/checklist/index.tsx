@@ -15,11 +15,16 @@ import {
 import { useToastStore } from '@/store/toastStore';
 import { useTemplateStore } from '@/store/templateStore';
 import { usePropertyStore } from '@/store/usePropertyStore';
-import { postProperty } from '@/lib/api/property';
+import { postProperty, updateProperty } from '@/lib/api/property';
 import { postTemplate } from '@/lib/api/template';
 import FixedBar from '@/components/FixedBar';
 import { useSearchParams } from 'next/navigation';
-import { getChecklistTemplate, getPropertyChecklistById } from '@/lib/api/checklist';
+import {
+  getChecklistTemplate,
+  getPropertyChecklistById,
+  updateChecklist,
+} from '@/lib/api/checklist';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function ChecklistPage() {
   const router = useRouter();
@@ -32,6 +37,7 @@ export default function ChecklistPage() {
   const [isCompleted, setIsCompleted] = useState(false);
   const { property, images, resetAll } = usePropertyStore();
   const store = useTemplateStore();
+  const queryClient = useQueryClient();
 
   // TO DO
   // hasInfo, 항목 & 세부사항 삭제 로직 돌려놓기
@@ -95,6 +101,10 @@ export default function ChecklistPage() {
     images.forEach((img) => formData.append('images', img));
     try {
       if (isEdit) {
+        await updateProperty(property, propertyId as string);
+        await updateChecklist(propertyId as string, checklist);
+        queryClient.invalidateQueries({ queryKey: ['propertyDetail', propertyId] });
+        queryClient.invalidateQueries({ queryKey: ['checklist', propertyId] });
       } else {
         await postProperty(formData);
       }
