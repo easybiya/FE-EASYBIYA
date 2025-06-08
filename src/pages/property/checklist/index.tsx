@@ -54,7 +54,7 @@ export default function ChecklistPage() {
             ? []
             : item.checkItems.map((desc, idx) => ({
                 description: desc,
-                checked: idx === 0,
+                checked: item.checkType === 'RADIO' ? idx === 0 : false,
                 priority: idx + 1,
               })),
       }));

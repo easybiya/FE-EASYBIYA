@@ -5,7 +5,7 @@ export const updateChecklist = async (propertyId: string, checklist: ChecklistPa
   const result = await instance.put(`/api/checklist/property/${propertyId}`, {
     checklists: checklist,
   });
-  return result.data.result;
+  return result.data;
 };
 
 export const getChecklistTemplate = async (): Promise<ChecklistTemplate> => {

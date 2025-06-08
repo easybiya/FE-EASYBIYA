@@ -9,7 +9,7 @@ interface Props {
 
 export default function AvailableCalendar({ handleCalendar, currentDate }: Props) {
   return (
-    <div className="relative left-0 top-full z-10 flex w-full items-center justify-center bg-white py-10 shadow-lg rounded">
+    <div className="relative left-0 top-full z-10 flex w-full items-center justify-center bg-white py-5 shadow-lg rounded">
       <DatePicker
         selected={new Date(currentDate) ? new Date(currentDate) : null}
         onChange={(e) => handleCalendar(formatDate(e!, 1))}
@@ -23,7 +23,9 @@ export default function AvailableCalendar({ handleCalendar, currentDate }: Props
           background-color: transparent !important;
           border: none !important;
         }
-
+        :global(.react-datepicker) {
+          border: none !important;
+        }
         :global(.react-datepicker__day--selected),
         :global(.react-datepicker__day--keyboard-selected) {
           background-color: #23262a !important;

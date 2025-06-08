@@ -17,6 +17,8 @@ import { updateChecklist } from '@/lib/api/checklist';
 import { useToastStore } from '@/store/toastStore';
 import Link from 'next/link';
 import { usePropertyDetail } from '@/hooks/propertyDetail/usePropertyDetail';
+import ImageSlider from '@/components/DashBoard/ImageSlider';
+import useImageCarousel from '@/hooks/propertyDetail/useImageCarousel';
 
 export default function ChecklistDetailPage() {
   const router = useRouter();
@@ -27,6 +29,9 @@ export default function ChecklistDetailPage() {
   const [isEdit, setIsEdit] = useState(false);
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const [, setActiveIndex] = useState(0);
+
+  const { setSelected, setApi, setStartIndex, selected, startIndex, currentIndex } =
+    useImageCarousel({ images: propertyDetail?.propertyImages || [] });
 
   const handleEditImages = () => {
     if (!id) return;
@@ -40,8 +45,8 @@ export default function ChecklistDetailPage() {
 
   const submitUpdateChecklist = async () => {
     if (!id) return;
-    const result = await updateChecklist(id as string, checklist);
-    showToast(result.message, 'success');
+    await updateChecklist(id as string, checklist);
+    showToast('체크리스트가 수정되었습니다.', 'success');
     setIsEdit(false);
   };
 
@@ -86,7 +91,17 @@ export default function ChecklistDetailPage() {
             >
               {propertyDetail.propertyImages.map((item, index) => (
                 <SwiperSlide key={index} className="relative">
-                  <Image fill src={item.imageUrl} alt={`room-${index}`} objectFit="cover" />
+                  <Image
+                    fill
+                    src={item.imageUrl}
+                    alt={`room-${index}`}
+                    objectFit="cover"
+                    onClick={() => {
+                      setSelected(item);
+                      setStartIndex(index);
+                    }}
+                    className="cursor-pointer"
+                  />
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -129,6 +144,15 @@ export default function ChecklistDetailPage() {
           </div>
         )}
       </div>
+
+      <ImageSlider
+        images={propertyDetail.propertyImages}
+        selected={selected}
+        currentIndex={currentIndex}
+        startIndex={startIndex}
+        setSelected={setSelected}
+        setApi={setApi}
+      />
 
       <div className="flex flex-col gap-2.5 px-4 mt-7">
         <div className=" flex flex-col gap-1">
