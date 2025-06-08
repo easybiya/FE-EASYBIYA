@@ -5,16 +5,16 @@ import Input from '../Input';
 interface Props {
   type: FeeType;
   text: string;
-  value?: number;
+  value?: number | null;
   onChange: (fee: number | undefined) => void;
 }
 
-export default function HouseFeeInput({ type, text, value = undefined, onChange }: Props) {
+export default function HouseFeeInput({ type, text, value, onChange }: Props) {
   const [billion, setBillion] = useState<number | undefined>();
   const [million, setMillion] = useState<number | undefined>();
 
   useEffect(() => {
-    if (value !== undefined) {
+    if (value !== null && value !== undefined) {
       setBillion(Math.floor(value / 100_000_000));
       setMillion(Math.floor((value % 100_000_000) / 10_000));
     } else {
