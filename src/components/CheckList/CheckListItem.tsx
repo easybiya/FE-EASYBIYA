@@ -136,8 +136,9 @@ export default function ChecklistItem({
                   className="flex justify-between items-center w-full"
                   onClick={() => setEditingText(true)}
                 >
-                  <span>{content || <span className="text-gray-400">입력 없음</span>}</span>
-                  <span className="text-gray-400 text-xs">✏️</span>
+                  <span>
+                    {content || <span className="text-gray-400">내용을 입력해주세요!</span>}
+                  </span>
                 </div>
               )}
             </div>
@@ -150,7 +151,7 @@ export default function ChecklistItem({
                   key={option.priority}
                   className="flex items-center justify-between text-r-14 gap-2"
                 >
-                  <label className="flex items-center gap-2 w-full">
+                  <div className="flex items-center gap-2 w-full">
                     <input
                       type="radio"
                       name={`radio-group-${priority}`}
@@ -159,6 +160,7 @@ export default function ChecklistItem({
                       onChange={() => onChange?.(priority, option)}
                       className="w-4 h-4 accent-black"
                     />
+
                     {editingIndex === i ? (
                       <input
                         value={option.description}
@@ -169,18 +171,11 @@ export default function ChecklistItem({
                         className="text-sm border-b border-gray-300"
                       />
                     ) : (
-                      <span>{option.description}</span>
+                      <span onClick={() => setEditingIndex(i)} className="cursor-pointer">
+                        {option.description}
+                      </span>
                     )}
-                  </label>
-                  {editingIndex !== i && (
-                    <button
-                      onClick={() => setEditingIndex(i)}
-                      className="text-gray-400 text-xs cursor-pointer hover:underline"
-                      aria-label="옵션 수정"
-                    >
-                      ✏️
-                    </button>
-                  )}
+                  </div>
                 </div>
               ))}
             </div>
@@ -193,7 +188,7 @@ export default function ChecklistItem({
                   key={option.priority}
                   className="flex items-center justify-between text-r-14 gap-2"
                 >
-                  <label className="flex items-center gap-2 w-full">
+                  <div className="flex items-center gap-2 w-full">
                     <input
                       type="checkbox"
                       value={option.description}
@@ -208,21 +203,14 @@ export default function ChecklistItem({
                         onChange={(e) => onOptionEdit?.(priority, option.priority, e.target.value)}
                         onBlur={() => setEditingIndex(null)}
                         onKeyDown={(e) => e.key === 'Enter' && setEditingIndex(null)}
-                        className="text-sm border-b border-gray-300"
+                        className="text-sm border-b border-gray-300 "
                       />
                     ) : (
-                      <span>{option.description}</span>
+                      <span onClick={() => setEditingIndex(i)} className="cursor-pointer w-full">
+                        {option.description}
+                      </span>
                     )}
-                  </label>
-                  {editingIndex !== i && (
-                    <button
-                      onClick={() => setEditingIndex(i)}
-                      className="text-gray-400 text-xs cursor-pointer hover:underline"
-                      aria-label="옵션 수정"
-                    >
-                      ✏️
-                    </button>
-                  )}
+                  </div>
                 </div>
               ))}
             </div>
