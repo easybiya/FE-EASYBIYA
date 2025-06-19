@@ -33,7 +33,10 @@ export default function Dropdown({ options, selectedOption, onSelect, type }: Dr
         {type === 'meatball' ? (
           <button
             type="button"
-            onClick={toggleDropdown}
+            onClick={(e) => {
+              e.preventDefault();
+              toggleDropdown();
+            }}
             className="flex items-center justify-center w-8 h-8 rounded-[4px] hover:bg-gray-100 focus:outline-none"
           >
             <IconComponent name="meatball" width={24} height={24} isBtn />
