@@ -22,3 +22,8 @@ export const editTemplate = async (templateId: string, template: ChecklistTempla
   const result = await instance.put(`/api/template/${templateId}`, template);
   return result.data;
 };
+
+export const deleteTemplate = async (templateId: number) => {
+  const result = await instance.delete(`/api/template/${templateId}`);
+  return result.data;
+};
