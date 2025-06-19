@@ -59,7 +59,8 @@ export default function Dropdown({ options, selectedOption, onSelect, type }: Dr
             {options.map((option, index) => (
               <button
                 key={index}
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
                   if (onSelect) {
                     onSelect(option);
                   }

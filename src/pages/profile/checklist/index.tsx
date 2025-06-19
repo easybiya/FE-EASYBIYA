@@ -7,6 +7,7 @@ import { useDispatch } from '@/hooks/checklist/useDispatch';
 import { useTemplates } from '@/hooks/checklist/useTemplates';
 
 export default function Page() {
+  const router = useRouter();
   const { openModal } = useModalStore();
   const { params } = useDispatch();
   const { data, fetchNextPage } = useTemplates(params);
@@ -24,7 +25,11 @@ export default function Page() {
           <div className="relative p-4 aspect-square col-span-1 bg-white rounded-lg flex items-start justify-between cursor-pointer hover:shadow-md transition">
             <p className="text-[16px] font-bold">기본 템플릿</p>
             <div className="absolute top-1.5 right-1.5">
-              <Dropdown type="meatball" options={['복제']} />
+              <Dropdown
+                type="meatball"
+                options={['복제']}
+                onSelect={() => router.push('/profile/checklist/default?mode=new')}
+              />
             </div>
           </div>
         </Link>
@@ -36,7 +41,13 @@ export default function Page() {
             >
               <p className="text-[16px] font-bold">{template.name}</p>
               <div className="absolute top-1.5 right-1.5">
-                <Dropdown type="meatball" options={['복제']} />
+                <Dropdown
+                  type="meatball"
+                  options={['복제', '삭제']}
+                  onSelect={() =>
+                    router.push(`/profile/checklist/detail/${template.templateId}?mode=new`)
+                  }
+                />
               </div>
             </div>
           </Link>

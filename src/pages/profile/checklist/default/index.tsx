@@ -1,14 +1,24 @@
 import ChecklistContent from '@/components/CheckList/CheckListContent';
 import Header from '@/components/Layout/Header';
+import ChecklistModal from '@/components/Modal/ChecklistModal';
 import { useDefaultTemplate } from '@/hooks/checklist/useDefaultTemplate';
-import { ChecklistPayloadItem, CheckType } from '@/types/checklist';
+import { postTemplate } from '@/lib/api/template';
+import { useToastStore } from '@/store/toastStore';
+import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
 import checklistFormatter from '@/utils/checklistFormatter';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 export default function DefaultTemplate() {
+  const router = useRouter();
+  const { mode } = router.query;
+  const templateMode = typeof mode === 'string' ? mode : undefined;
+  const isNewTemplate = templateMode === 'new';
+
   const defaultTemplate = useDefaultTemplate();
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
-  const [showTemplateSelectModal, setShowTemplateSelectModal] = useState(false);
+  const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
+  const { showToast } = useToastStore();
 
   const handleAddChecklist = (type: CheckType) => {
     const newId = checklist.length > 0 ? checklist[checklist.length - 1].priority + 1 : 1;
@@ -22,7 +32,29 @@ export default function DefaultTemplate() {
     setChecklist((prev) => [...prev, newItem]);
   };
 
-  const handleSaveTemplate = () => setShowTemplateSelectModal(true);
+  const handleNewTemplateSave = async (name: string) => {
+    const template: ChecklistTemplate = {
+      name,
+      checklists: checklist.map(({ title, checkType, content, checkItems }) => ({
+        title,
+        checkType,
+        content,
+        checkItems: checkItems.map((i) => i.description),
+      })),
+    };
+
+    try {
+      await postTemplate(template);
+      setShowNewTemplateModal(false);
+      showToast('새 템플릿 생성 완료', 'success');
+      router.push('/profile/checklist');
+    } catch (error) {
+      showToast('템플릿 저장 실패', 'error');
+      console.error(error);
+    }
+  };
+
+  const handleSaveTemplate = () => setShowNewTemplateModal(true);
 
   useEffect(() => {
     const transformedTemplate = checklistFormatter(defaultTemplate?.checklists ?? []);
@@ -31,14 +63,24 @@ export default function DefaultTemplate() {
 
   return (
     <div>
-      <Header title={defaultTemplate?.name ?? ''} type={4} />
+      <Header title={isNewTemplate ? '새로운 템플릿' : defaultTemplate?.name ?? ''} type={4} />
       <ChecklistContent
         checklist={checklist}
         setter={setChecklist}
         onAddChecklist={handleAddChecklist}
         onSaveTemplate={handleSaveTemplate}
-        isTemplate
+        isTemplate={!isNewTemplate}
       />
+      {showNewTemplateModal && (
+        <ChecklistModal
+          mode="edit"
+          title="새 템플릿 생성"
+          defaultValue={`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`}
+          confirmText="저장"
+          onClose={() => setShowNewTemplateModal(false)}
+          onConfirm={(value) => handleNewTemplateSave(value as string)}
+        />
+      )}
     </div>
   );
 }
