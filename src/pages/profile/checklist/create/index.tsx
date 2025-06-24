@@ -1,21 +1,18 @@
 import ChecklistContent from '@/components/CheckList/CheckListContent';
 import Header from '@/components/Layout/Header';
 import ChecklistModal from '@/components/Modal/ChecklistModal';
-import { useDefaultTemplate } from '@/hooks/checklist/useDefaultTemplate';
 import { postTemplate } from '@/lib/api/template';
+import { useModalStore } from '@/store/modalStore';
 import { useToastStore } from '@/store/toastStore';
 import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
-import checklistFormatter from '@/utils/checklistFormatter';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-export default function DefaultTemplate() {
+export default function CreateTemplate() {
   const router = useRouter();
-  const { mode } = router.query;
-  const templateMode = typeof mode === 'string' ? mode : undefined;
-  const isNewTemplate = templateMode === 'new';
+  const { openModal, closeModal } = useModalStore();
+  const [title, setTitle] = useState(`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`);
 
-  const defaultTemplate = useDefaultTemplate();
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
   const { showToast } = useToastStore();
@@ -57,32 +54,30 @@ export default function DefaultTemplate() {
   const handleSaveTemplate = () => setShowNewTemplateModal(true);
 
   useEffect(() => {
-    const transformedTemplate = checklistFormatter(defaultTemplate?.checklists ?? []);
-    setChecklist(transformedTemplate);
-  }, [defaultTemplate]);
+    openModal('input', {
+      title: '새 템플릿 생성',
+      onConfirm: async (value) => {
+        if (!value) return;
+        setTitle(value);
+        closeModal();
+      },
+    });
+  }, []);
 
   return (
     <div>
-      <Header
-        title={
-          isNewTemplate
-            ? `새로운 체크리스트 ${new Date().toISOString().slice(0, 10)}`
-            : defaultTemplate?.name ?? ''
-        }
-        type={4}
-      />
+      <Header title={title} type={4} />
       <ChecklistContent
         checklist={checklist}
         setter={setChecklist}
         onAddChecklist={handleAddChecklist}
         onSaveTemplate={handleSaveTemplate}
-        isTemplate={!isNewTemplate}
       />
       {showNewTemplateModal && (
         <ChecklistModal
           mode="edit"
           title="새 템플릿 생성"
-          defaultValue={`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`}
+          defaultValue={title}
           confirmText="저장"
           onClose={() => setShowNewTemplateModal(false)}
           onConfirm={(value) => handleNewTemplateSave(value as string)}

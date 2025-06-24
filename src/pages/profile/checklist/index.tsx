@@ -17,7 +17,7 @@ export default function Page() {
   const templateList = data?.pages.flatMap((page) => page);
 
   const createTemplate = () => {
-    openModal('input', { title: '새 템플릿 생성' });
+    router.push(`/profile/checklist/create`);
   };
 
   const handleSelect = (option: string, id: number) => {
