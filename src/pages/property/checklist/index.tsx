@@ -6,12 +6,7 @@ import TemplateSelectModal from '@/components/Modal/TemplateSelectModal';
 import Toast from '@/components/Toast';
 import ChecklistComplete from '@/components/CompletePage';
 import ChecklistContent from '@/components/CheckList/CheckListContent';
-import {
-  ChecklistItem,
-  ChecklistPayloadItem,
-  ChecklistTemplate,
-  CheckType,
-} from '@/types/checklist';
+import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
 import { useToastStore } from '@/store/toastStore';
 import { useTemplateStore } from '@/store/templateStore';
 import { usePropertyStore } from '@/store/usePropertyStore';
@@ -25,6 +20,7 @@ import {
   updateChecklist,
 } from '@/lib/api/checklist';
 import { useQueryClient } from '@tanstack/react-query';
+import checklistFormatter from '@/utils/checklistFormatter';
 
 export default function ChecklistPage() {
   const router = useRouter();
@@ -43,25 +39,9 @@ export default function ChecklistPage() {
   // hasInfo, 항목 & 세부사항 삭제 로직 돌려놓기
 
   useEffect(() => {
-    const transformApiChecklist = (apiData: ChecklistItem[]): ChecklistPayloadItem[] => {
-      return apiData.map((item, index) => ({
-        priority: index + 1,
-        title: item.title,
-        checkType: item.checkType,
-        content: item.checkType === 'TEXT' ? '' : null,
-        checkItems:
-          item.checkType === 'TEXT'
-            ? []
-            : item.checkItems.map((desc, idx) => ({
-                description: desc,
-                checked: item.checkType === 'RADIO' ? idx === 0 : false,
-                priority: idx + 1,
-              })),
-      }));
-    };
     const fetchTemplate = async () => {
       const result = await getChecklistTemplate();
-      const transformed = transformApiChecklist(result.checklists);
+      const transformed = checklistFormatter(result.checklists);
       setChecklist(transformed);
     };
     const fetchData = async () => {
