@@ -54,7 +54,7 @@ export default function ChecklistDetailPage() {
     if (propertyChecklist.length > 0 && checklist.length === 0) {
       setChecklist(propertyChecklist);
     }
-  }, [propertyChecklist]);
+  }, [propertyChecklist, checklist]);
 
   if (!propertyDetail) {
     return <div>매물 정보가 없습니다.</div>;

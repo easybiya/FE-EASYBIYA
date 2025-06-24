@@ -13,7 +13,7 @@ export default function Page() {
   const queryClient = useQueryClient();
   const { openModal, closeModal } = useModalStore();
   const { params } = useDispatch();
-  const { data, fetchNextPage } = useTemplates(params);
+  const { data } = useTemplates(params);
   const templateList = data?.pages.flatMap((page) => page);
 
   const createTemplate = () => {

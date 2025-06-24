@@ -1,5 +1,5 @@
 import { getTemplateList, GetTemplateListParams } from '@/lib/api/checklist';
-import { keepPreviousData, useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 
 export const useTemplates = (params: GetTemplateListParams) => {
   return useInfiniteQuery({

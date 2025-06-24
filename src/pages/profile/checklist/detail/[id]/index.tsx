@@ -11,18 +11,15 @@ import { useEffect, useState } from 'react';
 
 export default function ChecklistDetail() {
   const router = useRouter();
-  const { id } = router.query;
-  const templateId = typeof id === 'string' ? id : undefined;
+  const templateId = router.query.id as string;
   const { mode } = router.query;
   const templateMode = typeof mode === 'string' ? mode : undefined;
   const isNewTemplate = templateMode === 'new';
+  const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
-
-  if (!templateId) return null;
 
   const template = useTemplateById(templateId ?? '');
 
-  const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const { showToast } = useToastStore();
 
   const handleAddChecklist = (type: CheckType) => {

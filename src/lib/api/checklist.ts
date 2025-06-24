@@ -26,6 +26,6 @@ export interface GetTemplateListParams {
 export const getTemplateList = async (
   params: GetTemplateListParams,
 ): Promise<TemplatePreview[]> => {
-  const result = await instance.get('/api/template');
+  const result = await instance.get(`/api/template?page=${params.page}&size=${params.size}`);
   return result.data.result;
 };
