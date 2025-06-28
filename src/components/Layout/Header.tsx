@@ -108,15 +108,15 @@ export default function Header({ type, title, action, isFixed, propertyId }: Hea
             <div className="flex gap-5">
               <IconComponent
                 name="share"
-                width={16}
-                height={16}
+                width={24}
+                height={24}
                 className="cursor-pointer"
                 onClick={() => router.push('/share')}
               />
               <IconComponent
                 name="plus"
-                width={18}
-                height={18}
+                width={24}
+                height={24}
                 onClick={() => router.push('/property/room-info')}
                 className="cursor-pointer"
               />
@@ -131,7 +131,7 @@ export default function Header({ type, title, action, isFixed, propertyId }: Hea
                 name="arrowLeft"
                 width={24}
                 height={24}
-                onClick={() => router.back()}
+                onClick={() => router.push('/')}
                 className="cursor-pointer"
               />
               <h1 className="text-b-20 text-start">{title}</h1>
@@ -148,8 +148,8 @@ export default function Header({ type, title, action, isFixed, propertyId }: Hea
               )}
               <IconComponent
                 name="share"
-                width={16}
-                height={16}
+                width={24}
+                height={24}
                 className="cursor-pointer"
                 onClick={shareKakao}
               />
