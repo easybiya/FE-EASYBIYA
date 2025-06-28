@@ -82,9 +82,9 @@ export default function EditPhotoPage() {
   }, [propertyId]);
 
   return (
-    <div className="px-4 h-screen bg-[#F6F5F2] flex flex-col">
+    <div className="h-screen bg-[#F6F5F2] flex flex-col">
       <Header type={8} title="사진 수정" action={updateImages} />
-      <div className="flex-grow flex flex-col items-center pt-8">
+      <div className="flex-grow flex flex-col items-center pt-8 px-4">
         {existingImages.length === 0 ? (
           <label
             className="w-full px-5 py-2.5 border gap-1 border-gray-300 bg-white rounded-lg flex justify-center items-center cursor-pointer shadow-sm hover:bg-gray-100 transition"
