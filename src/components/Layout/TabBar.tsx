@@ -8,7 +8,7 @@ import UserIcon from '../../../public/icons/user.svg';
 
 export default function TabBar() {
   const path = usePathname();
-  const originPath = path === '/' ? path : path.split('/')[1]; // '/'로 시작하는 경로에서 첫 번째 부분만 추출
+  const originPath = path ? (path === '/' ? path : path.split('/')[1]) : '';
 
   return (
     <div className="fixed bottom-0 left-1/2 px-5 py-2 w-full z-40 max-w-[428px] -translate-x-1/2 bg-white border-t border-gray-200">
