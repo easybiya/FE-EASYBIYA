@@ -85,7 +85,12 @@ export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: P
           </div>
           <div className="bg-primary2 w-14 h-14 rounded relative">
             {info.propertyImages.length > 0 ? (
-              <Image src={info.propertyImages[0].imageUrl} fill alt="thumbnail" />
+              <Image
+                src={info.propertyImages[0].imageUrl}
+                fill
+                alt="thumbnail"
+                className="rounded"
+              />
             ) : (
               <IconComponent
                 name="home"
