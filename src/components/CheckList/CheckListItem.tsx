@@ -137,7 +137,7 @@ export default function ChecklistItem({
                   onClick={() => setEditingText(true)}
                 >
                   <span>
-                    {content || <span className="text-gray-400">내용을 입력해주세요!</span>}
+                    {content || <span className="text-gray-400">내용을 입력해주세요</span>}
                   </span>
                 </div>
               )}
@@ -168,7 +168,7 @@ export default function ChecklistItem({
                         onChange={(e) => onOptionEdit?.(priority, option.priority, e.target.value)}
                         onBlur={() => setEditingIndex(null)}
                         onKeyDown={(e) => e.key === 'Enter' && setEditingIndex(null)}
-                        className="text-sm border-b border-gray-300"
+                        className="text-sm border-b border-gray-300 w-full"
                       />
                     ) : (
                       <span onClick={() => setEditingIndex(i)} className="cursor-pointer">
@@ -203,7 +203,7 @@ export default function ChecklistItem({
                         onChange={(e) => onOptionEdit?.(priority, option.priority, e.target.value)}
                         onBlur={() => setEditingIndex(null)}
                         onKeyDown={(e) => e.key === 'Enter' && setEditingIndex(null)}
-                        className="text-sm border-b border-gray-300 "
+                        className="text-sm border-b border-gray-300 w-full"
                       />
                     ) : (
                       <span onClick={() => setEditingIndex(i)} className="cursor-pointer w-full">
