@@ -10,6 +10,7 @@ import { createInstitutionZodSchema } from '@/lib/zodSchema';
 import FixedBar from '../FixedBar';
 import { fetchInstitution } from '@/lib/api/institutuion';
 import { useRouter } from 'next/navigation';
+import { Institution } from '@/types';
 
 declare global {
   interface Window {
@@ -23,7 +24,11 @@ type InstitutionSchema = {
   nickName: string;
 };
 
-export default function InstitutionForm() {
+interface Props {
+  institution?: Institution;
+}
+
+export default function InstitutionForm({ institution }: Props) {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [addressCoordinate, setAddressCoordinate] = useState({ x: '', y: '' });
   const [isPending, startTransition] = useTransition();
@@ -32,8 +37,8 @@ export default function InstitutionForm() {
   const form = useForm<InstitutionSchema>({
     resolver: zodResolver(createInstitutionZodSchema),
     defaultValues: {
-      address: '',
-      nickName: '',
+      address: institution?.institutionAddress ?? '',
+      nickName: institution?.institutionName ?? '',
     },
     mode: 'onBlur',
   });

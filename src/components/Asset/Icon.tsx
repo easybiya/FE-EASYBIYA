@@ -41,7 +41,11 @@ export default function IconComponent({
           width={width}
           height={height}
           className="object-cover"
-          onClick={onClick}
+          onClick={() => {
+            if (onClick) {
+              onClick();
+            }
+          }}
         />
       </div>
     );
