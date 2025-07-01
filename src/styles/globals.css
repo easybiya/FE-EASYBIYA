@@ -238,3 +238,15 @@ body {
   -ms-overflow-style: none; /* IE, Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.swiper-pagination {
+  @apply flex justify-center items-center absolute w-full bottom-3 left-0 gap-1.5 z-10 opacity-100;
+}
+
+.swiper-pagination-bullet {
+  @apply w-2 h-2 bg-white border border-black opacity-100;
+}
+
+.swiper-pagination-bullet-active {
+  @apply bg-[#262626] border-0;
+}

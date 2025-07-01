@@ -80,59 +80,30 @@ export default function ChecklistDetailPage() {
           사진 수정
         </Link>
         {propertyDetail.propertyImages.length > 0 ? (
-          <>
-            <Swiper
-              modules={[Pagination]}
-              spaceBetween={10}
-              slidesPerView={1}
-              pagination={{ clickable: true }}
-              onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-              className="h-full"
-            >
-              {propertyDetail.propertyImages.map((item, index) => (
-                <SwiperSlide key={index} className="relative">
-                  <Image
-                    fill
-                    src={item.imageUrl}
-                    alt={`room-${index}`}
-                    objectFit="cover"
-                    onClick={() => {
-                      setSelected(item);
-                      setStartIndex(index);
-                    }}
-                    className="cursor-pointer"
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-            <style jsx global>{`
-              .swiper-pagination {
-                display: flex !important;
-                justify-content: center !important;
-                align-items: center !important;
-                position: absolute !important;
-                width: 100% !important;
-                bottom: 12px !important;
-                left: 0 !important;
-                gap: 6px;
-                z-index: 10 !important;
-                opacity: 1 !important;
-              }
-
-              .swiper-pagination-bullet {
-                width: 8px;
-                height: 8px;
-                background-color: white;
-                border: 1px solid black;
-                opacity: 1;
-              }
-
-              .swiper-pagination-bullet-active {
-                background-color: #262626 !important;
-                border: none;
-              }
-            `}</style>
-          </>
+          <Swiper
+            modules={[Pagination]}
+            spaceBetween={10}
+            slidesPerView={1}
+            pagination={{ clickable: true }}
+            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+            className="h-full"
+          >
+            {propertyDetail.propertyImages.map((item, index) => (
+              <SwiperSlide key={index} className="relative">
+                <Image
+                  fill
+                  src={item.imageUrl}
+                  alt={`room-${index}`}
+                  objectFit="cover"
+                  onClick={() => {
+                    setSelected(item);
+                    setStartIndex(index);
+                  }}
+                  className="cursor-pointer"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
         ) : (
           <div className="bg-primary2 h-full">
             <IconComponent

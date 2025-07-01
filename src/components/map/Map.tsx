@@ -1,8 +1,8 @@
 import { Institution, Property } from '@/types';
 import { AddressSearchResult, AddressSearchStatus } from '@/utils/getCoordinates';
 import { useCallback, useEffect, useState } from 'react';
-import markerIcon from '../../../public/icons/marker.svg';
-import borwnMarkerIcon from '../../../public/icons/marker-brown.svg';
+import markerIcon from '../../../public/icons/marker.svg?url';
+import borwnMarkerIcon from '../../../public/icons/marker-brown.svg?url';
 import { ModalContent } from '@/pages/map';
 
 declare global {
@@ -35,12 +35,16 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
   };
 
   const initMap = useCallback(() => {
-    window.kakao.maps.load(() => {
-      if (!window.kakao || map) return; // 중복 생성 방지
-
+    const tryInit = () => {
       const mapContainer = document.getElementById('map');
+      if (!mapContainer) {
+        setTimeout(tryInit, 100); // map 태그 없으면 재시도
+        return;
+      }
+      if (!window.kakao || map) return; // SDK가 없거나 이미 map 생성했으면 종료
+
       const mapOption = {
-        center: new window.kakao.maps.LatLng(37.566812939715675, 126.97864943227347), // 기본 좌표 서울 시청
+        center: new window.kakao.maps.LatLng(37.566812939715675, 126.97864943227347), // 기본 좌표
         level: 3,
       };
 
@@ -50,8 +54,6 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
 
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
-          // 브라우저 위치 허용시 접속 위치
-          // 브라우저 접속 위치
           const currentLocation = new window.kakao.maps.LatLng(
             position.coords.latitude,
             position.coords.longitude,
@@ -60,7 +62,9 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
           createCurrentMarker(currentLocation, newMap);
         });
       }
-    });
+    };
+
+    tryInit();
   }, [map]);
 
   useEffect(() => {
@@ -212,9 +216,7 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
   useEffect(() => {
     const loadKakaoMap = () => {
       if (window.kakao && window.kakao.maps) {
-        window.kakao.maps.load(() => {
-          initMap();
-        });
+        initMap();
       } else {
         const mapScript = document.createElement('script');
         mapScript.async = true;
