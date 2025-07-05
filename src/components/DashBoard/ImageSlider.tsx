@@ -6,12 +6,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '../ui/carousel';
-import { Button } from '../ui/button';
 import { PropertyImage } from '@/types';
 import { cn } from '@/lib/utils';
 import { createPortal } from 'react-dom';
 import CloseIcon from '../../../public/icons/close.svg';
-import IconComponent from '../Asset/Icon';
 
 type Props = {
   images: PropertyImage[];
