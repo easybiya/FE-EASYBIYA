@@ -1,3 +1,4 @@
+import DashboardSkeleton from '@/components/DashBoard/DashboardSkeleton';
 import HouseCard from '@/components/DashBoard/HouseCard';
 import Dropdown from '@/components/Dropdown';
 import { useDispatch } from '@/hooks/property/useDispatch';
@@ -12,7 +13,7 @@ const DROPDOWN_OPTION = [
 
 export default function Home() {
   const { params, setSortBy } = useDispatch();
-  const { bookmarked, nonBookmarked } = useProperty(params);
+  const { bookmarked, nonBookmarked, isLoading } = useProperty(params);
   const { showToast } = useToastStore();
 
   const toggleBookMark = async (id: number) => {
@@ -40,6 +41,13 @@ export default function Home() {
           onSelect={handleSelect}
         />
       </div>
+      {isLoading && (
+        <div className="flex flex-col gap-4">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <DashboardSkeleton key={index} />
+          ))}
+        </div>
+      )}
       {bookmarked.length === 0 && nonBookmarked.length === 0 && (
         <div className="text-gray-400 text-center py-4">등록한 매물이 없습니다.</div>
       )}
