@@ -41,32 +41,31 @@ export default function Home() {
           onSelect={handleSelect}
         />
       </div>
-      {isLoading && (
-        <div className="flex flex-col gap-4">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <DashboardSkeleton key={index} />
-          ))}
-        </div>
-      )}
-      {bookmarked.length === 0 && nonBookmarked.length === 0 && (
-        <div className="text-gray-400 text-center py-4">등록한 매물이 없습니다.</div>
-      )}
+      <>
+        {isLoading ? (
+          <div className="flex flex-col gap-4">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <DashboardSkeleton key={index} />
+            ))}
+          </div>
+        ) : bookmarked.length === 0 && nonBookmarked.length === 0 ? (
+          <div className="text-gray-400 text-center py-4">등록한 매물이 없습니다.</div>
+        ) : (
+          <ul className="flex flex-col gap-4">
+            {bookmarked.map((item) => (
+              <li key={item.id}>
+                <HouseCard info={item} toggleBookmark={toggleBookMark} isFixed />
+              </li>
+            ))}
 
-      <ul className="flex flex-col gap-4">
-        {bookmarked.length > 0 &&
-          bookmarked.map((item) => (
-            <li key={item.id}>
-              <HouseCard info={item} toggleBookmark={toggleBookMark} isFixed />
-            </li>
-          ))}
-
-        {nonBookmarked.length > 0 &&
-          nonBookmarked.map((item) => (
-            <li key={item.id}>
-              <HouseCard info={item} toggleBookmark={toggleBookMark} isFixed={false} />
-            </li>
-          ))}
-      </ul>
+            {nonBookmarked.map((item) => (
+              <li key={item.id}>
+                <HouseCard info={item} toggleBookmark={toggleBookMark} isFixed={false} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </>
     </div>
   );
 }
