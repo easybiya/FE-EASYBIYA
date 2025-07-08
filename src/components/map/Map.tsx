@@ -1,5 +1,4 @@
-import { Institution, Property } from '@/types';
-import { AddressSearchResult, AddressSearchStatus } from '@/utils/getCoordinates';
+import { Institution, MapProperty } from '@/types';
 import { useCallback, useEffect, useState } from 'react';
 import markerIcon from '../../../public/icons/marker.svg?url';
 import borwnMarkerIcon from '../../../public/icons/marker-brown.svg?url';
@@ -13,11 +12,11 @@ declare global {
 }
 
 interface Props {
-  roomList?: Property[];
+  roomList?: MapProperty[];
   institution?: Institution | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   settingMapObject: (object: any) => void;
-  handleMarkerClick: (content: ModalContent) => void;
+  handleMarkerClick: (content: MapProperty) => void;
 }
 
 export function Map({ roomList, institution, settingMapObject, handleMarkerClick }: Props) {
@@ -71,74 +70,60 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
     // 매물 위치 마커 생성 로직
     if (!map || !window.kakao || !window.kakao.maps || !roomList?.length) return;
 
-    const geocoder = new window.kakao.maps.services.Geocoder();
-
     roomList.forEach((house) => {
-      geocoder.addressSearch(
-        house.propertyAddress,
-        (result: AddressSearchResult[], status: AddressSearchStatus[]) => {
-          if (status === window.kakao.maps.services.Status.OK) {
-            const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-            const markerImage = new window.kakao.maps.MarkerImage(
-              markerIcon.src,
-              new window.kakao.maps.Size(24, 24),
-              { offset: new window.kakao.maps.Point(12, 24) },
-            );
-
-            const marker = new window.kakao.maps.Marker({
-              position: coords,
-              map,
-              title: house.propertyName,
-              image: markerImage,
-            });
-
-            const formatContent = {
-              address: house.propertyAddress,
-              name: house.propertyName,
-            };
-
-            window.kakao.maps.event.addListener(marker, 'click', () => {
-              handleMarkerClick(formatContent);
-            });
-
-            const customOverlayContent = document.createElement('div');
-            customOverlayContent.innerHTML = `
-                <div style="
-                  cursor: pointer;
-                  display: flex; 
-                  justify-content: center; 
-                  align-items: center; 
-                  padding: 6px 12px; 
-                  font-size: 14px; 
-                  color: #fff; 
-                  text-align: center; 
-                  font-weight: 600; 
-                  background-color: black; 
-                  border-radius: 9999px; 
-                  white-space: nowrap;
-                  position: relative;
-                  top: -3px;
-                  min-width: 50px;
-                ">
-                  ${house.propertyName}
-                </div>
-              `;
-
-            customOverlayContent.addEventListener('click', () => {
-              handleMarkerClick(formatContent);
-            });
-
-            const customOverlay = new window.kakao.maps.CustomOverlay({
-              map,
-              position: coords,
-              content: customOverlayContent,
-              yAnchor: 1.2, // 마커 위쪽에 오도록 조정
-            });
-
-            customOverlay.setMap(map);
-          }
-        },
+      const coords = new window.kakao.maps.LatLng(house.propertyLatitude, house.propertyLongitude);
+      const markerImage = new window.kakao.maps.MarkerImage(
+        markerIcon.src,
+        new window.kakao.maps.Size(24, 24),
+        { offset: new window.kakao.maps.Point(12, 24) },
       );
+
+      const marker = new window.kakao.maps.Marker({
+        position: coords,
+        map,
+        title: house.propertyName,
+        image: markerImage,
+      });
+
+      window.kakao.maps.event.addListener(marker, 'click', () => {
+        handleMarkerClick(house);
+      });
+
+      const customOverlayContent = document.createElement('div');
+      customOverlayContent.innerHTML = `
+        <div style="
+          cursor: pointer;
+          display: flex; 
+          justify-content: center; 
+          align-items: center; 
+          padding: 6px 12px; 
+          font-size: 14px; 
+          color: #fff; 
+          text-align: center; 
+          font-weight: 600; 
+          background-color: black; 
+          border-radius: 9999px; 
+          white-space: nowrap;
+          position: relative;
+          top: -3px;
+          min-width: 50px;
+        ">
+          ${house.propertyName}
+        </div>
+      `;
+
+      customOverlayContent.addEventListener('click', () => {
+        handleMarkerClick(house);
+      });
+
+      const customOverlay = new window.kakao.maps.CustomOverlay({
+        map,
+        position: coords,
+        content: customOverlayContent,
+        yAnchor: 1.2, // 마커 위쪽에 오도록 조정
+      });
+
+      customOverlay.setMap(map);
     });
   }, [map, roomList]);
 
@@ -146,71 +131,70 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
     // 사용자 등록 위치 마커 생성 로직
     if (!map || !window.kakao || !window.kakao.maps || !institution) return;
 
-    const geocoder = new window.kakao.maps.services.Geocoder();
-
-    geocoder.addressSearch(
-      institution.institutionAddress,
-      (result: AddressSearchResult[], status: AddressSearchStatus) => {
-        if (status === window.kakao.maps.services.Status.OK) {
-          const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-          const imageSrc: string = borwnMarkerIcon.src;
-          const imageSize = new window.kakao.maps.Size(24, 24);
-          const imageOption = { offset: new window.kakao.maps.Point(12, 24) };
-          const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
-          const formatContent = {
-            address: institution.institutionAddress,
-            name: institution.institutionName,
-          };
-
-          const marker = new window.kakao.maps.Marker({
-            position: coords,
-            map,
-            title: institution.institutionName,
-            image: markerImage,
-          });
-
-          window.kakao.maps.event.addListener(marker, 'click', () => {
-            handleMarkerClick(formatContent);
-          });
-
-          const customOverlayContent = document.createElement('div');
-          customOverlayContent.innerHTML = `
-              <div style="
-                  cursor: pointer;
-                  display: flex; 
-                  justify-content: center; 
-                  align-items: center; 
-                  padding: 6px 12px; 
-                  font-size: 14px; 
-                  color: #ffffff; 
-                  text-align: center; 
-                  font-weight: 600; 
-                  background-color: #94896A; 
-                  border-radius: 9999px; 
-                  white-space: nowrap;
-                  position: relative;
-                  top: -3px;
-                  min-width: 50px;
-                ">
-                  ${institution.institutionName}
-                </div>
-              `;
-
-          customOverlayContent.addEventListener('click', () => {
-            handleMarkerClick(formatContent);
-          });
-
-          const customOverlay = new window.kakao.maps.CustomOverlay({
-            map,
-            position: coords,
-            content: customOverlayContent,
-            yAnchor: 1.2, // 마커 위쪽에 오도록 조정
-          });
-
-          customOverlay.setMap(map);
-        }
-      },
+    const coords = new window.kakao.maps.LatLng(
+      institution.institutionLatitude,
+      institution.institutionLongitude,
     );
+    const imageSrc: string = borwnMarkerIcon.src;
+    const imageSize = new window.kakao.maps.Size(24, 24);
+    const imageOption = { offset: new window.kakao.maps.Point(12, 24) };
+    const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+
+    const marker = new window.kakao.maps.Marker({
+      position: coords,
+      map,
+      title: institution.institutionName,
+      image: markerImage,
+    });
+
+    const formatContent = {
+      id: 0,
+      propertyName: institution.institutionName,
+      propertyAddress: institution.institutionAddress,
+      propertyDetailedAddress: '',
+      propertyLatitude: institution.institutionLatitude,
+      propertyLongitude: institution.institutionLongitude,
+    };
+
+    window.kakao.maps.event.addListener(marker, 'click', () => {
+      handleMarkerClick(formatContent);
+    });
+
+    const customOverlayContent = document.createElement('div');
+    customOverlayContent.innerHTML = `
+      <div style="
+          cursor: pointer;
+          display: flex; 
+          justify-content: center; 
+          align-items: center; 
+          padding: 6px 12px; 
+          font-size: 14px; 
+          color: #ffffff; 
+          text-align: center; 
+          font-weight: 600; 
+          background-color: #94896A; 
+          border-radius: 9999px; 
+          white-space: nowrap;
+          position: relative;
+          top: -3px;
+          min-width: 50px;
+        ">
+          ${institution.institutionName}
+        </div>
+      `;
+
+    customOverlayContent.addEventListener('click', () => {
+      handleMarkerClick(formatContent);
+    });
+
+    const customOverlay = new window.kakao.maps.CustomOverlay({
+      map,
+      position: coords,
+      content: customOverlayContent,
+      yAnchor: 1.2, // 마커 위쪽에 오도록 조정
+    });
+
+    customOverlay.setMap(map);
   }, [map, institution]);
 
   useEffect(() => {

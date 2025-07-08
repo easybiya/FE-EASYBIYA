@@ -1,11 +1,11 @@
-import { Institution } from '@/types';
+import { Institution, MapProperty } from '@/types';
 import IconComponent from '../Asset/Icon';
 import { useRouter } from 'next/navigation';
 import CreateInstitutionButton from './CreateInstitutionButton';
 
 interface Props {
   institution?: Institution | null;
-  handleTagClick: (address: string, name: string) => Promise<void>;
+  handleTagClick: (item: MapProperty) => Promise<void>;
 }
 
 export function RoomContainer({ institution, handleTagClick }: Props) {
@@ -16,7 +16,14 @@ export function RoomContainer({ institution, handleTagClick }: Props) {
       {institution ? (
         <div
           onClick={() =>
-            handleTagClick(institution.institutionAddress, institution.institutionName)
+            handleTagClick({
+              id: 0,
+              propertyName: institution.institutionName,
+              propertyAddress: institution.institutionAddress,
+              propertyDetailedAddress: '',
+              propertyLatitude: institution.institutionLatitude,
+              propertyLongitude: institution.institutionLongitude,
+            })
           }
           className={`px-2.5 py-1.5 w-full rounded-sm cursor-pointer text-[14px] bg-white leading-tight flex justify-between mb-2.5`}
         >

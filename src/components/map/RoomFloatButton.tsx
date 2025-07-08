@@ -1,18 +1,18 @@
-import { Property } from '@/types';
+import { MapProperty } from '@/types';
 import { useState } from 'react';
 import IconComponent from '../Asset/Icon';
 
 interface Props {
-  roomList?: Property[];
-  handleTagClick: (address: string, name: string) => Promise<void>;
+  roomList?: MapProperty[];
+  handleTagClick: (item: MapProperty) => Promise<void>;
 }
 
 export default function RoomFloatButton({ roomList, handleTagClick }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleClickTag = (address: string, name: string) => {
+  const handleClickTag = (item: MapProperty) => {
     setIsOpen(false);
-    handleTagClick(address, name);
+    handleTagClick(item);
   };
   return (
     <div className="z-30 w-full flex flex-col items-center">
@@ -38,7 +38,7 @@ export default function RoomFloatButton({ roomList, handleTagClick }: Props) {
           <ul className="gap-1.5 flex flex-col max-h-[186px] overflow-y-auto pb-5">
             {roomList?.map((item) => (
               <li
-                onClick={() => handleClickTag(item.propertyAddress, item.propertyName)}
+                onClick={() => handleClickTag(item)}
                 key={item.id}
                 className="flex gap-[6px] items-center px-2 py-[11px] rounded-lg border-gray-300 border cursor-pointer"
               >
