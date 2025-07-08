@@ -2,7 +2,6 @@ import { Institution, MapProperty } from '@/types';
 import { useCallback, useEffect, useState } from 'react';
 import markerIcon from '../../../public/icons/marker.svg?url';
 import borwnMarkerIcon from '../../../public/icons/marker-brown.svg?url';
-import { ModalContent } from '@/pages/map';
 
 declare global {
   interface Window {

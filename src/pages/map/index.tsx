@@ -8,12 +8,6 @@ import { useInstitution } from '@/hooks/map/useInstitution';
 import { useMapProperty } from '@/hooks/map/useMapProperty';
 import { MapProperty } from '@/types';
 
-export interface ModalContent {
-  address: string;
-  name: string;
-  id: string;
-}
-
 export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<MapProperty | null>(null);
