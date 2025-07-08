@@ -39,6 +39,15 @@ export interface Property {
   isBookmarked: boolean;
 }
 
+export interface MapProperty {
+  id: number;
+  propertyName: string;
+  propertyAddress: string;
+  propertyDetailedAddress: string;
+  propertyLatitude: number;
+  propertyLongitude: number;
+}
+
 export interface Institution {
   institutionName: string;
   institutionAddress: string;

@@ -1,4 +1,4 @@
-import { Property } from '@/types';
+import { MapProperty, Property } from '@/types';
 import instance from './axiosInstance';
 import { PropertyData } from '@/store/usePropertyStore';
 
@@ -60,4 +60,9 @@ export const updatePropertyImages = async (propertyId: string, formData: FormDat
 export const deleteProperty = async (id: string) => {
   const result = await instance.delete(`/api/property/${id}`);
   return result.data;
+};
+
+export const getMapPropertyList = async (): Promise<MapProperty[]> => {
+  const result = await instance.get(`/api/property/map`);
+  return result.data.result;
 };
