@@ -1,11 +1,9 @@
-import { Institution } from '@/types';
+import { Institution, MapProperty } from '@/types';
 import { Result } from '@/types/odsay';
-import { getCoordinates } from '@/utils/getCoordinates';
 import { searchPubTransPathAJAX } from '@/utils/searchPath';
 import { useQuery } from '@tanstack/react-query';
 import IconComponent from '../Asset/Icon';
 import { ICONS } from '@/constants/asset';
-import { ModalContent } from '@/pages/map';
 
 type Traffic = {
   name: string;
@@ -23,7 +21,7 @@ const STABLE_TIME_DAY = 1000 * 60 * 60 * 24;
 
 interface Props {
   institution: Institution;
-  currentAddress: ModalContent;
+  currentAddress: MapProperty;
   isClose: () => void;
 }
 
@@ -31,13 +29,11 @@ export default function DetailRouteModal({ institution, currentAddress, isClose 
   const { data, isLoading } = useQuery({
     queryKey: [institution.institutionAddress, currentAddress],
     queryFn: async () => {
-      const fixedCoorder = await getCoordinates(institution.institutionAddress);
-      const spotCoorder = await getCoordinates(currentAddress.address);
       const result: Result = await searchPubTransPathAJAX({
-        sx: String(spotCoorder.x),
-        sy: String(spotCoorder.y),
-        ex: String(fixedCoorder.x),
-        ey: String(fixedCoorder.y),
+        sx: String(currentAddress.propertyLongitude),
+        sy: String(currentAddress.propertyLatitude),
+        ex: String(institution.institutionLongitude),
+        ey: String(institution.institutionLatitude),
       });
       return result.path[0];
     },
@@ -131,8 +127,8 @@ export default function DetailRouteModal({ institution, currentAddress, isClose 
           </div>
           <IconComponent name="arrowDown" width={16} height={16} />
           <div className="flex flex-col gap-0.5 px-4 py-3 border rounded-lg">
-            <p className="text-[15px] font-bold">{currentAddress.name}</p>
-            <p className="text-[14px]">{currentAddress.address}</p>
+            <p className="text-[15px] font-bold">{currentAddress.propertyName}</p>
+            <p className="text-[14px]">{currentAddress.propertyAddress}</p>
           </div>
         </div>
       </div>

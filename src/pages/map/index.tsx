@@ -1,29 +1,20 @@
 import { useState } from 'react';
-import { getCoordinates } from '@/utils/getCoordinates';
 import InfoModal from '@/components/map/infoModal';
 import Header from '@/components/Layout/Header';
 import { RoomContainer } from '@/components/map/RoomContainer';
 import { Map } from '@/components/map/Map';
 import RoomFloatButton from '@/components/map/RoomFloatButton';
-import { useProperty } from '@/hooks/property/useProperty';
-import { useDispatch } from '@/hooks/property/useDispatch';
 import { useInstitution } from '@/hooks/map/useInstitution';
-
-export interface ModalContent {
-  address: string;
-  name: string;
-}
+import { useMapProperty } from '@/hooks/map/useMapProperty';
+import { MapProperty } from '@/types';
 
 export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState<ModalContent | null>(null);
-  const { params } = useDispatch();
-  const { bookmarked, nonBookmarked } = useProperty(params);
+  const [modalContent, setModalContent] = useState<MapProperty | null>(null);
+  const { data } = useMapProperty();
   const { institution } = useInstitution();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [map, setMap] = useState<any>(null);
-
-  const propertyList = [...bookmarked, ...nonBookmarked];
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -35,17 +26,18 @@ export default function Page() {
     setMap(object);
   };
 
-  const handleMarkerClick = (content: ModalContent) => {
+  const handleMarkerClick = (content: MapProperty) => {
     setModalContent(content);
     setIsModalOpen(true);
   };
 
-  const handleTagClick = async (address: string, name: string) => {
-    const transferContent = { address: address, name: name };
-    setModalContent(transferContent);
+  const handleTagClick = async (item: MapProperty) => {
+    setModalContent(item);
     setIsModalOpen(true);
-    const houseCoorder = await getCoordinates(address);
-    const houseLocation = new window.kakao.maps.LatLng(houseCoorder.y, houseCoorder.x);
+    const houseLocation = new window.kakao.maps.LatLng(
+      item.propertyLatitude,
+      item.propertyLongitude,
+    );
     if (map) {
       map.setCenter(houseLocation);
       map.setLevel(3);
@@ -61,7 +53,7 @@ export default function Page() {
         </div>
       </div>
       <Map
-        roomList={propertyList}
+        roomList={data ?? []}
         institution={institution}
         settingMapObject={settingMapObject}
         handleMarkerClick={handleMarkerClick}
@@ -69,8 +61,8 @@ export default function Page() {
       {isModalOpen && modalContent && (
         <InfoModal modalContent={modalContent} institution={institution} closeModal={closeModal} />
       )}
-      {propertyList && propertyList.length > 0 && (
-        <RoomFloatButton roomList={propertyList} handleTagClick={handleTagClick} />
+      {data && data.length > 0 && (
+        <RoomFloatButton roomList={data} handleTagClick={handleTagClick} />
       )}
     </div>
   );
