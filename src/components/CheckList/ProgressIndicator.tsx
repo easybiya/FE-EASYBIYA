@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import IconComponent from '../Asset/Icon';
-import { useSearchParams } from 'next/navigation';
 
 interface Props {
   isEdit: boolean;
@@ -9,15 +8,6 @@ interface Props {
 
 export default function ProgressIndicator({ totalSteps, isEdit }: Props) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const queryString = searchParams.toString();
-
-  const stepMapping: { [key: number]: string } = {
-    1: '/property/room-info',
-    2: '/property/room-address',
-    3: isEdit ? '/property/checklist' : '/property/add-photo',
-    4: '/property/checklist',
-  };
 
   const reverseMapping: { [key: string]: number } = {
     '/property/room-info': 1,
@@ -28,14 +18,6 @@ export default function ProgressIndicator({ totalSteps, isEdit }: Props) {
 
   const currentStep = reverseMapping[router.pathname] || 1;
 
-  const handleClickStep = (stepNumber: number) => {
-    const path = stepMapping[stepNumber];
-    if (path) {
-      const url = isEdit ? `${path}?${queryString}` : path;
-      router.push(url);
-    }
-  };
-
   return (
     <div className="flex items-center justify-center py-1">
       {[...Array(totalSteps)].map((_, index) => {
@@ -45,11 +27,7 @@ export default function ProgressIndicator({ totalSteps, isEdit }: Props) {
         const isUpcoming = stepNumber > currentStep;
 
         return (
-          <div
-            key={stepNumber}
-            className="flex items-center cursor-pointer"
-            onClick={() => handleClickStep(stepNumber)}
-          >
+          <div key={stepNumber} className="flex items-center">
             <div
               className={`w-[18px] h-[18px] flex items-center justify-center rounded-full border border-gray-700
                 ${isCurrent ? 'bg-gray-700 text-white text-b-13' : 'text-gray-700'}
