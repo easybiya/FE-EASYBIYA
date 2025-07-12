@@ -31,7 +31,7 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
   const { showToast } = useToastStore();
   const [isEdit, setIsEdit] = useState(false);
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
-  const [_, setActiveIndex] = useState(0);
+  const [, setActiveIndex] = useState(0);
 
   const { setSelected, setApi, setStartIndex, selected, startIndex, currentIndex } =
     useImageCarousel({ images: detail.propertyImages || [] });
