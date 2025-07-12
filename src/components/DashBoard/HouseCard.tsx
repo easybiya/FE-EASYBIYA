@@ -18,8 +18,16 @@ interface Props {
   isShared?: boolean;
 }
 
-const defaultMenuList = ['고정하기', '수정하기', '삭제하기'];
-const cancelOptionMenuList = ['고정 해제하기', '수정하기', '삭제하기'];
+const defaultMenuList = [
+  { label: '고정하기', value: 'fix' },
+  { label: '수정하기', value: 'edit' },
+  { label: '삭제하기', value: 'delete' },
+];
+const cancelOptionMenuList = [
+  { label: '고정 해제하기', value: 'removeFix' },
+  { label: '수정하기', value: 'edit' },
+  { label: '삭제하기', value: 'delete' },
+];
 
 export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: Props) {
   const router = useRouter();
@@ -28,16 +36,16 @@ export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: P
   const queryClient = useQueryClient();
   const handleSelect = (option: string) => {
     switch (option) {
-      case '고정 해제하기':
+      case 'removeFix':
         toggleBookmark && toggleBookmark(info.id);
         break;
-      case '고정하기':
+      case 'fix':
         toggleBookmark && toggleBookmark(info.id);
         break;
-      case '수정하기':
+      case 'edit':
         router.push(`/property/room-info?mode=edit&propertyId=${info.id}`);
         break;
-      case '삭제하기':
+      case 'delete':
         openModal('confirm', {
           title: '체크리스트 항목 삭제',
           onConfirm: async () => {

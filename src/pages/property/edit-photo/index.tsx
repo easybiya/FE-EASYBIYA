@@ -9,6 +9,7 @@ import Header from '@/components/Layout/Header';
 import { PropertyImage } from '@/types';
 import { useToastStore } from '@/store/toastStore';
 import { useQueryClient } from '@tanstack/react-query';
+import Button from '@/components/Button/CustomButton';
 
 interface PropertyImageWithFiel extends PropertyImage {
   file?: File;
@@ -83,7 +84,22 @@ export default function EditPhotoPage() {
 
   return (
     <div className="h-screen bg-[#F6F5F2] flex flex-col">
-      <Header type={8} title="사진 수정" action={updateImages} />
+      <Header
+        left={
+          <button className="text-[15px] font-semibold" type="button" onClick={() => router.back()}>
+            취소
+          </button>
+        }
+        title="사진 수정"
+        right={
+          <Button
+            label="저장"
+            onClick={updateImages}
+            size="small"
+            className="rounded-full px-3 py-0.5 h-full"
+          />
+        }
+      />
       <div className="flex-grow flex flex-col items-center pt-8 px-4">
         {existingImages.length === 0 ? (
           <label

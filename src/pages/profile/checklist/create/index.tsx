@@ -1,3 +1,4 @@
+import IconComponent from '@/components/Asset/Icon';
 import ChecklistContent from '@/components/CheckList/CheckListContent';
 import Header from '@/components/Layout/Header';
 import ChecklistModal from '@/components/Modal/ChecklistModal';
@@ -66,7 +67,20 @@ export default function CreateTemplate() {
 
   return (
     <div>
-      <Header title={title} type={4} />
+      <Header
+        left={
+          <div className="flex items-center gap-2">
+            <IconComponent
+              name="arrowLeft"
+              width={24}
+              height={24}
+              onClick={() => router.back()}
+              className="cursor-pointer"
+            />
+            <h1 className="text-b-20">{title}</h1>
+          </div>
+        }
+      />
       <ChecklistContent
         checklist={checklist}
         setter={setChecklist}

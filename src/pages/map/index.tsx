@@ -47,7 +47,7 @@ export default function Page() {
   return (
     <div className="relative flex flex-col justify-center w-full">
       <div className="flex flex-col absolute top-0 right-0 left-0 z-10 bg-primary">
-        <Header type={5} title="지도" />
+        <Header left={<h1 className="text-b-20">지도</h1>} />
         <div className="p-4">
           <RoomContainer handleTagClick={handleTagClick} institution={institution} />
         </div>

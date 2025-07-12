@@ -7,7 +7,7 @@ export default function Page() {
 
   return (
     <div>
-      <Header type={5} title="내정보" />
+      <Header left={<h1 className="text-b-20">내정보</h1>} />
       <div className="flex flex-col px-5 py-2.5 gap-3">
         <Link className="py-3 font-semibold" href="/profile/info">
           기본 정보

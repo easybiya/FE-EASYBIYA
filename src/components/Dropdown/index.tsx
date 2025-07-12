@@ -1,8 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import IconComponent from '../Asset/Icon';
 
+export type DropdownOption = {
+  label: string;
+  value: string;
+};
+
 interface DropdownProps {
-  options: string[];
+  options: DropdownOption[];
   selectedOption?: string;
   onSelect?: (option: string) => void;
   type: 'meatball' | 'select';
@@ -62,13 +67,13 @@ export default function Dropdown({ options, selectedOption, onSelect, type }: Dr
                 onClick={(e) => {
                   e.preventDefault();
                   if (onSelect) {
-                    onSelect(option);
+                    onSelect(option.value);
                   }
                   setIsOpen(false);
                 }}
                 className="w-full p-2 rounded-[4px] text-r-14 text-left text-gray-800 hover:bg-secondary"
               >
-                {option}
+                {option.label}
               </button>
             ))}
           </div>
