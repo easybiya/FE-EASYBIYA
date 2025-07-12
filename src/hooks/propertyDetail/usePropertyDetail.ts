@@ -20,5 +20,6 @@ export const usePropertyDetail = (id?: string) => {
   return {
     propertyDetail: propertyDetailQuery.data,
     propertyChecklist: checklistQuery.data ?? [],
+    isLoading: propertyDetailQuery.isLoading || checklistQuery.isLoading,
   };
 };

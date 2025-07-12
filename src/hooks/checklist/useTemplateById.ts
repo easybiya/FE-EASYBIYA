@@ -8,5 +8,5 @@ export const useTemplateById = (id: string) => {
     placeholderData: keepPreviousData,
   });
 
-  return template.data;
+  return template;
 };
