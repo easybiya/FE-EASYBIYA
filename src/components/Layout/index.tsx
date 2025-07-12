@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import TabBar from './TabBar';
-import Header from './Header';
 
 interface LayoutProps {
   children: ReactNode;
@@ -34,8 +33,6 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="flex justify-center w-full min-h-screen bg-white">
       <div className="relative w-full max-w-[430px] min-h-screen bg-primary shadow-[inset_1px_0_#eee,inset_-1px_0_#eee]">
-        {/* 특정 페이지에서 Header 숨기기 */}
-        {!hideHeader && <Header type={2} title="내 집 후보" />}
         {children}
         {/* 특정 페이지에서 TabBar 숨기기 */}
         {!hideTabBar && <TabBar />}

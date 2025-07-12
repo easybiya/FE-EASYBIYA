@@ -1,13 +1,23 @@
+import IconComponent from '@/components/Asset/Icon';
 import ChecklistContent from '@/components/CheckList/CheckListContent';
+import Dropdown from '@/components/Dropdown';
 import Header from '@/components/Layout/Header';
 import ChecklistModal from '@/components/Modal/ChecklistModal';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useTemplateById } from '@/hooks/checklist/useTemplateById';
-import { editTemplate, postTemplate } from '@/lib/api/template';
+import { deleteTemplate, editTemplate, postTemplate } from '@/lib/api/template';
+import { useModalStore } from '@/store/modalStore';
 import { useToastStore } from '@/store/toastStore';
 import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
 import checklistFormatter from '@/utils/checklistFormatter';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+
+const TEMPLATE_DETAIL_OPTION = [
+  { label: '복제', value: 'copy' },
+  { label: '삭제', value: 'delete' },
+];
 
 export default function ChecklistDetail() {
   const router = useRouter();
@@ -17,10 +27,33 @@ export default function ChecklistDetail() {
   const isNewTemplate = templateMode === 'new';
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
+  const queryClient = useQueryClient();
 
-  const template = useTemplateById(templateId ?? '');
+  const { data: template, isLoading } = useTemplateById(templateId ?? '');
 
   const { showToast } = useToastStore();
+  const { openModal, closeModal } = useModalStore();
+
+  const templateHandleSelect = (option: string, id: number) => {
+    switch (option) {
+      case 'copy':
+        router.push(`/profile/checklist/detail/${id}?mode=new`);
+        break;
+      case 'delete':
+        openModal('confirm', {
+          title: '템플릿 삭제',
+          description: '이 템플릿을 정말 삭제하시겠습니까?',
+          onConfirm: async () => {
+            await deleteTemplate(id);
+            queryClient.invalidateQueries({ queryKey: ['templateList'] });
+            closeModal();
+          },
+        });
+        break;
+      default:
+        console.log('알 수 없는 옵션');
+    }
+  };
 
   const handleAddChecklist = (type: CheckType) => {
     const newId = checklist.length > 0 ? checklist[checklist.length - 1].priority + 1 : 1;
@@ -72,29 +105,66 @@ export default function ChecklistDetail() {
 
   return (
     <div>
-      <Header
-        title={
-          isNewTemplate
-            ? `새로운 체크리스트 ${new Date().toISOString().slice(0, 10)}`
-            : template?.name ?? ''
-        }
-        type={4}
-      />
-      <ChecklistContent
-        checklist={checklist}
-        setter={setChecklist}
-        onAddChecklist={handleAddChecklist}
-        onSaveTemplate={isNewTemplate ? handleSaveTemplate : handleUpdateTemplate}
-      />
-      {showNewTemplateModal && (
-        <ChecklistModal
-          mode="edit"
-          title="새 템플릿 생성"
-          defaultValue={`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`}
-          confirmText="저장"
-          onClose={() => setShowNewTemplateModal(false)}
-          onConfirm={(value) => createNewTemplate(value as string)}
-        />
+      {isLoading ? (
+        <div className="px-4">
+          <div className="py-2 mb-4">
+            <Skeleton className="h-7 w-64" />
+          </div>
+          <div className="flex flex-col gap-4">
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+          </div>
+        </div>
+      ) : (
+        <>
+          <Header
+            left={
+              <div className="flex items-center gap-2">
+                <IconComponent
+                  name="arrowLeft"
+                  width={24}
+                  height={24}
+                  onClick={() => router.back()}
+                  className="cursor-pointer"
+                />
+                <h1 className="text-b-20">
+                  {isNewTemplate
+                    ? `새로운 체크리스트 ${new Date().toISOString().slice(0, 10)}`
+                    : template?.name ?? ''}
+                </h1>
+              </div>
+            }
+            right={
+              !isNewTemplate && (
+                <Dropdown
+                  options={TEMPLATE_DETAIL_OPTION}
+                  type="meatball"
+                  onSelect={(option) => templateHandleSelect(option, template.templateId)}
+                />
+              )
+            }
+          />
+          <ChecklistContent
+            checklist={checklist}
+            setter={setChecklist}
+            onAddChecklist={handleAddChecklist}
+            onSaveTemplate={isNewTemplate ? handleSaveTemplate : handleUpdateTemplate}
+          />
+          {showNewTemplateModal && (
+            <ChecklistModal
+              mode="edit"
+              title="새 템플릿 생성"
+              defaultValue={`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`}
+              confirmText="저장"
+              onClose={() => setShowNewTemplateModal(false)}
+              onConfirm={(value) => createNewTemplate(value as string)}
+            />
+          )}
+        </>
       )}
     </div>
   );

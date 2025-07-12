@@ -6,7 +6,10 @@ import { Property } from '@/types';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const DROPDOWN_OPTION = ['최신순', '입주 빠른 순'];
+const DROPDOWN_OPTION = [
+  { label: '최신순', value: 'createdAt' },
+  { label: '입주 빠른 순', value: 'availableDate' },
+];
 
 export default function Home() {
   const searchParams = useSearchParams();
@@ -24,7 +27,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col px-5 py-2 gap-2 mb-20">
-      <Header type={7} title="공유받은 매물" />
+      <Header title="공유받은 매물" />
 
       <div className="flex w-full justify-between items-center">
         <p className="text-gray-500 text-[14px]">전체 {propertyList.length}</p>

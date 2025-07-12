@@ -1,3 +1,4 @@
+import IconComponent from '@/components/Asset/Icon';
 import ChecklistContent from '@/components/CheckList/CheckListContent';
 import Header from '@/components/Layout/Header';
 import ChecklistModal from '@/components/Modal/ChecklistModal';
@@ -64,12 +65,22 @@ export default function DefaultTemplate() {
   return (
     <div>
       <Header
-        title={
-          isNewTemplate
-            ? `새로운 체크리스트 ${new Date().toISOString().slice(0, 10)}`
-            : defaultTemplate?.name ?? ''
+        left={
+          <div className="flex items-center gap-2">
+            <IconComponent
+              name="arrowLeft"
+              width={24}
+              height={24}
+              onClick={() => router.back()}
+              className="cursor-pointer"
+            />
+            <h1 className="text-b-20">
+              {isNewTemplate
+                ? `새로운 체크리스트 ${new Date().toISOString().slice(0, 10)}`
+                : defaultTemplate?.name ?? ''}
+            </h1>
+          </div>
         }
-        type={4}
       />
       <ChecklistContent
         checklist={checklist}

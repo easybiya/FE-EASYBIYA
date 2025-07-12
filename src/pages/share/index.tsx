@@ -1,12 +1,17 @@
+import IconComponent from '@/components/Asset/Icon';
 import Button from '@/components/Button/CustomButton';
 import ShareCard from '@/components/DashBoard/ShareCard';
 import Dropdown from '@/components/Dropdown';
 import Header from '@/components/Layout/Header';
 import { mockHouserData } from '@/data/mockHouseData';
 import { Property } from '@/types';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const DROPDOWN_OPTION = ['최신순', '입주 빠른 순'];
+const DROPDOWN_OPTION = [
+  { label: '최신순', value: 'createdAt' },
+  { label: '입주 빠른 순', value: 'availableDate' },
+];
 
 declare global {
   interface Window {
@@ -18,6 +23,7 @@ declare global {
 export default function Home() {
   const [propertyList, setPropertyList] = useState<Property[]>([]);
   const [checkedList, setCheckedList] = useState<Property[]>([]);
+  const router = useRouter();
 
   const handleCheckList = (property: Property) => {
     setCheckedList((prev) =>
@@ -62,7 +68,18 @@ export default function Home() {
 
   return (
     <div className="h-full flex flex-col bg-[#F6F5F2] relative">
-      <Header type={1} title="공유하기" />
+      <Header
+        title="공유하기"
+        right={
+          <IconComponent
+            name="close"
+            width={16}
+            height={16}
+            className="cursor-pointer"
+            onClick={() => router.back()}
+          />
+        }
+      />
       <p className="text-gray-700 text-sm text-center">공유할 매물을 선택해주세요</p>
       <div className="flex flex-col px-5 py-2 gap-2 mb-20">
         <div className="flex w-full justify-between items-center">

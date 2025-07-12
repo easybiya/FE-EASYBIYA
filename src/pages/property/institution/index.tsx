@@ -3,12 +3,27 @@ import Header from '@/components/Layout/Header';
 import { useInstitution } from '@/hooks/map/useInstitution';
 import MapIcon from '../../../../public/icons/map-pinned.svg?url';
 import Image from 'next/image';
+import IconComponent from '@/components/Asset/Icon';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
   const { institution } = useInstitution();
+  const router = useRouter();
+
   return (
     <div>
-      <Header type={1} title={institution ? '직장/학교 수정' : '직장/학교 등록'} />
+      <Header
+        title={institution ? '직장/학교 수정' : '직장/학교 등록'}
+        right={
+          <IconComponent
+            name="close"
+            width={16}
+            height={16}
+            className="cursor-pointer"
+            onClick={() => router.back()}
+          />
+        }
+      />
       <div className="px-5 py-8 flex flex-col gap-14 relative h-[calc(100vh-40px)]">
         {!institution && (
           <div className="flex items-center gap-3 px-5 py-4 bg-white rounded-lg">
