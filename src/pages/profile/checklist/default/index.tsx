@@ -66,7 +66,7 @@ export default function DefaultTemplate() {
     <div>
       <Header
         left={
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-8">
             <IconComponent
               name="arrowLeft"
               width={24}

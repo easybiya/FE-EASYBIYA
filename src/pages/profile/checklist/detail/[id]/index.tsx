@@ -106,24 +106,24 @@ export default function ChecklistDetail() {
   return (
     <div>
       {isLoading ? (
-        <div className="px-4">
-          <div className="py-2 mb-4">
-            <Skeleton className="h-7 w-64" />
+        <div className="px-16">
+          <div className="py-8 mb-16">
+            <Skeleton className="h-28 w-256" />
           </div>
-          <div className="flex flex-col gap-4">
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-24 w-full" />
+          <div className="flex flex-col gap-16">
+            <Skeleton className="h-96 w-full" />
+            <Skeleton className="h-96 w-full" />
+            <Skeleton className="h-96 w-full" />
+            <Skeleton className="h-96 w-full" />
+            <Skeleton className="h-96 w-full" />
+            <Skeleton className="h-96 w-full" />
           </div>
         </div>
       ) : (
         <>
           <Header
             left={
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-8">
                 <IconComponent
                   name="arrowLeft"
                   width={24}

@@ -53,10 +53,10 @@ export default function ChecklistItem({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          className="flex flex-col pt-4 pr-2 pb-4 pl-4 border border-gray-300 rounded-lg bg-white shadow-sm"
+          className="flex flex-col pt-16 pr-8 pb-16 pl-16 border border-gray-300 rounded-lg bg-white shadow-sm"
         >
-          <div className="flex items-center justify-between mb-2 relative">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between mb-8 relative">
+            <div className="flex items-center gap-8">
               <IconComponent
                 name="drag"
                 width={16}
@@ -85,10 +85,10 @@ export default function ChecklistItem({
                 onClick={() => setIsMenuOpen((prev) => !prev)}
               />
               {isMenuOpen && (
-                <div className="absolute right-0 z-10 mt-2 w-28 bg-white border border-gray-200 rounded shadow-md">
+                <div className="absolute right-0 z-10 mt-8 w-112 bg-white border border-gray-200 rounded shadow-md">
                   {(checkType === 'RADIO' || checkType === 'CHECKBOX') && (
                     <button
-                      className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
+                      className="w-full px-16 py-8 text-left text-sm hover:bg-gray-100"
                       onClick={() => {
                         onOptionAdd?.(priority);
                         setIsMenuOpen(false);
@@ -98,7 +98,7 @@ export default function ChecklistItem({
                     </button>
                   )}
                   <button
-                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
+                    className="w-full px-16 py-8 text-left text-sm hover:bg-gray-100"
                     onClick={() => {
                       onEdit?.(priority);
                       setIsMenuOpen(false);
@@ -107,7 +107,7 @@ export default function ChecklistItem({
                     수정하기
                   </button>
                   <button
-                    className="w-full px-4 py-2 text-left text-sm text-red-500 hover:bg-gray-100"
+                    className="w-full px-16 py-8 text-left text-sm text-red-500 hover:bg-gray-100"
                     onClick={() => {
                       onDelete?.(priority);
                       setIsMenuOpen(false);
@@ -129,7 +129,7 @@ export default function ChecklistItem({
                   onChange={(e) => onTextEdit?.(priority, e.target.value)}
                   onBlur={() => setEditingText(false)}
                   onKeyDown={(e) => e.key === 'Enter' && setEditingText(false)}
-                  className="w-full text-sm border-b border-gray-300 mr-2"
+                  className="w-full text-sm border-b border-gray-300 mr-8"
                 />
               ) : (
                 <div
@@ -145,20 +145,20 @@ export default function ChecklistItem({
           )}
 
           {checkType === 'RADIO' && (
-            <div className="flex flex-col gap-2 mt-1">
+            <div className="flex flex-col gap-8 mt-4">
               {checkItems.map((option, i) => (
                 <div
                   key={option.priority}
-                  className="flex items-center justify-between text-r-14 gap-2"
+                  className="flex items-center justify-between text-r-14 gap-8"
                 >
-                  <div className="flex items-center gap-2 w-full">
+                  <div className="flex items-center gap-8 w-full">
                     <input
                       type="radio"
                       name={`radio-group-${priority}`}
                       value={option.description}
                       checked={option.checked}
                       onChange={() => onChange?.(priority, option)}
-                      className="w-4 h-4 accent-black"
+                      className="w-16 h-16 accent-black"
                     />
 
                     {editingIndex === i ? (
@@ -182,19 +182,19 @@ export default function ChecklistItem({
           )}
 
           {checkType === 'CHECKBOX' && (
-            <div className="flex flex-col gap-2 mt-1">
+            <div className="flex flex-col gap-8 mt-4">
               {checkItems.map((option, i) => (
                 <div
                   key={option.priority}
-                  className="flex items-center justify-between text-r-14 gap-2"
+                  className="flex items-center justify-between text-r-14 gap-8"
                 >
-                  <div className="flex items-center gap-2 w-full">
+                  <div className="flex items-center gap-8 w-full">
                     <input
                       type="checkbox"
                       value={option.description}
                       checked={option.checked}
                       onChange={() => onChange?.(priority, option)}
-                      className="w-4 h-4 accent-black"
+                      className="w-16 h-16 accent-black"
                     />
                     {editingIndex === i ? (
                       <input

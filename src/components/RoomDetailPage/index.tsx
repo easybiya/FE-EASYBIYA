@@ -65,7 +65,7 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
       <div className="w-full aspect-[1.8/1] relative">
         <Link
           href={`/property/edit-photo?mode=edit&propertyId=${id}`}
-          className="absolute right-[14px] top-[15px] z-10 px-2 py-1 rounded-full border-gray-300 bg-white text-sm"
+          className="absolute right-14 top-15 z-10 px-8 py-4 rounded-full border-gray-300 bg-white text-sm"
         >
           사진 수정
         </Link>
@@ -113,8 +113,8 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
         setSelected={setSelected}
         setApi={setApi}
       />
-      <div className="flex flex-col gap-2.5 px-4 mt-7">
-        <div className=" flex flex-col gap-1">
+      <div className="flex flex-col gap-10 px-16 mt-28">
+        <div className=" flex flex-col gap-4">
           <HouseTypeTag type={leaseType} />
           {leaseType === 'JEONSE' ? (
             <h2 className="text-b-18">보증금 {formatWon(deposit)}</h2>
@@ -123,9 +123,9 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
               보증금 {formatWon(deposit)} / 월세 {formatWon(monthlyFee ?? 0)}
             </h2>
           )}
-          <p className="text-r-15 text-[15px]">{propertyAddress}</p>
+          <p className="text-r-15 text-15">{propertyAddress}</p>
         </div>
-        <div className="flex gap-1 items-center">
+        <div className="flex gap-4 items-center">
           <Image
             src="/icons/calendar-brown.svg"
             color="#94896A"
@@ -133,13 +133,13 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
             height={10}
             alt="캘린더 아이콘"
           />
-          <div className="flex gap-2 text-brownText text-r-12">
+          <div className="flex gap-8 text-brownText text-r-12">
             <span className="font-semibold">입주 가능 일자</span>
             <p className="flex items-center ">{formatDate(new Date(availableDate), 2)}</p>
           </div>
         </div>
       </div>
-      <div className={`flex-grow px-4 ${isEdit ? 'pb-28' : 'pb-20'}`}>
+      <div className={`flex-grow px-16 ${isEdit ? 'pb-112' : 'pb-80'}`}>
         <CheckListContainer checklist={checklist} setter={setChecklist} handleEdit={handleEdit} />
       </div>
     </>

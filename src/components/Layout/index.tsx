@@ -17,7 +17,7 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div className="flex justify-center w-full min-h-screen bg-white">
-      <div className="relative w-full max-w-[430px] min-h-screen bg-primary shadow-[inset_1px_0_#eee,inset_-1px_0_#eee]">
+      <div className="relative w-full max-w-430 min-h-screen bg-primary shadow-[inset_1px_0_#eee,inset_-1px_0_#eee]">
         {children}
         {/* 특정 페이지에서 TabBar 숨기기 */}
         {!hideTabBar && <TabBar />}

@@ -155,11 +155,11 @@ export default function SearchAddress({ isEdit = false, id }: Props) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="py-8 px-5 h-full flex flex-col justify-between"
+          className="py-32 h-full flex flex-col justify-between"
         >
-          <div className="flex flex-col gap-14">
-            <div className="flex flex-col gap-[6px]">
-              <FormLabel className="mb-2 text-[16px] font-bold">집 주소</FormLabel>
+          <div className="flex flex-col gap-56">
+            <div className="flex flex-col gap-8">
+              <FormLabel className="text-16 font-bold">집 주소</FormLabel>
               <div onClick={() => setIsSearchModalOpen(true)} className="cursor-pointer relative">
                 <FormField
                   control={form.control}
@@ -171,7 +171,7 @@ export default function SearchAddress({ isEdit = false, id }: Props) {
                           disabled
                           {...field}
                           placeholder="주소를 검색해 주세요"
-                          className="pointer-events-none bg-white py-2 h-10 disabled:opacity-100" // 클릭 이벤트 차단 및 스타일 변경
+                          className="pointer-events-none bg-white py-8 h-40 disabled:opacity-100" // 클릭 이벤트 차단 및 스타일 변경
                         />
                       </FormControl>
                       <FormMessage />
@@ -183,7 +183,7 @@ export default function SearchAddress({ isEdit = false, id }: Props) {
                   alt="검색아이콘"
                   height={24}
                   width={24}
-                  className="absolute right-3 top-2"
+                  className="absolute right-12 top-8"
                 />
               </div>
               <FormField
@@ -195,7 +195,7 @@ export default function SearchAddress({ isEdit = false, id }: Props) {
                       <Input
                         {...field}
                         placeholder="상세 주소를 입력해 주세요"
-                        className="bg-white py-2 h-10"
+                        className="bg-white py-8 h-40"
                       />
                     </FormControl>
                     <FormMessage />
@@ -203,25 +203,25 @@ export default function SearchAddress({ isEdit = false, id }: Props) {
                 )}
               />
             </div>
-            <div className="flex flex-col gap-[6px]">
+            <div className="flex flex-col gap-8">
               <FormField
                 control={form.control}
                 name="nickName"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="mb-2 text-[16px] font-bold">집 별명</FormLabel>
+                  <FormItem className="flex flex-col gap-6">
+                    <FormLabel className="text-16 font-bold">집 별명</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         placeholder="집 별명을 입력해 주세요"
-                        className="bg-white py-2 h-10"
+                        className="bg-white py-8 h-40"
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <p className="text-[12px] text-gray-500 h-6 justify-center flex flex-col">
+              <p className="text-12 text-gray-500 h-24 justify-center flex flex-col">
                 예&#41; 합정동 매물 1
               </p>
             </div>

@@ -35,7 +35,7 @@ export default function HeaderWithProgress({ title }: HeaderWithProgressProps) {
 
   return (
     <div className="w-full">
-      <div className="relative flex items-center justify-center py-2">
+      <div className="relative flex items-center justify-center py-8">
         <IconComponent
           name="arrowLeft"
           width={24}

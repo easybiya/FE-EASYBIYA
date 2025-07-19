@@ -42,15 +42,15 @@ export default function DetailRouteModal({ institution, currentAddress, isClose 
   });
 
   if (isLoading)
-    return <div className="flex h-20 justify-between items-center p-4 bg-gray-200 rounded-lg" />;
+    return <div className="flex h-80 justify-between items-center p-16 bg-gray-200 rounded-lg" />;
 
   return (
     <div className="absolute inset-0 z-50 bg-white">
-      <div className="px-3 py-2 flex items-center justify-center relative">
-        <div className="flex h-[30px] justify-center items-center">
+      <div className="px-12 py-8 flex items-center justify-center relative">
+        <div className="flex h-30 justify-center items-center">
           <p className="text-center text-lg font-bold">대중교통 보기</p>
         </div>
-        <div className="absolute top-1/2 -translate-y-1/2 right-3 ">
+        <div className="absolute top-1/2 -translate-y-1/2 right-12">
           <IconComponent
             name="close"
             width={10}
@@ -61,8 +61,8 @@ export default function DetailRouteModal({ institution, currentAddress, isClose 
           />
         </div>
       </div>
-      <div className="px-6 py-2 flex flex-col gap-8">
-        <div className="flex justify-between h-12 items-center px-4 py-3 w-full bg-primary rounded-lg">
+      <div className="px-24 py-8 flex flex-col gap-32">
+        <div className="flex justify-between h-12 items-center px-16 py-12 w-full bg-primary rounded-lg">
           <p className="text-sm font-semibold">총 소요시간</p>
           <p className="font-bold">{data?.info.totalTime}분</p>
         </div>
@@ -72,7 +72,7 @@ export default function DetailRouteModal({ institution, currentAddress, isClose 
               return (
                 <div
                   key={index}
-                  className={`relative h-4 flex items-center justify-center ${
+                  className={`relative h-16 flex items-center justify-center ${
                     trafficType[info.trafficType].color
                   } ${index === 0 && 'rounded-l-full'} ${
                     index === data.subPath.length - 1 && 'rounded-r-full'
@@ -81,10 +81,10 @@ export default function DetailRouteModal({ institution, currentAddress, isClose 
                     width: `${(info.sectionTime / (data.info.totalTime ?? 1)) * 100}%`,
                   }}
                 >
-                  <p className="text-[11px] font-semibold text-white text-nowrap">
+                  <p className="text-11 font-semibold text-white text-nowrap">
                     {info.sectionTime}분
                   </p>
-                  <div className="absolute -top-5 w-5 h-5">
+                  <div className="absolute -top-20 w-20 h-20">
                     <IconComponent
                       name={trafficType[info.trafficType].icon}
                       width={20}
@@ -97,17 +97,17 @@ export default function DetailRouteModal({ institution, currentAddress, isClose 
             }
           })}
         </div>
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-10">
           {data?.subPath?.map((info, index) => {
             if (info.sectionTime > 0) {
               return (
                 <div className="flex justify-between" key={index}>
-                  <div className="flex gap-2 items-center text-[14px] font-semibold leading-tight">
+                  <div className="flex gap-8 items-center text-14 font-semibold leading-tight">
                     <span
-                      className={`w-2 h-2 rounded-full ${trafficType[info.trafficType].color}`}
+                      className={`w-8 h-8 rounded-full ${trafficType[info.trafficType].color}`}
                     />
                     {info.trafficType === 1 || info.trafficType === 2 ? (
-                      <div className="flex gap-1">
+                      <div className="flex gap-4">
                         {info.trafficType === 2 && <p>버스</p>}
                         <p>{info.lane?.[0]?.busNo || info.lane?.[0]?.name || ''}</p>
                       </div>
@@ -115,21 +115,21 @@ export default function DetailRouteModal({ institution, currentAddress, isClose 
                       <p>{trafficType[info.trafficType].name}</p>
                     )}
                   </div>
-                  <p className="text-[15px] font-bold">{info.sectionTime}분</p>
+                  <p className="text-15 font-bold">{info.sectionTime}분</p>
                 </div>
               );
             }
           })}
         </div>
-        <div className="flex flex-col gap-1.5 leading-normal">
-          <div className="flex flex-col gap-0.5 px-4 py-3 border rounded-lg">
-            <p className="text-[15px] font-bold">{institution.institutionName}</p>
-            <p className="text-[14px]">{institution.institutionAddress}</p>
+        <div className="flex flex-col gap-6 leading-normal">
+          <div className="flex flex-col gap-2 px-16 py-12 border rounded-lg">
+            <p className="text-15 font-bold">{institution.institutionName}</p>
+            <p className="text-14">{institution.institutionAddress}</p>
           </div>
           <IconComponent name="arrowDown" width={16} height={16} />
-          <div className="flex flex-col gap-0.5 px-4 py-3 border rounded-lg">
-            <p className="text-[15px] font-bold">{currentAddress.propertyName}</p>
-            <p className="text-[14px]">{currentAddress.propertyAddress}</p>
+          <div className="flex flex-col gap-2 px-16 py-12 border rounded-lg">
+            <p className="text-15 font-bold">{currentAddress.propertyName}</p>
+            <p className="text-14">{currentAddress.propertyAddress}</p>
           </div>
         </div>
       </div>

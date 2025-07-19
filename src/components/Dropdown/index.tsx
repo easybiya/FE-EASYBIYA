@@ -42,7 +42,7 @@ export default function Dropdown({ options, selectedOption, onSelect, type }: Dr
               e.preventDefault();
               toggleDropdown();
             }}
-            className="flex items-center justify-center rounded-[4px] hover:bg-gray-100 focus:outline-none"
+            className="flex items-center justify-center rounded-4 hover:bg-gray-100 focus:outline-none"
           >
             <IconComponent name="meatball" width={24} height={24} isBtn />
           </button>
@@ -50,7 +50,7 @@ export default function Dropdown({ options, selectedOption, onSelect, type }: Dr
           <button
             type="button"
             onClick={toggleDropdown}
-            className="flex justify-center items-center pl-4 pr-2.5 py-1 text-r-14 rounded-md border border-gray-300 text-gray-800 bg-white hover:bg-gray-100 focus:outline-none"
+            className="flex justify-center items-center pl-16 pr-10 py-4 text-r-14 rounded-md border border-gray-300 text-gray-800 bg-white hover:bg-gray-100 focus:outline-none"
           >
             {selectedOption || 'Select an option'}
             <IconComponent
@@ -58,15 +58,15 @@ export default function Dropdown({ options, selectedOption, onSelect, type }: Dr
               width={16}
               height={16}
               isBtn
-              className="pl-1"
+              className="pl-4"
             />
           </button>
         )}
       </div>
 
       {isOpen && (
-        <div className="z-20 origin-top-right mt-1 absolute right-0 min-w-[156px] max-w-[220px] rounded-[4px] shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-          <div className="p-1">
+        <div className="z-20 origin-top-right mt-4 absolute right-0 min-w-156 max-w-220 rounded-4 shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+          <div className="p-4">
             {options.map((option, index) => (
               <button
                 key={index}
@@ -77,7 +77,7 @@ export default function Dropdown({ options, selectedOption, onSelect, type }: Dr
                   }
                   setIsOpen(false);
                 }}
-                className="w-full p-2 rounded-[4px] text-r-14 text-left text-gray-800 hover:bg-secondary"
+                className="w-full p-8 rounded-4 text-r-14 text-left text-gray-800 hover:bg-secondary"
               >
                 {option.label}
               </button>

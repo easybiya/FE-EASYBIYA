@@ -1,6 +1,20 @@
 import type { Config } from 'tailwindcss';
 import * as tailwindAnimate from 'tailwindcss-animate';
 
+const px0_10 = generatePx(0, 10);
+const px0_100 = generatePx(0, 100);
+
+const px0_1600 = generatePx(0, 1600);
+
+function generatePx(start: number, end: number, baseFontSize: number = 16) {
+  const spacing: { [key: string]: string } = {};
+  for (let i = start; i <= end; i++) {
+    const remValue = i / baseFontSize;
+    spacing[i] = `${remValue}rem`;
+  }
+  return spacing;
+}
+
 const config: Config = {
   darkMode: ['class'],
   content: [
@@ -11,6 +25,15 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      borderWidth: px0_10,
+      borderRadius: px0_100,
+      fontSize: px0_100,
+      lineHeight: px0_100,
+      minWidth: px0_1600,
+      maxWidth: px0_1600,
+      minHeight: px0_1600,
+      maxHeight: px0_1600,
+      spacing: px0_1600,
       fontFamily: {
         pretendard: ['Pretendard', 'Arial', 'Helvetica', 'sans-serif'],
         sans: ['Pretendard', 'Arial', 'Helvetica', 'sans-serif'], // 기본 sans 설정 변경
@@ -93,11 +116,11 @@ const config: Config = {
           '5': 'hsl(var(--chart-5))',
         },
       },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
-      },
+      // borderRadius: {
+      //   lg: 'var(--radius)',
+      //   md: 'calc(var(--radius) - 2px)',
+      //   sm: 'calc(var(--radius) - 4px)',
+      // },
     },
   },
   plugins: [tailwindAnimate],

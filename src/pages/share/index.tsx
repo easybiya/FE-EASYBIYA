@@ -81,12 +81,12 @@ export default function Home() {
         }
       />
       <p className="text-gray-700 text-sm text-center">공유할 매물을 선택해주세요</p>
-      <div className="flex flex-col px-5 py-2 gap-2 mb-20">
+      <div className="flex flex-col px-20 py-8 gap-8 mb-80">
         <div className="flex w-full justify-between items-center">
-          <p className="text-gray-500 text-[14px]">전체 {checkedList.length}</p>
+          <p className="text-gray-500 text-14">전체 {checkedList.length}</p>
           <Dropdown options={DROPDOWN_OPTION} type="select" selectedOption="최신순" />
         </div>
-        <ul className="flex flex-col gap-4">
+        <ul className="flex flex-col gap-16">
           {propertyList.map((property) => (
             <li key={property.id}>
               <ShareCard
@@ -99,9 +99,9 @@ export default function Home() {
         </ul>
       </div>
       {checkedList.length > 0 && (
-        <div className="fixed bottom-0 left-1/2 w-full z-50 max-w-[428px] -translate-x-1/2 bg-primary flex flex-col">
-          <div className="absolute -top-10 left-0 w-full h-10 bg-gradient-to-b from-transparent to-primary" />
-          <div className="flex flex-col items-center gap-2 py-6 px-5">
+        <div className="fixed bottom-0 left-1/2 w-full z-50 max-w-428 -translate-x-1/2 bg-primary flex flex-col">
+          <div className="absolute -top-40 left-0 w-full h-40 bg-gradient-to-b from-transparent to-primary" />
+          <div className="flex flex-col items-center gap-8 py-24 px-20">
             <Button label="공유" className="w-full" onClick={shareKakao} />
           </div>
         </div>

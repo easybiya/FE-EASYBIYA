@@ -44,7 +44,7 @@ export default function OnboardingPage() {
         </Swiper>
       </div>
 
-      <div className="px-5 py-8 w-full">
+      <div className="px-20 py-32 w-full bg-primary">
         <Button
           label={activeIndex < 2 ? '다음' : '확인'}
           className="w-full"

@@ -12,8 +12,8 @@ interface Props {
 export default function TemplateSelectModal({ onClose, onCreateNew, onCancel, onNavigate }: Props) {
   return (
     <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-      <div className="relative bg-white rounded-[12px] w-[360px] px-6 pt-6 pb-5 shadow-lg">
-        <div className="flex justify-between items-center mb-6">
+      <div className="relative bg-white rounded-12 w-360 px-24 pt-24 pb-20 shadow-lg">
+        <div className="flex justify-between items-center mb-24">
           <h2 className="text-b-16 font-semibold">템플릿 저장</h2>
           <button onClick={onClose}>
             <IconComponent name="close" width={12} height={12} className="cursor-pointer" />
@@ -25,7 +25,7 @@ export default function TemplateSelectModal({ onClose, onCreateNew, onCancel, on
           variant="secondary"
           size="medium"
           fullWidth
-          className="mb-3 justify-between px-4 py-3 rounded-[10px]"
+          className="mb-12 justify-between px-16 py-12 rounded-10"
           icon={<IconComponent name="arrowRight" width={12} height={12} className="text-black" />}
           iconPosition="right"
           onClick={() => {
@@ -39,7 +39,7 @@ export default function TemplateSelectModal({ onClose, onCreateNew, onCancel, on
           variant="secondary"
           size="medium"
           fullWidth
-          className="justify-center px-4 py-3 rounded-[10px]"
+          className="justify-center px-16 py-12 rounded-10"
           icon={<span className="text-base font-bold">+</span>}
           iconPosition="left"
           onClick={() => {
@@ -52,7 +52,7 @@ export default function TemplateSelectModal({ onClose, onCreateNew, onCancel, on
           label="취소"
           variant="primary"
           fullWidth
-          className="mt-6 h-11 text-sm font-medium rounded-[10px]"
+          className="mt-24 h-44 text-sm font-medium rounded-10"
           onClick={onCancel}
         />
       </div>

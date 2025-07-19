@@ -26,14 +26,14 @@ export default function Home() {
   }, [ids]);
 
   return (
-    <div className="flex flex-col px-5 py-2 gap-2 mb-20">
+    <div className="flex flex-col px-20 py-8 gap-8 mb-80">
       <Header title="공유받은 매물" />
 
       <div className="flex w-full justify-between items-center">
-        <p className="text-gray-500 text-[14px]">전체 {propertyList.length}</p>
+        <p className="text-gray-500 text-14">전체 {propertyList.length}</p>
         <Dropdown options={DROPDOWN_OPTION} type="select" selectedOption="최신순" />
       </div>
-      <ul className="flex flex-col gap-4">
+      <ul className="flex flex-col gap-16">
         {propertyList.map((item) => (
           <li key={item.id}>
             <HouseCard info={item} isShared />

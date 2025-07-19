@@ -5,9 +5,5 @@ interface ChipsProps {
 }
 
 export default function Chips({ label }: ChipsProps) {
-  return (
-    <span className="px-[5px] py-[2px] text-m-12 rounded-[3px] bg-gray-700 text-white">
-      {label}
-    </span>
-  );
+  return <span className="px-5 py-2 text-m-12 rounded-3 bg-gray-700 text-white">{label}</span>;
 }

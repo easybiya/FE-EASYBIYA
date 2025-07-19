@@ -25,9 +25,9 @@ export default function Button({
   className = '',
 }: ButtonProps) {
   const sizeStyles = {
-    small: 'h-10 px-4 text-sm',
-    medium: 'h-12 px-6 text-base',
-    large: 'h-14 px-8 text-lg',
+    small: 'h-40 px-16 text-sm',
+    medium: 'h-48 px-16 text-base',
+    large: 'h-56 px-32 text-lg',
   };
 
   const variantStyles = {
@@ -48,9 +48,9 @@ export default function Button({
 
   return (
     <button onClick={onClick} disabled={disabled} className={buttonClass}>
-      {icon && iconPosition === 'left' && <span className="mr-2 stroke-gray-700">{icon}</span>}
+      {icon && iconPosition === 'left' && <span className="mr-8 stroke-gray-700">{icon}</span>}
       {label}
-      {icon && iconPosition === 'right' && <span className="ml-2 stroke-gray-700">{icon}</span>}
+      {icon && iconPosition === 'right' && <span className="ml-8 stroke-gray-700">{icon}</span>}
     </button>
   );
 }

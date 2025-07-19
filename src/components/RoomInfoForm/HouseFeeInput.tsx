@@ -36,12 +36,12 @@ export default function HouseFeeInput({ type, text, value, onChange }: Props) {
   };
 
   return (
-    <div className="flex gap-4 text-nowrap items-center justify-between w-full text-[14px]">
-      <p className="min-w-[41px]">{text}</p>
-      <div className="flex gap-2">
+    <div className="flex gap-16 text-nowrap items-center justify-between w-full text-14">
+      <p className="min-w-41">{text}</p>
+      <div className="flex gap-8">
         {type === 'DEPOSIT' && (
-          <div className="flex items-center gap-1">
-            <div className="w-[60px]">
+          <div className="flex items-center gap-4">
+            <div className="w-60">
               <Input
                 type="number"
                 placeholder="0"
@@ -53,8 +53,8 @@ export default function HouseFeeInput({ type, text, value, onChange }: Props) {
             <p>억</p>
           </div>
         )}
-        <div className="flex items-center gap-1">
-          <div className="w-24 text-right">
+        <div className="flex items-center gap-4">
+          <div className="w-96 text-right">
             <Input
               max={9999}
               type="number"

@@ -100,13 +100,11 @@ export default function InstitutionForm({ institution }: Props) {
           onSubmit={form.handleSubmit(onSubmit)}
           className="h-full flex flex-col justify-between"
         >
-          <div className="flex flex-col gap-14">
-            <div className="flex flex-col gap-[6px]">
-              <div className="flex gap-1.5">
-                <FormLabel className="mb-2 text-[16px] font-bold">직장/학교 주소</FormLabel>
-                <p className="text-[12px] text-gray-500 mb-2 justify-center flex flex-col">
-                  상세 주소 생략
-                </p>
+          <div className="flex flex-col gap-56">
+            <div className="flex flex-col gap-8">
+              <div className="flex gap-6">
+                <FormLabel className="text-16 font-bold">직장/학교 주소</FormLabel>
+                <p className="text-12 text-gray-500 justify-center flex flex-col">상세 주소 생략</p>
               </div>
               <div onClick={() => setIsSearchModalOpen(true)} className="cursor-pointer relative">
                 <FormField
@@ -119,7 +117,7 @@ export default function InstitutionForm({ institution }: Props) {
                           disabled
                           {...field}
                           placeholder="주소를 검색해 주세요"
-                          className="pointer-events-none bg-white py-2 h-10 disabled:opacity-100" // 클릭 이벤트 차단 및 스타일 변경
+                          className="pointer-events-none bg-white py-8 h-40 disabled:opacity-100" // 클릭 이벤트 차단 및 스타일 변경
                         />
                       </FormControl>
                       <FormMessage />
@@ -131,7 +129,7 @@ export default function InstitutionForm({ institution }: Props) {
                   alt="검색아이콘"
                   height={24}
                   width={24}
-                  className="absolute right-3 top-2"
+                  className="absolute right-12 top-8"
                 />
               </div>
             </div>
@@ -139,10 +137,10 @@ export default function InstitutionForm({ institution }: Props) {
               control={form.control}
               name="nickName"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="mb-2 text-[16px] font-bold">직장/학교명</FormLabel>
+                <FormItem className="flex flex-col gap-9">
+                  <FormLabel className="text-16 font-bold">직장/학교명</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="직장명/학교명" className="bg-white py-2 h-10" />
+                    <Input {...field} placeholder="직장명/학교명" className="bg-white py-8 h-40" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

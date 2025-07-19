@@ -24,10 +24,10 @@ export default function Page() {
           />
         }
       />
-      <div className="px-5 py-8 flex flex-col gap-14 relative h-[calc(100vh-40px)]">
+      <div className="px-20 py-32 flex flex-col gap-14 relative h-[calc(100vh-40px)]">
         {!institution && (
-          <div className="flex items-center gap-3 px-5 py-4 bg-white rounded-lg">
-            <div className="p-3 rounded bg-brownText">
+          <div className="flex items-center gap-12 px-20 py-16 bg-white rounded-lg">
+            <div className="p-12 rounded bg-brownText">
               <Image src={MapIcon} alt="지도 아이콘" width={24} height={24} />
             </div>
             <p className="text-sm leading-tight">

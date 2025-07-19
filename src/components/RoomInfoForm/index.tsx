@@ -108,9 +108,9 @@ export default function RoomInfoForm({ isEdit = false, id }: Props) {
   }, [id, isEdit]);
 
   return (
-    <div className="px-5 pt-8">
+    <div className="pt-32">
       <Form {...form}>
-        <form className="flex flex-col gap-14 mb-52" onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-56 mb-208" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name="contractType"
@@ -126,7 +126,7 @@ export default function RoomInfoForm({ isEdit = false, id }: Props) {
               </FormItem>
             )}
           />
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-12">
             <FormLabel className="text-md font-bold">계약 금액</FormLabel>
             <FormField
               control={form.control}
@@ -179,15 +179,15 @@ export default function RoomInfoForm({ isEdit = false, id }: Props) {
               )}
             />
           </div>
-          <div className="flex flex-col gap-3 cursor-pointer">
+          <div className="flex flex-col gap-12 cursor-pointer">
             <FormLabel className="text-md font-bold">입주 가능 날짜</FormLabel>
             <div
-              className="flex items-center justify-between px-3 py-2 rounded border bg-white"
+              className="flex items-center justify-between px-12 py-8 rounded border bg-white"
               onClick={() => setIsOpen(!isOpen)}
             >
-              <div className="flex gap-[6px] items-center">
+              <div className="flex gap-6 items-center">
                 <IconComponent width={14} height={14} name="calendar" alt="캘린더 아이콘" isBtn />
-                <p className="h-[22px] flex items-center text-center">{currentDate}</p>
+                <p className="h-22 flex items-center text-center">{currentDate}</p>
               </div>
               <IconComponent width={10} height={10} name="arrowRight" alt="캘린더 아이콘" isBtn />
             </div>

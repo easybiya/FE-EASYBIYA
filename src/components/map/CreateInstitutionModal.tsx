@@ -8,7 +8,7 @@ interface Props {
 export default function CreateInsitutionModal({ handleClick }: Props) {
   return (
     <div className="absolute inset-0 w-full h-screen z-50 bg-primary">
-      <div className="relative flex items-center gap-2 px-5 py-2">
+      <div className="relative flex items-center gap-8 px-20 py-8">
         <IconComponent
           name="arrowLeft"
           width={24}
