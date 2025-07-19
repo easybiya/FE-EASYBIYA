@@ -19,13 +19,13 @@ const ChecklistContent = ({
   isTemplate,
 }: Props) => {
   return (
-    <div className="flex-1 overflow-y-auto px-4 pb-48 no-scrollbar">
+    <div className="flex-1 overflow-y-auto pb-208 no-scrollbar">
       <CheckListContainer checklist={checklist} setter={setter} />
       {!isTemplate && (
         <>
-          <div className="mt-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-3">체크리스트 추가</h2>
-            <div className="grid grid-cols-3 gap-3">
+          <div className="mt-24">
+            <h2 className="text-lg font-bold text-gray-900 mb-12">체크리스트 추가</h2>
+            <div className="grid grid-cols-3 gap-12">
               <ChecklistAddButton
                 label="중복 선택"
                 iconName="addListCheck"
@@ -47,7 +47,7 @@ const ChecklistContent = ({
             label="템플릿 저장"
             variant="secondary"
             fullWidth
-            className="mt-5 mb-6"
+            className="mt-20 mb-24"
             onClick={onSaveTemplate}
           />
         </>

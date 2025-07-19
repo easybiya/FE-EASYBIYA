@@ -39,7 +39,7 @@ export default function Home() {
         left={<h1 className="text-b-20">내집 후보</h1>}
         right={
           !noData && (
-            <div className="flex gap-5">
+            <div className="flex gap-20">
               <Link href="/share">
                 <IconComponent name="share" width={24} height={24} className="cursor-pointer" />
               </Link>
@@ -51,7 +51,7 @@ export default function Home() {
         }
       />
       {noData ? (
-        <div className="font-semibold text-brownText text-center py-4 w-full max-h-[calc(100%-63px)] relative h-full flex flex-col items-center justify-center gap-[52px]">
+        <div className="font-semibold text-brownText text-center py-16 w-full max-h-[calc(100%-63px)] relative h-full flex flex-col items-center justify-center gap-52">
           <div className="w-full">
             <Image
               src={DashboardEmpty}
@@ -64,15 +64,15 @@ export default function Home() {
           </div>
           <Button
             label="등록하기"
-            className="w-60"
+            className="w-240"
             onClick={() => router.push('/property/room-info')}
           />
         </div>
       ) : (
-        <div className="flex flex-col px-5 py-2 gap-2 mb-20">
+        <div className="flex flex-col px-20 py-8 gap-8 mb-80">
           <>
             {isLoading ? (
-              <div className="flex flex-col gap-4 pt-[42px]">
+              <div className="flex flex-col gap-16 pt-42">
                 {Array.from({ length: 5 }).map((_, index) => (
                   <DashboardSkeleton key={index} />
                 ))}
@@ -80,7 +80,7 @@ export default function Home() {
             ) : (
               <>
                 <div className="flex w-full justify-between items-center">
-                  <p className="text-gray-500 text-[14px]">
+                  <p className="text-gray-500 text-14">
                     전체 {bookmarked.length + nonBookmarked.length}
                   </p>
                   <Dropdown
@@ -93,7 +93,7 @@ export default function Home() {
                     onSelect={handleSelect}
                   />
                 </div>
-                <ul className="flex flex-col gap-4">
+                <ul className="flex flex-col gap-16">
                   {bookmarked.map((item) => (
                     <li key={item.id}>
                       <HouseCard

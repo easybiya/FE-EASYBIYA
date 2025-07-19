@@ -32,7 +32,7 @@ export default function KakaoLoginButton() {
   return (
     <button
       onClick={handleKakaoLogin}
-      className="w-full h-12 px-6 text-b-16 bg-[#FEE500] rounded-md hover:bg-yellow-300 flex items-center justify-center gap-2 disabled:opacity-50"
+      className="w-full h-48 px-24 text-b-16 bg-[#FEE500] rounded-md hover:bg-yellow-300 flex items-center justify-center gap-8 disabled:opacity-50"
       disabled={loading}
     >
       <IconComponent name="kakao" width={20} height={20} />

@@ -8,10 +8,10 @@ export default function OptionButton({ isSelected, children, icon, ...props }: O
   return (
     <button
       type="button"
-      className={`w-full min-h-10 rounded-md border h-auto flex flex-col items-center justify-center ${
+      className={`w-full min-h-40 rounded-md border h-auto flex flex-col items-center justify-center ${
         isSelected ? 'border-gray-800' : 'border-gray-300'
       } ${
-        icon ? 'gap-[6px] p-3 pb-4' : 'px-3 py-2'
+        icon ? 'gap-6 p-12 pb-16' : 'px-12 py-8'
       } bg-white hover:bg-gray-100 text-gray-800 text-r-15`}
       {...props}
     >

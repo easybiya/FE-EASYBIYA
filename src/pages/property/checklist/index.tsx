@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
 import ChecklistModal from '@/components/Modal/ChecklistModal';
 import TemplateSelectModal from '@/components/Modal/TemplateSelectModal';
-import Toast from '@/components/Toast';
 import ChecklistComplete from '@/components/CompletePage';
 import ChecklistContent from '@/components/CheckList/CheckListContent';
 import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
@@ -121,8 +120,8 @@ export default function ChecklistPage() {
   };
 
   return (
-    <div className="flex justify-center bg-[#F6F5F2] px-4">
-      <div className="relative w-full max-w-[430px] h-screen flex flex-col">
+    <div className="flex justify-center bg-[#F6F5F2] px-20">
+      <div className="relative w-full max-w-430 h-screen flex flex-col">
         {isCompleted ? (
           <ChecklistComplete />
         ) : (
@@ -166,8 +165,6 @@ export default function ChecklistPage() {
             onConfirm={(value) => handleNewTemplateSave(value as string)}
           />
         )}
-
-        <Toast />
       </div>
     </div>
   );

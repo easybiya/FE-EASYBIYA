@@ -54,12 +54,12 @@ export default function AddPhotoPage() {
   }, [propertyId, isEdit]);
 
   return (
-    <div className="px-4 h-screen bg-[#F6F5F2] flex flex-col">
+    <div className="px-20 h-screen bg-[#F6F5F2] flex flex-col">
       <HeaderWithProgress title="사진 등록" />
-      <div className="flex-grow flex flex-col items-center pt-8">
+      <div className="flex-grow flex flex-col items-center pt-32">
         {previewImages.length === 0 ? (
           <label
-            className="w-full h-40 p-6 border border-gray-300 bg-white rounded-lg flex flex-col justify-center items-center cursor-pointer shadow-sm hover:bg-gray-100 transition"
+            className="w-full h-160 p-24 border border-gray-300 bg-white rounded-lg flex flex-col justify-center items-center cursor-pointer shadow-sm hover:bg-gray-100 transition"
             onClick={() => fileInputRef.current?.click()}
           >
             <IconComponent
@@ -68,8 +68,8 @@ export default function AddPhotoPage() {
               height={24}
               className="text-gray-500 cursor-pointer"
             />
-            <p className="text-b-16 mt-2 text-gray-900">집 사진 추가</p>
-            <p className="text-r-14 text-gray-500 mt-1">거실, 욕실, 부엌 등</p>
+            <p className="text-b-16 mt-8 text-gray-900">집 사진 추가</p>
+            <p className="text-r-14 text-gray-500 mt-4">거실, 욕실, 부엌 등</p>
           </label>
         ) : (
           <>

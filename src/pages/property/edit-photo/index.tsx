@@ -86,7 +86,7 @@ export default function EditPhotoPage() {
     <div className="h-screen bg-[#F6F5F2] flex flex-col">
       <Header
         left={
-          <button className="text-[15px] font-semibold" type="button" onClick={() => router.back()}>
+          <button className="text-15 font-semibold" type="button" onClick={() => router.back()}>
             취소
           </button>
         }
@@ -96,14 +96,14 @@ export default function EditPhotoPage() {
             label="저장"
             onClick={updateImages}
             size="small"
-            className="rounded-full px-3 py-0.5 h-full"
+            className="rounded-full px-12 py-2 h-full"
           />
         }
       />
-      <div className="flex-grow flex flex-col items-center pt-8 px-4">
+      <div className="flex-grow flex flex-col items-center pt-32 px-16">
         {existingImages.length === 0 ? (
           <label
-            className="w-full px-5 py-2.5 border gap-1 border-gray-300 bg-white rounded-lg flex justify-center items-center cursor-pointer shadow-sm hover:bg-gray-100 transition"
+            className="w-full px-20 py-10 border gap-4 border-gray-300 bg-white rounded-lg flex justify-center items-center cursor-pointer shadow-sm hover:bg-gray-100 transition"
             onClick={() => fileInputRef.current?.click()}
           >
             <IconComponent
@@ -112,11 +112,11 @@ export default function EditPhotoPage() {
               height={16}
               className="text-gray-500 cursor-pointer"
             />
-            <p className="text-[15px] text-gray-900 font-semibold">사진 추가</p>
+            <p className="text-15 text-gray-900 font-semibold">사진 추가</p>
           </label>
         ) : (
           <>
-            <div className="grid grid-cols-3 gap-3 w-full max-w-md">
+            <div className="grid grid-cols-3 gap-12 w-full max-w-md">
               {existingImages.map((image, index) => (
                 <div key={index} className="relative w-full aspect-square bg-gray-100 rounded-lg">
                   <Image
@@ -128,7 +128,7 @@ export default function EditPhotoPage() {
 
                   <button
                     onClick={() => handleRemoveImage(index)}
-                    className="absolute top-1 right-1 bg-white p-1 rounded-full shadow-md"
+                    className="absolute top-4 right-4 bg-white p-4 rounded-full shadow-md"
                   >
                     <IconComponent name="close" width={12} height={12} className="cursor-pointer" />
                   </button>
@@ -137,7 +137,7 @@ export default function EditPhotoPage() {
             </div>
 
             {existingImages.length < 8 && (
-              <div className="w-full max-w-md mt-4">
+              <div className="w-full max-w-md mt-16">
                 <CustomButton
                   label="+ 사진 추가"
                   variant="secondary"

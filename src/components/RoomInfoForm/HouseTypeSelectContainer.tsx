@@ -19,7 +19,7 @@ interface Props {
 
 export default function HouseTypeSelectContainer({ handleClick, value }: Props) {
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-8">
       {HOUSE_TYPE_SELECT.map((item) => (
         <OptionButton
           key={item.value}

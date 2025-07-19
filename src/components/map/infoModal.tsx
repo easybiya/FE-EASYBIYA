@@ -35,8 +35,8 @@ export default function InfoModal({ modalContent, closeModal, institution }: Pro
 
   return (
     <>
-      <div className="absolute top-5 right-0 left-0 z-50 mx-4 my-5">
-        <div className="relative flex flex-col items-start p-5 gap-2 h-fit bg-white rounded-xl shadow">
+      <div className="absolute top-20 right-0 left-0 z-50 mx-16 my-20">
+        <div className="relative flex flex-col items-start p-20 gap-8 h-fit bg-white rounded-xl shadow">
           <IconComponent
             name={`${isInstitution ? 'institution' : 'property'}`}
             width={28}
@@ -44,19 +44,19 @@ export default function InfoModal({ modalContent, closeModal, institution }: Pro
             alt="모달 아이콘"
           />
           <p className="text-md font-bold">{modalContent?.propertyName}</p>
-          <p className="text-[15px]">{modalContent?.propertyAddress}</p>
+          <p className="text-15">{modalContent?.propertyAddress}</p>
           {!isInstitution && institution && (
-            <p className="text-[15px] text-[#94896A] font-bold">
+            <p className="text-15 text-[#94896A] font-bold">
               {institution.institutionName}에서 {distance}m
             </p>
           )}
           {!isInstitution && institution && (
             <div
-              className="w-fit flex items-center gap-[2px] rounded-full border px-4 py-2.5 font-semibold cursor-pointer mt-2.5"
+              className="w-fit flex items-center gap-2 rounded-full border px-16 py-10 font-semibold cursor-pointer mt-10"
               onClick={() => setIsDetail(true)}
             >
-              <p className="h-5 leading-tight text-sm">대중교통 보기</p>
-              <div className="h-[14px] w-[14px]">
+              <p className="h-20 leading-tight text-sm">대중교통 보기</p>
+              <div className="h-14 w-14">
                 <IconComponent
                   name="arrowRight"
                   width={10}
@@ -73,7 +73,7 @@ export default function InfoModal({ modalContent, closeModal, institution }: Pro
             width={16}
             height={16}
             onClick={closeModal}
-            className="absolute top-5 right-5 cursor-pointer"
+            className="absolute top-20 right-20 cursor-pointer"
           />
         </div>
       </div>

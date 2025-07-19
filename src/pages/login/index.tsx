@@ -5,8 +5,8 @@ import router from 'next/router';
 
 export default function LoginPage() {
   return (
-    <div className="flex flex-col justify-between items-center h-screen bg-[#F6F5F2] relative px-6 py-10">
-      <button className="absolute top-4 right-4">
+    <div className="flex flex-col justify-between items-center h-screen bg-[#F6F5F2] relative px-24 py-40">
+      <button className="absolute top-16 right-16">
         <IconComponent
           name="close"
           width={16}
@@ -16,8 +16,8 @@ export default function LoginPage() {
         />
       </button>
 
-      <div className="mt-[76px] flex flex-col items-center">
-        <div className="flex items-center gap-2 mb-6">
+      <div className="mt-76 flex flex-col items-center">
+        <div className="flex items-center gap-8 mb-24">
           <IconComponent name="yellowCheck" width={44} height={44} />
           <IconComponent name="logo" width={152} height={44} />
         </div>

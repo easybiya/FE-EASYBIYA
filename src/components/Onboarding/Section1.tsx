@@ -12,7 +12,7 @@ export default function Section1() {
           className="max-w-full h-auto"
         />
       </div>
-      <div className="pt-10 pb-16 font-bold">
+      <div className="pt-40 pb-64 font-bold">
         <p className="text-center">
           좋은 집 체크리스트를
           <br />

@@ -12,7 +12,7 @@ export default function Section2() {
           className="max-w-full h-auto"
         />
       </div>
-      <div className="pt-10 pb-16 font-bold">
+      <div className="pt-40 pb-64 font-bold">
         <p className="text-center">
           매물 후보를 공유하고
           <br />

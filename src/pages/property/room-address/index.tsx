@@ -9,7 +9,7 @@ export default function RoomInfoPage() {
   const isEdit = searchParams.get('mode') === 'edit';
 
   return (
-    <div className="px-4 bg-[#F6F5F2] h-screen">
+    <div className="px-20 bg-[#F6F5F2] h-screen">
       <HeaderWithProgress title="주소 입력" />
       <SearchAddress isEdit={isEdit} id={propertyId ?? ''} />
     </div>

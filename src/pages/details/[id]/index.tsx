@@ -94,7 +94,7 @@ export default function ChecklistDetailPage() {
     <div className="h-full flex flex-col bg-[#F6F5F2] relative">
       <Header
         left={
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-8 items-center">
             <IconComponent
               name="arrowLeft"
               width={24}
@@ -106,7 +106,7 @@ export default function ChecklistDetailPage() {
           </div>
         }
         right={
-          <div className="flex gap-3">
+          <div className="flex gap-12">
             {propertyDetail.isBookmarked && (
               <IconComponent
                 name="pin"

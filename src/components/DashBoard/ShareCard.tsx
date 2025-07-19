@@ -10,8 +10,8 @@ interface Props {
 
 export default function ShareCard({ info, checked, onChange }: Props) {
   return (
-    <div className="w-full flex flex-col gap-2">
-      <div className="flex gap-1  items-center">
+    <div className="w-full flex flex-col gap-8">
+      <div className="flex gap-4 items-center">
         <input
           type="checkbox"
           checked={checked}
@@ -23,17 +23,17 @@ export default function ShareCard({ info, checked, onChange }: Props) {
           {info.propertyName}
         </label>
       </div>
-      <div className="flex w-full justify-between items-center rounded-lg bg-white border p-5">
-        <div className="flex flex-col gap-1">
+      <div className="flex w-full justify-between items-center rounded-lg bg-white border p-20">
+        <div className="flex flex-col gap-4">
           <HouseTypeTag type={info.leaseType} />
-          <div className="flex font-bold text-base gap-1">
+          <div className="flex font-bold text-base gap-4">
             <p>보증금 {formatWon(info.deposit)}</p>
             {info.leaseType !== 'JEONSE' && <p>/</p>}
             {info.monthlyFee && <p>월세 {formatWon(info.monthlyFee)}</p>}
           </div>
           <p className="text-gray-500 text-sm">{info.propertyAddress}</p>
         </div>
-        <div className="bg-gray-200 w-16 h-16 rounded"></div>
+        <div className="bg-gray-200 w-64 h-64 rounded"></div>
       </div>
     </div>
   );

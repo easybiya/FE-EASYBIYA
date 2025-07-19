@@ -64,11 +64,11 @@ export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: P
   };
 
   return (
-    <div className="w-full flex flex-col gap-2">
+    <div className="w-full flex flex-col gap-8">
       <div className="flex justify-between items-center">
         <h1 className="font-bold text-lg">{info.propertyName}</h1>
         {!isShared && (
-          <div className="flex gap-5">
+          <div className="flex gap-20">
             {isFixed && <IconComponent name="pin" width={20} height={20} />}
             <Dropdown
               options={isFixed ? cancelOptionMenuList : defaultMenuList}
@@ -79,17 +79,17 @@ export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: P
         )}
       </div>
       <Link href={`/details/${info.id}`}>
-        <div className="flex w-full justify-between items-center rounded-lg bg-white border p-5">
-          <div className="flex flex-col gap-1">
+        <div className="flex w-full justify-between items-center rounded-lg bg-white border p-20">
+          <div className="flex flex-col gap-4">
             <HouseTypeTag type={info.leaseType} />
-            <div className="flex font-bold text-base gap-1">
+            <div className="flex font-bold text-base gap-4">
               <p>보증금 {formatWon(info.deposit)}</p>
               {info.leaseType !== 'JEONSE' && <p>/</p>}
               {info.monthlyFee && <p>월세 {formatWon(info.monthlyFee)}</p>}
             </div>
             <p className="text-gray-500 text-sm">{info.propertyAddress}</p>
           </div>
-          <div className="bg-primary2 w-14 h-14 rounded relative">
+          <div className="bg-primary2 w-56 h-56 rounded relative">
             {info.propertyImages.length > 0 ? (
               <Image
                 src={info.propertyImages[0].imageUrl}

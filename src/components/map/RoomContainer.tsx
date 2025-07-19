@@ -17,7 +17,7 @@ export function RoomContainer({ institution, handleTagClick, isLoading }: Props)
   }
 
   return (
-    <ul className="flex gap-2.5 flex-col w-full">
+    <ul className="flex gap-10 flex-col w-full">
       {!institution ? (
         <CreateInstitutionButton />
       ) : (
@@ -32,9 +32,9 @@ export function RoomContainer({ institution, handleTagClick, isLoading }: Props)
               propertyLongitude: institution.institutionLongitude,
             })
           }
-          className={`px-2.5 py-1.5 w-full rounded-sm cursor-pointer text-[14px] bg-white leading-tight flex justify-between mb-2.5`}
+          className={`px-10 py-6 w-full rounded-sm cursor-pointer text-14 bg-white leading-tight flex justify-between mb-10`}
         >
-          <div className="flex gap-1.5 ">
+          <div className="flex gap-6">
             <p className="font-bold text-brownText">{institution.institutionName}</p>
             <p className="text-gray-700">{institution.institutionAddress}</p>
           </div>

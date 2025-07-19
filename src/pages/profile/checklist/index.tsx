@@ -40,10 +40,10 @@ export default function Page() {
   };
 
   return (
-    <div className="pb-16">
+    <div className="pb-64">
       <Header
         left={
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-8">
             <IconComponent
               name="arrowLeft"
               width={24}
@@ -60,11 +60,11 @@ export default function Page() {
           </Link>
         }
       />
-      <div className="py-6 px-5 grid grid-cols-2 gap-3">
+      <div className="py-24 px-20 grid grid-cols-2 gap-12">
         <Link href={`/profile/checklist/default`}>
-          <div className="relative p-4 aspect-square col-span-1 bg-white rounded-lg flex items-start justify-between cursor-pointer hover:shadow-md transition">
+          <div className="relative p-16 aspect-square col-span-1 bg-white rounded-lg flex items-start justify-between cursor-pointer hover:shadow-md transition">
             <p className="text-[16px] font-bold">기본 템플릿</p>
-            <div className="absolute top-1.5 right-1.5">
+            <div className="absolute top-6 right-6">
               <Dropdown
                 type="meatball"
                 options={[{ label: '복제', value: 'copy' }]}
@@ -84,10 +84,10 @@ export default function Page() {
               >
                 <div
                   key={template.templateId}
-                  className="relative p-4 aspect-square col-span-1 bg-white rounded-lg flex items-start justify-between cursor-pointer hover:shadow-md transition"
+                  className="relative p-16 aspect-square col-span-1 bg-white rounded-lg flex items-start justify-between cursor-pointer hover:shadow-md transition"
                 >
-                  <p className="text-[16px] font-bold">{template.name}</p>
-                  <div className="absolute top-1.5 right-1.5">
+                  <p className="text-16 font-bold">{template.name}</p>
+                  <div className="absolute top-6 right-6">
                     <Dropdown
                       type="meatball"
                       options={[

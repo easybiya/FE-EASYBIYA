@@ -16,10 +16,10 @@ export default function Section3() {
           src="/images/Section3-image.png"
           width={380}
           height={166}
-          className="max-w-full h-auto aspect-[1.7/1] absolute top-1/2 -translate-y-14 left-1/2 -translate-x-1/2"
+          className="max-w-full h-auto aspect-[1.7/1] absolute top-1/2 -translate-y-56 left-1/2 -translate-x-1/2"
         />
       </div>
-      <div className="pt-10 pb-16 font-bold">
+      <div className="pt-40 pb-64 font-bold">
         <p className="text-center">
           직장/학교까지 거리를
           <br />

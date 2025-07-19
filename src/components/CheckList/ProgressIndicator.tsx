@@ -19,7 +19,7 @@ export default function ProgressIndicator({ totalSteps, isEdit }: Props) {
   const currentStep = reverseMapping[router.pathname] || 1;
 
   return (
-    <div className="flex items-center justify-center py-1">
+    <div className="flex items-center justify-center py-4">
       {[...Array(totalSteps)].map((_, index) => {
         const stepNumber = index + 1;
         const isCompleted = stepNumber < currentStep;
@@ -29,7 +29,7 @@ export default function ProgressIndicator({ totalSteps, isEdit }: Props) {
         return (
           <div key={stepNumber} className="flex items-center">
             <div
-              className={`w-[18px] h-[18px] flex items-center justify-center rounded-full border border-gray-700
+              className={`w-18 h-18 flex items-center justify-center rounded-full border border-gray-700
                 ${isCurrent ? 'bg-gray-700 text-white text-b-13' : 'text-gray-700'}
                 ${isUpcoming ? 'bg-white text-gray-700 border-gray-700' : ''}`}
             >
@@ -45,7 +45,7 @@ export default function ProgressIndicator({ totalSteps, isEdit }: Props) {
               )}
             </div>
 
-            {stepNumber !== totalSteps && <div className="w-12 h-[2px] bg-gray-700 mx-1"></div>}
+            {stepNumber !== totalSteps && <div className="w-48 h-2 bg-gray-700 mx-4"></div>}
           </div>
         );
       })}
