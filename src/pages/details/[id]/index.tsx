@@ -5,9 +5,8 @@ import RoomDetailPage from '@/components/RoomDetailPage';
 import DetailSkeleton from '@/components/RoomDetailPage/DetailSkeleton';
 import IconComponent from '@/components/Asset/Icon';
 import Dropdown from '@/components/Dropdown';
-import { toggleBookmark } from '@/lib/api/property';
-import { useToastStore } from '@/store/toastStore';
 import { useModalStore } from '@/store/modalStore';
+import useBookmark from '@/hooks/property/useBookmark';
 
 const ROOM_DETAIL_OPTION = [
   { label: '매물 정보 수정', value: 'edit' },
@@ -20,8 +19,8 @@ export default function ChecklistDetailPage() {
   const propertyId = typeof id === 'string' ? id : undefined;
 
   const { propertyChecklist, propertyDetail, isLoading } = usePropertyDetail(propertyId);
-  const { showToast } = useToastStore();
   const { openModal, closeModal } = useModalStore();
+  const { mutate } = useBookmark();
 
   // 카카오 공유
   const shareKakao = () => {
@@ -50,12 +49,6 @@ export default function ChecklistDetailPage() {
         },
       ],
     });
-  };
-
-  const toggleBookMark = async () => {
-    if (!propertyId) return;
-    const result = await toggleBookmark(String(propertyId));
-    showToast(result.message, 'success');
   };
 
   const roomDeatilhandleSelect = (option: string) => {
@@ -120,7 +113,7 @@ export default function ChecklistDetailPage() {
                 width={24}
                 height={24}
                 className="cursor-pointer"
-                onClick={toggleBookMark}
+                onClick={() => mutate(propertyId as string)}
               />
             )}
             <IconComponent
