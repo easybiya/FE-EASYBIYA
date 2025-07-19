@@ -9,5 +9,6 @@ export const useInstitution = () => {
 
   return {
     institution: institution.data,
+    isLoading: institution.isLoading,
   };
 };

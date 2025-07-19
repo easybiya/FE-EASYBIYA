@@ -4,16 +4,23 @@ import { useRouter } from 'next/navigation';
 import CreateInstitutionButton from './CreateInstitutionButton';
 
 interface Props {
-  institution?: Institution | null;
+  institution: Institution | null;
   handleTagClick: (item: MapProperty) => Promise<void>;
+  isLoading?: boolean;
 }
 
-export function RoomContainer({ institution, handleTagClick }: Props) {
+export function RoomContainer({ institution, handleTagClick, isLoading }: Props) {
   const router = useRouter();
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <ul className="flex gap-2.5 flex-col w-full">
-      {institution ? (
+      {!institution ? (
+        <CreateInstitutionButton />
+      ) : (
         <div
           onClick={() =>
             handleTagClick({
@@ -40,8 +47,6 @@ export function RoomContainer({ institution, handleTagClick }: Props) {
             className="cursor-pointer"
           />
         </div>
-      ) : (
-        <CreateInstitutionButton />
       )}
     </ul>
   );
