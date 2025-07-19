@@ -12,7 +12,7 @@ export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<MapProperty | null>(null);
   const { data } = useMapProperty();
-  const { institution } = useInstitution();
+  const { institution, isLoading } = useInstitution();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [map, setMap] = useState<any>(null);
 
@@ -49,7 +49,11 @@ export default function Page() {
       <div className="flex flex-col absolute top-0 right-0 left-0 z-10 bg-primary">
         <Header left={<h1 className="text-b-20">지도</h1>} />
         <div className="p-4">
-          <RoomContainer handleTagClick={handleTagClick} institution={institution} />
+          <RoomContainer
+            handleTagClick={handleTagClick}
+            institution={institution}
+            isLoading={isLoading}
+          />
         </div>
       </div>
       <Map

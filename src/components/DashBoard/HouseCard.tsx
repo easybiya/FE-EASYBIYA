@@ -69,9 +69,7 @@ export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: P
         <h1 className="font-bold text-lg">{info.propertyName}</h1>
         {!isShared && (
           <div className="flex gap-5">
-            {isFixed && (
-              <IconComponent name="pin" width={20} height={20} className="cursor-pointer" />
-            )}
+            {isFixed && <IconComponent name="pin" width={20} height={20} />}
             <Dropdown
               options={isFixed ? cancelOptionMenuList : defaultMenuList}
               type="meatball"

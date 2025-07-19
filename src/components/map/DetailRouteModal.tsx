@@ -15,6 +15,7 @@ const trafficType: Record<number, Traffic> = {
   1: { name: '지하철', color: 'bg-gray-700', icon: 'subway' },
   2: { name: '버스', color: 'bg-[#94896A]', icon: 'bus' },
   3: { name: '도보', color: 'bg-gray-400', icon: 'walk' },
+  4: { name: '열차', color: 'bg-[#94896A]', icon: 'subway' },
 };
 
 const STABLE_TIME_DAY = 1000 * 60 * 60 * 24;
