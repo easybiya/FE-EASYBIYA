@@ -43,7 +43,7 @@ export default function Home() {
               <Link href="/share">
                 <IconComponent name="share" width={24} height={24} className="cursor-pointer" />
               </Link>
-              <Link href="/property/room-info">
+              <Link href="/property/create">
                 <IconComponent name="plus" width={24} height={24} className="cursor-pointer" />
               </Link>
             </div>

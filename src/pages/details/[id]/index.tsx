@@ -54,7 +54,7 @@ export default function ChecklistDetailPage() {
   const roomDeatilhandleSelect = (option: string) => {
     switch (option) {
       case 'edit':
-        router.push(`/property/room-info?mode=edit&propertyId=${propertyId}`);
+        router.push(`/property/edit?propertyId=${propertyId}`);
         break;
       case 'delete':
         openModal('confirm', {

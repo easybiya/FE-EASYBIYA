@@ -43,7 +43,7 @@ export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: P
         toggleBookmark && toggleBookmark(info.id);
         break;
       case 'edit':
-        router.push(`/property/room-info?mode=edit&propertyId=${info.id}`);
+        router.push(`/property/edit?propertyId=${info.id}`);
         break;
       case 'delete':
         openModal('confirm', {

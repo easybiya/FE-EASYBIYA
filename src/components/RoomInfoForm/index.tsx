@@ -1,6 +1,6 @@
 import { roomInfoZodSchema } from '@/lib/zodSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState, useTransition } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState, useTransition } from 'react';
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
 import { HouseType } from '@/types';
@@ -11,7 +11,6 @@ import IconComponent from '../Asset/Icon';
 import { formatDate } from '@/utils/formatDate';
 import FixedBar from '../FixedBar';
 import { usePropertyStore } from '@/store/usePropertyStore';
-import router from 'next/router';
 import { getPropertyById } from '@/lib/api/property';
 
 type roomInfoSchema = {
@@ -23,11 +22,12 @@ type roomInfoSchema = {
 };
 
 interface Props {
-  isEdit: boolean;
+  isEdit?: boolean;
   id?: string;
+  setStep: Dispatch<SetStateAction<number>>;
 }
 
-export default function RoomInfoForm({ isEdit = false, id }: Props) {
+export default function RoomInfoForm({ isEdit = false, id, setStep }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const form = useForm<roomInfoSchema>({
@@ -61,9 +61,7 @@ export default function RoomInfoForm({ isEdit = false, id }: Props) {
         availableDate: values.available,
       });
 
-      router.push(
-        isEdit ? `/property/room-address?mode=edit&propertyId=${id}` : '/property/room-address',
-      );
+      setStep(2);
     });
   };
 
@@ -197,7 +195,6 @@ export default function RoomInfoForm({ isEdit = false, id }: Props) {
           </div>
           <FixedBar
             disabled={!form.formState.isValid || isPending}
-            skipRoute="/property/room-address"
             preventSkip={true}
             text="다음"
           />

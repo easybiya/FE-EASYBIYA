@@ -1,6 +1,6 @@
 import { AddressSearchStatus } from '@/utils/getCoordinates';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCallback, useEffect, useState, useTransition } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useState, useTransition } from 'react';
 import DaumPostcodeEmbed, { Address } from 'react-daum-postcode';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
@@ -8,7 +8,6 @@ import { Input } from '../ui/input';
 import Image from 'next/image';
 import { createRoomZodSchema } from '@/lib/zodSchema';
 import FixedBar from '../FixedBar';
-import { useRouter } from 'next/router';
 import { usePropertyStore } from '@/store/usePropertyStore';
 
 declare global {
@@ -27,9 +26,10 @@ type CreateRoomSchema = {
 interface Props {
   isEdit?: boolean;
   id?: string;
+  setStep: Dispatch<SetStateAction<number>>;
 }
 
-export default function SearchAddress({ isEdit = false, id }: Props) {
+export default function SearchAddress({ isEdit = false, id, setStep }: Props) {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [addressCoordinate, setAddressCoordinate] = useState({ x: '', y: '' });
   const [isPending, startTransition] = useTransition();
@@ -44,7 +44,6 @@ export default function SearchAddress({ isEdit = false, id }: Props) {
     mode: 'onBlur',
   });
 
-  const router = useRouter();
   const { setProperty, property } = usePropertyStore();
 
   const onSubmit: SubmitHandler<CreateRoomSchema> = (values) => {
@@ -65,9 +64,7 @@ export default function SearchAddress({ isEdit = false, id }: Props) {
         propertyLongitude: Number(parseFloat(addressCoordinate.x).toFixed(7)), // x = 경도
       });
 
-      router.push(
-        isEdit ? `/property/checklist?mode=edit&propertyId=${id}` : '/property/add-photo',
-      );
+      setStep(3);
     });
   };
 
@@ -230,7 +227,6 @@ export default function SearchAddress({ isEdit = false, id }: Props) {
             disabled={
               !form.formState.isValid || isPending || !addressCoordinate.x || !addressCoordinate.y
             }
-            skipRoute={isEdit ? `/property?mode=edit&propertyId=${id}` : '/property/add-photo'}
             preventSkip={true}
             text="다음"
           />
