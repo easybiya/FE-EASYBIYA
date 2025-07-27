@@ -37,7 +37,7 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
     useImageCarousel({ images: detail.propertyImages || [] });
 
   const handleEditImages = () => {
-    router.push(`/property/add-photo?mode=edit&propertyId=${id}`);
+    router.push(`/property/edit-photo?propertyId=${id}`);
   };
 
   const handleEdit = () => {
@@ -64,7 +64,7 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
       )}
       <div className="w-full aspect-[1.8/1] relative">
         <Link
-          href={`/property/edit-photo?mode=edit&propertyId=${id}`}
+          href={`/property/edit-photo?propertyId=${id}`}
           className="absolute right-14 top-15 z-10 px-8 py-4 rounded-full border-gray-300 bg-white text-sm"
         >
           사진 수정

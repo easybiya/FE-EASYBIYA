@@ -1,20 +1,15 @@
-import { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useState, useRef, Dispatch, SetStateAction } from 'react';
 import Image from 'next/image';
-import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
 import CustomButton from '@/components/Button/CustomButton';
 import IconComponent from '@/components/Asset/Icon';
 import FixedBar from '@/components/FixedBar';
 import { usePropertyStore } from '@/store/usePropertyStore';
-import { useSearchParams } from 'next/navigation';
-import { mockHouserData } from '@/data/mockHouseData';
 
-export default function AddPhotoPage() {
-  const searchParams = useSearchParams();
-  const propertyId = searchParams.get('propertyId');
-  const isEdit = searchParams.get('mode') === 'edit';
-  const router = useRouter();
+interface Props {
+  setStep: Dispatch<SetStateAction<number>>;
+}
 
+export default function PhotoForm({ setStep }: Props) {
   const { setImages } = usePropertyStore();
 
   // 미리보기용 URL
@@ -40,22 +35,11 @@ export default function AddPhotoPage() {
   };
 
   const goToChecklist = () => {
-    router.push(
-      isEdit ? `/property/checklist?mode=edit&propertyId=${propertyId}` : '/property/checklist',
-    );
+    setStep(4);
   };
 
-  useEffect(() => {
-    if (isEdit && propertyId) {
-      const propertyData = mockHouserData.find((item) => item.id === Number(propertyId));
-      if (!propertyData) return;
-      // 이미지 수정은 다시 확인해봐야할듯
-    }
-  }, [propertyId, isEdit]);
-
   return (
-    <div className="px-20 h-screen bg-[#F6F5F2] flex flex-col">
-      <HeaderWithProgress title="사진 등록" />
+    <>
       <div className="flex-grow flex flex-col items-center pt-32">
         {previewImages.length === 0 ? (
           <label
@@ -107,7 +91,6 @@ export default function AddPhotoPage() {
           </>
         )}
       </div>
-
       <input
         type="file"
         ref={fileInputRef}
@@ -118,11 +101,11 @@ export default function AddPhotoPage() {
       />
       <FixedBar
         disabled={previewImages.length === 0}
-        skipRoute="/property/checklist"
+        handleSkip={() => setStep(4)}
         onClick={goToChecklist}
         preventSkip={false}
         text="다음"
       />
-    </div>
+    </>
   );
 }

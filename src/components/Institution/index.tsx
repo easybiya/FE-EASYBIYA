@@ -149,7 +149,7 @@ export default function InstitutionForm({ institution }: Props) {
           </div>
           <FixedBar
             disabled={!form.formState.isValid && !isPending}
-            skipRoute="/"
+            handleSkip={() => router.push('/')}
             preventSkip={false}
             text="완료"
           />

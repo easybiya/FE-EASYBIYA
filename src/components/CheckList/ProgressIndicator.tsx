@@ -1,30 +1,18 @@
-import { useRouter } from 'next/router';
 import IconComponent from '../Asset/Icon';
 
 interface Props {
-  isEdit: boolean;
   totalSteps: number;
+  step: number;
 }
 
-export default function ProgressIndicator({ totalSteps, isEdit }: Props) {
-  const router = useRouter();
-
-  const reverseMapping: { [key: string]: number } = {
-    '/property/room-info': 1,
-    '/property/room-address': 2,
-    '/property/add-photo': isEdit ? 0 : 3,
-    '/property/checklist': isEdit ? 3 : 4,
-  };
-
-  const currentStep = reverseMapping[router.pathname] || 1;
-
+export default function ProgressIndicator({ totalSteps, step }: Props) {
   return (
     <div className="flex items-center justify-center py-4">
       {[...Array(totalSteps)].map((_, index) => {
         const stepNumber = index + 1;
-        const isCompleted = stepNumber < currentStep;
-        const isCurrent = stepNumber === currentStep;
-        const isUpcoming = stepNumber > currentStep;
+        const isCompleted = stepNumber < step;
+        const isCurrent = stepNumber === step;
+        const isUpcoming = stepNumber > step;
 
         return (
           <div key={stepNumber} className="flex items-center">
