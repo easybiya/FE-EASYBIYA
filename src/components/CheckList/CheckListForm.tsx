@@ -8,10 +8,13 @@ import {
 import { updateProperty, postProperty } from '@/lib/api/property';
 import { useToastStore } from '@/store/toastStore';
 import { usePropertyStore } from '@/store/usePropertyStore';
-import { ChecklistPayloadItem, CheckType } from '@/types/checklist';
+import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
 import checklistFormatter from '@/utils/checklistFormatter';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import CheckListTemplate from './CheckListTemplate';
+import { getTemplateById, postTemplate } from '@/lib/api/template';
+import ChecklistModal from '../Modal/ChecklistModal';
 
 interface Props {
   isEdit?: boolean;
@@ -20,18 +23,28 @@ interface Props {
 }
 
 export default function CheckListForm({ setStep, isEdit, id }: Props) {
+  const [selectedTemplate, setSelectedTemplate] = useState<string | undefined>(undefined); // 선택한 템플릿 id
+  const [isDefaultTemplate, setIsDefaultTemplate] = useState(false); // 기본 템플릿 사용 여부
+  const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const { property, images, resetAll } = usePropertyStore();
   const queryClient = useQueryClient();
-
-  // TO DO
-  // hasInfo, 항목 & 세부사항 삭제 로직 돌려놓기
+  const { showToast } = useToastStore();
 
   useEffect(() => {
     const fetchTemplate = async () => {
-      const result = await getChecklistTemplate();
-      const transformed = checklistFormatter(result.checklists);
-      setChecklist(transformed);
+      if (isDefaultTemplate) {
+        // 기본 템플릿 사용하는 경우
+        const result = await getChecklistTemplate();
+        const transformed = checklistFormatter(result.checklists);
+        setChecklist(transformed);
+      } else {
+        // 선택한 템플릿이 있는 경우
+        if (!selectedTemplate) return;
+        const result = await getTemplateById(selectedTemplate);
+        const transformed = checklistFormatter(result.checklists);
+        setChecklist(transformed);
+      }
     };
     const fetchData = async () => {
       if (!id) return;
@@ -45,7 +58,7 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
       // 신규 모드일때는 템플릿 변환
       fetchTemplate();
     }
-  }, [isEdit, id]);
+  }, [isEdit, id, selectedTemplate, isDefaultTemplate]);
 
   const handleAddChecklist = (type: CheckType) => {
     const newId = checklist.length > 0 ? checklist[checklist.length - 1].priority + 1 : 1;
@@ -60,7 +73,7 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
   };
 
   const handleSaveTemplate = () => {
-    console.log('저장 아직 안됨');
+    setShowNewTemplateModal(true);
   };
 
   const handleComplete = async () => {
@@ -81,11 +94,42 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
       }
       resetAll();
       setStep((prev) => prev + 1);
-      // setShowTemplateSelectModal(true);
     } catch {
       useToastStore.getState().showToast('등록에 실패했습니다', 'error');
     }
   };
+
+  const handleNewTemplateSave = async (name: string) => {
+    const template: ChecklistTemplate = {
+      name,
+      checklists: checklist.map(({ title, checkType, content, checkItems }) => ({
+        title,
+        checkType,
+        content,
+        checkItems: checkItems.map((i) => i.description),
+      })),
+    };
+
+    try {
+      await postTemplate(template);
+      setShowNewTemplateModal(false);
+      showToast('새 템플릿 생성 완료', 'success');
+    } catch (error) {
+      showToast('템플릿 저장 실패', 'error');
+      console.error(error);
+    }
+  };
+
+  const isTemplateSelected = selectedTemplate || isDefaultTemplate;
+
+  if (!isEdit && !isTemplateSelected) {
+    return (
+      <CheckListTemplate
+        setTemplate={setSelectedTemplate}
+        setIsDefaultTemplate={setIsDefaultTemplate}
+      />
+    );
+  }
 
   return (
     <>
@@ -101,6 +145,16 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
         disabled={property.monthlyFee === null && property.propertyLatitude === null} // 매물 정보, 매물 주소 등록 안한경우 생성 못함
         text="완료"
       />
+      {showNewTemplateModal && (
+        <ChecklistModal
+          mode="edit"
+          title="새 템플릿 생성"
+          defaultValue={`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`}
+          confirmText="저장"
+          onClose={() => setShowNewTemplateModal(false)}
+          onConfirm={(value) => handleNewTemplateSave(value as string)}
+        />
+      )}
     </>
   );
 }
