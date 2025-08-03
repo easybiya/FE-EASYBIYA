@@ -12,6 +12,7 @@ import Image from 'next/image';
 import Button from '@/components/Button/CustomButton';
 import { useRouter } from 'next/navigation';
 import useBookmark from '@/hooks/property/useBookmark';
+import { motion } from 'framer-motion';
 
 const DROPDOWN_OPTION = [
   { label: '최신순', value: 'LATEST' },
@@ -93,27 +94,34 @@ export default function Home() {
                     onSelect={handleSelect}
                   />
                 </div>
-                <ul className="flex flex-col gap-16">
-                  {bookmarked.map((item) => (
-                    <li key={item.id}>
-                      <HouseCard
-                        info={item}
-                        toggleBookmark={() => mutate(String(item.id))}
-                        isFixed
-                      />
-                    </li>
-                  ))}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <ul className="flex flex-col gap-16">
+                    {bookmarked.map((item) => (
+                      <li key={item.id}>
+                        <HouseCard
+                          info={item}
+                          toggleBookmark={() => mutate(String(item.id))}
+                          isFixed
+                        />
+                      </li>
+                    ))}
 
-                  {nonBookmarked.map((item) => (
-                    <li key={item.id}>
-                      <HouseCard
-                        info={item}
-                        toggleBookmark={() => mutate(String(item.id))}
-                        isFixed={false}
-                      />
-                    </li>
-                  ))}
-                </ul>
+                    {nonBookmarked.map((item) => (
+                      <li key={item.id}>
+                        <HouseCard
+                          info={item}
+                          toggleBookmark={() => mutate(String(item.id))}
+                          isFixed={false}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
               </>
             )}
           </>

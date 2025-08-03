@@ -3,6 +3,7 @@ import CheckListItem from '@/components/CheckList/CheckListItem';
 import { DragDropContext, DropResult, Droppable } from '@hello-pangea/dnd';
 import { CheckItemPayload, ChecklistPayloadItem } from '@/types/checklist';
 import { useModalStore } from '@/store/modalStore';
+import { motion } from 'framer-motion';
 
 interface ChecklistContainerProps {
   checklist: ChecklistPayloadItem[]; // 체크리스트 데이터
@@ -143,28 +144,35 @@ export default function CheckListContainer({
   };
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <Droppable droppableId="checklist">
-        {(provided) => (
-          <div className="mt-16 space-y-16" ref={provided.innerRef} {...provided.droppableProps}>
-            {checklist.map((item, index) => (
-              <CheckListItem
-                key={item.priority}
-                index={index}
-                {...item}
-                priority={item.priority}
-                onChange={updateCheckListValue}
-                onOptionEdit={editOption}
-                onOptionAdd={addOption}
-                onEdit={editCheckListTitle}
-                onTextEdit={editTextItem}
-                onDelete={deleteCheckList}
-              />
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.4 }}
+    >
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="checklist">
+          {(provided) => (
+            <div className="mt-16 space-y-16" ref={provided.innerRef} {...provided.droppableProps}>
+              {checklist.map((item, index) => (
+                <CheckListItem
+                  key={item.priority}
+                  index={index}
+                  {...item}
+                  priority={item.priority}
+                  onChange={updateCheckListValue}
+                  onOptionEdit={editOption}
+                  onOptionAdd={addOption}
+                  onEdit={editCheckListTitle}
+                  onTextEdit={editTextItem}
+                  onDelete={deleteCheckList}
+                />
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </motion.div>
   );
 }
