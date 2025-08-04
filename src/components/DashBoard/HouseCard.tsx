@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Dropdown from '../Dropdown';
 import HouseTypeTag from './HouseTypeTag';
 import { Property } from '@/types';
 import IconComponent from '../Asset/Icon';
@@ -10,6 +9,7 @@ import Image from 'next/image';
 import { deleteProperty } from '@/lib/api/property';
 import { useToastStore } from '@/store/toastStore';
 import { useQueryClient } from '@tanstack/react-query';
+import DefaultDropdownLayout from '../Dropdown/DropdownLayout';
 
 interface Props {
   info: Property;
@@ -19,14 +19,14 @@ interface Props {
 }
 
 const defaultMenuList = [
-  { label: '고정하기', value: 'fix' },
-  { label: '수정하기', value: 'edit' },
-  { label: '삭제하기', value: 'delete' },
+  { value: '고정하기', key: 'fix' },
+  { value: '수정하기', key: 'edit' },
+  { value: '삭제하기', key: 'delete' },
 ];
 const cancelOptionMenuList = [
-  { label: '고정 해제하기', value: 'removeFix' },
-  { label: '수정하기', value: 'edit' },
-  { label: '삭제하기', value: 'delete' },
+  { value: '고정 해제하기', key: 'removeFix' },
+  { value: '수정하기', key: 'edit' },
+  { value: '삭제하기', key: 'delete' },
 ];
 
 export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: Props) {
@@ -70,11 +70,20 @@ export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: P
         {!isShared && (
           <div className="flex gap-20">
             {isFixed && <IconComponent name="pin" width={20} height={20} />}
-            <Dropdown
-              options={isFixed ? cancelOptionMenuList : defaultMenuList}
-              type="meatball"
-              onSelect={handleSelect}
-            />
+            <DefaultDropdownLayout
+              dropdownItems={isFixed ? cancelOptionMenuList : defaultMenuList}
+              handleSelect={(item) => handleSelect(item.key)}
+            >
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
+                className="flex items-center justify-center rounded-4 focus:outline-none"
+              >
+                <IconComponent name="meatball" width={24} height={24} isBtn />
+              </button>
+            </DefaultDropdownLayout>
           </div>
         )}
       </div>

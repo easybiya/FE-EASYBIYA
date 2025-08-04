@@ -1,7 +1,6 @@
 import IconComponent from '@/components/Asset/Icon';
 import DashboardSkeleton from '@/components/DashBoard/DashboardSkeleton';
 import HouseCard from '@/components/DashBoard/HouseCard';
-import Dropdown from '@/components/Dropdown';
 import Header from '@/components/Layout/Header';
 import { useDispatch } from '@/hooks/property/useDispatch';
 import { useProperty } from '@/hooks/property/useProperty';
@@ -15,10 +14,11 @@ import useBookmark from '@/hooks/property/useBookmark';
 import { motion } from 'framer-motion';
 import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
+import SortDropdown from '@/components/Dropdown/SortDropdown';
 
-const DROPDOWN_OPTION = [
-  { label: '최신순', value: 'LATEST' },
-  { label: '입주 빠른 순', value: 'AVAILABLE_DATE_ASC' },
+export const DROPDOWN_OPTION = [
+  { value: '최신순', key: 'LATEST' },
+  { value: '입주 빠른 순', key: 'AVAILABLE_DATE_ASC' },
 ];
 
 export default function Home() {
@@ -32,9 +32,9 @@ export default function Home() {
   });
 
   const handleSelect = (option: string) => {
-    const selectedOption = DROPDOWN_OPTION.find((item) => item.label === option);
+    const selectedOption = DROPDOWN_OPTION.find((item) => item.key === option);
     if (selectedOption) {
-      setSortBy(selectedOption.value as PropertySortBy);
+      setSortBy(selectedOption.key as PropertySortBy);
     }
   };
 
@@ -98,18 +98,10 @@ export default function Home() {
             ) : (
               <>
                 <div className="flex w-full justify-between items-center">
-                  <p className="text-gray-500 text-14">
+                  <p className="text-gray-500 text-14/19">
                     전체 {bookmarked.length + flattedNonBookmarkedData.length}
                   </p>
-                  <Dropdown
-                    options={DROPDOWN_OPTION}
-                    type="select"
-                    selectedOption={
-                      DROPDOWN_OPTION.find((item) => item.value === params.sortBy)?.label ||
-                      '최신순'
-                    }
-                    onSelect={handleSelect}
-                  />
+                  <SortDropdown handleClick={handleSelect} params={params} />
                 </div>
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}

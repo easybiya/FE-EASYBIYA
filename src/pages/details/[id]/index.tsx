@@ -4,13 +4,13 @@ import { usePropertyDetail } from '@/hooks/propertyDetail/usePropertyDetail';
 import RoomDetailPage from '@/components/RoomDetailPage';
 import DetailSkeleton from '@/components/RoomDetailPage/DetailSkeleton';
 import IconComponent from '@/components/Asset/Icon';
-import Dropdown from '@/components/Dropdown';
 import { useModalStore } from '@/store/modalStore';
 import useBookmark from '@/hooks/property/useBookmark';
+import DefaultDropdownLayout from '@/components/Dropdown/DropdownLayout';
 
 const ROOM_DETAIL_OPTION = [
-  { label: '매물 정보 수정', value: 'edit' },
-  { label: '삭제', value: 'delete' },
+  { value: '매물 정보 수정', key: 'edit' },
+  { value: '삭제', key: 'delete' },
 ];
 
 export default function ChecklistDetailPage() {
@@ -123,11 +123,20 @@ export default function ChecklistDetailPage() {
               className="cursor-pointer"
               onClick={shareKakao}
             />
-            <Dropdown
-              options={ROOM_DETAIL_OPTION}
-              type="meatball"
-              onSelect={roomDeatilhandleSelect}
-            />
+            <DefaultDropdownLayout
+              dropdownItems={ROOM_DETAIL_OPTION}
+              handleSelect={(item) => roomDeatilhandleSelect(item.key)}
+            >
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
+                className="flex items-center justify-center rounded-4 focus:outline-none"
+              >
+                <IconComponent name="meatball" width={24} height={24} isBtn />
+              </button>
+            </DefaultDropdownLayout>
           </div>
         }
       />
