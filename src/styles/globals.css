@@ -244,9 +244,9 @@ body {
 }
 
 .swiper-pagination-bullet {
-  @apply w-2 h-2 bg-white border border-black opacity-100;
+  @apply w-8 h-8 bg-white  opacity-100 !important;
 }
 
 .swiper-pagination-bullet-active {
-  @apply bg-[#262626] border-0;
+  @apply bg-[#191B1E] border-0 !important;
 }

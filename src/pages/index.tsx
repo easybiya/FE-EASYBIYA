@@ -13,6 +13,8 @@ import Button from '@/components/Button/CustomButton';
 import { useRouter } from 'next/navigation';
 import useBookmark from '@/hooks/property/useBookmark';
 import { motion } from 'framer-motion';
+import { useEffect, useMemo } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 const DROPDOWN_OPTION = [
   { label: '최신순', value: 'LATEST' },
@@ -22,8 +24,12 @@ const DROPDOWN_OPTION = [
 export default function Home() {
   const router = useRouter();
   const { params, setSortBy } = useDispatch();
-  const { bookmarked, nonBookmarked, isLoading } = useProperty(params);
+  const { bookmarked, nonBookmarked, isLoading, fetchNextPage, hasNextPage, isFetching } =
+    useProperty(params);
   const { mutate } = useBookmark();
+  const { ref, inView } = useInView({
+    threshold: 0.5,
+  });
 
   const handleSelect = (option: string) => {
     const selectedOption = DROPDOWN_OPTION.find((item) => item.label === option);
@@ -32,7 +38,18 @@ export default function Home() {
     }
   };
 
-  const noData = bookmarked.length === 0 && nonBookmarked.length === 0 && !isLoading;
+  const flattedNonBookmarkedData = useMemo(
+    () => nonBookmarked?.pages.flatMap((page) => page) ?? [],
+    [nonBookmarked],
+  );
+
+  const noData = bookmarked.length === 0 && flattedNonBookmarkedData.length === 0 && !isLoading;
+
+  useEffect(() => {
+    if (inView && !isFetching && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, isFetching, hasNextPage]);
 
   return (
     <>
@@ -82,7 +99,7 @@ export default function Home() {
               <>
                 <div className="flex w-full justify-between items-center">
                   <p className="text-gray-500 text-14">
-                    전체 {bookmarked.length + nonBookmarked.length}
+                    전체 {bookmarked.length + flattedNonBookmarkedData.length}
                   </p>
                   <Dropdown
                     options={DROPDOWN_OPTION}
@@ -111,7 +128,7 @@ export default function Home() {
                       </li>
                     ))}
 
-                    {nonBookmarked.map((item) => (
+                    {flattedNonBookmarkedData.map((item) => (
                       <li key={item.id}>
                         <HouseCard
                           info={item}
@@ -122,6 +139,7 @@ export default function Home() {
                     ))}
                   </ul>
                 </motion.div>
+                <div ref={ref} />
               </>
             )}
           </>

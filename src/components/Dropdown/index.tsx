@@ -43,7 +43,7 @@ export default function Dropdown({ options, selectedOption, onSelect, type }: Dr
               e.preventDefault();
               toggleDropdown();
             }}
-            className="flex items-center justify-center rounded-4 hover:bg-gray-100 focus:outline-none"
+            className="flex items-center justify-center rounded-4 focus:outline-none"
           >
             <IconComponent name="meatball" width={24} height={24} isBtn />
           </button>
