@@ -3,6 +3,7 @@ import IconComponent from '../Asset/Icon';
 import { useEffect, useState } from 'react';
 import DetailRouteModal from './DetailRouteModal';
 import { calculateDistance } from '@/utils/calculateDistance';
+import { motion } from 'framer-motion';
 
 interface Props {
   modalContent: MapProperty;
@@ -35,7 +36,13 @@ export default function InfoModal({ modalContent, closeModal, institution }: Pro
 
   return (
     <>
-      <div className="absolute top-20 right-0 left-0 z-50 mx-16 my-20">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 10 }}
+        transition={{ duration: 0.2 }}
+        className="absolute top-20 right-0 left-0 z-50 mx-16 my-20"
+      >
         <div className="relative flex flex-col items-start p-20 gap-8 h-fit bg-white rounded-xl shadow">
           <IconComponent
             name={`${isInstitution ? 'institution' : 'property'}`}
@@ -55,7 +62,7 @@ export default function InfoModal({ modalContent, closeModal, institution }: Pro
               className="w-fit flex items-center gap-2 rounded-full border px-16 py-10 font-semibold cursor-pointer mt-10"
               onClick={() => setIsDetail(true)}
             >
-              <p className="h-20 leading-tight text-sm">대중교통 보기</p>
+              <p className="h-20 text-sm">대중교통 보기</p>
               <div className="h-14 w-14">
                 <IconComponent
                   name="arrowRight"
@@ -76,7 +83,7 @@ export default function InfoModal({ modalContent, closeModal, institution }: Pro
             className="absolute top-20 right-20 cursor-pointer"
           />
         </div>
-      </div>
+      </motion.div>
       {isDetail && !isInstitution && institution && (
         <DetailRouteModal
           institution={institution}

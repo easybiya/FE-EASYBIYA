@@ -18,6 +18,7 @@ import Link from 'next/link';
 import ImageSlider from '@/components/DashBoard/ImageSlider';
 import useImageCarousel from '@/hooks/propertyDetail/useImageCarousel';
 import { Property } from '@/types';
+import { motion } from 'framer-motion';
 
 interface Props {
   roomChecklist: ChecklistPayloadItem[];
@@ -113,7 +114,13 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
         setSelected={setSelected}
         setApi={setApi}
       />
-      <div className="flex flex-col gap-10 px-16 mt-28">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.4 }}
+        className="flex flex-col gap-10 px-16 mt-28"
+      >
         <div className=" flex flex-col gap-4">
           <HouseTypeTag type={leaseType} />
           {leaseType === 'JEONSE' ? (
@@ -138,7 +145,7 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
             <p className="flex items-center ">{formatDate(new Date(availableDate), 2)}</p>
           </div>
         </div>
-      </div>
+      </motion.div>
       <div className={`flex-grow px-16 ${isEdit ? 'pb-112' : 'pb-80'}`}>
         <CheckListContainer checklist={checklist} setter={setChecklist} handleEdit={handleEdit} />
       </div>

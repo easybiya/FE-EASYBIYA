@@ -1,10 +1,17 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { CheckItemPayload, ChecklistPayloadItem } from '@/types/checklist';
 import IconComponent from '../Asset/Icon';
 import { Draggable } from '@hello-pangea/dnd';
 import InfoModal from '@/components/Modal/InfoModal';
 import { checklistInfoMap } from '@/constants/checkListInfo';
 import { stripEmoji } from '@/utils/stripEmoji';
+import DefaultDropdownLayout from '../Dropdown/DropdownLayout';
+
+const CHECKLISTITEM_OPTIONS = [
+  { key: 'add', value: '추가하기' },
+  { key: 'edit', value: '수정하기' },
+  { key: 'delete', value: '삭제하기', classNames: 'text-red-500 focus:text-red-500' },
+];
 
 interface ChecklistItemProps extends ChecklistPayloadItem {
   onChange?: (id: number, checkItem: CheckItemPayload) => void;
@@ -30,21 +37,25 @@ export default function ChecklistItem({
   onEdit,
   onDelete,
 }: ChecklistItemProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editingText, setEditingText] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMenuOpen(false);
-      }
+  const handleSelectOption = (option: string) => {
+    switch (option) {
+      case 'add':
+        onOptionAdd?.(priority);
+        break;
+      case 'edit':
+        onEdit?.(priority);
+        break;
+      case 'delete':
+        onDelete?.(priority);
+        break;
+      default:
+        break;
     }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  };
 
   return (
     <Draggable draggableId={priority.toString()} index={index}>
@@ -76,48 +87,23 @@ export default function ChecklistItem({
               )} */}
             </div>
 
-            <div className="relative" ref={menuRef}>
-              <IconComponent
-                name="meatballGray"
-                width={16}
-                height={16}
-                className="text-gray-500 cursor-pointer"
-                onClick={() => setIsMenuOpen((prev) => !prev)}
-              />
-              {isMenuOpen && (
-                <div className="absolute right-0 z-10 mt-8 w-112 bg-white border border-gray-200 rounded shadow-md">
-                  {(checkType === 'RADIO' || checkType === 'CHECKBOX') && (
-                    <button
-                      className="w-full px-16 py-8 text-left text-sm hover:bg-gray-100"
-                      onClick={() => {
-                        onOptionAdd?.(priority);
-                        setIsMenuOpen(false);
-                      }}
-                    >
-                      추가하기
-                    </button>
-                  )}
-                  <button
-                    className="w-full px-16 py-8 text-left text-sm hover:bg-gray-100"
-                    onClick={() => {
-                      onEdit?.(priority);
-                      setIsMenuOpen(false);
-                    }}
-                  >
-                    수정하기
-                  </button>
-                  <button
-                    className="w-full px-16 py-8 text-left text-sm text-red-500 hover:bg-gray-100"
-                    onClick={() => {
-                      onDelete?.(priority);
-                      setIsMenuOpen(false);
-                    }}
-                  >
-                    삭제하기
-                  </button>
-                </div>
-              )}
-            </div>
+            <DefaultDropdownLayout
+              dropdownItems={
+                checkType === 'RADIO' || checkType === 'CHECKBOX'
+                  ? CHECKLISTITEM_OPTIONS.filter((item) => item.key !== 'add')
+                  : CHECKLISTITEM_OPTIONS
+              }
+              handleSelect={(item) => handleSelectOption(item.key)}
+            >
+              <button type="button">
+                <IconComponent
+                  name="meatballGray"
+                  width={16}
+                  height={16}
+                  className="text-gray-500 cursor-pointer"
+                />
+              </button>
+            </DefaultDropdownLayout>
           </div>
 
           {checkType === 'TEXT' && (

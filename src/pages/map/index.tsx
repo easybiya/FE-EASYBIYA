@@ -7,6 +7,7 @@ import RoomFloatButton from '@/components/map/RoomFloatButton';
 import { useInstitution } from '@/hooks/map/useInstitution';
 import { useMapProperty } from '@/hooks/map/useMapProperty';
 import { MapProperty } from '@/types';
+import { AnimatePresence } from 'framer-motion';
 
 export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,9 +63,16 @@ export default function Page() {
         settingMapObject={settingMapObject}
         handleMarkerClick={handleMarkerClick}
       />
-      {isModalOpen && modalContent && (
-        <InfoModal modalContent={modalContent} institution={institution} closeModal={closeModal} />
-      )}
+      <AnimatePresence>
+        {isModalOpen && modalContent && (
+          <InfoModal
+            modalContent={modalContent}
+            institution={institution}
+            closeModal={closeModal}
+          />
+        )}
+      </AnimatePresence>
+
       {data && data.length > 0 && (
         <RoomFloatButton roomList={data} handleTagClick={handleTagClick} />
       )}

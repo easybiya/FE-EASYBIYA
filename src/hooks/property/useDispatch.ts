@@ -5,7 +5,7 @@ import { useState } from 'react';
 export const useDispatch = () => {
   const [sortBy, setSortBy] = useState<PropertySortBy>('LATEST');
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(10);
+  const [size, setSize] = useState(5);
 
   const params = {
     page,
