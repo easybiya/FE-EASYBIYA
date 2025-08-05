@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import { useModalStore } from '@/store/modalStore';
 import Header from '@/components/Layout/Header';
-import Dropdown from '@/components/Dropdown';
 import Link from 'next/link';
 import { useDispatch } from '@/hooks/checklist/useDispatch';
 import { useTemplates } from '@/hooks/checklist/useTemplates';
@@ -9,6 +8,7 @@ import { deleteTemplate } from '@/lib/api/template';
 import { useQueryClient } from '@tanstack/react-query';
 import { Skeleton } from '@/components/ui/skeleton';
 import IconComponent from '@/components/Asset/Icon';
+import DefaultDropdownLayout from '@/components/Dropdown/DropdownLayout';
 
 export default function Page() {
   const router = useRouter();
@@ -65,11 +65,20 @@ export default function Page() {
           <div className="relative p-16 aspect-square col-span-1 bg-white rounded-lg flex items-start justify-between cursor-pointer hover:shadow-md transition">
             <p className="text-[16px] font-bold">기본 템플릿</p>
             <div className="absolute top-6 right-6">
-              <Dropdown
-                type="meatball"
-                options={[{ label: '복제', value: 'copy' }]}
-                onSelect={() => router.push('/profile/checklist/default?mode=new')}
-              />
+              <DefaultDropdownLayout
+                dropdownItems={[{ value: '복제', key: 'copy' }]}
+                handleSelect={() => router.push('/profile/checklist/default?mode=new')}
+              >
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                  }}
+                  className="flex items-center justify-center rounded-4 focus:outline-none"
+                >
+                  <IconComponent name="meatball" width={24} height={24} isBtn />
+                </button>
+              </DefaultDropdownLayout>
             </div>
           </div>
         </Link>
@@ -88,14 +97,23 @@ export default function Page() {
                 >
                   <p className="text-16 font-bold">{template.name}</p>
                   <div className="absolute top-6 right-6">
-                    <Dropdown
-                      type="meatball"
-                      options={[
-                        { label: '복제', value: 'copy' },
-                        { label: '삭제', value: 'delete' },
+                    <DefaultDropdownLayout
+                      dropdownItems={[
+                        { value: '복제', key: 'copy' },
+                        { value: '삭제', key: 'delete', classNames: '!text-red-500' },
                       ]}
-                      onSelect={(option) => templateHandleSelect(option, template.templateId)}
-                    />
+                      handleSelect={(item) => templateHandleSelect(item.key, template.templateId)}
+                    >
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                        }}
+                        className="flex items-center justify-center rounded-4 focus:outline-none"
+                      >
+                        <IconComponent name="meatball" width={24} height={24} isBtn />
+                      </button>
+                    </DefaultDropdownLayout>
                   </div>
                 </div>
               </Link>

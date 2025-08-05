@@ -21,15 +21,15 @@ export default function SortDropdown({ handleClick, params }: Props) {
     >
       <button
         type="button"
-        className="flex justify-center items-center pl-10 pr-8 py-4 text-12/18 rounded-md border border-gray-300 text-gray-800 bg-white hover:bg-gray-100 focus:outline-none"
+        className="flex justify-center items-center pl-10 pr-8 py-4 gap-4 text-12/18 rounded-md border border-gray-300 text-gray-800 bg-white hover:bg-gray-100 focus:outline-none"
       >
         {DROPDOWN_OPTION.find((item) => item.value === params.sortBy)?.value || '최신순'}
         <IconComponent
-          name={isOpen ? 'arrowUp' : 'arrowDown'}
+          name={'arrowUp'}
           width={16}
           height={16}
           isBtn
-          className="pl-4"
+          className={`transition ease-out ${isOpen ? 'rotate-180' : ''}`}
         />
       </button>
     </DefaultDropdownLayout>

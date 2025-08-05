@@ -1,6 +1,6 @@
 import IconComponent from '@/components/Asset/Icon';
 import ChecklistContent from '@/components/CheckList/CheckListContent';
-import Dropdown from '@/components/Dropdown';
+import DefaultDropdownLayout from '@/components/Dropdown/DropdownLayout';
 import Header from '@/components/Layout/Header';
 import ChecklistModal from '@/components/Modal/ChecklistModal';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -15,8 +15,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 const TEMPLATE_DETAIL_OPTION = [
-  { label: '복제', value: 'copy' },
-  { label: '삭제', value: 'delete' },
+  { value: '복제', key: 'copy' },
+  { value: '삭제', key: 'delete', classNames: '!text-red-500' },
 ];
 
 export default function ChecklistDetail() {
@@ -140,20 +140,31 @@ export default function ChecklistDetail() {
             }
             right={
               !isNewTemplate && (
-                <Dropdown
-                  options={TEMPLATE_DETAIL_OPTION}
-                  type="meatball"
-                  onSelect={(option) => templateHandleSelect(option, template.templateId)}
-                />
+                <DefaultDropdownLayout
+                  dropdownItems={TEMPLATE_DETAIL_OPTION}
+                  handleSelect={(item) => templateHandleSelect(item.key, template.templateId)}
+                >
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
+                    className="flex items-center justify-center rounded-4 focus:outline-none"
+                  >
+                    <IconComponent name="meatball" width={24} height={24} isBtn />
+                  </button>
+                </DefaultDropdownLayout>
               )
             }
           />
-          <ChecklistContent
-            checklist={checklist}
-            setter={setChecklist}
-            onAddChecklist={handleAddChecklist}
-            onSaveTemplate={isNewTemplate ? handleSaveTemplate : handleUpdateTemplate}
-          />
+          <div className="px-20">
+            <ChecklistContent
+              checklist={checklist}
+              setter={setChecklist}
+              onAddChecklist={handleAddChecklist}
+              onSaveTemplate={isNewTemplate ? handleSaveTemplate : handleUpdateTemplate}
+            />
+          </div>
           {showNewTemplateModal && (
             <ChecklistModal
               mode="edit"

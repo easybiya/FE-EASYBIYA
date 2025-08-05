@@ -10,7 +10,7 @@ import DefaultDropdownLayout from '@/components/Dropdown/DropdownLayout';
 
 const ROOM_DETAIL_OPTION = [
   { value: '매물 정보 수정', key: 'edit' },
-  { value: '삭제', key: 'delete' },
+  { value: '삭제', key: 'delete', classNames: '!text-red-500' },
 ];
 
 export default function ChecklistDetailPage() {

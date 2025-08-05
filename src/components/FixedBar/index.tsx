@@ -15,7 +15,10 @@ export default function FixedBar({ disabled, handleSkip, onClick, preventSkip, t
       <div className="w-full p-20 flex flex-col items-center gap-8">
         <Button disabled={disabled} label={text} className="w-full" onClick={onClick} />
         {!preventSkip && (
-          <p onClick={handleSkip} className="py-12 text-15 text-gray-800 font-semibold">
+          <p
+            onClick={handleSkip}
+            className="py-12 text-15 text-gray-800 font-semibold cursor-pointer"
+          >
             건너 뛰기
           </p>
         )}

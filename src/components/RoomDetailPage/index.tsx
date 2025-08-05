@@ -66,7 +66,7 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
       <div className="w-full aspect-[1.8/1] relative">
         <Link
           href={`/property/edit-photo?propertyId=${id}`}
-          className="absolute right-14 top-15 z-10 px-8 py-4 rounded-full border-gray-300 bg-white text-sm"
+          className="absolute right-14 top-15 z-10 px-8 py-4 rounded-full border-gray-300 bg-white text-14/19 transition duration-100 hover:bg-gray-300 active:bg-gray-400"
         >
           사진 수정
         </Link>
