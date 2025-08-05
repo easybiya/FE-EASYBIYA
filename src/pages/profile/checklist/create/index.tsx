@@ -81,12 +81,14 @@ export default function CreateTemplate() {
           </div>
         }
       />
-      <ChecklistContent
-        checklist={checklist}
-        setter={setChecklist}
-        onAddChecklist={handleAddChecklist}
-        onSaveTemplate={handleSaveTemplate}
-      />
+      <div className="px-20">
+        <ChecklistContent
+          checklist={checklist}
+          setter={setChecklist}
+          onAddChecklist={handleAddChecklist}
+          onSaveTemplate={handleSaveTemplate}
+        />
+      </div>
       {showNewTemplateModal && (
         <ChecklistModal
           mode="edit"

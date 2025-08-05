@@ -10,6 +10,7 @@ import { deleteProperty } from '@/lib/api/property';
 import { useToastStore } from '@/store/toastStore';
 import { useQueryClient } from '@tanstack/react-query';
 import DefaultDropdownLayout from '../Dropdown/DropdownLayout';
+import { useMemo } from 'react';
 
 interface Props {
   info: Property;
@@ -17,17 +18,6 @@ interface Props {
   isFixed?: boolean;
   isShared?: boolean;
 }
-
-const defaultMenuList = [
-  { value: '고정하기', key: 'fix' },
-  { value: '수정하기', key: 'edit' },
-  { value: '삭제하기', key: 'delete' },
-];
-const cancelOptionMenuList = [
-  { value: '고정 해제하기', key: 'removeFix' },
-  { value: '수정하기', key: 'edit' },
-  { value: '삭제하기', key: 'delete' },
-];
 
 export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: Props) {
   const router = useRouter();
@@ -63,6 +53,18 @@ export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: P
     }
   };
 
+  const menuList = useMemo(() => {
+    const fixItem = isFixed
+      ? { value: '고정 해제하기', key: 'removeFix' }
+      : { value: '고정하기', key: 'fix' };
+
+    return [
+      fixItem,
+      { value: '수정하기', key: 'edit' },
+      { value: '삭제하기', key: 'delete', classNames: '!text-red-500' },
+    ];
+  }, [isFixed]);
+
   return (
     <div className="w-full flex flex-col gap-8">
       <div className="flex justify-between items-center">
@@ -71,7 +73,7 @@ export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: P
           <div className="flex gap-20">
             {isFixed && <IconComponent name="pin" width={20} height={20} />}
             <DefaultDropdownLayout
-              dropdownItems={isFixed ? cancelOptionMenuList : defaultMenuList}
+              dropdownItems={menuList}
               handleSelect={(item) => handleSelect(item.key)}
             >
               <button

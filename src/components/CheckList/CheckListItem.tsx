@@ -90,8 +90,8 @@ export default function ChecklistItem({
             <DefaultDropdownLayout
               dropdownItems={
                 checkType === 'RADIO' || checkType === 'CHECKBOX'
-                  ? CHECKLISTITEM_OPTIONS.filter((item) => item.key !== 'add')
-                  : CHECKLISTITEM_OPTIONS
+                  ? CHECKLISTITEM_OPTIONS
+                  : CHECKLISTITEM_OPTIONS.filter((item) => item.key !== 'add')
               }
               handleSelect={(item) => handleSelectOption(item.key)}
             >
