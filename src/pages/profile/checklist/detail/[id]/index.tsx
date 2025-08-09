@@ -5,9 +5,9 @@ import Header from '@/components/Layout/Header';
 import ChecklistModal from '@/components/Modal/ChecklistModal';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTemplateById } from '@/hooks/checklist/useTemplateById';
+import { toast } from '@/hooks/use-toast';
 import { deleteTemplate, editTemplate, postTemplate } from '@/lib/api/template';
 import { useModalStore } from '@/store/modalStore';
-import { useToastStore } from '@/store/toastStore';
 import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
 import checklistFormatter from '@/utils/checklistFormatter';
 import { useQueryClient } from '@tanstack/react-query';
@@ -31,7 +31,6 @@ export default function ChecklistDetail() {
 
   const { data: template, isLoading } = useTemplateById(templateId ?? '');
 
-  const { showToast } = useToastStore();
   const { openModal, closeModal } = useModalStore();
 
   const templateHandleSelect = (option: string, id: number) => {
@@ -78,7 +77,7 @@ export default function ChecklistDetail() {
       })),
     };
     editTemplate(templateId, tranferTemplate);
-    showToast('템플릿이 업데이트 되었습니다.', 'success');
+    toast({ title: '템플릿이 업데이트 되었습니다.', variant: 'success' });
   };
 
   const handleSaveTemplate = () => setShowNewTemplateModal(true);
@@ -94,7 +93,7 @@ export default function ChecklistDetail() {
       })),
     };
     postTemplate(template);
-    showToast('템플릿이 생성 되었습니다.', 'success');
+    toast({ title: '템플릿이 생성 되었습니다.', variant: 'success' });
     router.push('/profile/checklist');
   };
 

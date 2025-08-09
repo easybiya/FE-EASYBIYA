@@ -1,6 +1,5 @@
 import Layout from '@/components/Layout';
 import Modal from '@/components/Modal';
-import Toast from '@/components/Toast';
 import '@/styles/globals.css';
 import '@/styles/reset.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -11,6 +10,7 @@ import { useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import KakaoScript from '@/components/Layout/KakaoScript';
 import { CookiesProvider } from 'react-cookie';
+import { Toaster } from '@/components/ui/toaster';
 
 const queryClient = new QueryClient();
 
@@ -35,8 +35,8 @@ export default function App({ Component, pageProps }: AppProps) {
         <QueryClientProvider client={queryClient}>
           <Layout>
             <Component {...pageProps} />
-            <Toast />
             <Modal />
+            <Toaster />
           </Layout>
           <KakaoScript />
           <ReactQueryDevtools initialIsOpen={false} />

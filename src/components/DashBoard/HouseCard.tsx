@@ -7,10 +7,10 @@ import { useRouter } from 'next/router';
 import { useModalStore } from '@/store/modalStore';
 import Image from 'next/image';
 import { deleteProperty } from '@/lib/api/property';
-import { useToastStore } from '@/store/toastStore';
 import { useQueryClient } from '@tanstack/react-query';
 import DefaultDropdownLayout from '../Dropdown/DropdownLayout';
 import { useMemo } from 'react';
+import { toast } from '@/hooks/use-toast';
 
 interface Props {
   info: Property;
@@ -22,7 +22,6 @@ interface Props {
 export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: Props) {
   const router = useRouter();
   const { openModal, closeModal } = useModalStore();
-  const { showToast } = useToastStore();
   const queryClient = useQueryClient();
   const handleSelect = (option: string) => {
     switch (option) {
@@ -42,7 +41,7 @@ export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: P
             await deleteProperty(String(info.id));
             queryClient.invalidateQueries({ queryKey: ['bookmarkedProperty'] });
             queryClient.invalidateQueries({ queryKey: ['propertyList'] });
-            showToast('매물이 삭제되었습니다.', 'success');
+            toast({ title: '매물이 삭제되었습니다.', variant: 'success' });
             closeModal();
           },
           buttonStyle: 'bg-red-500 hover:bg-red-400 active:bg-red-300',

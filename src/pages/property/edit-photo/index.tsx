@@ -7,9 +7,9 @@ import { useSearchParams } from 'next/navigation';
 import { getPropertyById, updatePropertyImages } from '@/lib/api/property';
 import Header from '@/components/Layout/Header';
 import { PropertyImage } from '@/types';
-import { useToastStore } from '@/store/toastStore';
 import { useQueryClient } from '@tanstack/react-query';
 import Button from '@/components/Button/CustomButton';
+import { toast } from '@/hooks/use-toast';
 
 interface PropertyImageWithFiel extends PropertyImage {
   file?: File;
@@ -19,7 +19,6 @@ export default function EditPhotoPage() {
   const searchParams = useSearchParams();
   const propertyId = searchParams.get('propertyId');
   const router = useRouter();
-  const { showToast } = useToastStore();
   const queryClient = useQueryClient();
   const [existingImages, setExistingImages] = useState<PropertyImageWithFiel[]>([]);
   const [originalImages, setOriginalImages] = useState<PropertyImage[]>([]);
@@ -68,7 +67,7 @@ export default function EditPhotoPage() {
 
     await updatePropertyImages(propertyId, formData);
     await queryClient.invalidateQueries({ queryKey: ['propertyDetail', propertyId] });
-    showToast('사진이 성공적으로 업데이트되었습니다.', 'success');
+    toast({ title: '사진이 성공적으로 업데이트되었습니다.', variant: 'success' });
     router.push(`/details/${propertyId}`);
   };
 

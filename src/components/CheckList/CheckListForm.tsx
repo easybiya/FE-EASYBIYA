@@ -6,7 +6,6 @@ import {
   updateChecklist,
 } from '@/lib/api/checklist';
 import { updateProperty, postProperty } from '@/lib/api/property';
-import { useToastStore } from '@/store/toastStore';
 import { usePropertyStore } from '@/store/usePropertyStore';
 import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
 import checklistFormatter from '@/utils/checklistFormatter';
@@ -15,6 +14,7 @@ import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import CheckListTemplate from './CheckListTemplate';
 import { getTemplateById, postTemplate } from '@/lib/api/template';
 import ChecklistModal from '../Modal/ChecklistModal';
+import { toast } from '@/hooks/use-toast';
 
 interface Props {
   isEdit?: boolean;
@@ -29,7 +29,6 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const { property, images, resetAll } = usePropertyStore();
   const queryClient = useQueryClient();
-  const { showToast } = useToastStore();
 
   useEffect(() => {
     const fetchTemplate = async () => {
@@ -95,7 +94,7 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
       resetAll();
       setStep((prev) => prev + 1);
     } catch {
-      useToastStore.getState().showToast('등록에 실패했습니다', 'error');
+      toast({ title: '등록에 실패했습니다', variant: 'fail' });
     }
   };
 
@@ -113,9 +112,9 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
     try {
       await postTemplate(template);
       setShowNewTemplateModal(false);
-      showToast('새 템플릿 생성 완료', 'success');
+      toast({ title: '새 템플릿 생성 완료', variant: 'success' });
     } catch (error) {
-      showToast('템플릿 저장 실패', 'error');
+      toast({ title: '템플릿 저장 실패', variant: 'fail' });
       console.error(error);
     }
   };
