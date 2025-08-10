@@ -105,7 +105,7 @@ export default function ChecklistItem({
                     description="체크리스트 항목을 삭제하시겠습니까?"
                     trigger={
                       <PreventDropdownMenuItem className="w-full p-8 rounded-4 text-r-14 text-left text-gray-800 hover:bg-secondary">
-                        <div className="flex flex-col gap-4">삭제하기</div>
+                        <div className="flex flex-col gap-4 text-red-500">삭제하기</div>
                       </PreventDropdownMenuItem>
                     }
                     handleSubmit={() => onDelete && onDelete(priority)}

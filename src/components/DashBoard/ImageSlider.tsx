@@ -9,7 +9,7 @@ import {
 import { PropertyImage } from '@/types';
 import { cn } from '@/lib/utils';
 import { createPortal } from 'react-dom';
-import CloseIcon from '../../../public/icons/close.svg';
+import CloseIcon from '@/public/icons/close.svg?react';
 
 type Props = {
   images: PropertyImage[];
@@ -41,7 +41,7 @@ const ImageSlider = ({
               type="button"
               className="text-white hover:text-gray-500 transition duration-100"
             >
-              <CloseIcon className="w-20 h-20" />
+              <CloseIcon width={20} height={20} />
             </button>
             {/* <Button
               variant="ghost"

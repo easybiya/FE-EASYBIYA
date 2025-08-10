@@ -42,17 +42,13 @@ const DefaultDropdownLayout = <T extends string>({
         onClick={(e) => e.stopPropagation()}
         align={align}
         sideOffset={8}
-        className={cn('rounded-5 z-50 w-full bg-white p-4', contentClassName)}
+        className={cn('z-50 w-full', contentClassName)}
       >
         {dropdownItems.map((item) => (
           <div key={item.key}>
             <DropdownMenuItem
               key={item.key}
-              className={cn(
-                'w-full p-8 rounded-4 text-r-14 text-left text-gray-800 hover:bg-secondary',
-                item.classNames,
-                itemClassName,
-              )}
+              className={cn(item.classNames, itemClassName)}
               onSelect={() => handleSelect && handleSelect(item)}
             >
               <div className="flex flex-col gap-4">{item.value}</div>
