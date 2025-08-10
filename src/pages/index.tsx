@@ -6,7 +6,7 @@ import { useDispatch } from '@/hooks/property/useDispatch';
 import { useProperty } from '@/hooks/property/useProperty';
 import { PropertySortBy } from '@/lib/api/property';
 import Link from 'next/link';
-import DashboardEmpty from '../../public/images/dashboard-empty.svg?url';
+import DashboardEmpty from '@/public/images/dashboard-empty.svg?url';
 import Image from 'next/image';
 import Button from '@/components/Button/CustomButton';
 import { useRouter } from 'next/navigation';

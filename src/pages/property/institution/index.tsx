@@ -1,7 +1,7 @@
 import InstitutionForm from '@/components/Institution';
 import Header from '@/components/Layout/Header';
 import { useInstitution } from '@/hooks/map/useInstitution';
-import MapIcon from '../../../../public/icons/map-pinned.svg?url';
+import MapIcon from '@/public/icons/map-pinned.svg?react';
 import Image from 'next/image';
 import IconComponent from '@/components/Asset/Icon';
 import { useRouter } from 'next/navigation';
@@ -28,7 +28,7 @@ export default function Page() {
         {!institution && (
           <div className="flex items-center gap-12 px-20 py-16 bg-white rounded-lg">
             <div className="p-12 rounded bg-brownText">
-              <Image src={MapIcon} alt="지도 아이콘" width={24} height={24} />
+              <MapIcon width={24} height={24} />
             </div>
             <p className="text-sm leading-tight">
               주소를 등록하면,

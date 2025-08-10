@@ -14,7 +14,7 @@ const DialogDropdownLayout = ({ children, trigger, open, onOpenChange }: Props) 
       <DropdownMenuContent
         sideOffset={8}
         align="end"
-        className="w-full p-8 rounded-4 text-r-14 text-left text-gray-800"
+        className="w-full p-4 rounded-4 text-14/21 text-left text-gray-800"
       >
         {children}
       </DropdownMenuContent>

@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
-import HouseIcon from '../../../public/icons/house.svg';
-import MapIcon from '../../../public/icons/map.svg';
-import UserIcon from '../../../public/icons/user.svg';
+import HouseIcon from '@/public/icons/house.svg?react';
+import MapIcon from '@/public/icons/map.svg?react';
+import UserIcon from '@/public/icons/user.svg?react';
 
 export default function TabBar() {
   const path = usePathname();
@@ -20,7 +20,7 @@ export default function TabBar() {
             { 'text-black': originPath === '/' || originPath === 'details' },
           )}
         >
-          <HouseIcon className="w-24 h-24" />
+          <HouseIcon width={24} height={24} />
           <span className="text-m-12">홈</span>
         </Link>
         <Link
@@ -30,7 +30,7 @@ export default function TabBar() {
             { 'text-black': originPath === 'map' },
           )}
         >
-          <MapIcon className="w-24 h-24" />
+          <MapIcon width={24} height={24} />
           <span className="text-m-12">거리 확인</span>
         </Link>
         <Link
@@ -40,7 +40,7 @@ export default function TabBar() {
             { 'text-black': originPath === 'profile' },
           )}
         >
-          <UserIcon className="w-24 h-24" />
+          <UserIcon width={24} height={24} />
           <span className="text-m-12">내 정보</span>
         </Link>
       </div>

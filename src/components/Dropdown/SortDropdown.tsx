@@ -29,7 +29,7 @@ export default function SortDropdown({ handleClick, params }: Props) {
           width={16}
           height={16}
           isBtn
-          className={`transition ease-out ${isOpen ? 'rotate-180' : ''}`}
+          className={`transition ease-out ${isOpen ? '' : 'rotate-180'}`}
         />
       </button>
     </DefaultDropdownLayout>

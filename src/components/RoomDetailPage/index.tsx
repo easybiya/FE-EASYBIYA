@@ -19,6 +19,7 @@ import useImageCarousel from '@/hooks/propertyDetail/useImageCarousel';
 import { Property } from '@/types';
 import { motion } from 'framer-motion';
 import { toast } from '@/hooks/use-toast';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   roomChecklist: ChecklistPayloadItem[];
@@ -32,6 +33,7 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
   const [isEdit, setIsEdit] = useState(false);
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const [, setActiveIndex] = useState(0);
+  const queryClient = useQueryClient();
 
   const { setSelected, setApi, setStartIndex, selected, startIndex, currentIndex } =
     useImageCarousel({ images: detail.propertyImages || [] });
@@ -47,6 +49,7 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
 
   const submitUpdateChecklist = async () => {
     await updateChecklist(String(id), checklist);
+    queryClient.invalidateQueries({ queryKey: 'propertyDetail', id });
     toast({ title: '체크리스트가 수정되었습니다.', variant: 'success' });
     setIsEdit(false);
   };
@@ -80,16 +83,13 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
           >
             {propertyImages.map((item, index) => (
               <SwiperSlide key={index} className="relative">
-                <Image
-                  fill
-                  src={item.imageUrl}
-                  alt={`room-${index}`}
-                  objectFit="cover"
+                <Image fill src={item.imageUrl} alt={`room-${index}`} objectFit="cover" />
+                <div
+                  className="absolute inset-0 z-10 bg-gradient-to-t from-black/30 to-transparent cursor-pointer"
                   onClick={() => {
                     setSelected(item);
                     setStartIndex(index);
                   }}
-                  className="cursor-pointer"
                 />
               </SwiperSlide>
             ))}
