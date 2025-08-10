@@ -5,7 +5,7 @@ import router from 'next/router';
 
 export default function LoginPage() {
   return (
-    <div className="flex flex-col justify-between items-center h-screen bg-[#F6F5F2] relative px-24 py-40">
+    <div className="flex flex-col justify-between items-center h-screen bg-[#FDFEFF] relative px-24 py-40">
       <button className="absolute top-16 right-16">
         <IconComponent
           name="close"
@@ -22,7 +22,7 @@ export default function LoginPage() {
           <IconComponent name="logo" width={152} height={44} />
         </div>
 
-        <Image src="/images/main.svg" alt="Main Logo" width={235} height={342} />
+        <Image src="/images/landing-image.gif" alt="Main Logo" width={235} height={342} />
       </div>
 
       <KakaoLoginButton />
