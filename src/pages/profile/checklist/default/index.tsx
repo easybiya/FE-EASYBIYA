@@ -49,6 +49,7 @@ export default function DefaultTemplate() {
       toast({ title: '새 템플릿 생성 완료', variant: 'success' });
       router.push('/profile/checklist');
     } catch (error) {
+      console.error(error);
       toast({ title: '템플릿 저장 실패', variant: 'fail' });
     }
   };

@@ -2,16 +2,16 @@ import IconComponent from '@/components/Asset/Icon';
 import ChecklistContent from '@/components/CheckList/CheckListContent';
 import Header from '@/components/Layout/Header';
 import ChecklistModal from '@/components/Modal/ChecklistModal';
+import { InputModal } from '@/components/Modal/InputModal';
 import { toast } from '@/hooks/use-toast';
 import { postTemplate } from '@/lib/api/template';
-import { useModalStore } from '@/store/modalStore';
 import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function CreateTemplate() {
   const router = useRouter();
-  const { openModal, closeModal } = useModalStore();
+  const [modalOpen, setIsModalOpen] = useState(true);
   const [title, setTitle] = useState(`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`);
 
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
@@ -53,17 +53,6 @@ export default function CreateTemplate() {
 
   const handleSaveTemplate = () => setShowNewTemplateModal(true);
 
-  useEffect(() => {
-    openModal('input', {
-      title: '새 템플릿 생성',
-      onConfirm: async (value) => {
-        if (!value) return;
-        setTitle(value);
-        closeModal();
-      },
-    });
-  }, []);
-
   return (
     <div>
       <Header
@@ -98,6 +87,13 @@ export default function CreateTemplate() {
           onConfirm={(value) => handleNewTemplateSave(value as string)}
         />
       )}
+      <InputModal
+        title="새 템플릿 생성"
+        open={modalOpen}
+        openChange={setIsModalOpen}
+        trigger={<></>}
+        handleClick={(v) => setTitle(v)}
+      />
     </div>
   );
 }

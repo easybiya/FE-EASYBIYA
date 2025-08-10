@@ -8,7 +8,7 @@ export function Toaster() {
 
   return (
     <ToastProvider duration={2000}>
-      {toasts.map(function ({ id, title, description, action, variant, ...props }) {
+      {toasts.map(function ({ id, title, action, variant, ...props }) {
         return (
           <Toast key={id} {...props}>
             <div className="flex items-center gap-6">

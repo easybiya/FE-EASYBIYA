@@ -2,7 +2,6 @@ import { SetStateAction } from 'react';
 import CheckListItem from '@/components/CheckList/CheckListItem';
 import { DragDropContext, DropResult, Droppable } from '@hello-pangea/dnd';
 import { CheckItemPayload, ChecklistPayloadItem } from '@/types/checklist';
-import { useModalStore } from '@/store/modalStore';
 import { motion } from 'framer-motion';
 
 interface ChecklistContainerProps {
@@ -16,8 +15,6 @@ export default function CheckListContainer({
   setter,
   handleEdit,
 }: ChecklistContainerProps) {
-  const { openModal, closeModal } = useModalStore();
-
   // 체크리스트 항목 체크 상태 업데이트 함수
   const updateCheckListValue = (id: number, checkItem: CheckItemPayload) => {
     const updatedChecklist = checklist.map((item) => {
@@ -115,32 +112,19 @@ export default function CheckListContainer({
   };
 
   // 체크리스트 항목 타이틀 옵션 수정 핸들러
-  const editCheckListTitle = (id: number) => {
-    openModal('input', {
-      title: '체크리스트 제목 수정',
-      defaultValue: checklist.find((item) => item.priority === id)?.title ?? '',
-      onConfirm: (value) => {
-        setter((prev) =>
-          prev.map((item) => (item.priority === id ? { ...item, title: value ?? '' } : item)),
-        );
-        handleEdit?.();
-        closeModal();
-      },
-    });
+  const editCheckListTitle = (id: number, value: string) => {
+    setter((prev) =>
+      prev.map((item) => (item.priority === id ? { ...item, title: value ?? '' } : item)),
+    );
+    handleEdit?.();
   };
 
   // 체크리스트 항목 삭제 핸들러
   const deleteCheckList = (id: number) => {
-    openModal('confirm', {
-      title: '체크리스트 항목 삭제',
-      onConfirm: () => {
-        if (id !== null) {
-          setter((prev) => prev.filter((item) => item.priority !== id));
-        }
-        handleEdit?.();
-        closeModal();
-      },
-    });
+    if (id !== null) {
+      setter((prev) => prev.filter((item) => item.priority !== id));
+    }
+    handleEdit?.();
   };
 
   return (
