@@ -5,20 +5,17 @@ import { Draggable } from '@hello-pangea/dnd';
 import InfoModal from '@/components/Modal/InfoModal';
 import { checklistInfoMap } from '@/constants/checkListInfo';
 import { stripEmoji } from '@/utils/stripEmoji';
-import DefaultDropdownLayout from '../Dropdown/DropdownLayout';
-
-const CHECKLISTITEM_OPTIONS = [
-  { key: 'add', value: '추가하기' },
-  { key: 'edit', value: '수정하기' },
-  { key: 'delete', value: '삭제하기', classNames: 'text-red-500 focus:text-red-500' },
-];
+import DialogDropdownLayout from '../Dropdown/DialogDropdown';
+import { InputModal } from '../Modal/InputModal';
+import { ConfirmModal } from '../Modal/ConfirmModal';
+import PreventDropdownMenuItem from '../Dropdown/PreventDropdownMenuItem';
 
 interface ChecklistItemProps extends ChecklistPayloadItem {
   onChange?: (id: number, checkItem: CheckItemPayload) => void;
   onOptionEdit?: (id: number, optionIndex: number, newValue: string) => void;
   onOptionAdd?: (id: number) => void;
   index: number;
-  onEdit?: (id: number) => void;
+  onEdit?: (id: number, value: string) => void;
   onDelete?: (id: number) => void;
   onTextEdit?: (id: number, content: string) => void;
 }
@@ -40,22 +37,6 @@ export default function ChecklistItem({
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editingText, setEditingText] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
-
-  const handleSelectOption = (option: string) => {
-    switch (option) {
-      case 'add':
-        onOptionAdd?.(priority);
-        break;
-      case 'edit':
-        onEdit?.(priority);
-        break;
-      case 'delete':
-        onDelete?.(priority);
-        break;
-      default:
-        break;
-    }
-  };
 
   return (
     <Draggable draggableId={priority.toString()} index={index}>
@@ -86,24 +67,53 @@ export default function ChecklistItem({
                 />
               )} */}
             </div>
-
-            <DefaultDropdownLayout
-              dropdownItems={
-                checkType === 'RADIO' || checkType === 'CHECKBOX'
-                  ? CHECKLISTITEM_OPTIONS
-                  : CHECKLISTITEM_OPTIONS.filter((item) => item.key !== 'add')
+            <DialogDropdownLayout
+              trigger={
+                <button type="button" onSelect={(e) => e.preventDefault()}>
+                  <IconComponent
+                    name="meatballGray"
+                    width={16}
+                    height={16}
+                    className="text-gray-500 cursor-pointer"
+                  />
+                </button>
               }
-              handleSelect={(item) => handleSelectOption(item.key)}
             >
-              <button type="button">
-                <IconComponent
-                  name="meatballGray"
-                  width={16}
-                  height={16}
-                  className="text-gray-500 cursor-pointer"
-                />
-              </button>
-            </DefaultDropdownLayout>
+              {
+                <>
+                  {checkType !== 'TEXT' && (
+                    <PreventDropdownMenuItem
+                      onSelect={() => onOptionAdd && onOptionAdd(priority)}
+                      className="w-full p-8 rounded-4 text-r-14 text-left text-gray-800 hover:bg-secondary"
+                    >
+                      <div className="flex flex-col gap-4">추가하기</div>
+                    </PreventDropdownMenuItem>
+                  )}
+
+                  <InputModal
+                    title="수정하기"
+                    trigger={
+                      <PreventDropdownMenuItem className="w-full p-8 rounded-4 text-r-14 text-left text-gray-800 hover:bg-secondary">
+                        <div className="flex flex-col gap-4">수정하기</div>
+                      </PreventDropdownMenuItem>
+                    }
+                    handleClick={(v: string) => onEdit && onEdit(priority, v)}
+                    defaultValue={title}
+                  />
+                  <ConfirmModal
+                    title="삭제하기"
+                    description="체크리스트 항목을 삭제하시겠습니까?"
+                    trigger={
+                      <PreventDropdownMenuItem className="w-full p-8 rounded-4 text-r-14 text-left text-gray-800 hover:bg-secondary">
+                        <div className="flex flex-col gap-4">삭제하기</div>
+                      </PreventDropdownMenuItem>
+                    }
+                    handleSubmit={() => onDelete && onDelete(priority)}
+                    buttonStyle="bg-red-500 hover:bg-red-400 active:bg-red-300"
+                  />
+                </>
+              }
+            </DialogDropdownLayout>
           </div>
 
           {checkType === 'TEXT' && (

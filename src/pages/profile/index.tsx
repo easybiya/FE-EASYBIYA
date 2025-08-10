@@ -1,10 +1,8 @@
 import Header from '@/components/Layout/Header';
-import { useModalStore } from '@/store/modalStore';
+import { ConfirmModal } from '@/components/Modal/ConfirmModal';
 import Link from 'next/link';
 
 export default function Page() {
-  const { openModal } = useModalStore();
-
   return (
     <div>
       <Header left={<h1 className="text-b-20">내정보</h1>} />
@@ -21,14 +19,12 @@ export default function Page() {
         >
           이용 약관
         </Link>
-        <button
-          className="py-12 font-semibold text-start"
-          onClick={() =>
-            openModal('confirm', { title: '확인', description: '로그아웃 하시겠어요?' })
-          }
-        >
-          로그아웃
-        </button>
+        <ConfirmModal
+          trigger={<button className="py-12 font-semibold text-start">로그아웃</button>}
+          title="로그아웃 확인"
+          description="로그아웃 하시겠어요?"
+          handleSubmit={() => console.log('로그아웃')}
+        />
       </div>
     </div>
   );

@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import { useModalStore } from '@/store/modalStore';
 import Header from '@/components/Layout/Header';
 import Link from 'next/link';
 import { useDispatch } from '@/hooks/checklist/useDispatch';
@@ -8,36 +7,16 @@ import { deleteTemplate } from '@/lib/api/template';
 import { useQueryClient } from '@tanstack/react-query';
 import { Skeleton } from '@/components/ui/skeleton';
 import IconComponent from '@/components/Asset/Icon';
-import DefaultDropdownLayout from '@/components/Dropdown/DropdownLayout';
+import DialogDropdownLayout from '@/components/Dropdown/DialogDropdown';
+import PreventDropdownMenuItem from '@/components/Dropdown/PreventDropdownMenuItem';
+import { ConfirmModal } from '@/components/Modal/ConfirmModal';
 
 export default function Page() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { openModal, closeModal } = useModalStore();
   const { params } = useDispatch();
   const { data, isLoading } = useTemplates(params);
   const templateList = data?.pages.flatMap((page) => page);
-
-  const templateHandleSelect = (option: string, id: number) => {
-    switch (option) {
-      case 'copy':
-        router.push(`/profile/checklist/detail/${id}?mode=new`);
-        break;
-      case 'delete':
-        openModal('confirm', {
-          title: '템플릿 삭제',
-          description: '이 템플릿을 정말 삭제하시겠습니까?',
-          onConfirm: async () => {
-            await deleteTemplate(id);
-            queryClient.invalidateQueries({ queryKey: ['templateList'] });
-            closeModal();
-          },
-        });
-        break;
-      default:
-        console.log('알 수 없는 옵션');
-    }
-  };
 
   return (
     <div className="pb-64">
@@ -65,20 +44,25 @@ export default function Page() {
           <div className="relative p-16 aspect-square col-span-1 bg-white rounded-lg flex items-start justify-between cursor-pointer hover:shadow-md transition">
             <p className="text-[16px] font-bold">기본 템플릿</p>
             <div className="absolute top-6 right-6">
-              <DefaultDropdownLayout
-                dropdownItems={[{ value: '복제', key: 'copy' }]}
-                handleSelect={() => router.push('/profile/checklist/default?mode=new')}
+              <DialogDropdownLayout
+                trigger={
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
+                    className="flex items-center justify-center rounded-4 focus:outline-none"
+                  >
+                    <IconComponent name="meatball" width={24} height={24} isBtn />
+                  </button>
+                }
               >
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                  }}
-                  className="flex items-center justify-center rounded-4 focus:outline-none"
+                <PreventDropdownMenuItem
+                  onSelect={() => router.push('/profile/checklist/default?mode=new')}
                 >
-                  <IconComponent name="meatball" width={24} height={24} isBtn />
-                </button>
-              </DefaultDropdownLayout>
+                  복제
+                </PreventDropdownMenuItem>
+              </DialogDropdownLayout>
             </div>
           </div>
         </Link>
@@ -97,23 +81,44 @@ export default function Page() {
                 >
                   <p className="text-16 font-bold">{template.name}</p>
                   <div className="absolute top-6 right-6">
-                    <DefaultDropdownLayout
-                      dropdownItems={[
-                        { value: '복제', key: 'copy' },
-                        { value: '삭제', key: 'delete', classNames: '!text-red-500' },
-                      ]}
-                      handleSelect={(item) => templateHandleSelect(item.key, template.templateId)}
+                    <DialogDropdownLayout
+                      trigger={
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                          }}
+                          className="flex items-center justify-center rounded-4 focus:outline-none"
+                        >
+                          <IconComponent name="meatball" width={24} height={24} isBtn />
+                        </button>
+                      }
                     >
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                        }}
-                        className="flex items-center justify-center rounded-4 focus:outline-none"
+                      <PreventDropdownMenuItem
+                        onSelect={() =>
+                          router.push(`/profile/checklist/detail/${template.templateId}?mode=new`)
+                        }
                       >
-                        <IconComponent name="meatball" width={24} height={24} isBtn />
-                      </button>
-                    </DefaultDropdownLayout>
+                        복제
+                      </PreventDropdownMenuItem>
+                      <ConfirmModal
+                        title="템플릿 삭제"
+                        description="이 템플릿을 정말 삭제하시겠습니까?"
+                        handleSubmit={async () => {
+                          await deleteTemplate(template.templateId);
+                          queryClient.invalidateQueries({ queryKey: ['templateList'] });
+                        }}
+                        trigger={
+                          <PreventDropdownMenuItem
+                            className="!text-red-500"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            삭제
+                          </PreventDropdownMenuItem>
+                        }
+                        buttonStyle="bg-red-500 hover:bg-red-400 active:bg-red-300"
+                      />
+                    </DialogDropdownLayout>
                   </div>
                 </div>
               </Link>

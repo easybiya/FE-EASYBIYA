@@ -1,10 +1,9 @@
 import IconComponent from '@/components/Asset/Icon';
 import Header from '@/components/Layout/Header';
-import { useModalStore } from '@/store/modalStore';
+import { ConfirmModal } from '@/components/Modal/ConfirmModal';
 import { useRouter } from 'next/navigation';
 
 export default function Page() {
-  const { openModal } = useModalStore();
   const router = useRouter();
 
   return (
@@ -30,14 +29,12 @@ export default function Page() {
           </span>
           <p className="font-semibold text-base leading-tight">000000@gmail.com</p>
         </div>
-        <button
-          className="font-semibold text-base leading-tight py-12 text-start"
-          onClick={() =>
-            openModal('confirm', { title: '확인', description: '회원 탈퇴 하시겠어요?' })
-          }
-        >
-          회원 탈퇴
-        </button>
+        <ConfirmModal
+          trigger={<button className="py-12 font-semibold text-start">회원 탈퇴</button>}
+          title="회원탈퇴"
+          description="회원 탈퇴 하시겠어요?"
+          handleSubmit={() => console.log('탈퇴')}
+        />
       </div>
     </>
   );

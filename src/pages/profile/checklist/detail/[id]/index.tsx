@@ -1,23 +1,19 @@
 import IconComponent from '@/components/Asset/Icon';
 import ChecklistContent from '@/components/CheckList/CheckListContent';
-import DefaultDropdownLayout from '@/components/Dropdown/DropdownLayout';
+import DialogDropdownLayout from '@/components/Dropdown/DialogDropdown';
+import PreventDropdownMenuItem from '@/components/Dropdown/PreventDropdownMenuItem';
 import Header from '@/components/Layout/Header';
 import ChecklistModal from '@/components/Modal/ChecklistModal';
+import { ConfirmModal } from '@/components/Modal/ConfirmModal';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTemplateById } from '@/hooks/checklist/useTemplateById';
+import { toast } from '@/hooks/use-toast';
 import { deleteTemplate, editTemplate, postTemplate } from '@/lib/api/template';
-import { useModalStore } from '@/store/modalStore';
-import { useToastStore } from '@/store/toastStore';
 import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
 import checklistFormatter from '@/utils/checklistFormatter';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
-const TEMPLATE_DETAIL_OPTION = [
-  { value: '복제', key: 'copy' },
-  { value: '삭제', key: 'delete', classNames: '!text-red-500' },
-];
 
 export default function ChecklistDetail() {
   const router = useRouter();
@@ -30,30 +26,6 @@ export default function ChecklistDetail() {
   const queryClient = useQueryClient();
 
   const { data: template, isLoading } = useTemplateById(templateId ?? '');
-
-  const { showToast } = useToastStore();
-  const { openModal, closeModal } = useModalStore();
-
-  const templateHandleSelect = (option: string, id: number) => {
-    switch (option) {
-      case 'copy':
-        router.push(`/profile/checklist/detail/${id}?mode=new`);
-        break;
-      case 'delete':
-        openModal('confirm', {
-          title: '템플릿 삭제',
-          description: '이 템플릿을 정말 삭제하시겠습니까?',
-          onConfirm: async () => {
-            await deleteTemplate(id);
-            queryClient.invalidateQueries({ queryKey: ['templateList'] });
-            closeModal();
-          },
-        });
-        break;
-      default:
-        console.log('알 수 없는 옵션');
-    }
-  };
 
   const handleAddChecklist = (type: CheckType) => {
     const newId = checklist.length > 0 ? checklist[checklist.length - 1].priority + 1 : 1;
@@ -78,7 +50,7 @@ export default function ChecklistDetail() {
       })),
     };
     editTemplate(templateId, tranferTemplate);
-    showToast('템플릿이 업데이트 되었습니다.', 'success');
+    toast({ title: '템플릿이 업데이트 되었습니다.', variant: 'success' });
   };
 
   const handleSaveTemplate = () => setShowNewTemplateModal(true);
@@ -94,7 +66,7 @@ export default function ChecklistDetail() {
       })),
     };
     postTemplate(template);
-    showToast('템플릿이 생성 되었습니다.', 'success');
+    toast({ title: '템플릿이 생성 되었습니다.', variant: 'success' });
     router.push('/profile/checklist');
   };
 
@@ -140,20 +112,44 @@ export default function ChecklistDetail() {
             }
             right={
               !isNewTemplate && (
-                <DefaultDropdownLayout
-                  dropdownItems={TEMPLATE_DETAIL_OPTION}
-                  handleSelect={(item) => templateHandleSelect(item.key, template.templateId)}
+                <DialogDropdownLayout
+                  trigger={
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                      }}
+                      className="flex items-center justify-center rounded-4 focus:outline-none"
+                    >
+                      <IconComponent name="meatball" width={24} height={24} isBtn />
+                    </button>
+                  }
                 >
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                    }}
-                    className="flex items-center justify-center rounded-4 focus:outline-none"
+                  <PreventDropdownMenuItem
+                    onSelect={() =>
+                      router.push(`/profile/checklist/detail/${template.templateId}?mode=new`)
+                    }
                   >
-                    <IconComponent name="meatball" width={24} height={24} isBtn />
-                  </button>
-                </DefaultDropdownLayout>
+                    복제
+                  </PreventDropdownMenuItem>
+                  <ConfirmModal
+                    title="템플릿 삭제"
+                    description="이 템플릿을 정말 삭제하시겠습니까?"
+                    handleSubmit={async () => {
+                      await deleteTemplate(template.templateId);
+                      queryClient.invalidateQueries({ queryKey: ['templateList'] });
+                    }}
+                    trigger={
+                      <PreventDropdownMenuItem
+                        className="!text-red-500"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        삭제
+                      </PreventDropdownMenuItem>
+                    }
+                    buttonStyle="bg-red-500 hover:bg-red-400 active:bg-red-300"
+                  />
+                </DialogDropdownLayout>
               )
             }
           />

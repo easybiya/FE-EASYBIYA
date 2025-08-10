@@ -13,12 +13,12 @@ import EditButtonContainer from '@/components/EditButtonContainer';
 import CheckListContainer from '@/components/CheckList/CheckListContainer';
 import IconComponent from '@/components/Asset/Icon';
 import { updateChecklist } from '@/lib/api/checklist';
-import { useToastStore } from '@/store/toastStore';
 import Link from 'next/link';
 import ImageSlider from '@/components/DashBoard/ImageSlider';
 import useImageCarousel from '@/hooks/propertyDetail/useImageCarousel';
 import { Property } from '@/types';
 import { motion } from 'framer-motion';
+import { toast } from '@/hooks/use-toast';
 
 interface Props {
   roomChecklist: ChecklistPayloadItem[];
@@ -29,7 +29,6 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
   const router = useRouter();
   const { propertyImages, propertyAddress, leaseType, deposit, monthlyFee, availableDate, id } =
     detail;
-  const { showToast } = useToastStore();
   const [isEdit, setIsEdit] = useState(false);
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const [, setActiveIndex] = useState(0);
@@ -48,7 +47,7 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
 
   const submitUpdateChecklist = async () => {
     await updateChecklist(String(id), checklist);
-    showToast('체크리스트가 수정되었습니다.', 'success');
+    toast({ title: '체크리스트가 수정되었습니다.', variant: 'success' });
     setIsEdit(false);
   };
 

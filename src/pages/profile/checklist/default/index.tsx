@@ -3,8 +3,8 @@ import ChecklistContent from '@/components/CheckList/CheckListContent';
 import Header from '@/components/Layout/Header';
 import ChecklistModal from '@/components/Modal/ChecklistModal';
 import { useDefaultTemplate } from '@/hooks/checklist/useDefaultTemplate';
+import { toast } from '@/hooks/use-toast';
 import { postTemplate } from '@/lib/api/template';
-import { useToastStore } from '@/store/toastStore';
 import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
 import checklistFormatter from '@/utils/checklistFormatter';
 import { useRouter } from 'next/router';
@@ -19,7 +19,6 @@ export default function DefaultTemplate() {
   const defaultTemplate = useDefaultTemplate();
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
-  const { showToast } = useToastStore();
 
   const handleAddChecklist = (type: CheckType) => {
     const newId = checklist.length > 0 ? checklist[checklist.length - 1].priority + 1 : 1;
@@ -47,11 +46,11 @@ export default function DefaultTemplate() {
     try {
       await postTemplate(template);
       setShowNewTemplateModal(false);
-      showToast('새 템플릿 생성 완료', 'success');
+      toast({ title: '새 템플릿 생성 완료', variant: 'success' });
       router.push('/profile/checklist');
     } catch (error) {
-      showToast('템플릿 저장 실패', 'error');
       console.error(error);
+      toast({ title: '템플릿 저장 실패', variant: 'fail' });
     }
   };
 

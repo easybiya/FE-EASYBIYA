@@ -4,14 +4,13 @@ import { usePropertyDetail } from '@/hooks/propertyDetail/usePropertyDetail';
 import RoomDetailPage from '@/components/RoomDetailPage';
 import DetailSkeleton from '@/components/RoomDetailPage/DetailSkeleton';
 import IconComponent from '@/components/Asset/Icon';
-import { useModalStore } from '@/store/modalStore';
 import useBookmark from '@/hooks/property/useBookmark';
-import DefaultDropdownLayout from '@/components/Dropdown/DropdownLayout';
-
-const ROOM_DETAIL_OPTION = [
-  { value: '매물 정보 수정', key: 'edit' },
-  { value: '삭제', key: 'delete', classNames: '!text-red-500' },
-];
+import { ConfirmModal } from '@/components/Modal/ConfirmModal';
+import DialogDropdownLayout from '@/components/Dropdown/DialogDropdown';
+import PreventDropdownMenuItem from '@/components/Dropdown/PreventDropdownMenuItem';
+import { deleteProperty } from '@/lib/api/property';
+import { useQueryClient } from '@tanstack/react-query';
+import { toast } from '@/hooks/use-toast';
 
 export default function ChecklistDetailPage() {
   const router = useRouter();
@@ -19,8 +18,8 @@ export default function ChecklistDetailPage() {
   const propertyId = typeof id === 'string' ? id : undefined;
 
   const { propertyChecklist, propertyDetail, isLoading } = usePropertyDetail(propertyId);
-  const { openModal, closeModal } = useModalStore();
   const { mutate } = useBookmark();
+  const queryClient = useQueryClient();
 
   // 카카오 공유
   const shareKakao = () => {
@@ -51,23 +50,12 @@ export default function ChecklistDetailPage() {
     });
   };
 
-  const roomDeatilhandleSelect = (option: string) => {
-    switch (option) {
-      case 'edit':
-        router.push(`/property/edit?propertyId=${propertyId}`);
-        break;
-      case 'delete':
-        openModal('confirm', {
-          title: '체크리스트 항목 삭제',
-          onConfirm: () => {
-            closeModal();
-          },
-          buttonStyle: 'bg-red-500 hover:bg-red-400 active:bg-red-300',
-        });
-        break;
-      default:
-        console.log('알 수 없는 옵션');
-    }
+  const handleDelete = async () => {
+    if (!propertyId) return;
+    await deleteProperty(propertyId);
+    queryClient.invalidateQueries({ queryKey: ['bookmarkedProperty'] });
+    queryClient.invalidateQueries({ queryKey: ['propertyList'] });
+    toast({ title: '매물이 삭제되었습니다.', variant: 'success' });
   };
 
   if (!router.isReady) {
@@ -123,20 +111,30 @@ export default function ChecklistDetailPage() {
               className="cursor-pointer"
               onClick={shareKakao}
             />
-            <DefaultDropdownLayout
-              dropdownItems={ROOM_DETAIL_OPTION}
-              handleSelect={(item) => roomDeatilhandleSelect(item.key)}
+            <DialogDropdownLayout
+              trigger={
+                <button
+                  type="button"
+                  className="flex items-center justify-center rounded-4 focus:outline-none"
+                  onClick={(e) => e.preventDefault()}
+                >
+                  <IconComponent name="meatball" width={24} height={24} isBtn />
+                </button>
+              }
             >
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                }}
-                className="flex items-center justify-center rounded-4 focus:outline-none"
+              <PreventDropdownMenuItem
+                onSelect={() => router.push(`/property/edit?propertyId=${propertyId}`)}
               >
-                <IconComponent name="meatball" width={24} height={24} isBtn />
-              </button>
-            </DefaultDropdownLayout>
+                수정하기
+              </PreventDropdownMenuItem>
+              <ConfirmModal
+                title="매물 정보 삭제"
+                description="매물 정보를 삭제하시겠습니까?"
+                handleSubmit={handleDelete}
+                trigger={<PreventDropdownMenuItem>삭제하기</PreventDropdownMenuItem>}
+                buttonStyle="bg-red-500 hover:bg-red-400 active:bg-red-300"
+              />
+            </DialogDropdownLayout>
           </div>
         }
       />

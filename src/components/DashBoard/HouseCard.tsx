@@ -4,13 +4,13 @@ import { Property } from '@/types';
 import IconComponent from '../Asset/Icon';
 import { formatWon } from '@/utils/formatWon';
 import { useRouter } from 'next/router';
-import { useModalStore } from '@/store/modalStore';
 import Image from 'next/image';
 import { deleteProperty } from '@/lib/api/property';
-import { useToastStore } from '@/store/toastStore';
 import { useQueryClient } from '@tanstack/react-query';
-import DefaultDropdownLayout from '../Dropdown/DropdownLayout';
-import { useMemo } from 'react';
+import { toast } from '@/hooks/use-toast';
+import DialogDropdownLayout from '../Dropdown/DialogDropdown';
+import PreventDropdownMenuItem from '../Dropdown/PreventDropdownMenuItem';
+import { ConfirmModal } from '../Modal/ConfirmModal';
 
 interface Props {
   info: Property;
@@ -21,49 +21,7 @@ interface Props {
 
 export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: Props) {
   const router = useRouter();
-  const { openModal, closeModal } = useModalStore();
-  const { showToast } = useToastStore();
   const queryClient = useQueryClient();
-  const handleSelect = (option: string) => {
-    switch (option) {
-      case 'removeFix':
-        toggleBookmark && toggleBookmark(info.id);
-        break;
-      case 'fix':
-        toggleBookmark && toggleBookmark(info.id);
-        break;
-      case 'edit':
-        router.push(`/property/edit?propertyId=${info.id}`);
-        break;
-      case 'delete':
-        openModal('confirm', {
-          title: '체크리스트 항목 삭제',
-          onConfirm: async () => {
-            await deleteProperty(String(info.id));
-            queryClient.invalidateQueries({ queryKey: ['bookmarkedProperty'] });
-            queryClient.invalidateQueries({ queryKey: ['propertyList'] });
-            showToast('매물이 삭제되었습니다.', 'success');
-            closeModal();
-          },
-          buttonStyle: 'bg-red-500 hover:bg-red-400 active:bg-red-300',
-        });
-        break;
-      default:
-        console.log('알 수 없는 옵션');
-    }
-  };
-
-  const menuList = useMemo(() => {
-    const fixItem = isFixed
-      ? { value: '고정 해제하기', key: 'removeFix' }
-      : { value: '고정하기', key: 'fix' };
-
-    return [
-      fixItem,
-      { value: '수정하기', key: 'edit' },
-      { value: '삭제하기', key: 'delete', classNames: '!text-red-500' },
-    ];
-  }, [isFixed]);
 
   return (
     <div className="w-full flex flex-col gap-8">
@@ -72,20 +30,44 @@ export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: P
         {!isShared && (
           <div className="flex gap-20">
             {isFixed && <IconComponent name="pin" width={20} height={20} />}
-            <DefaultDropdownLayout
-              dropdownItems={menuList}
-              handleSelect={(item) => handleSelect(item.key)}
+            <DialogDropdownLayout
+              trigger={
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                  }}
+                  className="flex items-center justify-center rounded-4 focus:outline-none"
+                >
+                  <IconComponent name="meatball" width={24} height={24} isBtn />
+                </button>
+              }
             >
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                }}
-                className="flex items-center justify-center rounded-4 focus:outline-none"
+              <PreventDropdownMenuItem onSelect={() => toggleBookmark && toggleBookmark(info.id)}>
+                {isFixed ? '고정 해제하기' : '고정하기'}
+              </PreventDropdownMenuItem>
+              <PreventDropdownMenuItem
+                onSelect={() => router.push(`/property/edit?propertyId=${info.id}`)}
               >
-                <IconComponent name="meatball" width={24} height={24} isBtn />
-              </button>
-            </DefaultDropdownLayout>
+                수정하기
+              </PreventDropdownMenuItem>
+              <ConfirmModal
+                title="매물 정보 삭제"
+                description="매물 정보를 삭제하시겠습니까?"
+                handleSubmit={() => {
+                  deleteProperty(String(info.id));
+                  queryClient.invalidateQueries({ queryKey: ['bookmarkedProperty'] });
+                  queryClient.invalidateQueries({ queryKey: ['propertyList'] });
+                  toast({ title: '매물이 삭제되었습니다.', variant: 'success' });
+                }}
+                trigger={
+                  <PreventDropdownMenuItem className="!text-red-500">
+                    삭제하기
+                  </PreventDropdownMenuItem>
+                }
+                buttonStyle="bg-red-500 hover:bg-red-400 active:bg-red-300"
+              />
+            </DialogDropdownLayout>
           </div>
         )}
       </div>
