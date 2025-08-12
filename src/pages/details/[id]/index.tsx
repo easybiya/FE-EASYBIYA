@@ -11,6 +11,7 @@ import PreventDropdownMenuItem from '@/components/Dropdown/PreventDropdownMenuIt
 import { deleteProperty } from '@/lib/api/property';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/hooks/use-toast';
+import DropdownIcon from '@/public/icons/meatball.svg?react';
 
 export default function ChecklistDetailPage() {
   const router = useRouter();
@@ -118,7 +119,11 @@ export default function ChecklistDetailPage() {
                   className="flex items-center justify-center rounded-4 focus:outline-none"
                   onClick={(e) => e.preventDefault()}
                 >
-                  <IconComponent name="meatball" width={24} height={24} isBtn />
+                  <DropdownIcon
+                    width={24}
+                    height={24}
+                    className="cursor-pointer fill-gray-800 stroke-gray-800"
+                  />
                 </button>
               }
             >
@@ -131,7 +136,11 @@ export default function ChecklistDetailPage() {
                 title="매물 정보 삭제"
                 description="매물 정보를 삭제하시겠습니까?"
                 handleSubmit={handleDelete}
-                trigger={<PreventDropdownMenuItem>삭제하기</PreventDropdownMenuItem>}
+                trigger={
+                  <PreventDropdownMenuItem className="!text-red-500">
+                    삭제하기
+                  </PreventDropdownMenuItem>
+                }
                 buttonStyle="bg-red-500 hover:bg-red-400 active:bg-red-300"
               />
             </DialogDropdownLayout>

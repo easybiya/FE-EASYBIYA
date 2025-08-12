@@ -9,6 +9,7 @@ import DialogDropdownLayout from '../Dropdown/DialogDropdown';
 import { InputModal } from '../Modal/InputModal';
 import { ConfirmModal } from '../Modal/ConfirmModal';
 import PreventDropdownMenuItem from '../Dropdown/PreventDropdownMenuItem';
+import DropdownIcon from '@/public/icons/meatball-gray.svg?react';
 
 interface ChecklistItemProps extends ChecklistPayloadItem {
   onChange?: (id: number, checkItem: CheckItemPayload) => void;
@@ -69,12 +70,15 @@ export default function ChecklistItem({
             </div>
             <DialogDropdownLayout
               trigger={
-                <button type="button" onSelect={(e) => e.preventDefault()}>
-                  <IconComponent
-                    name="meatballGray"
+                <button
+                  type="button"
+                  className="flex items-center justify-center w-16 h-16"
+                  onSelect={(e) => e.preventDefault()}
+                >
+                  <DropdownIcon
                     width={16}
                     height={16}
-                    className="text-gray-500 cursor-pointer"
+                    className="cursor-pointer fill-gray-400 stroke-gray-400 w-16 h-16"
                   />
                 </button>
               }
@@ -84,7 +88,7 @@ export default function ChecklistItem({
                   {checkType !== 'TEXT' && (
                     <PreventDropdownMenuItem
                       onSelect={() => onOptionAdd && onOptionAdd(priority)}
-                      className="w-full p-8 rounded-4 text-r-14 text-left text-gray-800 hover:bg-secondary"
+                      className="w-full p-8 rounded-4 text-left text-gray-800 hover:bg-secondary"
                     >
                       <div className="flex flex-col gap-4">추가하기</div>
                     </PreventDropdownMenuItem>
@@ -93,8 +97,8 @@ export default function ChecklistItem({
                   <InputModal
                     title="수정하기"
                     trigger={
-                      <PreventDropdownMenuItem className="w-full p-8 rounded-4 text-r-14 text-left text-gray-800 hover:bg-secondary">
-                        <div className="flex flex-col gap-4">수정하기</div>
+                      <PreventDropdownMenuItem className="w-full p-8 rounded-4 text-left text-gray-800 hover:bg-secondary">
+                        <div className="text-14/21">수정하기</div>
                       </PreventDropdownMenuItem>
                     }
                     handleClick={(v: string) => onEdit && onEdit(priority, v)}
@@ -104,8 +108,8 @@ export default function ChecklistItem({
                     title="삭제하기"
                     description="체크리스트 항목을 삭제하시겠습니까?"
                     trigger={
-                      <PreventDropdownMenuItem className="w-full p-8 rounded-4 text-r-14 text-left text-gray-800 hover:bg-secondary">
-                        <div className="flex flex-col gap-4 text-red-500">삭제하기</div>
+                      <PreventDropdownMenuItem className="w-full p-8 rounded-4 text-left text-gray-800 hover:bg-secondary">
+                        <div className="text-14/21 text-red-500">삭제하기</div>
                       </PreventDropdownMenuItem>
                     }
                     handleSubmit={() => onDelete && onDelete(priority)}

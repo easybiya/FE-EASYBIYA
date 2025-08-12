@@ -14,6 +14,7 @@ import checklistFormatter from '@/utils/checklistFormatter';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import DropdownIcon from '@/public/icons/meatball.svg?react';
 
 export default function ChecklistDetail() {
   const router = useRouter();
@@ -116,12 +117,14 @@ export default function ChecklistDetail() {
                   trigger={
                     <button
                       type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                      }}
-                      className="flex items-center justify-center rounded-4 focus:outline-none"
+                      className="flex items-center justify-center"
+                      onSelect={(e) => e.preventDefault()}
                     >
-                      <IconComponent name="meatball" width={24} height={24} isBtn />
+                      <DropdownIcon
+                        width={24}
+                        height={24}
+                        className="cursor-pointer fill-gray-800 stroke-gray-800"
+                      />
                     </button>
                   }
                 >

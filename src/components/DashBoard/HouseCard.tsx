@@ -11,6 +11,7 @@ import { toast } from '@/hooks/use-toast';
 import DialogDropdownLayout from '../Dropdown/DialogDropdown';
 import PreventDropdownMenuItem from '../Dropdown/PreventDropdownMenuItem';
 import { ConfirmModal } from '../Modal/ConfirmModal';
+import DropdownIcon from '@/public/icons/meatball.svg?react';
 
 interface Props {
   info: Property;
@@ -39,7 +40,11 @@ export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: P
                   }}
                   className="flex items-center justify-center rounded-4 focus:outline-none"
                 >
-                  <IconComponent name="meatball" width={24} height={24} isBtn />
+                  <DropdownIcon
+                    width={24}
+                    height={24}
+                    className="cursor-pointer fill-brownText stroke-brownText"
+                  />
                 </button>
               }
             >

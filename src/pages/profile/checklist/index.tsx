@@ -10,6 +10,7 @@ import IconComponent from '@/components/Asset/Icon';
 import DialogDropdownLayout from '@/components/Dropdown/DialogDropdown';
 import PreventDropdownMenuItem from '@/components/Dropdown/PreventDropdownMenuItem';
 import { ConfirmModal } from '@/components/Modal/ConfirmModal';
+import DropdownIcon from '@/public/icons/meatball.svg?react';
 
 export default function Page() {
   const router = useRouter();
@@ -48,12 +49,14 @@ export default function Page() {
                 trigger={
                   <button
                     type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                    }}
-                    className="flex items-center justify-center rounded-4 focus:outline-none"
+                    className="flex items-center justify-center"
+                    onSelect={(e) => e.preventDefault()}
                   >
-                    <IconComponent name="meatball" width={24} height={24} isBtn />
+                    <DropdownIcon
+                      width={24}
+                      height={24}
+                      className="cursor-pointer fill-gray-800 stroke-gray-800"
+                    />
                   </button>
                 }
               >
@@ -71,57 +74,58 @@ export default function Page() {
               <Skeleton key={index} className="aspect-square" />
             ))
           : templateList?.map((template) => (
-              <Link
-                href={`/profile/checklist/detail/${template.templateId}`}
-                key={template.templateId}
-              >
-                <div
-                  key={template.templateId}
-                  className="relative p-16 aspect-square col-span-1 bg-white rounded-lg flex items-start justify-between cursor-pointer hover:shadow-md transition"
-                >
-                  <p className="text-16 font-bold">{template.name}</p>
-                  <div className="absolute top-6 right-6">
-                    <DialogDropdownLayout
-                      trigger={
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                          }}
-                          className="flex items-center justify-center rounded-4 focus:outline-none"
-                        >
-                          <IconComponent name="meatball" width={24} height={24} isBtn />
-                        </button>
+              <div className="relative" key={template.templateId}>
+                <div className="absolute top-6 right-6 z-10">
+                  <DialogDropdownLayout
+                    trigger={
+                      <button
+                        type="button"
+                        className="flex items-center justify-center"
+                        onSelect={(e) => e.stopPropagation()}
+                      >
+                        <DropdownIcon
+                          width={24}
+                          height={24}
+                          className="cursor-pointer fill-gray-800 stroke-gray-800"
+                        />
+                      </button>
+                    }
+                  >
+                    <PreventDropdownMenuItem
+                      onSelect={() =>
+                        router.push(`/profile/checklist/detail/${template.templateId}?mode=new`)
                       }
                     >
-                      <PreventDropdownMenuItem
-                        onSelect={() =>
-                          router.push(`/profile/checklist/detail/${template.templateId}?mode=new`)
-                        }
-                      >
-                        복제
-                      </PreventDropdownMenuItem>
-                      <ConfirmModal
-                        title="템플릿 삭제"
-                        description="이 템플릿을 정말 삭제하시겠습니까?"
-                        handleSubmit={async () => {
-                          await deleteTemplate(template.templateId);
-                          queryClient.invalidateQueries({ queryKey: ['templateList'] });
-                        }}
-                        trigger={
-                          <PreventDropdownMenuItem
-                            className="!text-red-500"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            삭제
-                          </PreventDropdownMenuItem>
-                        }
-                        buttonStyle="bg-red-500 hover:bg-red-400 active:bg-red-300"
-                      />
-                    </DialogDropdownLayout>
-                  </div>
+                      복제
+                    </PreventDropdownMenuItem>
+                    <ConfirmModal
+                      title="템플릿 삭제"
+                      description="이 템플릿을 정말 삭제하시겠습니까?"
+                      handleSubmit={async () => {
+                        await deleteTemplate(template.templateId);
+                        queryClient.invalidateQueries({ queryKey: ['templateList'] });
+                      }}
+                      trigger={
+                        <PreventDropdownMenuItem
+                          className="!text-red-500"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          삭제
+                        </PreventDropdownMenuItem>
+                      }
+                      buttonStyle="bg-red-500 hover:bg-red-400 active:bg-red-300"
+                    />
+                  </DialogDropdownLayout>
                 </div>
-              </Link>
+                <Link href={`/profile/checklist/detail/${template.templateId}`}>
+                  <div
+                    key={template.templateId}
+                    className="relative p-16 aspect-square col-span-1 bg-white rounded-lg flex items-start justify-between cursor-pointer hover:shadow-md transition"
+                  >
+                    <p className="text-16 font-bold">{template.name}</p>
+                  </div>
+                </Link>
+              </div>
             ))}
       </div>
     </div>
