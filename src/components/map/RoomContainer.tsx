@@ -2,6 +2,7 @@ import { Institution, MapProperty } from '@/types';
 import IconComponent from '../Asset/Icon';
 import { useRouter } from 'next/navigation';
 import CreateInstitutionButton from './CreateInstitutionButton';
+import EditIcon from '@/public/icons/pencil.svg?react';
 
 interface Props {
   institution: Institution | null;
@@ -38,12 +39,13 @@ export function RoomContainer({ institution, handleTagClick, isLoading }: Props)
             <p className="font-bold text-brownText">{institution.institutionName}</p>
             <p className="text-gray-700">{institution.institutionAddress}</p>
           </div>
-          <IconComponent
-            name="pencil"
+          <EditIcon
             width={16}
             height={16}
-            alt="수정 아이콘"
-            onClick={() => router.push('/property/institution')}
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push('/property/institution');
+            }}
             className="cursor-pointer"
           />
         </div>

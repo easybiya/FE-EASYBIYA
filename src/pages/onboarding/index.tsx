@@ -27,7 +27,10 @@ export default function OnboardingPage() {
           modules={[Pagination]}
           spaceBetween={10}
           slidesPerView={1}
-          pagination={{ clickable: true, type: 'bullets' }}
+          pagination={{
+            clickable: true,
+            type: 'bullets',
+          }}
           onSwiper={setSwiper}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
           className="h-full"

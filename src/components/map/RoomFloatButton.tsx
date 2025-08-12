@@ -42,7 +42,7 @@ export default function RoomFloatButton({ roomList, handleTagClick }: Props) {
                 className="cursor-pointer"
               />
             </div>
-            <ul className="gap-6 flex flex-col max-h-186 overflow-y-auto pb-20">
+            <ul className="gap-6 flex flex-col max-h-186 overflow-y-auto pb-20 custom-scrollbar">
               {roomList?.map((item) => (
                 <li
                   onClick={() => handleClickTag(item)}
