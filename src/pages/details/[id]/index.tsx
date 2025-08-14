@@ -122,7 +122,7 @@ export default function ChecklistDetailPage() {
                   <DropdownIcon
                     width={24}
                     height={24}
-                    className="cursor-pointer fill-gray-800 stroke-gray-800"
+                    className="cursor-pointer fill-brownText stroke-brownText"
                   />
                 </button>
               }

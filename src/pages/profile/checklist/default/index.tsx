@@ -1,7 +1,7 @@
 import IconComponent from '@/components/Asset/Icon';
 import ChecklistContent from '@/components/CheckList/CheckListContent';
 import Header from '@/components/Layout/Header';
-import ChecklistModal from '@/components/Modal/ChecklistModal';
+import { InputModal } from '@/components/Modal/InputModal';
 import { useDefaultTemplate } from '@/hooks/checklist/useDefaultTemplate';
 import { toast } from '@/hooks/use-toast';
 import { postTemplate } from '@/lib/api/template';
@@ -15,8 +15,8 @@ export default function DefaultTemplate() {
   const { mode } = router.query;
   const templateMode = typeof mode === 'string' ? mode : undefined;
   const isNewTemplate = templateMode === 'new';
-
   const defaultTemplate = useDefaultTemplate();
+
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
 
@@ -61,6 +61,8 @@ export default function DefaultTemplate() {
     setChecklist(transformedTemplate);
   }, [defaultTemplate]);
 
+  console.log(showNewTemplateModal);
+
   return (
     <div>
       <Header
@@ -74,9 +76,7 @@ export default function DefaultTemplate() {
               className="cursor-pointer"
             />
             <h1 className="text-b-20">
-              {isNewTemplate
-                ? `새로운 체크리스트 ${new Date().toISOString().slice(0, 10)}`
-                : defaultTemplate?.name ?? ''}
+              {isNewTemplate ? `${defaultTemplate?.name} 복제본` : defaultTemplate?.name}
             </h1>
           </div>
         }
@@ -91,16 +91,14 @@ export default function DefaultTemplate() {
         />
       </div>
 
-      {showNewTemplateModal && (
-        <ChecklistModal
-          mode="edit"
-          title="새 템플릿 생성"
-          defaultValue={`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`}
-          confirmText="저장"
-          onClose={() => setShowNewTemplateModal(false)}
-          onConfirm={(value) => handleNewTemplateSave(value as string)}
-        />
-      )}
+      <InputModal
+        open={showNewTemplateModal}
+        openChange={setShowNewTemplateModal}
+        title="새 템플릿 생성"
+        defaultValue={`${defaultTemplate?.name} 복제본`}
+        handleClick={(value) => handleNewTemplateSave(value as string)}
+        trigger={<></>}
+      />
     </div>
   );
 }

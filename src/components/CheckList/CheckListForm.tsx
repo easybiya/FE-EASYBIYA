@@ -13,8 +13,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import CheckListTemplate from './CheckListTemplate';
 import { getTemplateById, postTemplate } from '@/lib/api/template';
-import ChecklistModal from '../Modal/ChecklistModal';
 import { toast } from '@/hooks/use-toast';
+import { InputModal } from '../Modal/InputModal';
 
 interface Props {
   isEdit?: boolean;
@@ -144,16 +144,15 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
         disabled={property.monthlyFee === null && property.propertyLatitude === null} // 매물 정보, 매물 주소 등록 안한경우 생성 못함
         text="완료"
       />
-      {showNewTemplateModal && (
-        <ChecklistModal
-          mode="edit"
-          title="새 템플릿 생성"
-          defaultValue={`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`}
-          confirmText="저장"
-          onClose={() => setShowNewTemplateModal(false)}
-          onConfirm={(value) => handleNewTemplateSave(value as string)}
-        />
-      )}
+      <InputModal
+        open={showNewTemplateModal}
+        openChange={setShowNewTemplateModal}
+        title={isEdit ? '템플릿 저장' : '새 템플릿 생성'}
+        defaultValue="우리집 체크리스트"
+        handleClick={(value) => handleNewTemplateSave(value)}
+        trigger={<></>}
+        maxLength={20}
+      />
     </>
   );
 }

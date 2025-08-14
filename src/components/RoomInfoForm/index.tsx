@@ -113,7 +113,7 @@ export default function RoomInfoForm({ isEdit = false, id, setStep }: Props) {
             control={form.control}
             name="contractType"
             render={() => (
-              <FormItem>
+              <FormItem className="flex flex-col gap-8">
                 <FormLabel className="text-md font-bold">계약 형태</FormLabel>
                 <FormControl>
                   <HouseTypeSelectContainer

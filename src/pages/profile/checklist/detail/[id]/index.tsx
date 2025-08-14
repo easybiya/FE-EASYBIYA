@@ -3,7 +3,6 @@ import ChecklistContent from '@/components/CheckList/CheckListContent';
 import DialogDropdownLayout from '@/components/Dropdown/DialogDropdown';
 import PreventDropdownMenuItem from '@/components/Dropdown/PreventDropdownMenuItem';
 import Header from '@/components/Layout/Header';
-import ChecklistModal from '@/components/Modal/ChecklistModal';
 import { ConfirmModal } from '@/components/Modal/ConfirmModal';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTemplateById } from '@/hooks/checklist/useTemplateById';
@@ -15,6 +14,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import DropdownIcon from '@/public/icons/meatball.svg?react';
+import { InputModal } from '@/components/Modal/InputModal';
 
 export default function ChecklistDetail() {
   const router = useRouter();
@@ -40,9 +40,9 @@ export default function ChecklistDetail() {
     setChecklist((prev) => [...prev, newItem]);
   };
 
-  const handleUpdateTemplate = () => {
+  const handleUpdateTemplate = (title: string) => {
     const tranferTemplate: ChecklistTemplate = {
-      name: template.name ?? '',
+      name: title,
       checklists: checklist.map(({ title, checkType, content, checkItems }) => ({
         title,
         checkType,
@@ -51,10 +51,9 @@ export default function ChecklistDetail() {
       })),
     };
     editTemplate(templateId, tranferTemplate);
+    queryClient.invalidateQueries({ queryKey: ['template', templateId] });
     toast({ title: '템플릿이 업데이트 되었습니다.', variant: 'success' });
   };
-
-  const handleSaveTemplate = () => setShowNewTemplateModal(true);
 
   const createNewTemplate = (title: string) => {
     const template: ChecklistTemplate = {
@@ -105,9 +104,7 @@ export default function ChecklistDetail() {
                   className="cursor-pointer"
                 />
                 <h1 className="text-b-20">
-                  {isNewTemplate
-                    ? `새로운 체크리스트 ${new Date().toISOString().slice(0, 10)}`
-                    : template?.name ?? ''}
+                  {isNewTemplate ? `${template?.name} 복제본` : template?.name ?? ''}
                 </h1>
               </div>
             }
@@ -129,9 +126,7 @@ export default function ChecklistDetail() {
                   }
                 >
                   <PreventDropdownMenuItem
-                    onSelect={() =>
-                      router.push(`/profile/checklist/detail/${template.templateId}?mode=new`)
-                    }
+                    onSelect={() => router.push(`/profile/checklist/detail/${templateId}?mode=new`)}
                   >
                     복제
                   </PreventDropdownMenuItem>
@@ -139,7 +134,7 @@ export default function ChecklistDetail() {
                     title="템플릿 삭제"
                     description="이 템플릿을 정말 삭제하시겠습니까?"
                     handleSubmit={async () => {
-                      await deleteTemplate(template.templateId);
+                      await deleteTemplate(Number(templateId));
                       queryClient.invalidateQueries({ queryKey: ['templateList'] });
                     }}
                     trigger={
@@ -161,19 +156,17 @@ export default function ChecklistDetail() {
               checklist={checklist}
               setter={setChecklist}
               onAddChecklist={handleAddChecklist}
-              onSaveTemplate={isNewTemplate ? handleSaveTemplate : handleUpdateTemplate}
+              onSaveTemplate={() => setShowNewTemplateModal(true)}
             />
           </div>
-          {showNewTemplateModal && (
-            <ChecklistModal
-              mode="edit"
-              title="새 템플릿 생성"
-              defaultValue={`나의 체크리스트 ${new Date().toISOString().slice(0, 10)}`}
-              confirmText="저장"
-              onClose={() => setShowNewTemplateModal(false)}
-              onConfirm={(value) => createNewTemplate(value as string)}
-            />
-          )}
+          <InputModal
+            open={showNewTemplateModal}
+            openChange={setShowNewTemplateModal}
+            title={isNewTemplate ? '새 템플릿 생성' : '템플릿 수정'}
+            defaultValue={isNewTemplate ? `${template?.name} 복제본` : template?.name}
+            handleClick={(v) => (isNewTemplate ? createNewTemplate(v) : handleUpdateTemplate(v))}
+            trigger={<></>}
+          />
         </>
       )}
     </div>

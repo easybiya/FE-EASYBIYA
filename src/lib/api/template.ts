@@ -2,7 +2,7 @@ import { ChecklistTemplate } from '@/types/checklist';
 import instance from './axiosInstance';
 import axiosInstance from './axiosInstance';
 
-export const getTemplateById = async (templateId: string) => {
+export const getTemplateById = async (templateId: string): Promise<ChecklistTemplate> => {
   const res = await axiosInstance.get(`/api/template/${templateId}`);
   return res.data.result;
 };

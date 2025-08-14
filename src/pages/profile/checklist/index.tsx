@@ -41,34 +41,36 @@ export default function Page() {
         }
       />
       <div className="py-24 px-20 grid grid-cols-2 gap-12">
-        <Link href={`/profile/checklist/default`}>
-          <div className="relative p-16 aspect-square col-span-1 bg-white rounded-lg flex items-start justify-between cursor-pointer hover:shadow-md transition">
-            <p className="text-[16px] font-bold">기본 템플릿</p>
-            <div className="absolute top-6 right-6">
-              <DialogDropdownLayout
-                trigger={
-                  <button
-                    type="button"
-                    className="flex items-center justify-center"
-                    onSelect={(e) => e.preventDefault()}
-                  >
-                    <DropdownIcon
-                      width={24}
-                      height={24}
-                      className="cursor-pointer fill-gray-800 stroke-gray-800"
-                    />
-                  </button>
-                }
-              >
-                <PreventDropdownMenuItem
-                  onSelect={() => router.push('/profile/checklist/default?mode=new')}
-                >
-                  복제
-                </PreventDropdownMenuItem>
-              </DialogDropdownLayout>
+        <div className="relative">
+          <Link href={`/profile/checklist/default`}>
+            <div className="p-16 aspect-square col-span-1 bg-white rounded-lg flex items-start justify-between cursor-pointer hover:shadow-md transition">
+              <p className="text-[16px] font-bold">기본 템플릿</p>
             </div>
+          </Link>
+          <div className="absolute top-6 right-6">
+            <DialogDropdownLayout
+              trigger={
+                <button
+                  type="button"
+                  className="flex items-center justify-center"
+                  onSelect={(e) => e.stopPropagation()}
+                >
+                  <DropdownIcon
+                    width={24}
+                    height={24}
+                    className="cursor-pointer fill-gray-800 stroke-gray-800"
+                  />
+                </button>
+              }
+            >
+              <PreventDropdownMenuItem
+                onSelect={() => router.push('/profile/checklist/default?mode=new')}
+              >
+                복제
+              </PreventDropdownMenuItem>
+            </DialogDropdownLayout>
           </div>
-        </Link>
+        </div>
         {isLoading
           ? Array.from({ length: 5 }).map((_, index) => (
               <Skeleton key={index} className="aspect-square" />
