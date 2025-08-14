@@ -118,7 +118,7 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}
         transition={{ duration: 0.4 }}
-        className="flex flex-col gap-10 px-16 mt-28"
+        className="flex flex-col gap-10 px-20 mt-28 mb-20"
       >
         <div className=" flex flex-col gap-4">
           <HouseTypeTag type={leaseType} />
@@ -145,7 +145,7 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
           </div>
         </div>
       </motion.div>
-      <div className={`flex-grow px-16 ${isEdit ? 'pb-112' : 'pb-80'}`}>
+      <div className={`flex-grow px-20 ${isEdit ? 'pb-112' : 'pb-80'}`}>
         <CheckListContainer checklist={checklist} setter={setChecklist} handleEdit={handleEdit} />
       </div>
     </>

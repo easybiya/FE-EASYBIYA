@@ -137,7 +137,11 @@ export default function CheckListContainer({
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="checklist">
           {(provided) => (
-            <div className="mt-16 space-y-16" ref={provided.innerRef} {...provided.droppableProps}>
+            <div
+              className="flex flex-col gap-8"
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+            >
               {checklist.map((item, index) => (
                 <CheckListItem
                   key={item.priority}

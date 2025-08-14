@@ -90,7 +90,7 @@ export default function ChecklistItem({
                       onSelect={() => onOptionAdd && onOptionAdd(priority)}
                       className="w-full p-8 rounded-4 text-left text-gray-800 hover:bg-secondary"
                     >
-                      <div className="flex flex-col gap-4">추가하기</div>
+                      <div className="flex flex-col gap-4 text-14/21">추가하기</div>
                     </PreventDropdownMenuItem>
                   )}
 
@@ -129,11 +129,11 @@ export default function ChecklistItem({
                   onChange={(e) => onTextEdit?.(priority, e.target.value)}
                   onBlur={() => setEditingText(false)}
                   onKeyDown={(e) => e.key === 'Enter' && setEditingText(false)}
-                  className="w-full text-sm border-b border-gray-300 mr-8"
+                  className="text-sm w-full h-20 focus:outline-brownText"
                 />
               ) : (
                 <div
-                  className="flex justify-between items-center w-full"
+                  className="flex justify-between items-center w-full h-20"
                   onClick={() => setEditingText(true)}
                 >
                   <span>
@@ -168,10 +168,13 @@ export default function ChecklistItem({
                         onChange={(e) => onOptionEdit?.(priority, option.priority, e.target.value)}
                         onBlur={() => setEditingIndex(null)}
                         onKeyDown={(e) => e.key === 'Enter' && setEditingIndex(null)}
-                        className="text-sm border-b border-gray-300 w-full"
+                        className="text-sm w-full h-20  focus:outline-brownText"
                       />
                     ) : (
-                      <span onClick={() => setEditingIndex(i)} className="cursor-pointer">
+                      <span
+                        onClick={() => setEditingIndex(i)}
+                        className="cursor-pointer inline-block h-20 w-full"
+                      >
                         {option.description}
                       </span>
                     )}
@@ -203,10 +206,13 @@ export default function ChecklistItem({
                         onChange={(e) => onOptionEdit?.(priority, option.priority, e.target.value)}
                         onBlur={() => setEditingIndex(null)}
                         onKeyDown={(e) => e.key === 'Enter' && setEditingIndex(null)}
-                        className="text-sm border-b border-gray-300 w-full"
+                        className="text-sm w-full h-20  focus:outline-brownText"
                       />
                     ) : (
-                      <span onClick={() => setEditingIndex(i)} className="cursor-pointer w-full">
+                      <span
+                        onClick={() => setEditingIndex(i)}
+                        className="cursor-pointer inline-block h-20 w-full"
+                      >
                         {option.description}
                       </span>
                     )}
