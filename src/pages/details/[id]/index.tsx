@@ -12,6 +12,7 @@ import { deleteProperty } from '@/lib/api/property';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/hooks/use-toast';
 import DropdownIcon from '@/public/icons/meatball.svg?react';
+import OpengraphImage from '@/public/images/opengraph.png';
 
 export default function ChecklistDetailPage() {
   const router = useRouter();
@@ -27,13 +28,14 @@ export default function ChecklistDetailPage() {
     const { Kakao } = window;
 
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/detail/${propertyId}}`;
+    const imageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/images/opengraph.png`;
 
     Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
         title: '집 좀 같이 봐줘요!',
         description: `내가 살 집에 대한 피드백을 주세요!`,
-        imageUrl: '', // 기본 이미지 필요함
+        imageUrl: imageUrl, // 기본 이미지 필요함
         link: {
           mobileWebUrl: url,
           webUrl: url,

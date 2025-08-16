@@ -19,7 +19,9 @@ const ChecklistContent = ({
   isTemplate,
 }: Props) => {
   return (
-    <div className={`flex-1 overflow-y-auto ${!isTemplate ? 'pb-104' : 'pb-208'} no-scrollbar`}>
+    <div
+      className={`flex-1 overflow-y-auto ${!isTemplate ? 'pb-104' : 'pb-208'} no-scrollbar pt-20`}
+    >
       <CheckListContainer checklist={checklist} setter={setter} />
       {!isTemplate && (
         <>
