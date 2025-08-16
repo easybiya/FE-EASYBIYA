@@ -10,6 +10,12 @@ import Section2 from '@/components/Onboarding/Section2';
 import Section3 from '@/components/Onboarding/Section3';
 import { useRouter } from 'next/navigation';
 
+export async function getStaticProps() {
+  return {
+    props: {},
+  };
+}
+
 export default function OnboardingPage() {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [swiper, setSwiper] = useState<SwiperInstance | null>(null);
@@ -33,7 +39,7 @@ export default function OnboardingPage() {
           }}
           onSwiper={setSwiper}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-          className="h-full"
+          className="h-full onboarding-swiper-bullet"
         >
           <SwiperSlide className="relative">
             <Section1 />

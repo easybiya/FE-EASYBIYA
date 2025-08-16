@@ -24,6 +24,7 @@ export default function Page() {
           title="로그아웃 확인"
           description="로그아웃 하시겠어요?"
           handleSubmit={() => console.log('로그아웃')}
+          buttonStyle="!bg-red-500"
         />
       </div>
     </div>

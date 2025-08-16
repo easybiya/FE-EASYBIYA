@@ -2,14 +2,15 @@ import { useState } from 'react';
 import { CheckItemPayload, ChecklistPayloadItem } from '@/types/checklist';
 import IconComponent from '../Asset/Icon';
 import { Draggable } from '@hello-pangea/dnd';
-import InfoModal from '@/components/Modal/InfoModal';
-import { checklistInfoMap } from '@/constants/checkListInfo';
 import { stripEmoji } from '@/utils/stripEmoji';
 import DialogDropdownLayout from '../Dropdown/DialogDropdown';
 import { InputModal } from '../Modal/InputModal';
 import { ConfirmModal } from '../Modal/ConfirmModal';
 import PreventDropdownMenuItem from '../Dropdown/PreventDropdownMenuItem';
 import DropdownIcon from '@/public/icons/meatball-gray.svg?react';
+import { matchedInfoByTitle } from '@/utils/matchedInfoByTitle';
+import { NotificationModal } from '../Modal/NotificationModal';
+import InfoIcon from '@/public/icons/info-circle.svg?react';
 
 interface ChecklistItemProps extends ChecklistPayloadItem {
   onChange?: (id: number, checkItem: CheckItemPayload) => void;
@@ -37,7 +38,7 @@ export default function ChecklistItem({
 }: ChecklistItemProps) {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editingText, setEditingText] = useState(false);
-  const [showInfoModal, setShowInfoModal] = useState(false);
+  const info = matchedInfoByTitle(stripEmoji(title));
 
   return (
     <Draggable draggableId={priority.toString()} index={index}>
@@ -56,17 +57,27 @@ export default function ChecklistItem({
                 height={16}
                 className="text-gray-400 cursor-grab"
               />
-              <p className="text-b-15">{title}</p>
-              {/* 애매해서 일단 주석처리함, 정보 리스트 나오면 정리해야 할듯 */}
-              {/* {hasInfo && (
-                <IconComponent
-                  name="infoCircle"
-                  width={16}
-                  height={16}
-                  className="text-gray-500 cursor-pointer"
-                  onClick={() => setShowInfoModal(true)}
+              <p className="text-15/22 font-bold">{title}</p>
+              {info && (
+                <NotificationModal
+                  trigger={
+                    <button
+                      type="button"
+                      className="flex items-center justify-center w-16 h-16"
+                      onSelect={(e) => e.preventDefault()}
+                    >
+                      <InfoIcon
+                        name="infoCircle"
+                        width={16}
+                        height={16}
+                        className="text-gray-500 cursor-pointer"
+                      />
+                    </button>
+                  }
+                  title={title}
+                  desscription={info}
                 />
-              )} */}
+              )}
             </div>
             <DialogDropdownLayout
               trigger={
@@ -119,7 +130,6 @@ export default function ChecklistItem({
               }
             </DialogDropdownLayout>
           </div>
-
           {checkType === 'TEXT' && (
             <div className="flex items-center justify-between text-r-14">
               {editingText ? (
@@ -143,7 +153,6 @@ export default function ChecklistItem({
               )}
             </div>
           )}
-
           {checkType === 'RADIO' && (
             <div className="flex flex-col gap-8 mt-4">
               {checkItems.map((option, i) => (
@@ -183,7 +192,6 @@ export default function ChecklistItem({
               ))}
             </div>
           )}
-
           {checkType === 'CHECKBOX' && (
             <div className="flex flex-col gap-8 mt-4">
               {checkItems.map((option, i) => (
@@ -220,14 +228,6 @@ export default function ChecklistItem({
                 </div>
               ))}
             </div>
-          )}
-
-          {showInfoModal && (
-            <InfoModal
-              title={stripEmoji(title)}
-              description={checklistInfoMap[stripEmoji(title)] || '정보가 없습니다.'}
-              onClose={() => setShowInfoModal(false)}
-            />
           )}
         </div>
       )}

@@ -12,13 +12,15 @@ export function Toaster() {
         return (
           <Toast key={id} {...props}>
             <div className="flex items-center gap-6">
-              <SwitchCase
-                value={variant ?? ''}
-                caseBy={{
-                  success: <IconComponent name={'toastSuccess'} width={16} height={16} />,
-                  fail: <IconComponent name={'toastError'} width={16} height={16} />,
-                }}
-              />
+              <div className="size-16">
+                <SwitchCase
+                  value={variant ?? ''}
+                  caseBy={{
+                    success: <IconComponent name={'toastSuccess'} width={16} height={16} />,
+                    fail: <IconComponent name={'toastError'} width={16} height={16} />,
+                  }}
+                />
+              </div>
               {title && <ToastTitle>{title}</ToastTitle>}
             </div>
             {action}

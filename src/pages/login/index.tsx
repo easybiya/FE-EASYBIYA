@@ -3,6 +3,12 @@ import IconComponent from '@/components/Asset/Icon';
 import Image from 'next/image';
 import router from 'next/router';
 
+export async function getStaticProps() {
+  return {
+    props: {},
+  };
+}
+
 export default function LoginPage() {
   return (
     <div className="flex flex-col justify-between items-center h-screen bg-[#FDFEFF] relative px-24 py-40">

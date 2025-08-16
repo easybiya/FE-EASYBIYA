@@ -184,10 +184,10 @@ export default function RoomInfoForm({ isEdit = false, id, setStep }: Props) {
               onClick={() => setIsOpen(!isOpen)}
             >
               <div className="flex gap-6 items-center">
-                <IconComponent width={14} height={14} name="calendar" alt="캘린더 아이콘" isBtn />
-                <p className="h-22 flex items-center text-center">{currentDate}</p>
+                <IconComponent width={16} height={16} name="calendar" alt="캘린더 아이콘" isBtn />
+                <p className="flex items-center text-center text-15/22">{currentDate}</p>
               </div>
-              <IconComponent width={10} height={10} name="arrowRight" alt="캘린더 아이콘" isBtn />
+              <IconComponent width={14} height={14} name="arrowRight" alt="캘린더 아이콘" isBtn />
             </div>
             {isOpen && (
               <AvailableCalendar handleCalendar={handleCalendar} currentDate={currentDate} />
