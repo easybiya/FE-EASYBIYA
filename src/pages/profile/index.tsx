@@ -15,9 +15,15 @@ export default function Page() {
         </Link>
         <Link
           className="py-12 font-semibold"
-          href="https://regular-penguin-856.notion.site/new-18123719b15f80c5bb3cd0e39f36e149?pvs=4"
+          href="https://dent-kitten-aab.notion.site/24b30a2dbf6f80c5ad6bd5789d8f5131"
         >
-          이용 약관
+          서비스 이용 약관
+        </Link>
+        <Link
+          className="py-12 font-semibold"
+          href="https://dent-kitten-aab.notion.site/24b30a2dbf6f8006bb54f3f090b32213"
+        >
+          개인정보 처리방침
         </Link>
         <ConfirmModal
           trigger={<button className="py-12 font-semibold text-start">로그아웃</button>}

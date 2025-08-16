@@ -144,7 +144,7 @@ export default function CheckListContainer({
             >
               {checklist.map((item, index) => (
                 <CheckListItem
-                  key={item.priority}
+                  key={`${item.checkType}-${item.priority}`}
                   index={index}
                   {...item}
                   priority={item.priority}
