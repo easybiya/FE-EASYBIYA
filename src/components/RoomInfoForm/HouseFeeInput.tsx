@@ -48,6 +48,7 @@ export default function HouseFeeInput({ type, text, value, onChange }: Props) {
                 max={999}
                 value={billion ?? ''}
                 onChange={handleBillionChange}
+                className="text-right"
               />
             </div>
             <p>억</p>
@@ -61,6 +62,7 @@ export default function HouseFeeInput({ type, text, value, onChange }: Props) {
               placeholder="0000"
               value={million ?? ''}
               onChange={handleMillionChange}
+              className="text-right"
             />
           </div>
           만원

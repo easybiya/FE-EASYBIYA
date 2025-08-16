@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import DetailRouteModal from './DetailRouteModal';
 import { calculateDistance } from '@/utils/calculateDistance';
 import { motion } from 'framer-motion';
+import { formatDistance } from '@/utils/formatDistance';
 
 interface Props {
   modalContent: MapProperty;
@@ -43,31 +44,32 @@ export default function InfoModal({ modalContent, closeModal, institution }: Pro
         transition={{ duration: 0.2 }}
         className="absolute top-20 right-0 left-0 z-50 mx-16 my-20"
       >
-        <div className="relative flex flex-col items-start p-20 gap-8 h-fit bg-white rounded-xl shadow">
+        <div className="relative flex flex-col items-start p-20 h-fit bg-white rounded-xl shadow">
           <IconComponent
             name={`${isInstitution ? 'institution' : 'property'}`}
             width={28}
             height={28}
             alt="모달 아이콘"
+            className="mb-10"
           />
-          <p className="text-md font-bold">{modalContent?.propertyName}</p>
-          <p className="text-15">{modalContent?.propertyAddress}</p>
+          <p className="text-16/24 font-bold mb-2">{modalContent?.propertyName}</p>
+          <p className="text-15/22">{modalContent?.propertyAddress}</p>
           {!isInstitution && institution && (
-            <p className="text-15 text-[#94896A] font-bold">
-              {institution.institutionName}에서 {distance}m
+            <p className="text-15 text-[#94896A] font-bold mt-10">
+              {institution.institutionName}에서 {formatDistance(distance)}
             </p>
           )}
           {!isInstitution && institution && (
             <div
-              className="w-fit flex items-center gap-2 rounded-full border px-16 py-10 font-semibold cursor-pointer mt-10"
+              className="w-fit flex items-center gap-2 rounded-full border pl-16 pr-10 py-10 font-semibold cursor-pointer mt-20 hover:bg-gray-100"
               onClick={() => setIsDetail(true)}
             >
-              <p className="h-20 text-sm">대중교통 보기</p>
+              <p className="h-20 text-14/20 font-semibold">대중교통 보기</p>
               <div className="h-14 w-14">
                 <IconComponent
                   name="arrowRight"
-                  width={10}
-                  height={10}
+                  width={16}
+                  height={16}
                   alt="오른쪽 화살표"
                   className="cursor-pointer"
                 />

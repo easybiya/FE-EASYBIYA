@@ -140,6 +140,10 @@ body {
   font-family: 'Pretendard', Arial, Helvetica, sans-serif;
 }
 
+p {
+  font-family: 'Pretendard', Arial, Helvetica, sans-serif;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -237,16 +241,30 @@ body {
 }
 
 .swiper-pagination-bullet {
-  @apply w-8 h-8 bg-white  opacity-100 !important;
+  @apply w-8 h-8 bg-white opacity-100 !important;
 }
 
 .swiper-pagination-bullet-active {
   @apply bg-[#191B1E] border-0 !important;
 }
 
+.onboarding-swiper-bullet .swiper-pagination-bullet {
+  background-color: #b5c1d2 !important;
+}
+
+.onboarding-swiper-bullet .swiper-pagination-bullet-active {
+  background-color: #191b1e !important;
+}
+
 .custom-scrollbar::-webkit-scrollbar {
+  display: block;
   width: 5px;
   height: 5px;
+}
+
+.with-scrollbar {
+  -ms-overflow-style: auto; /* IE, Edge */
+  scrollbar-width: auto; /* 파이어폭스 */
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
@@ -256,4 +274,16 @@ body {
 
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
+}
+
+/* ✅ 크롬/사파리/엣지 */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* ✅ 파이어폭스 */
+html,
+body {
+  scrollbar-width: none; /* 스크롤바 영역 자체를 없앰 */
+  -ms-overflow-style: none; /* IE, Edge 구버전 */
 }

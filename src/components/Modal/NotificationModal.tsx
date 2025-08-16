@@ -1,44 +1,36 @@
-import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useState } from 'react';
+import { Dispatch } from 'react';
 
 interface Props {
   trigger: React.ReactNode;
+  open?: boolean;
+  openChange?: Dispatch<React.SetStateAction<boolean>>;
+  title: string;
+  desscription: string[];
 }
 
-export function NotificationModal({ trigger }: Props) {
-  const [isOpen, setIsOpen] = useState(false);
+export function NotificationModal({ trigger, openChange, open, title, desscription }: Props) {
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={open} onOpenChange={openChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="max-w-320">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
-          <DialogDescription>
-            {`Make changes to your profile here. Click save when you're done.`}
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription className="text-gray-800 text-14/20 pl-20">
+            <ul className="list-disc">
+              {desscription.map((line, i) => (
+                <li key={i}>{line}</li>
+              ))}
+            </ul>
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input id="name" value="Pedro Duarte" className="col-span-3" />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
