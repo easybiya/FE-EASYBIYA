@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { CheckItemPayload, ChecklistPayloadItem } from '@/types/checklist';
 import IconComponent from '../Asset/Icon';
 import { Draggable } from '@hello-pangea/dnd';
-import InfoModal from '@/components/Modal/InfoModal';
-import { checklistInfoMap } from '@/constants/checkListInfo';
 import { stripEmoji } from '@/utils/stripEmoji';
 import DialogDropdownLayout from '../Dropdown/DialogDropdown';
 import { InputModal } from '../Modal/InputModal';
