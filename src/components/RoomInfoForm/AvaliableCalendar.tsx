@@ -1,4 +1,5 @@
 import { formatDate } from '@/utils/formatDate';
+import { ko } from 'date-fns/locale';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -17,6 +18,7 @@ export default function AvailableCalendar({ handleCalendar, currentDate }: Props
         isClearable
         dateFormat="yyyy-MM-dd"
         inline
+        locale={ko}
       />
       <style jsx>{`
         :global(.react-datepicker__header) {
