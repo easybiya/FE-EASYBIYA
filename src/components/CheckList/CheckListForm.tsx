@@ -91,6 +91,7 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
       } else {
         await postProperty(formData);
       }
+
       resetAll();
       setStep((prev) => prev + 1);
     } catch {
