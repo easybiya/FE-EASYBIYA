@@ -2,14 +2,17 @@ import { toggleBookmark } from '@/lib/api/property';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from '../use-toast';
 
-const useBookmark = () => {
+const useBookmark = (isFixed?: boolean) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (id: string) => toggleBookmark(id),
-    onSuccess: (data, id) => {
-      toast({ title: data.message, variant: 'success' });
-
+    onSuccess: (_, id) => {
+      if (isFixed) {
+        toast({ title: '북마크를 해제했습니다.', variant: 'success' });
+      } else {
+        toast({ title: '북마크를 설정했습니다.', variant: 'success' });
+      }
       queryClient.invalidateQueries({ queryKey: ['bookmarkedProperty'] });
       queryClient.invalidateQueries({ queryKey: ['propertyList'] });
       queryClient.invalidateQueries({ queryKey: ['propertyDetail', id] });

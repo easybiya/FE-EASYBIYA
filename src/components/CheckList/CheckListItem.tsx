@@ -182,7 +182,7 @@ export default function ChecklistItem({
                     ) : (
                       <span
                         onClick={() => setEditingIndex(i)}
-                        className="cursor-pointer inline-block h-20 w-full"
+                        className="cursor-pointer inline-block h-20 w-auto"
                       >
                         {option.description}
                       </span>
@@ -205,7 +205,7 @@ export default function ChecklistItem({
                       value={option.description}
                       checked={option.checked}
                       onChange={() => onChange?.(priority, option)}
-                      className="w-16 h-16 accent-black"
+                      className="w-16 h-16 accent-black rounded-4 border-gray-300"
                     />
                     {editingIndex === i ? (
                       <input
@@ -219,7 +219,7 @@ export default function ChecklistItem({
                     ) : (
                       <span
                         onClick={() => setEditingIndex(i)}
-                        className="cursor-pointer inline-block h-20 w-full"
+                        className="cursor-pointer inline-block h-20 w-auto"
                       >
                         {option.description}
                       </span>

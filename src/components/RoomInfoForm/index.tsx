@@ -12,6 +12,8 @@ import { formatDate } from '@/utils/formatDate';
 import FixedBar from '../FixedBar';
 import { usePropertyStore } from '@/store/usePropertyStore';
 import { getPropertyById } from '@/lib/api/property';
+import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 type roomInfoSchema = {
   contractType: HouseType;
@@ -48,6 +50,7 @@ export default function RoomInfoForm({ isEdit = false, id, setStep }: Props) {
   });
 
   const currentDate = useWatch({ control: form.control, name: 'available' });
+  const isMonth = currentType !== 'JEONSE' && !form.getValues('monthlyRent'); // 전세 타입이 아닌경우 월세 필수
 
   const { setProperty } = usePropertyStore();
 
@@ -108,7 +111,10 @@ export default function RoomInfoForm({ isEdit = false, id, setStep }: Props) {
   return (
     <div className="pt-32">
       <Form {...form}>
-        <form className="flex flex-col gap-56 mb-208" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          className={cn('flex flex-col gap-56', { 'mb-108': isOpen })}
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
           <FormField
             control={form.control}
             name="contractType"
@@ -187,14 +193,27 @@ export default function RoomInfoForm({ isEdit = false, id, setStep }: Props) {
                 <IconComponent width={16} height={16} name="calendar" alt="캘린더 아이콘" isBtn />
                 <p className="flex items-center text-center text-15/22">{currentDate}</p>
               </div>
-              <IconComponent width={14} height={14} name="arrowRight" alt="캘린더 아이콘" isBtn />
+              <IconComponent
+                width={16}
+                height={16}
+                name="arrowDown"
+                alt="캘린더 아이콘"
+                isBtn
+                className={cn('transition-transform duration-200', isOpen && 'rotate-180')}
+              />
             </div>
             {isOpen && (
-              <AvailableCalendar handleCalendar={handleCalendar} currentDate={currentDate} />
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <AvailableCalendar handleCalendar={handleCalendar} currentDate={currentDate} />
+              </motion.div>
             )}
           </div>
           <FixedBar
-            disabled={!form.formState.isValid || isPending}
+            disabled={!form.formState.isValid || isPending || isMonth}
             preventSkip={true}
             text="다음"
           />

@@ -13,13 +13,13 @@ export default function DetailSkeleton() {
       </div>
       <div className="flex flex-col">
         <Skeleton className="w-full aspect-[1.8/1] rounded-none" />
-        <div className="flex flex-col gap-10 my-28">
+        <div className="flex flex-col gap-10 my-28 px-20">
           <Skeleton className="h-18 w-28" />
           <Skeleton className="h-27 w-240" />
           <Skeleton className="h-20 w-208" />
           <Skeleton className="h-18 w-240 mt-6" />
         </div>
-        <div className="flex flex-col gap-16">
+        <div className="flex flex-col gap-16 px-20">
           <Skeleton className="h-96 w-full" />
           <Skeleton className="h-96 w-full" />
           <Skeleton className="h-96 w-full" />

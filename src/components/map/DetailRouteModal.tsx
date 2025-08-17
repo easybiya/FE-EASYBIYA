@@ -123,13 +123,13 @@ export default function DetailRouteModal({ institution, currentAddress, isClose 
         </div>
         <div className="flex flex-col gap-6 leading-normal">
           <div className="flex flex-col gap-2 px-16 py-12 border rounded-lg">
-            <p className="text-15 font-bold">{institution.institutionName}</p>
-            <p className="text-14">{institution.institutionAddress}</p>
+            <p className="text-15 font-bold">{currentAddress.propertyName}</p>
+            <p className="text-14">{currentAddress.propertyAddress}</p>
           </div>
           <IconComponent name="arrowDown" width={16} height={16} />
           <div className="flex flex-col gap-2 px-16 py-12 border rounded-lg">
-            <p className="text-15 font-bold">{currentAddress.propertyName}</p>
-            <p className="text-14">{currentAddress.propertyAddress}</p>
+            <p className="text-15 font-bold">{institution.institutionName}</p>
+            <p className="text-14">{institution.institutionAddress}</p>
           </div>
         </div>
       </div>

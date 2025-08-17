@@ -12,17 +12,18 @@ import DialogDropdownLayout from '../Dropdown/DialogDropdown';
 import PreventDropdownMenuItem from '../Dropdown/PreventDropdownMenuItem';
 import { ConfirmModal } from '../Modal/ConfirmModal';
 import DropdownIcon from '@/public/icons/meatball.svg?react';
+import useBookmark from '@/hooks/property/useBookmark';
 
 interface Props {
   info: Property;
-  toggleBookmark?: (id: number) => void;
   isFixed?: boolean;
   isShared?: boolean;
 }
 
-export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: Props) {
+export default function HouseCard({ info, isFixed, isShared }: Props) {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { mutate } = useBookmark(isFixed);
 
   return (
     <div className="w-full flex flex-col gap-8">
@@ -48,7 +49,7 @@ export default function HouseCard({ info, toggleBookmark, isFixed, isShared }: P
                 </button>
               }
             >
-              <PreventDropdownMenuItem onSelect={() => toggleBookmark && toggleBookmark(info.id)}>
+              <PreventDropdownMenuItem onSelect={() => mutate(String(info.id))}>
                 {isFixed ? '고정 해제하기' : '고정하기'}
               </PreventDropdownMenuItem>
               <PreventDropdownMenuItem

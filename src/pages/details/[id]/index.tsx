@@ -12,14 +12,12 @@ import { deleteProperty } from '@/lib/api/property';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/hooks/use-toast';
 import DropdownIcon from '@/public/icons/meatball.svg?react';
-import OpengraphImage from '@/public/images/opengraph.png';
 
 export default function ChecklistDetailPage() {
   const router = useRouter();
-  const { id } = router.query;
-  const propertyId = typeof id === 'string' ? id : undefined;
+  const { id } = router.query as { id: string };
 
-  const { propertyChecklist, propertyDetail, isLoading } = usePropertyDetail(propertyId);
+  const { propertyChecklist, propertyDetail, isLoading } = usePropertyDetail(id);
   const { mutate } = useBookmark();
   const queryClient = useQueryClient();
 
@@ -27,7 +25,7 @@ export default function ChecklistDetailPage() {
   const shareKakao = () => {
     const { Kakao } = window;
 
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/detail/${propertyId}}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/detail/${id}}`;
     const imageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/images/opengraph.png`;
 
     Kakao.Share.sendDefault({
@@ -54,8 +52,7 @@ export default function ChecklistDetailPage() {
   };
 
   const handleDelete = async () => {
-    if (!propertyId) return;
-    await deleteProperty(propertyId);
+    await deleteProperty(id);
     queryClient.invalidateQueries({ queryKey: ['bookmarkedProperty'] });
     queryClient.invalidateQueries({ queryKey: ['propertyList'] });
     toast({ title: '매물이 삭제되었습니다.', variant: 'success' });
@@ -104,7 +101,7 @@ export default function ChecklistDetailPage() {
                 width={24}
                 height={24}
                 className="cursor-pointer"
-                onClick={() => mutate(propertyId as string)}
+                onClick={() => mutate(id as string)}
               />
             )}
             <IconComponent
@@ -130,7 +127,7 @@ export default function ChecklistDetailPage() {
               }
             >
               <PreventDropdownMenuItem
-                onSelect={() => router.push(`/property/edit?propertyId=${propertyId}`)}
+                onSelect={() => router.push(`/property/edit?propertyId=${id}`)}
               >
                 수정하기
               </PreventDropdownMenuItem>
@@ -149,7 +146,7 @@ export default function ChecklistDetailPage() {
           </div>
         }
       />
-      <RoomDetailPage roomChecklist={propertyChecklist} detail={propertyDetail} />
+      <RoomDetailPage roomChecklist={propertyChecklist} detail={propertyDetail} id={id} />
     </div>
   );
 }
