@@ -1,5 +1,7 @@
 import { CheckItemPayload } from '@/types/checklist';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import CheckIcon from '@/public/icons/checkbox-check.svg?react';
+import UnCheckIcon from '@/public/icons/checkbox-uncheck.svg?react';
 
 interface Props {
   priority: number;
@@ -36,13 +38,17 @@ function CheckboxInput({ priority, item, onChange, onOptionEdit }: RadioInputPro
   const [inputEdit, setInputEdit] = useState(false);
   return (
     <div className="flex items-center gap-8 w-full">
-      <input
-        type="checkbox"
-        value={item.description}
-        checked={item.checked}
-        onChange={() => onChange?.(priority, item)}
-        className="w-16 h-16 accent-black rounded-4 border-gray-300"
-      />
+      <div
+        onClick={() => {
+          onChange?.(priority, item);
+        }}
+      >
+        {item.checked ? (
+          <CheckIcon width={16} height={16} />
+        ) : (
+          <UnCheckIcon width={16} height={16} />
+        )}
+      </div>
       {inputEdit ? (
         <input
           value={item.description}

@@ -1,5 +1,8 @@
 import { CheckItemPayload } from '@/types/checklist';
 import { useState } from 'react';
+import CheckIcon from '@/public/icons/radio-check.svg?react';
+import UnCheckIcon from '@/public/icons/radio-uncheck.svg?react';
+import { cn } from '@/lib/utils';
 
 interface Props {
   priority: number;
@@ -18,6 +21,7 @@ export default function RadioCheckItem({ priority, onChange, onOptionEdit, check
             item={option}
             onChange={onChange}
             onOptionEdit={onOptionEdit}
+            checkItems={checkItems}
           />
         </div>
       ))}
@@ -30,20 +34,27 @@ interface RadioInputProps {
   item: CheckItemPayload;
   onChange?: (id: number, checkItem: CheckItemPayload) => void;
   onOptionEdit?: (id: number, optionIndex: number, newValue: string) => void;
+  checkItems: CheckItemPayload[];
 }
 
-function RadioInput({ priority, item, onChange, onOptionEdit }: RadioInputProps) {
+function RadioInput({ priority, item, onChange, onOptionEdit, checkItems }: RadioInputProps) {
   const [inputEdit, setInputEdit] = useState(false);
   return (
     <div className="flex items-center gap-8 w-full">
-      <input
-        type="radio"
-        name={`radio-group-${priority}`}
-        value={item.description}
-        checked={item.checked}
-        onChange={() => onChange?.(priority, item)}
-        className="w-16 h-16 accent-black"
-      />
+      <div
+        onClick={() => {
+          // 라디오이므로 같은 그룹 내 다른 항목은 false로 바꾸고 현재만 true
+          checkItems.forEach((option) => (option.checked = option.priority === item.priority));
+          onChange?.(priority, item);
+        }}
+        className="cursor-pointer"
+      >
+        {item.checked ? (
+          <CheckIcon width={16} height={16} />
+        ) : (
+          <UnCheckIcon width={16} height={16} />
+        )}
+      </div>
 
       {inputEdit ? (
         <input
@@ -52,12 +63,15 @@ function RadioInput({ priority, item, onChange, onOptionEdit }: RadioInputProps)
           onChange={(e) => onOptionEdit?.(priority, item.priority, e.target.value)}
           onBlur={() => setInputEdit(false)}
           onKeyDown={(e) => e.key === 'Enter' && setInputEdit(false)}
-          className="text-sm w-full h-20  focus:outline-brownText"
+          className="text-sm w-full h-20 focus:outline-brownText"
         />
       ) : (
         <span
           onClick={() => setInputEdit(true)}
-          className="cursor-pointer inline-block h-20 w-auto"
+          className={cn(
+            'cursor-pointer inline-block h-20',
+            item.description.length === 0 ? 'w-full' : 'w-auto',
+          )}
         >
           {item.description}
         </span>
