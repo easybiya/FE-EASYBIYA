@@ -26,7 +26,6 @@ export default function Home() {
   const { params, setSortBy } = useDispatch();
   const { bookmarked, nonBookmarked, isLoading, fetchNextPage, hasNextPage, isFetching } =
     useProperty(params);
-  const { mutate } = useBookmark();
   const { ref, inView } = useInView({
     threshold: 0.5,
   });
@@ -112,21 +111,13 @@ export default function Home() {
                   <ul className="flex flex-col gap-16">
                     {bookmarked.map((item) => (
                       <li key={item.id}>
-                        <HouseCard
-                          info={item}
-                          toggleBookmark={() => mutate(String(item.id))}
-                          isFixed
-                        />
+                        <HouseCard info={item} isFixed />
                       </li>
                     ))}
 
                     {flattedNonBookmarkedData.map((item) => (
                       <li key={item.id}>
-                        <HouseCard
-                          info={item}
-                          toggleBookmark={() => mutate(String(item.id))}
-                          isFixed={false}
-                        />
+                        <HouseCard info={item} isFixed={false} />
                       </li>
                     ))}
                   </ul>

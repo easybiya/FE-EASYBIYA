@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { CheckItemPayload, ChecklistPayloadItem } from '@/types/checklist';
 import IconComponent from '../Asset/Icon';
 import { Draggable } from '@hello-pangea/dnd';
@@ -11,6 +10,9 @@ import DropdownIcon from '@/public/icons/meatball-gray.svg?react';
 import { matchedInfoByTitle } from '@/utils/matchedInfoByTitle';
 import { NotificationModal } from '../Modal/NotificationModal';
 import InfoIcon from '@/public/icons/info-circle.svg?react';
+import TextCheckItem from './TextCheckItem';
+import RadioCheckItem from './RadioCheckItem';
+import CheckboxCheckItem from './CheckboxCheckItem';
 
 interface ChecklistItemProps extends ChecklistPayloadItem {
   onChange?: (id: number, checkItem: CheckItemPayload) => void;
@@ -36,8 +38,6 @@ export default function ChecklistItem({
   onEdit,
   onDelete,
 }: ChecklistItemProps) {
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [editingText, setEditingText] = useState(false);
   const info = matchedInfoByTitle(stripEmoji(title));
 
   return (
@@ -131,103 +131,23 @@ export default function ChecklistItem({
             </DialogDropdownLayout>
           </div>
           {checkType === 'TEXT' && (
-            <div className="flex items-center justify-between text-r-14">
-              {editingText ? (
-                <input
-                  value={content ?? ''}
-                  autoFocus
-                  onChange={(e) => onTextEdit?.(priority, e.target.value)}
-                  onBlur={() => setEditingText(false)}
-                  onKeyDown={(e) => e.key === 'Enter' && setEditingText(false)}
-                  className="text-sm w-full h-20 focus:outline-brownText"
-                />
-              ) : (
-                <div
-                  className="flex justify-between items-center w-full h-20"
-                  onClick={() => setEditingText(true)}
-                >
-                  <span>
-                    {content || <span className="text-gray-400">내용을 입력해주세요</span>}
-                  </span>
-                </div>
-              )}
-            </div>
+            <TextCheckItem priority={priority} content={content} editText={onTextEdit} />
           )}
           {checkType === 'RADIO' && (
-            <div className="flex flex-col gap-8 mt-4">
-              {checkItems.map((option, i) => (
-                <div
-                  key={option.priority}
-                  className="flex items-center justify-between text-r-14 gap-8"
-                >
-                  <div className="flex items-center gap-8 w-full">
-                    <input
-                      type="radio"
-                      name={`radio-group-${priority}`}
-                      value={option.description}
-                      checked={option.checked}
-                      onChange={() => onChange?.(priority, option)}
-                      className="w-16 h-16 accent-black"
-                    />
-
-                    {editingIndex === i ? (
-                      <input
-                        value={option.description}
-                        autoFocus
-                        onChange={(e) => onOptionEdit?.(priority, option.priority, e.target.value)}
-                        onBlur={() => setEditingIndex(null)}
-                        onKeyDown={(e) => e.key === 'Enter' && setEditingIndex(null)}
-                        className="text-sm w-full h-20  focus:outline-brownText"
-                      />
-                    ) : (
-                      <span
-                        onClick={() => setEditingIndex(i)}
-                        className="cursor-pointer inline-block h-20 w-full"
-                      >
-                        {option.description}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <RadioCheckItem
+              priority={priority}
+              onChange={onChange}
+              onOptionEdit={onOptionEdit}
+              checkItems={checkItems}
+            />
           )}
           {checkType === 'CHECKBOX' && (
-            <div className="flex flex-col gap-8 mt-4">
-              {checkItems.map((option, i) => (
-                <div
-                  key={option.priority}
-                  className="flex items-center justify-between text-r-14 gap-8"
-                >
-                  <div className="flex items-center gap-8 w-full">
-                    <input
-                      type="checkbox"
-                      value={option.description}
-                      checked={option.checked}
-                      onChange={() => onChange?.(priority, option)}
-                      className="w-16 h-16 accent-black"
-                    />
-                    {editingIndex === i ? (
-                      <input
-                        value={option.description}
-                        autoFocus
-                        onChange={(e) => onOptionEdit?.(priority, option.priority, e.target.value)}
-                        onBlur={() => setEditingIndex(null)}
-                        onKeyDown={(e) => e.key === 'Enter' && setEditingIndex(null)}
-                        className="text-sm w-full h-20  focus:outline-brownText"
-                      />
-                    ) : (
-                      <span
-                        onClick={() => setEditingIndex(i)}
-                        className="cursor-pointer inline-block h-20 w-full"
-                      >
-                        {option.description}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <CheckboxCheckItem
+              priority={priority}
+              onChange={onChange}
+              onOptionEdit={onOptionEdit}
+              checkItems={checkItems}
+            />
           )}
         </div>
       )}

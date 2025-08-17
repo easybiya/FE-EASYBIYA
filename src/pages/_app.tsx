@@ -10,7 +10,16 @@ import KakaoScript from '@/components/Layout/KakaoScript';
 import { CookiesProvider } from 'react-cookie';
 import { Toaster } from '@/components/ui/toaster';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 0,
+      gcTime: 0,
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+    },
+  },
+});
 
 export default function App({ Component, pageProps }: AppProps) {
   const setTokens = useAuthStore((state) => state.setTokens);

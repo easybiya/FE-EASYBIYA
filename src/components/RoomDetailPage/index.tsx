@@ -4,7 +4,6 @@ import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { ChecklistPayloadItem } from '@/types/checklist';
-import { useRouter } from 'next/router';
 import { formatDate } from '@/utils/formatDate';
 import { formatWon } from '@/utils/formatWon';
 import HouseTypeTag from '@/components/DashBoard/HouseTypeTag';
@@ -24,12 +23,11 @@ import { useQueryClient } from '@tanstack/react-query';
 interface Props {
   roomChecklist: ChecklistPayloadItem[];
   detail: Property;
+  id: string;
 }
 
-export default function RoomDetailPage({ roomChecklist, detail }: Props) {
-  const router = useRouter();
-  const { propertyImages, propertyAddress, leaseType, deposit, monthlyFee, availableDate, id } =
-    detail;
+export default function RoomDetailPage({ roomChecklist, detail, id }: Props) {
+  const { propertyImages, propertyAddress, leaseType, deposit, monthlyFee, availableDate } = detail;
   const [isEdit, setIsEdit] = useState(false);
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const [, setActiveIndex] = useState(0);
@@ -38,10 +36,6 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
   const { setSelected, setApi, setStartIndex, selected, startIndex, currentIndex } =
     useImageCarousel({ images: detail.propertyImages || [] });
 
-  const handleEditImages = () => {
-    router.push(`/property/edit-photo?propertyId=${id}`);
-  };
-
   const handleEdit = () => {
     if (isEdit) return;
     setIsEdit(true);
@@ -49,7 +43,7 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
 
   const submitUpdateChecklist = async () => {
     await updateChecklist(String(id), checklist);
-    queryClient.invalidateQueries({ queryKey: 'propertyDetail', id });
+    await queryClient.invalidateQueries({ queryKey: ['propertyDetail', String(id)] });
     toast({ title: '체크리스트가 수정되었습니다.', variant: 'success' });
     setIsEdit(false);
   };
@@ -62,9 +56,7 @@ export default function RoomDetailPage({ roomChecklist, detail }: Props) {
 
   return (
     <>
-      {isEdit && (
-        <EditButtonContainer onClick={submitUpdateChecklist} onEditImage={handleEditImages} />
-      )}
+      {isEdit && <EditButtonContainer onClick={submitUpdateChecklist} />}
       <div className="w-full aspect-[1.8/1] relative">
         <Link
           href={`/property/edit-photo?propertyId=${id}`}

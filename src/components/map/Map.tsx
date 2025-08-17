@@ -95,8 +95,9 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
           display: flex; 
           justify-content: center; 
           align-items: center; 
-          padding: 6px 12px; 
+          padding: 4px 12px; 
           font-size: 14px; 
+          line-height: 140%;
           color: #fff; 
           text-align: center; 
           font-weight: 600; 
@@ -104,7 +105,6 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
           border-radius: 9999px; 
           white-space: nowrap;
           position: relative;
-          top: -3px;
           min-width: 50px;
         ">
           ${house.propertyName}
@@ -166,7 +166,7 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
           display: flex; 
           justify-content: center; 
           align-items: center; 
-          padding: 6px 12px; 
+          padding: 4px 12px; 
           font-size: 14px; 
           color: #ffffff; 
           text-align: center; 

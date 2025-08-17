@@ -2,7 +2,6 @@ import Button from '../Button/CustomButton';
 
 interface Props {
   onClick: () => void;
-  onEditImage?: () => void;
 }
 
 export default function EditButtonContainer({ onClick }: Props) {

@@ -168,7 +168,7 @@ export default function SearchAddress({ isEdit = false, id, setStep }: Props) {
                           disabled
                           {...field}
                           placeholder="주소를 검색해 주세요"
-                          className="pointer-events-none bg-white py-8 h-40 disabled:opacity-100" // 클릭 이벤트 차단 및 스타일 변경
+                          className="pointer-events-none bg-white py-8 h-40 disabled:opacity-100 !text-15/22" // 클릭 이벤트 차단 및 스타일 변경
                         />
                       </FormControl>
                       <FormMessage />
@@ -192,7 +192,7 @@ export default function SearchAddress({ isEdit = false, id, setStep }: Props) {
                       <Input
                         {...field}
                         placeholder="상세 주소를 입력해 주세요"
-                        className="bg-white py-8 h-40"
+                        className="bg-white py-8 h-40 !text-15/22"
                       />
                     </FormControl>
                     <FormMessage />
@@ -211,7 +211,7 @@ export default function SearchAddress({ isEdit = false, id, setStep }: Props) {
                       <Input
                         {...field}
                         placeholder="집 별명을 입력해 주세요"
-                        className="bg-white py-8 h-40"
+                        className="bg-white py-8 h-40 !text-15/22"
                       />
                     </FormControl>
                     <FormMessage />
