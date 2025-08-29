@@ -22,8 +22,8 @@ const queryClient = new QueryClient({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
-  const setTokens = useAuthStore((state) => state.setTokens);
   const imageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/images/opengraph.png`;
+  const setTokens = useAuthStore((state) => state.setTokens);
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
@@ -38,12 +38,12 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <title>Easybiya</title>
-        <meta name="description" content="내가 살 집을 확인해보세요" />
+        <title>이집이야</title>
+        <meta name="description" content={`"좋은 집" 고르는 기준, 정리해 드립니다`} />
         {/* Open Graph */}
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="easybiya" />
-        <meta property="og:description" content="내가 살 집을 확인해보세요" />
+        <meta property="og:title" content="이집이야! 자취방 체크리스트" />
+        <meta property="og:description" content={`"좋은 집" 고르는 기준, 정리해 드립니다`} />
         <meta property="og:image" content={imageUrl} />
         <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL} />
         <meta property="og:site_name" content="easybiya" />
