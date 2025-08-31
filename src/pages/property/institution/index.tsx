@@ -2,9 +2,8 @@ import InstitutionForm from '@/components/Institution';
 import Header from '@/components/Layout/Header';
 import { useInstitution } from '@/hooks/map/useInstitution';
 import MapIcon from '@/public/icons/map-pinned.svg?react';
-import Image from 'next/image';
-import IconComponent from '@/components/Asset/Icon';
 import { useRouter } from 'next/navigation';
+import CloseIcon from '@/public/icons/close.svg?react';
 
 export default function Page() {
   const { institution } = useInstitution();
@@ -15,7 +14,7 @@ export default function Page() {
       <Header
         title={institution ? '직장/학교 수정' : '직장/학교 등록'}
         right={
-          <IconComponent
+          <CloseIcon
             name="close"
             width={16}
             height={16}

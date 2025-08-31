@@ -7,13 +7,14 @@ import { HouseType } from '@/types';
 import HouseTypeSelectContainer from './HouseTypeSelectContainer';
 import HouseFeeInput from './HouseFeeInput';
 import AvailableCalendar from './AvaliableCalendar';
-import IconComponent from '../Asset/Icon';
 import { formatDate } from '@/utils/formatDate';
 import FixedBar from '../FixedBar';
 import { usePropertyStore } from '@/store/usePropertyStore';
 import { getPropertyById } from '@/lib/api/property';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
+import CalendarIcon from '@/public/icons/calendar.svg?react';
+import ArrowDownIcon from '@/public/icons/arrow-down.svg?react';
 
 type roomInfoSchema = {
   contractType: HouseType;
@@ -190,16 +191,22 @@ export default function RoomInfoForm({ isEdit = false, id, setStep }: Props) {
               onClick={() => setIsOpen(!isOpen)}
             >
               <div className="flex gap-6 items-center">
-                <IconComponent width={16} height={16} name="calendar" alt="캘린더 아이콘" isBtn />
+                <CalendarIcon
+                  width={16}
+                  height={16}
+                  name="calendar"
+                  className={'cursor-pointer fill-gray-500'}
+                />
                 <p className="flex items-center text-center text-15/22">{currentDate}</p>
               </div>
-              <IconComponent
+              <ArrowDownIcon
                 width={16}
                 height={16}
                 name="arrowDown"
-                alt="캘린더 아이콘"
-                isBtn
-                className={cn('transition-transform duration-200', isOpen && 'rotate-180')}
+                className={cn(
+                  'transition-transform duration-200 cursor-pointer',
+                  isOpen && 'rotate-180',
+                )}
               />
             </div>
             {isOpen && (

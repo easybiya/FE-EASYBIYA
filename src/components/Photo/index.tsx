@@ -1,9 +1,10 @@
 import { useState, useRef, Dispatch, SetStateAction } from 'react';
 import Image from 'next/image';
-import CustomButton from '@/components/Button/CustomButton';
-import IconComponent from '@/components/Asset/Icon';
 import FixedBar from '@/components/FixedBar';
 import { usePropertyStore } from '@/store/usePropertyStore';
+import PlusIcon from '@/public/icons/plus.svg?react';
+import CloseIcon from '@/public/icons/close.svg?react';
+import { Button } from '../ui/button';
 
 interface Props {
   setStep: Dispatch<SetStateAction<number>>;
@@ -46,12 +47,7 @@ export default function PhotoForm({ setStep }: Props) {
             className="w-full h-160 p-24 border border-gray-300 bg-white rounded-lg flex flex-col justify-center items-center cursor-pointer shadow-sm hover:bg-gray-100 transition"
             onClick={() => fileInputRef.current?.click()}
           >
-            <IconComponent
-              name="plus"
-              width={24}
-              height={24}
-              className="text-gray-500 cursor-pointer"
-            />
+            <PlusIcon name="plus" width={24} height={24} className="cursor-pointer" />
             <p className="text-b-16 mt-8 text-gray-900">집 사진 추가</p>
             <p className="text-r-14 text-gray-500 mt-4">거실, 욕실, 부엌 등</p>
           </label>
@@ -69,9 +65,9 @@ export default function PhotoForm({ setStep }: Props) {
 
                   <button
                     onClick={() => handleRemoveImage(index)}
-                    className="absolute top-1 right-1 bg-white p-1 rounded-full shadow-md"
+                    className="absolute top-8 right-6"
                   >
-                    <IconComponent name="close" width={12} height={12} className="cursor-pointer" />
+                    <CloseIcon name="close" width={12} height={12} className="cursor-pointer" />
                   </button>
                 </div>
               ))}
@@ -79,13 +75,16 @@ export default function PhotoForm({ setStep }: Props) {
 
             {previewImages.length < 8 && (
               <div className="w-full max-w-md mt-4">
-                <CustomButton
-                  label="+ 사진 추가"
+                <Button
                   variant="secondary"
-                  fullWidth
-                  className="cursor-pointer"
+                  className="cursor-pointer w-full bg-white border-1 border-gray-300!"
                   onClick={() => fileInputRef.current?.click()}
-                />
+                >
+                  <div className="flex gap-4 items-center font-semibold">
+                    <PlusIcon width={16} height={16} />
+                    사진 추가
+                  </div>
+                </Button>
               </div>
             )}
           </>

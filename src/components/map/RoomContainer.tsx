@@ -1,5 +1,4 @@
 import { Institution, MapProperty } from '@/types';
-import IconComponent from '../Asset/Icon';
 import { useRouter } from 'next/navigation';
 import CreateInstitutionButton from './CreateInstitutionButton';
 import EditIcon from '@/public/icons/pencil.svg?react';

@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import HouseTypeTag from './HouseTypeTag';
 import { Property } from '@/types';
-import IconComponent from '../Asset/Icon';
 import { formatWon } from '@/utils/formatWon';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -13,6 +12,8 @@ import PreventDropdownMenuItem from '../Dropdown/PreventDropdownMenuItem';
 import { ConfirmModal } from '../Modal/ConfirmModal';
 import DropdownIcon from '@/public/icons/meatball.svg?react';
 import useBookmark from '@/hooks/property/useBookmark';
+import HomeIcon from '@/public/icons/home.svg?react';
+import PinIcon from '@/public/icons/pin-icon.svg?react';
 
 interface Props {
   info: Property;
@@ -31,7 +32,7 @@ export default function HouseCard({ info, isFixed, isShared }: Props) {
         <h1 className="font-bold text-lg">{info.propertyName}</h1>
         {!isShared && (
           <div className="flex gap-20">
-            {isFixed && <IconComponent name="pin" width={20} height={20} />}
+            {isFixed && <PinIcon width={20} height={20} />}
             <DialogDropdownLayout
               trigger={
                 <button
@@ -97,12 +98,9 @@ export default function HouseCard({ info, isFixed, isShared }: Props) {
                 className="rounded"
               />
             ) : (
-              <IconComponent
-                name="home"
-                width={28}
-                height={28}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-              />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <HomeIcon width={28} height={28} />
+              </div>
             )}
           </div>
         </div>

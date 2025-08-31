@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { usePropertyDetail } from '@/hooks/propertyDetail/usePropertyDetail';
 import RoomDetailPage from '@/components/RoomDetailPage';
 import DetailSkeleton from '@/components/RoomDetailPage/DetailSkeleton';
-import IconComponent from '@/components/Asset/Icon';
 import useBookmark from '@/hooks/property/useBookmark';
 import { ConfirmModal } from '@/components/Modal/ConfirmModal';
 import DialogDropdownLayout from '@/components/Dropdown/DialogDropdown';
@@ -12,6 +11,9 @@ import { deleteProperty } from '@/lib/api/property';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/hooks/use-toast';
 import DropdownIcon from '@/public/icons/meatball.svg?react';
+import ArrowLeftIcon from '@/public/icons/arrow-left.svg?react';
+import PinIcon from '@/public/icons/pin-icon.svg?react';
+import ShareIcon from '@/public/icons/share-Icon.svg?react';
 
 export default function ChecklistDetailPage() {
   const router = useRouter();
@@ -83,7 +85,7 @@ export default function ChecklistDetailPage() {
       <Header
         left={
           <div className="flex gap-8 items-center">
-            <IconComponent
+            <ArrowLeftIcon
               name="arrowLeft"
               width={24}
               height={24}
@@ -96,7 +98,7 @@ export default function ChecklistDetailPage() {
         right={
           <div className="flex gap-12">
             {propertyDetail.isBookmarked && (
-              <IconComponent
+              <PinIcon
                 name="pin"
                 width={24}
                 height={24}
@@ -104,7 +106,7 @@ export default function ChecklistDetailPage() {
                 onClick={() => mutate(id as string)}
               />
             )}
-            <IconComponent
+            <ShareIcon
               name="share"
               width={24}
               height={24}

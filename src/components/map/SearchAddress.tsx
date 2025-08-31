@@ -5,10 +5,10 @@ import DaumPostcodeEmbed, { Address } from 'react-daum-postcode';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
-import Image from 'next/image';
 import { createRoomZodSchema } from '@/lib/zodSchema';
 import FixedBar from '../FixedBar';
 import { usePropertyStore } from '@/store/usePropertyStore';
+import SearchIcon from '@/public/icons/SearchIcon.svg?react';
 
 declare global {
   interface Window {
@@ -175,13 +175,7 @@ export default function SearchAddress({ isEdit = false, id, setStep }: Props) {
                     </FormItem>
                   )}
                 />
-                <Image
-                  src="/icons/SearchIcon.svg"
-                  alt="검색아이콘"
-                  height={24}
-                  width={24}
-                  className="absolute right-12 top-8"
-                />
+                <SearchIcon height={24} width={24} className="absolute right-12 top-8" />
               </div>
               <FormField
                 control={form.control}

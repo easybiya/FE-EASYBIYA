@@ -1,8 +1,9 @@
 import { MapProperty } from '@/types';
 import { useState } from 'react';
-import IconComponent from '../Asset/Icon';
 import { AnimatePresence, motion } from 'framer-motion';
-import X from '@/public/icons/x.svg?react';
+import HamburgerIcon from '@/public/icons/hanburger.svg?react';
+import CloseIcon from '@/public/icons/close.svg?react';
+
 interface Props {
   roomList?: MapProperty[];
   handleTagClick: (item: MapProperty) => Promise<void>;
@@ -21,7 +22,7 @@ export default function RoomFloatButton({ roomList, handleTagClick }: Props) {
         className="absolute px-16 py-8 rounded-full border-2 bottom-44 border-black bg-white flex items-center gap-6 cursor-pointer h-40"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <IconComponent width={16} height={16} name="hamburger" />
+        <HamburgerIcon width={16} height={16} name="hamburger" />
         <p className="font-semibold text-gray-800 text-16/24">목록보기</p>
       </div>
       <AnimatePresence>
@@ -35,8 +36,7 @@ export default function RoomFloatButton({ roomList, handleTagClick }: Props) {
           >
             <div className="flex justify-between items-center h-24">
               <p className="font-semibold text-16/24">목록</p>
-              <IconComponent
-                name="close"
+              <CloseIcon
                 width={10}
                 height={10}
                 onClick={() => setIsOpen(false)}

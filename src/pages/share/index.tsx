@@ -1,12 +1,13 @@
-import IconComponent from '@/components/Asset/Icon';
 import Button from '@/components/Button/CustomButton';
 import ShareCard from '@/components/DashBoard/ShareCard';
-import Dropdown from '@/components/Dropdown';
 import Header from '@/components/Layout/Header';
 import { mockHouserData } from '@/data/mockHouseData';
 import { Property } from '@/types';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import CloseIcon from '@/public/icons/close.svg?react';
+import SortDropdown from '@/components/Dropdown/SortDropdown';
+import { useDispatch } from '@/hooks/property/useDispatch';
 
 const DROPDOWN_OPTION = [
   { label: '최신순', value: 'createdAt' },
@@ -24,6 +25,7 @@ export default function Home() {
   const [propertyList, setPropertyList] = useState<Property[]>([]);
   const [checkedList, setCheckedList] = useState<Property[]>([]);
   const router = useRouter();
+  const { params } = useDispatch();
 
   const handleCheckList = (property: Property) => {
     setCheckedList((prev) =>
@@ -31,6 +33,10 @@ export default function Home() {
         ? prev.filter((item) => item.id !== property.id)
         : [...prev, property],
     );
+  };
+
+  const handleSelect = (option: string) => {
+    console.log(option);
   };
 
   const shareKakao = () => {
@@ -71,7 +77,7 @@ export default function Home() {
       <Header
         title="공유하기"
         right={
-          <IconComponent
+          <CloseIcon
             name="close"
             width={16}
             height={16}
@@ -84,7 +90,7 @@ export default function Home() {
       <div className="flex flex-col px-20 py-8 gap-8 mb-80">
         <div className="flex w-full justify-between items-center">
           <p className="text-gray-500 text-14">전체 {checkedList.length}</p>
-          <Dropdown options={DROPDOWN_OPTION} type="select" selectedOption="최신순" />
+          <SortDropdown handleClick={handleSelect} params={params} />
         </div>
         <ul className="flex flex-col gap-16">
           {propertyList.map((property) => (

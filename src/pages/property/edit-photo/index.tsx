@@ -1,15 +1,16 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import CustomButton from '@/components/Button/CustomButton';
-import IconComponent from '@/components/Asset/Icon';
 import { useSearchParams } from 'next/navigation';
 import { getPropertyById, updatePropertyImages } from '@/lib/api/property';
 import Header from '@/components/Layout/Header';
 import { PropertyImage } from '@/types';
 import { useQueryClient } from '@tanstack/react-query';
-import Button from '@/components/Button/CustomButton';
 import { toast } from '@/hooks/use-toast';
+import PlusIcon from '@/public/icons/plus.svg?react';
+import CloseIcon from '@/public/icons/close.svg?react';
+import { Button } from '@/components/ui/button';
+import CustomButton from '@/components/Button/CustomButton';
 
 interface PropertyImageWithFiel extends PropertyImage {
   file?: File;
@@ -91,7 +92,7 @@ export default function EditPhotoPage() {
         }
         title="사진 수정"
         right={
-          <Button
+          <CustomButton
             label="저장"
             onClick={updateImages}
             size="small"
@@ -105,12 +106,7 @@ export default function EditPhotoPage() {
             className="w-full px-20 py-10 border gap-4 border-gray-300 bg-white rounded-lg flex justify-center items-center cursor-pointer shadow-sm hover:bg-gray-100 transition"
             onClick={() => fileInputRef.current?.click()}
           >
-            <IconComponent
-              name="plus"
-              width={16}
-              height={16}
-              className="text-gray-500 cursor-pointer"
-            />
+            <PlusIcon name="plus" width={16} height={16} className="text-gray-500 cursor-pointer" />
             <p className="text-15 text-gray-900 font-semibold">사진 추가</p>
           </label>
         ) : (
@@ -124,12 +120,11 @@ export default function EditPhotoPage() {
                     alt={`Uploaded ${index}`}
                     className="w-full h-full object-cover rounded-lg border border-gray-300"
                   />
-
                   <button
                     onClick={() => handleRemoveImage(index)}
-                    className="absolute top-4 right-4 bg-white p-4 rounded-full shadow-md"
+                    className="absolute top-8 right-6"
                   >
-                    <IconComponent name="close" width={12} height={12} className="cursor-pointer" />
+                    <CloseIcon name="close" width={12} height={12} className="cursor-pointer" />
                   </button>
                 </div>
               ))}
@@ -137,13 +132,16 @@ export default function EditPhotoPage() {
 
             {existingImages.length < 8 && (
               <div className="w-full max-w-md mt-16">
-                <CustomButton
-                  label="+ 사진 추가"
+                <Button
                   variant="secondary"
-                  fullWidth
-                  className="cursor-pointer"
+                  className="cursor-pointer w-full bg-white border-1 border-gray-300!"
                   onClick={() => fileInputRef.current?.click()}
-                />
+                >
+                  <div className="flex gap-4 items-center font-semibold">
+                    <PlusIcon width={16} height={16} />
+                    사진 추가
+                  </div>
+                </Button>
               </div>
             )}
           </>

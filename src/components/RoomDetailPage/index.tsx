@@ -10,7 +10,6 @@ import HouseTypeTag from '@/components/DashBoard/HouseTypeTag';
 import Image from 'next/image';
 import EditButtonContainer from '@/components/EditButtonContainer';
 import CheckListContainer from '@/components/CheckList/CheckListContainer';
-import IconComponent from '@/components/Asset/Icon';
 import { updateChecklist } from '@/lib/api/checklist';
 import Link from 'next/link';
 import ImageSlider from '@/components/DashBoard/ImageSlider';
@@ -19,6 +18,7 @@ import { Property } from '@/types';
 import { motion } from 'framer-motion';
 import { toast } from '@/hooks/use-toast';
 import { useQueryClient } from '@tanstack/react-query';
+import HomeIcon from '@/public/icons/home.svg?react';
 
 interface Props {
   roomChecklist: ChecklistPayloadItem[];
@@ -88,12 +88,9 @@ export default function RoomDetailPage({ roomChecklist, detail, id }: Props) {
           </Swiper>
         ) : (
           <div className="bg-primary2 h-full">
-            <IconComponent
-              name="home"
-              width={64}
-              height={64}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-            />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              <HomeIcon width={64} height={64} />
+            </div>
           </div>
         )}
       </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import IconComponent from '@/components/Asset/Icon';
+import KakaoIcon from '@/public/icons/kakao.svg?react';
 
 // TO DO: 서버 켜면 로그인 테스트
 export default function KakaoLoginButton() {
@@ -32,11 +32,11 @@ export default function KakaoLoginButton() {
   return (
     <button
       onClick={handleKakaoLogin}
-      className="w-full h-48 px-24 text-b-16 bg-[#FEE500] rounded-md hover:bg-yellow-300 flex items-center justify-center gap-8 disabled:opacity-50 text-black"
+      className="w-full h-48 px-24 text-b-16 bg-[#FEE500] rounded-12 hover:bg-yellow-300 flex items-center justify-center gap-8 disabled:opacity-50 text-black"
       disabled={loading}
     >
-      <IconComponent name="kakao" width={20} height={20} />
-      {loading ? '로그인 중...' : '카카오로 시작하기'}
+      <KakaoIcon width={22} height={25} />
+      <p className="font-black/80">{loading ? '로그인 중...' : '카카오 로그인'}</p>
     </button>
   );
 }

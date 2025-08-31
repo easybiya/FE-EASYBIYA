@@ -1,10 +1,13 @@
 import { Institution, MapProperty } from '@/types';
-import IconComponent from '../Asset/Icon';
 import { useEffect, useState } from 'react';
 import DetailRouteModal from './DetailRouteModal';
 import { calculateDistance } from '@/utils/calculateDistance';
 import { motion } from 'framer-motion';
 import { formatDistance } from '@/utils/formatDistance';
+import CloseIcon from '@/public/icons/close.svg?react';
+import ArrowRightIcon from '@/public/icons/arrow-right.svg?react';
+import InstitutionIcon from '@/public/icons/institution.svg?react';
+import PropertyIcon from '@/public/icons/property.svg?react';
 
 interface Props {
   modalContent: MapProperty;
@@ -45,13 +48,13 @@ export default function InfoModal({ modalContent, closeModal, institution }: Pro
         className="absolute top-20 right-0 left-0 z-50 mx-16 my-20"
       >
         <div className="relative flex flex-col items-start p-20 h-fit bg-white rounded-xl shadow">
-          <IconComponent
-            name={`${isInstitution ? 'institution' : 'property'}`}
-            width={28}
-            height={28}
-            alt="모달 아이콘"
-            className="mb-10"
-          />
+          <div className="mb-10">
+            {institution ? (
+              <InstitutionIcon width={28} height={28} />
+            ) : (
+              <PropertyIcon width={28} height={28} />
+            )}
+          </div>
           <p className="text-16/24 font-bold mb-2">{modalContent?.propertyName}</p>
           <p className="text-15/22">{modalContent?.propertyAddress}</p>
           {!isInstitution && institution && (
@@ -64,21 +67,12 @@ export default function InfoModal({ modalContent, closeModal, institution }: Pro
               className="w-fit flex items-center gap-2 rounded-full border pl-16 pr-10 py-10 font-semibold cursor-pointer mt-20 hover:bg-gray-100"
               onClick={() => setIsDetail(true)}
             >
-              <p className="h-20 text-14/20 font-semibold">대중교통 보기</p>
-              <div className="h-14 w-14">
-                <IconComponent
-                  name="arrowRight"
-                  width={16}
-                  height={16}
-                  alt="오른쪽 화살표"
-                  className="cursor-pointer"
-                />
-              </div>
+              <p className="text-14/20 font-semibold">대중교통 보기</p>
+              <ArrowRightIcon width={14} height={14} className="cursor-pointer" />
             </div>
           )}
-          <IconComponent
+          <CloseIcon
             name="close"
-            alt="닫기 아이콘"
             width={16}
             height={16}
             onClick={closeModal}

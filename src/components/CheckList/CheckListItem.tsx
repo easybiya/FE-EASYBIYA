@@ -1,5 +1,5 @@
 import { CheckItemPayload, ChecklistPayloadItem } from '@/types/checklist';
-import IconComponent from '../Asset/Icon';
+import DragIcon from '@/public/icons/drag.svg?react';
 import { Draggable } from '@hello-pangea/dnd';
 import { stripEmoji } from '@/utils/stripEmoji';
 import DialogDropdownLayout from '../Dropdown/DialogDropdown';
@@ -51,12 +51,7 @@ export default function ChecklistItem({
         >
           <div className="flex items-center justify-between mb-8 relative">
             <div className="flex items-center gap-8">
-              <IconComponent
-                name="drag"
-                width={16}
-                height={16}
-                className="text-gray-400 cursor-grab"
-              />
+              <DragIcon width={16} height={16} className="cursor-grab" />
               <p className="text-15/22 font-bold">{title}</p>
               {info && (
                 <NotificationModal
