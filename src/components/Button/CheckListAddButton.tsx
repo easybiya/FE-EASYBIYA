@@ -1,4 +1,6 @@
-import IconComponent from '@/components/Asset/Icon';
+import CheckItemIcon from '@/public/icons/add-list-check.svg?react';
+import RadioItemIcon from '@/public/icons/add-list-radio.svg?react';
+import TextItemIcon from '@/public/icons/add-list-text.svg?react';
 
 interface ChecklistAddButtonProps {
   label: string;
@@ -7,6 +9,19 @@ interface ChecklistAddButtonProps {
 }
 
 export default function ChecklistAddButton({ label, iconName, onClick }: ChecklistAddButtonProps) {
+  const renderIcon = () => {
+    switch (iconName) {
+      case 'addListCheck':
+        return <CheckItemIcon width={16} height={16} />;
+      case 'addListRadio':
+        return <RadioItemIcon width={16} height={16} />;
+      case 'addListText':
+        return <TextItemIcon width={16} height={16} />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <button
       onClick={onClick}
@@ -14,7 +29,7 @@ export default function ChecklistAddButton({ label, iconName, onClick }: Checkli
         hover:bg-gray-100 hover:border-gray-500 transition"
     >
       <span className="text-r-14">{label}</span>
-      <IconComponent name={iconName} width={16} height={16} className="text-black" />
+      {renderIcon()}
     </button>
   );
 }

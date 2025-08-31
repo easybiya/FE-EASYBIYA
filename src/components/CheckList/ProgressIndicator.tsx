@@ -1,4 +1,4 @@
-import IconComponent from '../Asset/Icon';
+import CheckIcon from '@/public/icons/check.svg?react';
 
 interface Props {
   totalSteps: number;
@@ -22,18 +22,13 @@ export default function ProgressIndicator({ totalSteps, step }: Props) {
                 ${isUpcoming ? 'bg-white text-gray-700 border-gray-700' : ''}`}
             >
               {isCompleted ? (
-                <IconComponent
-                  name="checkCircle"
-                  width={18}
-                  height={18}
-                  className="text-gray-700"
-                />
+                <CheckIcon width={10} height={8} />
               ) : (
-                <span className="text-b-13">{stepNumber}</span>
+                <span className="text-13/20">{stepNumber}</span>
               )}
             </div>
 
-            {stepNumber !== totalSteps && <div className="w-48 h-2 bg-gray-700 mx-4"></div>}
+            {stepNumber !== totalSteps && <div className="w-48 h-2 bg-gray-700 mx-4" />}
           </div>
         );
       })}

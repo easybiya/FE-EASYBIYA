@@ -5,12 +5,12 @@ import DaumPostcodeEmbed, { Address } from 'react-daum-postcode';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
-import Image from 'next/image';
 import { createInstitutionZodSchema } from '@/lib/zodSchema';
 import FixedBar from '../FixedBar';
 import { fetchInstitution } from '@/lib/api/institutuion';
 import { useRouter } from 'next/navigation';
 import { Institution } from '@/types';
+import SearchIcon from '@/public/icons/SearchIcon.svg?react';
 
 declare global {
   interface Window {
@@ -124,13 +124,7 @@ export default function InstitutionForm({ institution }: Props) {
                     </FormItem>
                   )}
                 />
-                <Image
-                  src="/icons/SearchIcon.svg"
-                  alt="검색아이콘"
-                  height={24}
-                  width={24}
-                  className="absolute right-12 top-8"
-                />
+                <SearchIcon height={24} width={24} className="absolute right-12 top-8" />
               </div>
             </div>
             <FormField

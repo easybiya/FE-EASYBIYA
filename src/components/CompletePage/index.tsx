@@ -1,5 +1,5 @@
-import IconComponent from '@/components/Asset/Icon';
 import CustomButton from '@/components/Button/CustomButton';
+import CheckIcon from '@/public/icons/big-check.svg?react';
 import { useRouter } from 'next/router';
 
 export default function ChecklistComplete() {
@@ -8,7 +8,7 @@ export default function ChecklistComplete() {
   return (
     <div className="relative flex flex-col items-center justify-center h-full text-center bg-[#F6F5F2]">
       <div className="flex items-center justify-center mb-16">
-        <IconComponent name="bigCheck" width={80} height={80} />
+        <CheckIcon width={80} height={80} />
       </div>
       <p className="text-b-24 mb-24">작성 완료</p>
 

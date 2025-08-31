@@ -1,4 +1,3 @@
-import IconComponent from '@/components/Asset/Icon';
 import DashboardSkeleton from '@/components/DashBoard/DashboardSkeleton';
 import HouseCard from '@/components/DashBoard/HouseCard';
 import Header from '@/components/Layout/Header';
@@ -10,11 +9,12 @@ import DashboardEmpty from '@/public/images/dashboard-empty.svg?url';
 import Image from 'next/image';
 import Button from '@/components/Button/CustomButton';
 import { useRouter } from 'next/navigation';
-import useBookmark from '@/hooks/property/useBookmark';
 import { motion } from 'framer-motion';
 import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import SortDropdown from '@/components/Dropdown/SortDropdown';
+import ShareIcon from '@/public/icons/share-Icon.svg?react';
+import PlusIcon from '@/public/icons/plus.svg?react';
 
 export const DROPDOWN_OPTION = [
   { value: '최신순', key: 'LATEST' },
@@ -58,10 +58,10 @@ export default function Home() {
           !noData && (
             <div className="flex gap-20">
               <Link href="/share">
-                <IconComponent name="share" width={24} height={24} className="cursor-pointer" />
+                <ShareIcon name="share" width={24} height={24} className="cursor-pointer" />
               </Link>
               <Link href="/property/create">
-                <IconComponent name="plus" width={24} height={24} className="cursor-pointer" />
+                <PlusIcon name="plus" width={24} height={24} className="cursor-pointer" />
               </Link>
             </div>
           )

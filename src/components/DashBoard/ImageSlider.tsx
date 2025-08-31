@@ -43,18 +43,6 @@ const ImageSlider = ({
             >
               <CloseIcon width={20} height={20} />
             </button>
-            {/* <Button
-              variant="ghost"
-              className="p-0"
-            >
-              <IconComponent
-                name="close"
-                width={20}
-                height={20}
-                onClick={() => setSelected(undefined)}
-                className="cursor-pointer text-white"
-              />
-            </Button> */}
           </div>
           <Carousel
             className="w-full"

@@ -6,11 +6,12 @@ import { useTemplates } from '@/hooks/checklist/useTemplates';
 import { deleteTemplate } from '@/lib/api/template';
 import { useQueryClient } from '@tanstack/react-query';
 import { Skeleton } from '@/components/ui/skeleton';
-import IconComponent from '@/components/Asset/Icon';
 import DialogDropdownLayout from '@/components/Dropdown/DialogDropdown';
 import PreventDropdownMenuItem from '@/components/Dropdown/PreventDropdownMenuItem';
 import { ConfirmModal } from '@/components/Modal/ConfirmModal';
 import DropdownIcon from '@/public/icons/meatball.svg?react';
+import ArrowLeftIcon from '@/public/icons/arrow-left.svg?react';
+import PlusIcon from '@/public/icons/plus.svg?react';
 
 export default function Page() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function Page() {
       <Header
         left={
           <div className="flex items-center gap-8">
-            <IconComponent
+            <ArrowLeftIcon
               name="arrowLeft"
               width={24}
               height={24}
@@ -36,7 +37,7 @@ export default function Page() {
         }
         right={
           <Link href="/profile/checklist/create">
-            <IconComponent name="plus" width={24} height={24} className="cursor-pointer" />
+            <PlusIcon name="plus" width={24} height={24} className="cursor-pointer" />
           </Link>
         }
       />

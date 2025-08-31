@@ -1,4 +1,3 @@
-import IconComponent from '@/components/Asset/Icon';
 import ChecklistContent from '@/components/CheckList/CheckListContent';
 import Header from '@/components/Layout/Header';
 import { InputModal } from '@/components/Modal/InputModal';
@@ -7,6 +6,7 @@ import { postTemplate } from '@/lib/api/template';
 import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import ArrowLeftIcon from '@/public/icons/arrow-left.svg?react';
 
 const defaultChecklist: ChecklistPayloadItem[] = [
   {
@@ -80,7 +80,7 @@ export default function CreateTemplate() {
       <Header
         left={
           <div className="flex items-center gap-8">
-            <IconComponent
+            <ArrowLeftIcon
               name="arrowLeft"
               width={24}
               height={24}

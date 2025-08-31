@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
-import IconComponent from '@/components/Asset/Icon';
 import ProgressIndicator from '@/components/CheckList/ProgressIndicator';
+import ArrowLeftIcon from '@/public/icons/arrow-left.svg?react';
 
 interface HeaderWithProgressProps {
   title: string;
@@ -14,8 +14,7 @@ export default function HeaderWithProgress({ title, totalSteps, step }: HeaderWi
   return (
     <div className="w-full">
       <div className="relative flex items-center justify-center py-8">
-        <IconComponent
-          name="arrowLeft"
+        <ArrowLeftIcon
           width={24}
           height={24}
           className="absolute left-0 cursor-pointer"
