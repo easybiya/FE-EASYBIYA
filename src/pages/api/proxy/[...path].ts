@@ -16,6 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           Object.entries(req.headers).map(([key, value]) => [key, String(value)]),
         ),
         host: '54.180.148.155',
+        'Content-Type': 'application/json',
       },
       body: ['GET', 'HEAD'].includes(req.method || '') ? undefined : req.body,
     });
