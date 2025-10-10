@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import TabBar from './TabBar';
 
@@ -15,9 +15,18 @@ export default function Layout({ children }: LayoutProps) {
   const isCreatePage = router.pathname.startsWith(HIDEEN_LAYOUT_ROUTE);
   const hideTabBar = HIDDEN_TABBAR_PAGES.includes(router.pathname) || isCreatePage;
 
+  useEffect(() => {
+    const setVh = () => {
+      document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+    };
+    setVh();
+    window.addEventListener('resize', setVh);
+    return () => window.removeEventListener('resize', setVh);
+  }, []);
+
   return (
-    <div className="flex justify-center w-full min-h-screen bg-white">
-      <div className="relative w-full max-w-430 min-h-screen bg-primary shadow-[inset_1px_0_#eee,inset_-1px_0_#eee]">
+    <div className="flex justify-center w-full min-h-[calc(var(--vh,1vh)*100)] bg-white">
+      <div className="relative w-full max-w-430 min-h-[calc(var(--vh,1vh)*100)] bg-primary shadow-[inset_1px_0_#eee,inset_-1px_0_#eee]">
         {children}
         {/* 특정 페이지에서 TabBar 숨기기 */}
         {!hideTabBar && <TabBar />}
