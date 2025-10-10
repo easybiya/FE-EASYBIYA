@@ -18,8 +18,6 @@ export default function KakaoLoginButton() {
       const data = await response.json();
 
       if (!data.result.url) throw new Error('로그인 URL 없음');
-
-      console.log('카카오 로그인 URL:', data.result.url);
       window.location.href = data.result.url;
     } catch (error) {
       console.error('로그인 요청 실패:', error);

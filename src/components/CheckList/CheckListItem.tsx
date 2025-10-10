@@ -13,6 +13,7 @@ import InfoIcon from '@/public/icons/info-circle.svg?react';
 import TextCheckItem from './TextCheckItem';
 import RadioCheckItem from './RadioCheckItem';
 import CheckboxCheckItem from './CheckboxCheckItem';
+import { useState } from 'react';
 
 interface ChecklistItemProps extends ChecklistPayloadItem {
   onChange?: (id: number, checkItem: CheckItemPayload) => void;
@@ -39,6 +40,7 @@ export default function ChecklistItem({
   onDelete,
 }: ChecklistItemProps) {
   const info = matchedInfoByTitle(stripEmoji(title));
+  const [isInputModalOpen, setIsInputModalOpen] = useState(false);
 
   return (
     <Draggable draggableId={priority.toString()} index={index}>
@@ -109,6 +111,8 @@ export default function ChecklistItem({
                     }
                     handleClick={(v: string) => onEdit && onEdit(priority, v)}
                     defaultValue={title}
+                    open={isInputModalOpen}
+                    openChange={setIsInputModalOpen}
                   />
                   <ConfirmModal
                     title="삭제하기"

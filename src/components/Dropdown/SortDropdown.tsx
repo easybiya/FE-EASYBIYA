@@ -23,7 +23,7 @@ export default function SortDropdown({ handleClick, params }: Props) {
         type="button"
         className="flex justify-center items-center pl-10 pr-8 py-4 gap-4 text-12/18 rounded-md border border-gray-300 text-gray-800 bg-white hover:bg-gray-100 focus:outline-none"
       >
-        {DROPDOWN_OPTION.find((item) => item.value === params.sortBy)?.value || '최신순'}
+        {DROPDOWN_OPTION.find((item) => item.key === params.sortBy)?.value || '최신순'}
         <ArrowIcon
           width={16}
           height={16}
