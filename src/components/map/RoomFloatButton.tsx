@@ -18,13 +18,16 @@ export default function RoomFloatButton({ roomList, handleTagClick }: Props) {
   };
   return (
     <div className="z-30 w-full flex flex-col items-center">
-      <div
-        className="absolute px-16 py-8 rounded-full border-2 bottom-44 border-black bg-white flex items-center gap-6 cursor-pointer h-40"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <HamburgerIcon width={16} height={16} name="hamburger" />
-        <p className="font-semibold text-gray-800 text-16/24">목록보기</p>
-      </div>
+      {!isOpen && (
+        <div
+          className="fixed px-16 py-8 rounded-full border-2 bottom-100 border-black bg-white flex items-center gap-6 cursor-pointer h-40"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <HamburgerIcon width={16} height={16} name="hamburger" />
+          <p className="font-semibold text-gray-800 text-16/24">목록보기</p>
+        </div>
+      )}
+
       <AnimatePresence>
         {isOpen && (
           <motion.div

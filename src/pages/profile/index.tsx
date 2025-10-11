@@ -1,8 +1,17 @@
 import Header from '@/components/Layout/Header';
 import { ConfirmModal } from '@/components/Modal/ConfirmModal';
 import Link from 'next/link';
+import { useCookies } from 'react-cookie';
 
 export default function Page() {
+  const [, setCookie] = useCookies(['accessToken', 'isNewMember']);
+
+  const logout = () => {
+    setCookie('accessToken', '', { path: '/', maxAge: 0, sameSite: 'lax' });
+    setCookie('isNewMember', '', { path: '/', maxAge: 0, sameSite: 'lax' });
+    window.location.href = '/onboarding';
+  };
+
   return (
     <div>
       <Header left={<h1 className="text-b-20">내정보</h1>} />
@@ -29,7 +38,7 @@ export default function Page() {
           trigger={<button className="py-12 font-semibold text-start">로그아웃</button>}
           title="로그아웃 확인"
           description="로그아웃 하시겠어요?"
-          handleSubmit={() => console.log('로그아웃')}
+          handleSubmit={logout}
           buttonStyle="!bg-red-500"
         />
       </div>
