@@ -27,6 +27,8 @@ export const mockHouserData: Property[] = [
       },
     ],
     isBookmarked: false,
+    propertyLatitude: 0,
+    propertyLongitude: 0,
   },
   {
     id: 6,
@@ -40,6 +42,8 @@ export const mockHouserData: Property[] = [
     propertyDetailedAddress: '101동 1203호',
     propertyImages: [],
     isBookmarked: false,
+    propertyLatitude: 0,
+    propertyLongitude: 0,
   },
   {
     id: 1,
@@ -53,6 +57,8 @@ export const mockHouserData: Property[] = [
     propertyDetailedAddress: '101동 1203호',
     propertyImages: [],
     isBookmarked: false,
+    propertyLatitude: 0,
+    propertyLongitude: 0,
   },
   {
     id: 5,
@@ -66,6 +72,8 @@ export const mockHouserData: Property[] = [
     propertyDetailedAddress: '101동 1203호',
     propertyImages: [],
     isBookmarked: false,
+    propertyLatitude: 0,
+    propertyLongitude: 0,
   },
   {
     id: 2,
@@ -79,6 +87,8 @@ export const mockHouserData: Property[] = [
     propertyDetailedAddress: '101동 1203호',
     propertyImages: [],
     isBookmarked: true,
+    propertyLatitude: 0,
+    propertyLongitude: 0,
   },
   {
     id: 3,
@@ -92,6 +102,8 @@ export const mockHouserData: Property[] = [
     propertyDetailedAddress: '101동 1203호',
     propertyImages: [],
     isBookmarked: true,
+    propertyLatitude: 0,
+    propertyLongitude: 0,
   },
 ];
 
