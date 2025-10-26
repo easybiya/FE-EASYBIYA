@@ -99,7 +99,7 @@ export default function HouseCard({ info, isFixed, isShared }: Props) {
                 height={10}
                 alt="캘린더 아이콘"
               />
-              <p className="flex items-center text-brownText">
+              <p className="flex items-center text-brownText text-12">
                 {formatDate(new Date(info.availableDate), 2)} 입주
               </p>
             </div>
