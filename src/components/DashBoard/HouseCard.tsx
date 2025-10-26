@@ -14,6 +14,7 @@ import DropdownIcon from '@/public/icons/meatball.svg?react';
 import useBookmark from '@/hooks/property/useBookmark';
 import HomeIcon from '@/public/icons/home.svg?react';
 import PinIcon from '@/public/icons/pin-icon.svg?react';
+import { formatDate } from '@/utils/formatDate';
 
 interface Props {
   info: Property;
@@ -80,14 +81,28 @@ export default function HouseCard({ info, isFixed, isShared }: Props) {
       </div>
       <Link href={`/details/${info.id}`}>
         <div className="flex w-full justify-between items-center rounded-lg bg-white border p-20">
-          <div className="flex flex-col gap-4">
-            <HouseTypeTag type={info.leaseType} />
-            <div className="flex font-bold text-base gap-4">
-              <p>보증금 {formatWon(info.deposit)}</p>
-              {info.leaseType !== 'JEONSE' && <p>/</p>}
-              {info.monthlyFee && <p>월세 {formatWon(info.monthlyFee)}</p>}
+          <div className="flex flex-col gap-12">
+            <div className="flex flex-col gap-4">
+              <HouseTypeTag type={info.leaseType} />
+              <div className="flex font-bold text-base gap-4">
+                <p>보증금 {formatWon(info.deposit)}</p>
+                {info.leaseType !== 'JEONSE' && <p>/</p>}
+                {info.monthlyFee && <p>월세 {formatWon(info.monthlyFee)}</p>}
+              </div>
+              <p className="text-gray-500 text-sm">{info.propertyAddress}</p>
             </div>
-            <p className="text-gray-500 text-sm">{info.propertyAddress}</p>
+            <div className="flex gap-4 items-center">
+              <Image
+                src="/icons/calendar-brown.svg"
+                color="#94896A"
+                width={10}
+                height={10}
+                alt="캘린더 아이콘"
+              />
+              <p className="flex items-center text-brownText">
+                {formatDate(new Date(info.availableDate), 2)} 입주
+              </p>
+            </div>
           </div>
           <div className="bg-primary2 w-56 h-56 rounded relative">
             {info.propertyImages.length > 0 ? (

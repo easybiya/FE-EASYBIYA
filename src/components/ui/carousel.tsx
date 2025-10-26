@@ -184,7 +184,7 @@ const CarouselPrevious = React.forwardRef<HTMLButtonElement, React.ComponentProp
         variant={variant}
         size={size}
         className={cn(
-          'absolute size-40 rounded-full',
+          'absolute size-40 rounded-full [&_svg]:size-30 bg-white',
           orientation === 'horizontal'
             ? '-left-48 top-1/2 -translate-y-1/2'
             : '-top-48 left-1/2 -translate-x-1/2 rotate-90',
@@ -212,7 +212,7 @@ const CarouselNext = React.forwardRef<HTMLButtonElement, React.ComponentProps<ty
         variant={variant}
         size={size}
         className={cn(
-          'absolute size-40 rounded-full',
+          'absolute size-40 rounded-full [&_svg]:size-30 bg-white',
           orientation === 'horizontal'
             ? '-right-48 top-1/2 -translate-y-1/2'
             : '-bottom-48 left-1/2 -translate-x-1/2 rotate-90',

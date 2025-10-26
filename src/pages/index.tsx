@@ -67,10 +67,10 @@ export default function Home() {
           )
         }
       />
+
       {noData ? (
         <div className="font-semibold text-brownText text-center py-16 w-full max-h-[calc(100%-63px)] relative h-full flex flex-col items-center justify-center gap-52">
           <div className="w-full">
-            <SortDropdown handleClick={handleSelect} params={params} />
             <Image
               src={DashboardEmpty}
               alt="대시보드 빈 이미지"

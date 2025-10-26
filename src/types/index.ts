@@ -37,6 +37,8 @@ export interface Property {
   propertyDetailedAddress: string;
   propertyImages: PropertyImage[];
   isBookmarked: boolean;
+  propertyLatitude: number;
+  propertyLongitude: number;
 }
 
 export interface MapProperty {

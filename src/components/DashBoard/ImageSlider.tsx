@@ -32,7 +32,8 @@ const ImageSlider = ({
     <>
       {selected && (
         <div className="absolute inset-0 z-[100] mx-auto flex size-full max-w-430 min-h-screen items-center justify-center bg-black/80 p-20">
-          <div className=" absolute top-0 z-[110] flex w-full items-center justify-end gap-32 py-16 px-20">
+          <div className="absolute top-0 z-[110] flex w-full items-center justify-between py-16 px-20">
+            <div className="w-46" />
             <div className="text-2xl font-semibold text-white">
               {currentIndex + 1} / {images.length}
             </div>
@@ -41,7 +42,7 @@ const ImageSlider = ({
               type="button"
               className="text-white hover:text-gray-500 transition duration-100"
             >
-              <CloseIcon width={20} height={20} />
+              <CloseIcon width={20} height={20} className="stroke-white" />
             </button>
           </div>
           <Carousel

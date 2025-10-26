@@ -9,16 +9,16 @@ const useBookmark = (isFixed?: boolean) => {
     mutationFn: (id: string) => toggleBookmark(id),
     onSuccess: (_, id) => {
       if (isFixed) {
-        toast({ title: '북마크를 해제했습니다.', variant: 'success' });
+        toast({ title: '고정 해제되었습니다.', variant: 'success' });
       } else {
-        toast({ title: '북마크를 설정했습니다.', variant: 'success' });
+        toast({ title: '상단으로 고정되었습니다..', variant: 'success' });
       }
       queryClient.invalidateQueries({ queryKey: ['bookmarkedProperty'] });
       queryClient.invalidateQueries({ queryKey: ['propertyList'] });
       queryClient.invalidateQueries({ queryKey: ['propertyDetail', id] });
     },
     onError: () => {
-      toast({ title: '북마크 처리 중 오류가 발생했습니다.', variant: 'fail' });
+      toast({ title: '작업 중 오류가 발생했습니다.', variant: 'fail' });
     },
   });
 };
