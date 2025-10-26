@@ -4,13 +4,13 @@ import { useCookies } from 'react-cookie';
 
 export default function KakaoLoginProcess() {
   const [isLoading, setIsLoading] = useState(true);
-  const [, setCookie] = useCookies(['accessToken', 'isNewMember']);
+  const [, setCookie] = useCookies(['accessToken']);
   const router = useRouter();
 
   useEffect(() => {
     if (!router.isReady) return;
 
-    const { access_token, is_new_member } = router.query;
+    const { access_token } = router.query;
 
     if (typeof access_token === 'string') {
       setCookie('accessToken', access_token, {
@@ -20,13 +20,13 @@ export default function KakaoLoginProcess() {
       });
     }
 
-    if (typeof is_new_member === 'string') {
-      setCookie('isNewMember', is_new_member, {
-        path: '/',
-        maxAge: 60 * 60 * 24,
-        sameSite: 'lax',
-      });
-    }
+    // if (typeof is_new_member === 'string') {
+    //   setCookie('isNewMember', is_new_member, {
+    //     path: '/',
+    //     maxAge: 60 * 60 * 24,
+    //     sameSite: 'lax',
+    //   });
+    // }
     router.push('/');
 
     setIsLoading(false);

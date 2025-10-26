@@ -4,11 +4,11 @@ import Link from 'next/link';
 import { useCookies } from 'react-cookie';
 
 export default function Page() {
-  const [, setCookie] = useCookies(['accessToken', 'isNewMember']);
+  const [, setCookie] = useCookies(['accessToken']);
 
   const logout = () => {
     setCookie('accessToken', '', { path: '/', maxAge: 0, sameSite: 'lax' });
-    setCookie('isNewMember', '', { path: '/', maxAge: 0, sameSite: 'lax' });
+    // setCookie('isNewMember', '', { path: '/', maxAge: 0, sameSite: 'lax' });
     window.location.href = '/onboarding';
   };
 
