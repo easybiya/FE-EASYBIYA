@@ -81,7 +81,7 @@ export default function Home() {
             name="close"
             width={16}
             height={16}
-            className="cursor-pointer"
+            className="cursor-pointer stroke-black"
             onClick={() => router.back()}
           />
         }

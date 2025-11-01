@@ -124,7 +124,12 @@ export default function EditPhotoPage() {
                     onClick={() => handleRemoveImage(index)}
                     className="absolute top-8 right-6"
                   >
-                    <CloseIcon name="close" width={12} height={12} className="cursor-pointer" />
+                    <CloseIcon
+                      name="close"
+                      width={12}
+                      height={12}
+                      className="cursor-pointer stroke-black"
+                    />
                   </button>
                 </div>
               ))}

@@ -76,7 +76,7 @@ export default function InfoModal({ modalContent, closeModal, institution }: Pro
             width={16}
             height={16}
             onClick={closeModal}
-            className="absolute top-20 right-20 cursor-pointer"
+            className="absolute top-20 right-20 cursor-pointer stroke-black"
           />
         </div>
       </motion.div>

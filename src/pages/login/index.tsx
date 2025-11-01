@@ -20,7 +20,7 @@ export default function LoginPage() {
           width={16}
           height={16}
           onClick={() => router.push('/onboarding')}
-          className="cursor-pointer"
+          className="cursor-pointer stroke-black"
         />
       </button>
 
