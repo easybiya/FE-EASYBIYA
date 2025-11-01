@@ -13,7 +13,7 @@ export async function getStaticProps() {
 
 export default function LoginPage() {
   return (
-    <div className="flex flex-col justify-between items-center h-screen bg-[#FDFEFF] relative px-24 py-40">
+    <div className="flex flex-col justify-between items-center h-dvh bg-[#FDFEFF] relative px-24 py-40">
       <button className="absolute top-16 right-16">
         <CloseIcon
           name="close"

@@ -19,41 +19,36 @@ export async function getStaticProps() {
 export default function OnboardingPage() {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [swiper, setSwiper] = useState<SwiperInstance | null>(null);
+  const router = useRouter();
 
   const handleNext = () => {
     swiper?.slideNext();
   };
 
-  const router = useRouter();
-
   return (
-    <div className="flex flex-col h-screen text-2xl font-semibold text-gray-800">
-      <div className="h-full">
+    <div className="flex flex-col h-dvh text-2xl font-semibold text-gray-800">
+      <div className="flex-1 min-h-0">
         <Swiper
           modules={[Pagination]}
           spaceBetween={10}
           slidesPerView={1}
-          pagination={{
-            clickable: true,
-            type: 'bullets',
-          }}
+          pagination={{ clickable: true, type: 'bullets' }}
           onSwiper={setSwiper}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
           className="h-full onboarding-swiper-bullet"
         >
-          <SwiperSlide className="relative">
+          <SwiperSlide>
             <Section1 />
           </SwiperSlide>
-          <SwiperSlide className="relative">
+          <SwiperSlide>
             <Section2 />
           </SwiperSlide>
-          <SwiperSlide className="relative">
+          <SwiperSlide>
             <Section3 />
           </SwiperSlide>
         </Swiper>
       </div>
-
-      <div className="px-20 py-32 w-full bg-primary">
+      <div className="px-20 py-32 w-full bg-primary shrink-0">
         <Button
           label={activeIndex < 2 ? '다음' : '확인'}
           className="w-full"

@@ -3,7 +3,7 @@ import NotFoundIcon from '@/public/icons/file-plus.svg?react';
 
 export default function NotFoundPage() {
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-primary gap-52">
+    <div className="flex flex-col items-center justify-center h-dvh bg-primary gap-52">
       <div className="flex flex-col items-center">
         <NotFoundIcon width={68} height={68} className="mb-16" />
         <p className="text-16/24 font-bold text-brownText">페이지를 찾을 수 없어요.</p>

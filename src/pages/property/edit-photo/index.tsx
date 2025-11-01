@@ -83,7 +83,7 @@ export default function EditPhotoPage() {
   }, [propertyId]);
 
   return (
-    <div className="h-screen bg-[#F6F5F2] flex flex-col">
+    <div className="h-dvh bg-[#F6F5F2] flex flex-col">
       <Header
         left={
           <button className="text-15 font-semibold" type="button" onClick={() => router.back()}>
