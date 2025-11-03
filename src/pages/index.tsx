@@ -15,6 +15,7 @@ import { useInView } from 'react-intersection-observer';
 import SortDropdown from '@/components/Dropdown/SortDropdown';
 import ShareIcon from '@/public/icons/share-Icon.svg?react';
 import PlusIcon from '@/public/icons/plus.svg?react';
+import { useTotalCount } from '@/hooks/property/useTotalCount';
 
 export const DROPDOWN_OPTION = [
   { value: '최신순', key: 'LATEST' },
@@ -29,6 +30,7 @@ export default function Home() {
   const { ref, inView } = useInView({
     threshold: 0.5,
   });
+  const { data: totalCount } = useTotalCount();
 
   const handleSelect = (option: string) => {
     const selectedOption = DROPDOWN_OPTION.find((item) => item.key === option);
@@ -98,9 +100,7 @@ export default function Home() {
             ) : (
               <>
                 <div className="flex w-full justify-between items-center">
-                  <p className="text-gray-500 text-14/19">
-                    전체 {bookmarked.length + flattedNonBookmarkedData.length}
-                  </p>
+                  <p className="text-gray-500 text-14/19">전체 {totalCount}</p>
                   <SortDropdown handleClick={handleSelect} params={params} />
                 </div>
                 <motion.div

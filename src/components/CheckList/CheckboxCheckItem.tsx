@@ -1,5 +1,5 @@
 import { CheckItemPayload } from '@/types/checklist';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CheckIcon from '@/public/icons/checkbox-check.svg?react';
 import UnCheckIcon from '@/public/icons/checkbox-uncheck.svg?react';
 

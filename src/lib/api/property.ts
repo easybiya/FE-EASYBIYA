@@ -7,6 +7,11 @@ export const getBookmarkedPropertyList = async (): Promise<Property[]> => {
   return result.data.result ?? [];
 };
 
+export const getTotalCount = async () => {
+  const result = await instance.get('/api/property/total-number');
+  return result.data.result.totalNumber;
+};
+
 export type PropertySortBy = 'LATEST' | 'AVAILABLE_DATE_ASC';
 
 export interface GetPropertyListParams {
@@ -64,5 +69,13 @@ export const deleteProperty = async (id: string) => {
 
 export const getMapPropertyList = async (): Promise<MapProperty[]> => {
   const result = await instance.get(`/api/property/map`);
+  return result.data.result;
+};
+
+export const getSharedPropertyList = async (ids: string[]): Promise<Property[]> => {
+  const result = await instance.get(`/shared/property`, {
+    params: { propertyIds: ids.join(',') },
+    withCredentials: false,
+  });
   return result.data.result;
 };

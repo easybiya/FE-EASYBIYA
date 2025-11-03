@@ -218,7 +218,7 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
 
   return (
     <div className="relative pt-40">
-      <div id="map" className="w-full h-[calc(100vh-100px)]" />
+      <div id="map" className="w-full h-[calc(100dvh-100px)]" />
     </div>
   );
 }

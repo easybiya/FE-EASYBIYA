@@ -1,18 +1,13 @@
 import Button from '@/components/Button/CustomButton';
 import ShareCard from '@/components/DashBoard/ShareCard';
 import Header from '@/components/Layout/Header';
-import { mockHouserData } from '@/data/mockHouseData';
 import { Property } from '@/types';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import CloseIcon from '@/public/icons/close.svg?react';
-import SortDropdown from '@/components/Dropdown/SortDropdown';
 import { useDispatch } from '@/hooks/property/useDispatch';
-
-const DROPDOWN_OPTION = [
-  { label: '최신순', value: 'createdAt' },
-  { label: '입주 빠른 순', value: 'availableDate' },
-];
+import { useProperty } from '@/hooks/property/useProperty';
+import { useInView } from 'react-intersection-observer';
 
 declare global {
   interface Window {
@@ -22,10 +17,18 @@ declare global {
 }
 
 export default function Home() {
-  const [propertyList, setPropertyList] = useState<Property[]>([]);
   const [checkedList, setCheckedList] = useState<Property[]>([]);
   const router = useRouter();
   const { params } = useDispatch();
+  const { bookmarked, nonBookmarked, isLoading, fetchNextPage, hasNextPage, isFetching } =
+    useProperty(params);
+  const { ref, inView } = useInView({
+    threshold: 0.5,
+  });
+  const flattedNonBookmarkedData = useMemo(
+    () => nonBookmarked?.pages.flatMap((page) => page) ?? [],
+    [nonBookmarked],
+  );
 
   const handleCheckList = (property: Property) => {
     setCheckedList((prev) =>
@@ -33,10 +36,6 @@ export default function Home() {
         ? prev.filter((item) => item.id !== property.id)
         : [...prev, property],
     );
-  };
-
-  const handleSelect = (option: string) => {
-    console.log(option);
   };
 
   const shareKakao = () => {
@@ -69,31 +68,44 @@ export default function Home() {
   };
 
   useEffect(() => {
-    setPropertyList(mockHouserData);
-  }, []);
+    if (inView && !isFetching && hasNextPage && !isLoading) {
+      fetchNextPage();
+    }
+  }, [inView, isFetching, hasNextPage]);
 
   return (
     <div className="h-full flex flex-col bg-[#F6F5F2] relative">
       <Header
         title="공유하기"
         right={
-          <CloseIcon
-            name="close"
-            width={16}
-            height={16}
-            className="cursor-pointer stroke-black"
-            onClick={() => router.back()}
-          />
+          <div className="size-24 flex justify-center items-center" onClick={() => router.back()}>
+            <CloseIcon
+              name="close"
+              width={10}
+              height={10}
+              className="cursor-pointer stroke-black"
+            />
+          </div>
         }
       />
-      <p className="text-gray-700 text-sm text-center">공유할 매물을 선택해주세요</p>
-      <div className="flex flex-col px-20 py-8 gap-8 mb-80">
-        <div className="flex w-full justify-between items-center">
-          <p className="text-gray-500 text-14">전체 {checkedList.length}</p>
-          <SortDropdown handleClick={handleSelect} params={params} />
+      <div className="h-28 flex items-center justify-center">
+        <p className="text-gray-700 text-14 text-center">공유할 매물을 선택해주세요</p>
+      </div>
+      <div className="flex flex-col px-20 py-12 gap-6 mb-80">
+        <div className="flex w-full items-center">
+          <p className="text-gray-500 text-14">선택 {checkedList.length}</p>
         </div>
         <ul className="flex flex-col gap-16">
-          {propertyList.map((property) => (
+          {bookmarked.map((property) => (
+            <li key={property.id}>
+              <ShareCard
+                info={property}
+                checked={checkedList.some((item) => item.id === property.id)}
+                onChange={handleCheckList}
+              />
+            </li>
+          ))}
+          {flattedNonBookmarkedData.map((property) => (
             <li key={property.id}>
               <ShareCard
                 info={property}
@@ -103,6 +115,7 @@ export default function Home() {
             </li>
           ))}
         </ul>
+        <div ref={ref} />
       </div>
       {checkedList.length > 0 && (
         <div className="fixed bottom-0 left-1/2 w-full z-50 max-w-428 -translate-x-1/2 bg-primary flex flex-col">
