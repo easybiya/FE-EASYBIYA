@@ -2,6 +2,11 @@ import { NextResponse, NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const { cookies } = request;
+  const pathname = request.nextUrl.pathname;
+
+  if (pathname.startsWith('/view')) {
+    return NextResponse.next(); // view는 토큰 검사 제외
+  }
 
   const authToken = cookies.get('accessToken')?.value;
   // const isNewMember = cookies.get('isNewMember')?.value;
@@ -21,5 +26,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!login|api|_next|onboarding|oauth2|share|icons|images|favicon.ico|view).*)'],
+  matcher: ['/((?!login|api|_next|onboarding|oauth2|share|icons|images|favicon.ico).*)'],
 };
