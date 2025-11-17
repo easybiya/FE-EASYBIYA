@@ -13,7 +13,8 @@ const HIDEEN_LAYOUT_ROUTE = '/property';
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
   const isCreatePage = router.pathname.startsWith(HIDEEN_LAYOUT_ROUTE);
-  const hideTabBar = HIDDEN_TABBAR_PAGES.includes(router.pathname) || isCreatePage;
+  const hideTabBar =
+    HIDDEN_TABBAR_PAGES.some((path) => router.pathname.startsWith(path)) || isCreatePage;
 
   useEffect(() => {
     const setVh = () => {

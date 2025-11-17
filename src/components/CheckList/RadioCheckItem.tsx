@@ -9,9 +9,16 @@ interface Props {
   onChange?: (id: number, checkItem: CheckItemPayload) => void;
   onOptionEdit?: (id: number, optionIndex: number, newValue: string) => void;
   checkItems: CheckItemPayload[];
+  isShared?: boolean;
 }
 
-export default function RadioCheckItem({ priority, onChange, onOptionEdit, checkItems }: Props) {
+export default function RadioCheckItem({
+  priority,
+  onChange,
+  onOptionEdit,
+  checkItems,
+  isShared,
+}: Props) {
   return (
     <div className="flex flex-col gap-8 mt-4">
       {checkItems.map((option) => (
@@ -22,6 +29,7 @@ export default function RadioCheckItem({ priority, onChange, onOptionEdit, check
             onChange={onChange}
             onOptionEdit={onOptionEdit}
             checkItems={checkItems}
+            isShared={isShared}
           />
         </div>
       ))}
@@ -35,14 +43,23 @@ interface RadioInputProps {
   onChange?: (id: number, checkItem: CheckItemPayload) => void;
   onOptionEdit?: (id: number, optionIndex: number, newValue: string) => void;
   checkItems: CheckItemPayload[];
+  isShared?: boolean;
 }
 
-function RadioInput({ priority, item, onChange, onOptionEdit, checkItems }: RadioInputProps) {
+function RadioInput({
+  priority,
+  item,
+  onChange,
+  onOptionEdit,
+  checkItems,
+  isShared,
+}: RadioInputProps) {
   const [inputEdit, setInputEdit] = useState(false);
   return (
     <div className="flex items-center gap-8 w-full">
       <div
         onClick={() => {
+          if (!isShared) return;
           // 라디오이므로 같은 그룹 내 다른 항목은 false로 바꾸고 현재만 true
           checkItems.forEach((option) => (option.checked = option.priority === item.priority));
           onChange?.(priority, item);
@@ -56,7 +73,7 @@ function RadioInput({ priority, item, onChange, onOptionEdit, checkItems }: Radi
         )}
       </div>
 
-      {inputEdit ? (
+      {inputEdit && !isShared ? (
         <input
           value={item.description}
           autoFocus
@@ -67,7 +84,7 @@ function RadioInput({ priority, item, onChange, onOptionEdit, checkItems }: Radi
         />
       ) : (
         <span
-          onClick={() => setInputEdit(true)}
+          onClick={() => !isShared && setInputEdit(true)}
           className={cn(
             'cursor-pointer inline-block h-20',
             item.description.length === 0 ? 'w-full' : 'w-auto',

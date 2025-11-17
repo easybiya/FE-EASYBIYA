@@ -19,24 +19,26 @@ import { motion } from 'framer-motion';
 import { toast } from '@/hooks/use-toast';
 import { useQueryClient } from '@tanstack/react-query';
 import HomeIcon from '@/public/icons/home.svg?react';
+import { cn } from '@/lib/utils';
 
 interface Props {
   roomChecklist: ChecklistPayloadItem[];
   detail: Property;
   id: string;
+  isShared?: boolean;
 }
 
-export default function RoomDetailPage({ roomChecklist, detail, id }: Props) {
+export default function RoomDetailPage({ roomChecklist, detail, id, isShared }: Props) {
   const { propertyImages, propertyAddress, leaseType, deposit, monthlyFee, availableDate } = detail;
   const [isEdit, setIsEdit] = useState(false);
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
-  const [, setActiveIndex] = useState(0);
   const queryClient = useQueryClient();
 
   const { setSelected, setApi, setStartIndex, selected, startIndex, currentIndex } =
     useImageCarousel({ images: detail.propertyImages || [] });
 
   const handleEdit = () => {
+    if (isShared) return;
     if (isEdit) return;
     setIsEdit(true);
   };
@@ -56,21 +58,22 @@ export default function RoomDetailPage({ roomChecklist, detail, id }: Props) {
 
   return (
     <>
-      {isEdit && <EditButtonContainer onClick={submitUpdateChecklist} />}
+      {isEdit && !isShared && <EditButtonContainer onClick={submitUpdateChecklist} />}
       <div className="w-full aspect-[1.8/1] relative">
-        <Link
-          href={`/property/edit-photo?propertyId=${id}`}
-          className="absolute right-14 top-15 z-10 px-8 py-4 rounded-full border-gray-300 bg-white text-14/19 transition duration-100 hover:bg-gray-300 active:bg-gray-400"
-        >
-          사진 수정
-        </Link>
+        {!isShared && (
+          <Link
+            href={`/property/edit-photo?propertyId=${id}`}
+            className="absolute right-14 top-15 z-10 px-8 py-4 rounded-full border-gray-300 bg-white text-14/19 transition duration-100 hover:bg-gray-300 active:bg-gray-400"
+          >
+            사진 수정
+          </Link>
+        )}
         {propertyImages.length > 0 ? (
           <Swiper
             modules={[Pagination]}
             spaceBetween={10}
             slidesPerView={1}
             pagination={{ clickable: true }}
-            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
             className="h-full"
           >
             {propertyImages.map((item, index) => (
@@ -134,8 +137,19 @@ export default function RoomDetailPage({ roomChecklist, detail, id }: Props) {
           </div>
         </div>
       </motion.div>
-      <div className={`flex-grow px-20 ${isEdit ? 'pb-112' : 'pb-80'}`}>
-        <CheckListContainer checklist={checklist} setter={setChecklist} handleEdit={handleEdit} />
+      <div
+        className={cn('flex-grow px-20', {
+          'pb-20': isShared,
+          'pb-112': !isShared && isEdit,
+          'pb-21': !isShared && !isEdit,
+        })}
+      >
+        <CheckListContainer
+          checklist={checklist}
+          setter={setChecklist}
+          handleEdit={handleEdit}
+          isShared={isShared}
+        />
       </div>
     </>
   );

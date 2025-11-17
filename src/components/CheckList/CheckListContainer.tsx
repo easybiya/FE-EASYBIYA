@@ -8,12 +8,14 @@ interface ChecklistContainerProps {
   checklist: ChecklistPayloadItem[]; // 체크리스트 데이터
   setter: React.Dispatch<SetStateAction<ChecklistPayloadItem[]>>; // 체크리스트 상태 setter 함수
   handleEdit?: () => void;
+  isShared?: boolean;
 }
 
 export default function CheckListContainer({
   checklist,
   setter,
   handleEdit,
+  isShared,
 }: ChecklistContainerProps) {
   // 체크리스트 항목 체크 상태 업데이트 함수
   const updateCheckListValue = (id: number, checkItem: CheckItemPayload) => {
@@ -46,6 +48,7 @@ export default function CheckListContainer({
 
   // 체크리스트 항목 드래그 앤 드롭 핸들러
   const handleDragEnd = (result: DropResult) => {
+    if (isShared) return;
     if (!result.destination) return;
     const updatedChecklist = [...checklist];
     const [movedItem] = updatedChecklist.splice(result.source.index, 1);
@@ -135,7 +138,7 @@ export default function CheckListContainer({
       transition={{ duration: 0.4 }}
     >
       <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="checklist">
+        <Droppable droppableId="checklist" isDropDisabled={isShared}>
           {(provided) => (
             <div
               className="flex flex-col gap-8"
@@ -154,6 +157,7 @@ export default function CheckListContainer({
                   onEdit={editCheckListTitle}
                   onTextEdit={editTextItem}
                   onDelete={deleteCheckList}
+                  isShared={isShared}
                 />
               ))}
               {provided.placeholder}

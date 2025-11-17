@@ -23,6 +23,7 @@ interface ChecklistItemProps extends ChecklistPayloadItem {
   onEdit?: (id: number, value: string) => void;
   onDelete?: (id: number) => void;
   onTextEdit?: (id: number, content: string) => void;
+  isShared?: boolean;
 }
 
 export default function ChecklistItem({
@@ -38,12 +39,13 @@ export default function ChecklistItem({
   index,
   onEdit,
   onDelete,
+  isShared,
 }: ChecklistItemProps) {
   const info = matchedInfoByTitle(stripEmoji(title));
   const [isInputModalOpen, setIsInputModalOpen] = useState(false);
 
   return (
-    <Draggable draggableId={priority.toString()} index={index}>
+    <Draggable draggableId={priority.toString()} index={index} isDragDisabled={isShared}>
       {(provided) => (
         <div
           {...provided.draggableProps}
@@ -53,7 +55,7 @@ export default function ChecklistItem({
         >
           <div className="flex items-center justify-between mb-8 relative">
             <div className="flex items-center gap-8">
-              <DragIcon width={16} height={16} className="cursor-grab" />
+              {!isShared && <DragIcon width={16} height={16} className="cursor-grab" />}
               <p className="text-15/22 font-bold">{title}</p>
               {info && (
                 <NotificationModal
@@ -76,61 +78,68 @@ export default function ChecklistItem({
                 />
               )}
             </div>
-            <DialogDropdownLayout
-              trigger={
-                <button
-                  type="button"
-                  className="flex items-center justify-center w-16 h-16"
-                  onSelect={(e) => e.preventDefault()}
-                >
-                  <DropdownIcon
-                    width={16}
-                    height={16}
-                    className="cursor-pointer fill-gray-400 stroke-gray-400 w-16 h-16"
-                  />
-                </button>
-              }
-            >
-              {
-                <>
-                  {checkType !== 'TEXT' && (
-                    <PreventDropdownMenuItem
-                      onSelect={() => onOptionAdd && onOptionAdd(priority)}
-                      className="w-full p-8 rounded-4 text-left text-gray-800 hover:bg-secondary"
-                    >
-                      <div className="flex flex-col gap-4 text-14/21">추가하기</div>
-                    </PreventDropdownMenuItem>
-                  )}
+            {!isShared && (
+              <DialogDropdownLayout
+                trigger={
+                  <button
+                    type="button"
+                    className="flex items-center justify-center w-16 h-16"
+                    onSelect={(e) => e.preventDefault()}
+                  >
+                    <DropdownIcon
+                      width={16}
+                      height={16}
+                      className="cursor-pointer fill-gray-400 stroke-gray-400 w-16 h-16"
+                    />
+                  </button>
+                }
+              >
+                {
+                  <>
+                    {checkType !== 'TEXT' && (
+                      <PreventDropdownMenuItem
+                        onSelect={() => onOptionAdd && onOptionAdd(priority)}
+                        className="w-full p-8 rounded-4 text-left text-gray-800 hover:bg-secondary"
+                      >
+                        <div className="flex flex-col gap-4 text-14/21">추가하기</div>
+                      </PreventDropdownMenuItem>
+                    )}
 
-                  <InputModal
-                    title="수정하기"
-                    trigger={
-                      <PreventDropdownMenuItem className="w-full p-8 rounded-4 text-left text-gray-800 hover:bg-secondary">
-                        <div className="text-14/21">수정하기</div>
-                      </PreventDropdownMenuItem>
-                    }
-                    handleClick={(v: string) => onEdit && onEdit(priority, v)}
-                    defaultValue={title}
-                    open={isInputModalOpen}
-                    openChange={setIsInputModalOpen}
-                  />
-                  <ConfirmModal
-                    title="삭제하기"
-                    description="체크리스트 항목을 삭제하시겠습니까?"
-                    trigger={
-                      <PreventDropdownMenuItem className="w-full p-8 rounded-4 text-left text-gray-800 hover:bg-secondary">
-                        <div className="text-14/21 text-red-500">삭제하기</div>
-                      </PreventDropdownMenuItem>
-                    }
-                    handleSubmit={() => onDelete && onDelete(priority)}
-                    buttonStyle="bg-red-500 hover:bg-red-400 active:bg-red-300"
-                  />
-                </>
-              }
-            </DialogDropdownLayout>
+                    <InputModal
+                      title="수정하기"
+                      trigger={
+                        <PreventDropdownMenuItem className="w-full p-8 rounded-4 text-left text-gray-800 hover:bg-secondary">
+                          <div className="text-14/21">수정하기</div>
+                        </PreventDropdownMenuItem>
+                      }
+                      handleClick={(v: string) => onEdit && onEdit(priority, v)}
+                      defaultValue={title}
+                      open={isInputModalOpen}
+                      openChange={setIsInputModalOpen}
+                    />
+                    <ConfirmModal
+                      title="삭제하기"
+                      description="체크리스트 항목을 삭제하시겠습니까?"
+                      trigger={
+                        <PreventDropdownMenuItem className="w-full p-8 rounded-4 text-left text-gray-800 hover:bg-secondary">
+                          <div className="text-14/21 text-red-500">삭제하기</div>
+                        </PreventDropdownMenuItem>
+                      }
+                      handleSubmit={() => onDelete && onDelete(priority)}
+                      buttonStyle="bg-red-500 hover:bg-red-400 active:bg-red-300"
+                    />
+                  </>
+                }
+              </DialogDropdownLayout>
+            )}
           </div>
           {checkType === 'TEXT' && (
-            <TextCheckItem priority={priority} content={content} editText={onTextEdit} />
+            <TextCheckItem
+              priority={priority}
+              content={content}
+              editText={onTextEdit}
+              isShared={isShared}
+            />
           )}
           {checkType === 'RADIO' && (
             <RadioCheckItem
@@ -138,6 +147,7 @@ export default function ChecklistItem({
               onChange={onChange}
               onOptionEdit={onOptionEdit}
               checkItems={checkItems}
+              isShared={isShared}
             />
           )}
           {checkType === 'CHECKBOX' && (
@@ -146,6 +156,7 @@ export default function ChecklistItem({
               onChange={onChange}
               onOptionEdit={onOptionEdit}
               checkItems={checkItems}
+              isShared={isShared}
             />
           )}
         </div>

@@ -8,9 +8,16 @@ interface Props {
   onChange?: (id: number, checkItem: CheckItemPayload) => void;
   onOptionEdit?: (id: number, optionIndex: number, newValue: string) => void;
   checkItems: CheckItemPayload[];
+  isShared?: boolean;
 }
 
-export default function CheckboxCheckItem({ priority, onChange, onOptionEdit, checkItems }: Props) {
+export default function CheckboxCheckItem({
+  priority,
+  onChange,
+  onOptionEdit,
+  checkItems,
+  isShared,
+}: Props) {
   return (
     <div className="flex flex-col gap-8 mt-4">
       {checkItems.map((option) => (
@@ -20,6 +27,7 @@ export default function CheckboxCheckItem({ priority, onChange, onOptionEdit, ch
             onChange={onChange}
             onOptionEdit={onOptionEdit}
             item={option}
+            isShared={isShared}
           />
         </div>
       ))}
@@ -32,14 +40,16 @@ interface RadioInputProps {
   item: CheckItemPayload;
   onChange?: (id: number, checkItem: CheckItemPayload) => void;
   onOptionEdit?: (id: number, optionIndex: number, newValue: string) => void;
+  isShared?: boolean;
 }
 
-function CheckboxInput({ priority, item, onChange, onOptionEdit }: RadioInputProps) {
+function CheckboxInput({ priority, item, onChange, onOptionEdit, isShared }: RadioInputProps) {
   const [inputEdit, setInputEdit] = useState(false);
   return (
     <div className="flex items-center gap-8 w-full">
       <div
         onClick={() => {
+          if (isShared) return;
           onChange?.(priority, item);
         }}
       >
@@ -49,10 +59,11 @@ function CheckboxInput({ priority, item, onChange, onOptionEdit }: RadioInputPro
           <UnCheckIcon width={16} height={16} />
         )}
       </div>
-      {inputEdit ? (
+      {inputEdit && !isShared ? (
         <input
           value={item.description}
           autoFocus
+          disabled={isShared}
           onChange={(e) => onOptionEdit?.(priority, item.priority, e.target.value)}
           onBlur={() => setInputEdit(false)}
           onKeyDown={(e) => e.key === 'Enter' && setInputEdit(false)}
@@ -60,7 +71,7 @@ function CheckboxInput({ priority, item, onChange, onOptionEdit }: RadioInputPro
         />
       ) : (
         <span
-          onClick={() => setInputEdit(true)}
+          onClick={() => !isShared && setInputEdit(true)}
           className="cursor-pointer inline-block h-20 w-auto"
         >
           {item.description}

@@ -79,7 +79,7 @@ export default function HouseCard({ info, isFixed, isShared }: Props) {
           </div>
         )}
       </div>
-      <Link href={`/details/${info.id}`}>
+      <Link href={isShared ? `/view/${info.id}` : `/details/${info.id}`}>
         <div className="flex w-full justify-between items-center rounded-lg bg-white border p-20">
           <div className="flex flex-col gap-12">
             <div className="flex flex-col gap-4">

@@ -27,7 +27,7 @@ export default function ChecklistDetailPage() {
   const shareKakao = () => {
     const { Kakao } = window;
 
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/detail/${id}}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/view/${id}}`;
     const imageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/images/opengraph.png`;
 
     Kakao.Share.sendDefault({

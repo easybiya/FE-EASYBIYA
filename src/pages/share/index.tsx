@@ -91,7 +91,11 @@ export default function Home() {
       <div className="h-28 flex items-center justify-center">
         <p className="text-gray-700 text-14 text-center">공유할 매물을 선택해주세요</p>
       </div>
-      <div className="flex flex-col px-20 py-12 gap-6 mb-80">
+      <div
+        className={`flex flex-col px-20 py-12 gap-6 ${
+          checkedList.length > 0 ? 'mb-110' : 'mb-20'
+        } `}
+      >
         <div className="flex w-full items-center">
           <p className="text-gray-500 text-14">선택 {checkedList.length}</p>
         </div>

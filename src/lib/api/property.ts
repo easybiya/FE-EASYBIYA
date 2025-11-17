@@ -1,6 +1,7 @@
 import { MapProperty, Property } from '@/types';
 import instance from './axiosInstance';
 import { PropertyData } from '@/store/usePropertyStore';
+import { ChecklistPayloadItem } from '@/types/checklist';
 
 export const getBookmarkedPropertyList = async (): Promise<Property[]> => {
   const result = await instance.get('/api/property/bookmarked');
@@ -74,7 +75,21 @@ export const getMapPropertyList = async (): Promise<MapProperty[]> => {
 
 export const getSharedPropertyList = async (ids: string[]): Promise<Property[]> => {
   const result = await instance.get(`/shared/property`, {
-    params: { propertyIds: ids.join(',') },
+    params: { ids: ids.join(',') },
+    withCredentials: false,
+  });
+  return result.data.result;
+};
+
+export const getSharedPropertyDetail = async (id: string): Promise<Property> => {
+  const result = await instance.get(`/shared/property/${id}`, {
+    withCredentials: false,
+  });
+  return result.data.result;
+};
+
+export const getSharedPropertyChecklist = async (id: string): Promise<ChecklistPayloadItem[]> => {
+  const result = await instance.get(`/shared/checklist/property/${id}`, {
     withCredentials: false,
   });
   return result.data.result;
