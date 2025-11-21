@@ -47,8 +47,8 @@ export default function Home() {
     Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
-        title: '집 좀 같이 봐줘요!',
-        description: `내가 살 집에 대한 피드백을 주세요!`,
+        title: '이 집 어때요?',
+        description: '계약하고 싶은 집인데 한마디 해줘요!',
         imageUrl: checkedList[0].propertyImages[0]?.imageUrl || '', // ✅ 안전하게 접근
         link: {
           mobileWebUrl: url,
@@ -122,7 +122,7 @@ export default function Home() {
         <div ref={ref} />
       </div>
       {checkedList.length > 0 && (
-        <div className="fixed bottom-0 left-1/2 w-full z-50 max-w-428 -translate-x-1/2 bg-primary flex flex-col">
+        <div className="fixed bottom-0 left-1/2 w-full z-50 max-w-430 -translate-x-1/2 bg-primary flex flex-col">
           <div className="absolute -top-40 left-0 w-full h-40 bg-gradient-to-b from-transparent to-primary" />
           <div className="flex flex-col items-center gap-8 py-24 px-20">
             <Button label="공유" className="w-full" onClick={shareKakao} />

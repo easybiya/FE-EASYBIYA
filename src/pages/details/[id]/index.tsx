@@ -27,15 +27,15 @@ export default function ChecklistDetailPage() {
   const shareKakao = () => {
     const { Kakao } = window;
 
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/view/${id}}`;
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/view/${id}`;
     const imageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/images/opengraph.png`;
 
     Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
-        title: '집 좀 같이 봐줘요!',
-        description: `내가 살 집에 대한 피드백을 주세요!`,
-        imageUrl: imageUrl, // 기본 이미지 필요함
+        title: '이 집 어때요?',
+        description: `계약하고 싶은 집인데 한마디 해줘요!`,
+        imageUrl: propertyDetail?.propertyImages[0].imageUrl ?? imageUrl, // 기본 이미지 필요함
         link: {
           mobileWebUrl: url,
           webUrl: url,
@@ -55,8 +55,8 @@ export default function ChecklistDetailPage() {
 
   const handleDelete = async () => {
     await deleteProperty(id);
-    queryClient.invalidateQueries({ queryKey: ['bookmarkedProperty'] });
-    queryClient.invalidateQueries({ queryKey: ['propertyList'] });
+    await queryClient.invalidateQueries({ queryKey: ['bookmarkedProperty'] });
+    await queryClient.invalidateQueries({ queryKey: ['propertyList'] });
     toast({ title: '매물이 삭제되었습니다.', variant: 'success' });
   };
 
