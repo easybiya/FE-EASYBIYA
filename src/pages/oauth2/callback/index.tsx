@@ -28,9 +28,8 @@ export default function KakaoLoginProcess() {
     //     sameSite: 'lax',
     //   });
     // }
-    router.push('/');
-
     setIsLoading(false);
+    router.push('/');
   }, [router, setCookie]);
 
   return <>{isLoading && <Spinner />}</>;
