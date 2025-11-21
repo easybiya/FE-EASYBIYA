@@ -28,14 +28,14 @@ export default function ChecklistDetailPage() {
     const { Kakao } = window;
 
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/view/${id}`;
-    const imageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/images/opengraph.png`;
+    // const imageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/images/opengraph.png`;
 
     Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
         title: '이 집 어때요?',
         description: `계약하고 싶은 집인데 한마디 해줘요!`,
-        imageUrl: propertyDetail?.propertyImages[0].imageUrl ?? imageUrl, // 기본 이미지 필요함
+        imageUrl: propertyDetail?.propertyImages[0].imageUrl ?? '', // 기본 이미지 필요함
         link: {
           mobileWebUrl: url,
           webUrl: url,

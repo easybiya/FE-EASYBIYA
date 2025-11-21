@@ -1,3 +1,4 @@
+import Spinner from '@/components/Spinner';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
@@ -32,5 +33,5 @@ export default function KakaoLoginProcess() {
     setIsLoading(false);
   }, [router, setCookie]);
 
-  return <>{isLoading && <div>로딩중...</div>}</>;
+  return <>{isLoading && <Spinner />}</>;
 }
