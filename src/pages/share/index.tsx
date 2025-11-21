@@ -43,13 +43,14 @@ export default function Home() {
 
     const ids = checkedList.map((item) => item.id).join(',');
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/view?ids=${ids}`;
+    const imageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/images/opengraph.png`;
 
     Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
         title: '이 집 어때요?',
         description: '계약하고 싶은 집인데 한마디 해줘요!',
-        imageUrl: checkedList[0].propertyImages[0]?.imageUrl || '', // ✅ 안전하게 접근
+        imageUrl: checkedList[0].propertyImages[0]?.imageUrl ?? imageUrl,
         link: {
           mobileWebUrl: url,
           webUrl: url, // ✅ 모바일+웹 둘 다
