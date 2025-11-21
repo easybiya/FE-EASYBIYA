@@ -59,12 +59,12 @@ function RadioInput({
     <div className="flex items-center gap-8 w-full">
       <div
         onClick={() => {
-          if (!isShared) return;
+          if (isShared) return;
           // 라디오이므로 같은 그룹 내 다른 항목은 false로 바꾸고 현재만 true
           checkItems.forEach((option) => (option.checked = option.priority === item.priority));
           onChange?.(priority, item);
         }}
-        className="cursor-pointer"
+        className={`${!isShared && 'cursor-pointer'}`}
       >
         {item.checked ? (
           <CheckIcon width={16} height={16} />
@@ -86,8 +86,9 @@ function RadioInput({
         <span
           onClick={() => !isShared && setInputEdit(true)}
           className={cn(
-            'cursor-pointer inline-block h-20',
+            'inline-block h-20',
             item.description.length === 0 ? 'w-full' : 'w-auto',
+            !isShared && 'cursor-pointer ',
           )}
         >
           {item.description}

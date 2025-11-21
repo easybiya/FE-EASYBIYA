@@ -28,7 +28,7 @@ export default function TextCheckItem({ priority, content, editText, isShared }:
           onClick={() => setIsEdit(true)}
         >
           {isShared ? (
-            <span>{content || <span className="text-black">미기입</span>}</span>
+            <span>{content || <span className="text-gray-400">내용을 입력해주세요</span>}</span>
           ) : (
             <span>{content || <span className="text-gray-400">내용을 입력해주세요</span>}</span>
           )}

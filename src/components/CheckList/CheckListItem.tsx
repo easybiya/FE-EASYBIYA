@@ -55,7 +55,7 @@ export default function ChecklistItem({
         >
           <div className="flex items-center justify-between mb-8 relative">
             <div className="flex items-center gap-8">
-              {!isShared && <DragIcon width={16} height={16} className="cursor-grab" />}
+              <DragIcon width={16} height={16} className={`${!isShared && 'cursor-grab'}`} />
               <p className="text-15/22 font-bold">{title}</p>
               {info && (
                 <NotificationModal

@@ -72,7 +72,7 @@ function CheckboxInput({ priority, item, onChange, onOptionEdit, isShared }: Rad
       ) : (
         <span
           onClick={() => !isShared && setInputEdit(true)}
-          className="cursor-pointer inline-block h-20 w-auto"
+          className={`${!isShared && 'cursor-pointer'} inline-block h-20 w-auto`}
         >
           {item.description}
         </span>

@@ -6,7 +6,7 @@ interface Props {
 
 export default function EditButtonContainer({ onClick }: Props) {
   return (
-    <div className="fixed bottom-0 left-1/2 w-full z-50 max-w-428  -translate-x-1/2 flex flex-col">
+    <div className="fixed bottom-0 left-1/2 w-full z-50 max-w-430 -translate-x-1/2 flex flex-col">
       <div className="w-full flex items-center justify-center h-49 bg-gradient-to-b from-transparent to-primary">
         <p className="text-gray-600 text-xs">
           ※ 변경된 내용이 있습니다. 변경된 내용을 저장해주세요.

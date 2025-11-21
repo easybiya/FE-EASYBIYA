@@ -20,7 +20,7 @@ export default function CheckListTemplate({ setTemplate, setIsDefaultTemplate }:
   };
 
   return (
-    <div className="py-24 px-20 grid grid-cols-2 gap-12">
+    <div className="py-24 grid grid-cols-2 gap-12">
       <div
         onClick={() => setIsDefaultTemplate(true)}
         className="relative p-16 aspect-square col-span-1 bg-white rounded-lg flex items-start justify-between cursor-pointer hover:shadow-md transition"

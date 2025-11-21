@@ -15,6 +15,7 @@ import CheckListTemplate from './CheckListTemplate';
 import { getTemplateById, postTemplate } from '@/lib/api/template';
 import { toast } from '@/hooks/use-toast';
 import { InputModal } from '../Modal/InputModal';
+import Spinner from '../Spinner';
 
 interface Props {
   isEdit?: boolean;
@@ -29,6 +30,7 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const { property, images, resetAll } = usePropertyStore();
   const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchTemplate = async () => {
@@ -83,6 +85,7 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
     );
     images.forEach((img) => formData.append('images', img));
     try {
+      setIsLoading(true);
       if (isEdit) {
         await updateProperty(property, id as string);
         await updateChecklist(id as string, checklist);
@@ -91,7 +94,7 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
       } else {
         await postProperty(formData);
       }
-
+      setIsLoading(false);
       resetAll();
       setStep((prev) => prev + 1);
     } catch {
@@ -111,7 +114,9 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
     };
 
     try {
+      setIsLoading(true);
       await postTemplate(template);
+      setIsLoading(false);
       setShowNewTemplateModal(false);
       toast({ title: '새 템플릿 생성 완료', variant: 'success' });
     } catch (error) {
@@ -133,6 +138,7 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
 
   return (
     <>
+      {isLoading && <Spinner />}
       <ChecklistContent
         checklist={checklist}
         setter={setChecklist}

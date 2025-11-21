@@ -11,7 +11,7 @@ const useBookmark = (isFixed?: boolean) => {
       if (isFixed) {
         toast({ title: '고정 해제되었습니다.', variant: 'success' });
       } else {
-        toast({ title: '상단으로 고정되었습니다..', variant: 'success' });
+        toast({ title: '상단으로 고정되었습니다.', variant: 'success' });
       }
       queryClient.invalidateQueries({ queryKey: ['bookmarkedProperty'] });
       queryClient.invalidateQueries({ queryKey: ['propertyList'] });

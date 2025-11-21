@@ -11,6 +11,7 @@ import { fetchInstitution } from '@/lib/api/institutuion';
 import { useRouter } from 'next/navigation';
 import { Institution } from '@/types';
 import SearchIcon from '@/public/icons/SearchIcon.svg?react';
+import { toast } from '@/hooks/use-toast';
 
 declare global {
   interface Window {
@@ -51,6 +52,7 @@ export default function InstitutionForm({ institution }: Props) {
         institutionLatitude: Number(parseFloat(addressCoordinate.y).toFixed(7)),
         institutionLongitude: Number(parseFloat(addressCoordinate.x).toFixed(7)),
       });
+      toast({ title: '직장/학교 주소가 업데이트되었습니다.', variant: 'success' });
       router.push('/');
     });
   };
@@ -144,7 +146,7 @@ export default function InstitutionForm({ institution }: Props) {
           <FixedBar
             disabled={!form.formState.isValid && !isPending}
             handleSkip={() => router.push('/')}
-            preventSkip={false}
+            preventSkip={true}
             text="완료"
           />
         </form>

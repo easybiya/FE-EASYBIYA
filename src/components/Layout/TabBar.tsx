@@ -11,7 +11,7 @@ export default function TabBar() {
   const originPath = path ? (path === '/' ? path : path.split('/')[1]) : '';
 
   return (
-    <div className="fixed bottom-0 left-1/2 px-20 py-8 w-full z-40 max-w-428 -translate-x-1/2 bg-white border-t border-gray-200">
+    <div className="fixed bottom-0 left-1/2 px-20 py-8 w-full z-40 max-w-430 -translate-x-1/2 bg-white border-t border-gray-200">
       <div className="flex">
         <Link
           href="/"
