@@ -22,7 +22,7 @@ export default function ShareCard({ info, checked, onChange }: Props) {
       }}
     >
       <div className="flex gap-4 items-center">
-        <div className="bg-white">
+        <div className="bg-white rounded-5">
           {checked ? <CheckIcon width={16} height={16} /> : <UnCheckIcon width={16} height={16} />}
         </div>
         <label htmlFor={info.propertyAddress} className="font-bold text-18">

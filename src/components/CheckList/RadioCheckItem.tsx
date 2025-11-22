@@ -64,7 +64,7 @@ function RadioInput({
           checkItems.forEach((option) => (option.checked = option.priority === item.priority));
           onChange?.(priority, item);
         }}
-        className={`${!isShared && 'cursor-pointer'}`}
+        className={`${!isShared && 'cursor-pointer'} rounded-full`}
       >
         {item.checked ? (
           <CheckIcon width={16} height={16} />

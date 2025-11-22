@@ -52,6 +52,7 @@ function CheckboxInput({ priority, item, onChange, onOptionEdit, isShared }: Rad
           if (isShared) return;
           onChange?.(priority, item);
         }}
+        // className="rounde-5"
       >
         {item.checked ? (
           <CheckIcon width={16} height={16} />
