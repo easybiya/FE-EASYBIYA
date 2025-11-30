@@ -9,6 +9,7 @@ import { useAuthStore } from '@/store/authStore';
 import KakaoScript from '@/components/Layout/KakaoScript';
 import { CookiesProvider } from 'react-cookie';
 import { Toaster } from '@/components/ui/toaster';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -52,6 +53,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <QueryClientProvider client={queryClient}>
           <Layout>
             <Component {...pageProps} />
+            <GoogleAnalytics gaId="G-WV84R1N7GC" />
             <Toaster />
           </Layout>
           <KakaoScript />
