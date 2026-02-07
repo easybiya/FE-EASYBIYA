@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Dispatch, SetStateAction, useEffect, useState, useTransition } from 'react';
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
-import { HouseType } from '@/types';
+import { LeaseType } from '@/types';
 import HouseTypeSelectContainer from './HouseTypeSelectContainer';
 import HouseFeeInput from './HouseFeeInput';
 import AvailableCalendar from './AvaliableCalendar';
@@ -17,7 +17,7 @@ import CalendarIcon from '@/public/icons/calendar.svg?react';
 import ArrowDownIcon from '@/public/icons/arrow-down.svg?react';
 
 type roomInfoSchema = {
-  contractType: HouseType;
+  contractType: LeaseType;
   deposit: number;
   monthlyRent: number | null;
   maintenanceFee?: number;
@@ -36,7 +36,7 @@ export default function RoomInfoForm({ isEdit = false, id, setStep }: Props) {
   const form = useForm<roomInfoSchema>({
     resolver: zodResolver(roomInfoZodSchema),
     defaultValues: {
-      contractType: 'MONTHLY_RENT',
+      contractType: 'monthly_rent',
       deposit: undefined,
       monthlyRent: null,
       maintenanceFee: 0,
@@ -51,27 +51,27 @@ export default function RoomInfoForm({ isEdit = false, id, setStep }: Props) {
   });
 
   const currentDate = useWatch({ control: form.control, name: 'available' });
-  const isMonth = currentType !== 'JEONSE' && !form.getValues('monthlyRent'); // 전세 타입이 아닌경우 월세 필수
+  const isMonth = currentType !== 'jeonse' && !form.getValues('monthlyRent'); // 전세 타입이 아닌경우 월세 필수
 
   const { setProperty } = usePropertyStore();
 
   const onSubmit: SubmitHandler<roomInfoSchema> = (values) => {
     startTransition(() => {
       setProperty({
-        leaseType: values.contractType,
+        lease_type: values.contractType,
         deposit: values.deposit,
-        monthlyFee: values.monthlyRent,
-        maintenanceFee: values.maintenanceFee || 0,
-        availableDate: values.available,
+        monthly_fee: values.monthlyRent || 0,
+        maintenance_fee: values.maintenanceFee || 0,
+        avaliable_date: values.available,
       });
 
       setStep(2);
     });
   };
 
-  const handleRoomType = (type: HouseType) => {
+  const handleRoomType = (type: LeaseType) => {
     form.setValue('contractType', type);
-    if (type === 'JEONSE') {
+    if (type === 'jeonse') {
       form.setValue('monthlyRent', null);
     }
   };
@@ -97,11 +97,11 @@ export default function RoomInfoForm({ isEdit = false, id, setStep }: Props) {
       const result = await getPropertyById(id);
       setProperty(result);
       form.reset({
-        contractType: result.leaseType,
+        contractType: result.lease_type,
         deposit: result.deposit,
-        monthlyRent: result.monthlyFee ?? 0,
-        maintenanceFee: result.maintenanceFee ?? 0,
-        available: formatDate(new Date(result.availableDate), 1),
+        monthlyRent: result.monthly_fee ?? 0,
+        maintenanceFee: result.maintenance_fee ?? 0,
+        available: formatDate(new Date(result.avaliable_date), 1),
       });
     };
     if (isEdit && id) {
@@ -149,7 +149,7 @@ export default function RoomInfoForm({ isEdit = false, id, setStep }: Props) {
                 </FormItem>
               )}
             />
-            {currentType !== 'JEONSE' && (
+            {currentType !== 'jeonse' && (
               <FormField
                 control={form.control}
                 name="monthlyRent"

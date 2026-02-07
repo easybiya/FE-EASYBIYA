@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 export const useTotalCount = () => {
   return useQuery({
-    queryKey: ['totalCount'],
+    queryKey: ['total-count'],
     queryFn: getTotalCount,
   });
 };

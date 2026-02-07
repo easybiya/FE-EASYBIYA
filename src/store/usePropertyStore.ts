@@ -1,16 +1,17 @@
+import { LeaseType } from '@/types';
 import { create } from 'zustand';
 
 export interface PropertyData {
-  leaseType: 'JEONSE' | 'BANJEONSE' | 'MONTHLY_RENT' | '';
-  deposit: number | null;
-  monthlyFee: number | null;
-  maintenanceFee: number | null;
-  availableDate: string;
-  propertyName: string;
-  propertyAddress: string;
-  propertyDetailedAddress: string;
-  propertyLatitude: number | null;
-  propertyLongitude: number | null;
+  lease_type: LeaseType;
+  deposit: number;
+  monthly_fee: number;
+  maintenance_fee: number;
+  avaliable_date: string;
+  name: string;
+  address: string;
+  address_detail: string;
+  lat: number;
+  lng: number;
 }
 
 interface PropertyStore {
@@ -23,16 +24,16 @@ interface PropertyStore {
 
 export const usePropertyStore = create<PropertyStore>((set) => ({
   property: {
-    leaseType: '',
-    deposit: null,
-    monthlyFee: null,
-    maintenanceFee: null,
-    availableDate: '',
-    propertyName: '',
-    propertyAddress: '',
-    propertyDetailedAddress: '',
-    propertyLatitude: null,
-    propertyLongitude: null,
+    lease_type: 'monthly_rent',
+    deposit: 0,
+    monthly_fee: 0,
+    maintenance_fee: 0,
+    avaliable_date: '',
+    name: '',
+    address: '',
+    address_detail: '',
+    lat: 0,
+    lng: 0,
   },
   images: [],
   setProperty: (data) =>
@@ -46,16 +47,16 @@ export const usePropertyStore = create<PropertyStore>((set) => ({
   resetAll: () =>
     set({
       property: {
-        leaseType: '',
-        deposit: null,
-        monthlyFee: null,
-        maintenanceFee: null,
-        availableDate: '',
-        propertyName: '',
-        propertyAddress: '',
-        propertyDetailedAddress: '',
-        propertyLatitude: null,
-        propertyLongitude: null,
+        lease_type: 'monthly_rent',
+        deposit: 0,
+        monthly_fee: 0,
+        maintenance_fee: 0,
+        avaliable_date: '',
+        name: '',
+        address: '',
+        address_detail: '',
+        lat: 0,
+        lng: 0,
       },
       images: [],
     }),

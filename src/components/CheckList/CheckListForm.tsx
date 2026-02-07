@@ -16,6 +16,10 @@ import { getTemplateById, postTemplate } from '@/lib/api/template';
 import { toast } from '@/hooks/use-toast';
 import { InputModal } from '../Modal/InputModal';
 import Spinner from '../Spinner';
+import { CHECKLIST_TEMPLATE } from '@/constants/checklistTemplate';
+import { PropertyInsert } from '@/types';
+import { Json } from '../../../database.types';
+import { supabase } from '@/lib/supabaseClient';
 
 interface Props {
   isEdit?: boolean;
@@ -36,8 +40,8 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
     const fetchTemplate = async () => {
       if (isDefaultTemplate) {
         // 기본 템플릿 사용하는 경우
-        const result = await getChecklistTemplate();
-        const transformed = checklistFormatter(result.checklists);
+        const defaultTemplate = CHECKLIST_TEMPLATE;
+        const transformed = checklistFormatter(defaultTemplate.checklists);
         setChecklist(transformed);
       } else {
         // 선택한 템플릿이 있는 경우
@@ -92,7 +96,17 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
         queryClient.invalidateQueries({ queryKey: ['propertyDetail', id] });
         queryClient.invalidateQueries({ queryKey: ['checklist', id] });
       } else {
-        await postProperty(formData);
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (!user) throw new Error('로그인이 필요합니다');
+        const payload: PropertyInsert = {
+          ...property,
+          user_id: user.id,
+          bookmarked: false,
+          checklist: checklist as unknown as Json,
+        };
+        await postProperty(payload);
       }
       setIsLoading(false);
       resetAll();
@@ -148,7 +162,7 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
       <FixedBar
         onClick={handleComplete}
         preventSkip={true}
-        disabled={property.monthlyFee === null && property.propertyLatitude === null} // 매물 정보, 매물 주소 등록 안한경우 생성 못함
+        disabled={property.monthly_fee === null && property.lat === null} // 매물 정보, 매물 주소 등록 안한경우 생성 못함
         text="완료"
       />
       <InputModal

@@ -1,7 +1,6 @@
 import ChecklistContent from '@/components/CheckList/CheckListContent';
 import Header from '@/components/Layout/Header';
 import { InputModal } from '@/components/Modal/InputModal';
-import { useDefaultTemplate } from '@/hooks/checklist/useDefaultTemplate';
 import { toast } from '@/hooks/use-toast';
 import { postTemplate } from '@/lib/api/template';
 import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
@@ -9,13 +8,14 @@ import checklistFormatter from '@/utils/checklistFormatter';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import ArrowLeftIcon from '@/public/icons/arrow-left.svg?react';
+import { CHECKLIST_TEMPLATE } from '@/constants/checklistTemplate';
 
 export default function DefaultTemplate() {
   const router = useRouter();
   const { mode } = router.query;
   const templateMode = typeof mode === 'string' ? mode : undefined;
   const isNewTemplate = templateMode === 'new';
-  const defaultTemplate = useDefaultTemplate();
+  const defaultTemplate = CHECKLIST_TEMPLATE;
 
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);

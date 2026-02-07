@@ -14,6 +14,7 @@ import DropdownIcon from '@/public/icons/meatball.svg?react';
 import ArrowLeftIcon from '@/public/icons/arrow-left.svg?react';
 import PinIcon from '@/public/icons/pin-icon.svg?react';
 import ShareIcon from '@/public/icons/share-Icon.svg?react';
+import { PropertyImage } from '@/types';
 
 export default function ChecklistDetailPage() {
   const router = useRouter();
@@ -22,6 +23,7 @@ export default function ChecklistDetailPage() {
   const { propertyChecklist, propertyDetail, isLoading } = usePropertyDetail(id);
   const { mutate } = useBookmark();
   const queryClient = useQueryClient();
+  const propertyImages = (propertyDetail?.images ?? []) as unknown as PropertyImage[];
 
   // 카카오 공유
   const shareKakao = () => {
@@ -35,7 +37,7 @@ export default function ChecklistDetailPage() {
       content: {
         title: '이 집 어때요?',
         description: `계약하고 싶은 집인데 한마디 해줘요!`,
-        imageUrl: propertyDetail?.propertyImages[0]?.imageUrl ?? imageUrl, // 기본 이미지 필요함
+        imageUrl: propertyImages[0]?.imageUrl ?? imageUrl, // 기본 이미지 필요함
         link: {
           mobileWebUrl: url,
           webUrl: url,
@@ -92,12 +94,12 @@ export default function ChecklistDetailPage() {
               onClick={() => router.push('/')}
               className="cursor-pointer"
             />
-            <h1 className="text-b-20 text-start">{propertyDetail.propertyName}</h1>
+            <h1 className="text-b-20 text-start">{propertyDetail.name}</h1>
           </div>
         }
         right={
           <div className="flex gap-12">
-            {propertyDetail.isBookmarked && (
+            {propertyDetail.bookmarked && (
               <PinIcon
                 name="pin"
                 width={24}

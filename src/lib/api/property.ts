@@ -1,16 +1,27 @@
-import { MapProperty, Property } from '@/types';
+import { MapProperty, Property, PropertyInsert } from '@/types';
 import instance from './axiosInstance';
 import { PropertyData } from '@/store/usePropertyStore';
 import { ChecklistPayloadItem } from '@/types/checklist';
+import { supabase } from '../supabaseClient';
 
 export const getBookmarkedPropertyList = async (): Promise<Property[]> => {
-  const result = await instance.get('/api/property/bookmarked');
-  return result.data.result ?? [];
+  const { data, error } = await supabase
+    .from('property')
+    .select('*')
+    .eq('bookmarked', true)
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+  return data ?? [];
 };
 
-export const getTotalCount = async () => {
-  const result = await instance.get('/api/property/total-number');
-  return result.data.result.totalNumber;
+export const getTotalCount = async (): Promise<number> => {
+  const { count, error } = await supabase
+    .from('property')
+    .select('*', { count: 'exact', head: true });
+
+  if (error) throw error;
+  return count ?? 0;
 };
 
 export type PropertySortBy = 'LATEST' | 'AVAILABLE_DATE_ASC';
@@ -22,24 +33,41 @@ export interface GetPropertyListParams {
 }
 
 export const getNonBookmarkedPropertyList = async (
-  params: GetPropertyListParams,
+  params: GetPropertyListParams & { page: number },
 ): Promise<Property[]> => {
-  const result = await instance.get('/api/property/not-bookmarked', { params });
-  return result.data.result ?? [];
+  const { page, size, sortBy } = params;
+
+  const from = (page - 1) * size;
+  const to = from + size - 1;
+
+  let query = supabase.from('property').select('*').eq('bookmarked', false).range(from, to);
+
+  if (sortBy === 'LATEST') {
+    query = query.order('created_at', { ascending: false });
+  }
+
+  if (sortBy === 'AVAILABLE_DATE_ASC') {
+    query = query.order('available_date', { ascending: true });
+  }
+
+  const { data, error } = await query;
+
+  if (error) throw error;
+  return data ?? [];
 };
 
 export const getPropertyById = async (id: string): Promise<Property> => {
-  const result = await instance.get(`/api/property/${id}`);
-  return result.data.result;
+  const { data, error } = await supabase.from('property').select('*').eq('id', id).single(); // 단건 보장
+
+  if (error) throw error;
+  return data;
 };
 
-export const postProperty = async (formData: FormData) => {
-  const result = await instance.post('/api/property', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return result.data;
+export const postProperty = async (property: PropertyInsert) => {
+  const { data, error } = await supabase.from('property').insert(property).select().single();
+
+  if (error) throw error;
+  return data;
 };
 
 export const updateProperty = async (property: PropertyData, id: string) => {

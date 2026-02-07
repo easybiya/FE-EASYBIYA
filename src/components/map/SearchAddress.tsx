@@ -49,7 +49,7 @@ export default function SearchAddress({ isEdit = false, id, setStep }: Props) {
   const onSubmit: SubmitHandler<CreateRoomSchema> = (values) => {
     startTransition(() => {
       if (
-        property.propertyAddress !== values.address && // edit일 경우 처음에 전역 상태에 데이터를 저장하기 때문에 form의 address와 비교해서 다른 경우에만 좌표 필요 조건
+        property.address !== values.address && // edit일 경우 처음에 전역 상태에 데이터를 저장하기 때문에 form의 address와 비교해서 다른 경우에만 좌표 필요 조건
         (!addressCoordinate.x || !addressCoordinate.y)
       ) {
         alert('좌표를 찾을 수 없습니다.');
@@ -57,11 +57,11 @@ export default function SearchAddress({ isEdit = false, id, setStep }: Props) {
       }
 
       setProperty({
-        propertyName: values.nickName,
-        propertyAddress: values.address,
-        propertyDetailedAddress: values.addressDetail,
-        propertyLatitude: Number(parseFloat(addressCoordinate.y).toFixed(7)), // y = 위도
-        propertyLongitude: Number(parseFloat(addressCoordinate.x).toFixed(7)), // x = 경도
+        name: values.nickName,
+        address: values.address,
+        address_detail: values.addressDetail,
+        lat: Number(parseFloat(addressCoordinate.y).toFixed(7)), // y = 위도
+        lng: Number(parseFloat(addressCoordinate.x).toFixed(7)), // x = 경도
       });
 
       setStep(3);
@@ -116,18 +116,18 @@ export default function SearchAddress({ isEdit = false, id, setStep }: Props) {
     };
 
     const handleGeocode = () => {
-      if (!isEdit || !id || !property?.propertyAddress) return;
+      if (!isEdit || !id || !property?.address) return;
 
       const geocoder = new window.kakao.maps.services.Geocoder();
       geocoder.addressSearch(
-        property.propertyAddress,
+        property.address,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (result: any, status: AddressSearchStatus) => {
           if (status === window.kakao.maps.services.Status.OK) {
             setAddressCoordinate({ x: result[0].x, y: result[0].y });
             setProperty({
-              propertyLatitude: Number(parseFloat(result[0].y).toFixed(7)),
-              propertyLongitude: Number(parseFloat(result[0].x).toFixed(7)),
+              lat: Number(parseFloat(result[0].y).toFixed(7)),
+              lng: Number(parseFloat(result[0].x).toFixed(7)),
             });
           }
         },
@@ -135,14 +135,14 @@ export default function SearchAddress({ isEdit = false, id, setStep }: Props) {
     };
 
     loadMap();
-  }, [initMap, isEdit, id, property?.propertyAddress]);
+  }, [initMap, isEdit, id, property?.address]);
 
   useEffect(() => {
     if (isEdit && id) {
       form.reset({
-        nickName: property.propertyName,
-        address: property.propertyAddress,
-        addressDetail: property.propertyDetailedAddress,
+        nickName: property.name,
+        address: property.address,
+        addressDetail: property.address_detail,
       });
     }
   }, [id, isEdit]);

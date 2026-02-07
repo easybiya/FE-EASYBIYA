@@ -1,5 +1,5 @@
 import HouseTypeTag from './HouseTypeTag';
-import { Property } from '@/types';
+import { Property, PropertyImage } from '@/types';
 import { formatDate } from '@/utils/formatDate';
 import { formatWon } from '@/utils/formatWon';
 import Image from 'next/image';
@@ -14,6 +14,10 @@ interface Props {
 }
 
 export default function ShareCard({ info, checked, onChange }: Props) {
+  const images = info.images as PropertyImage[] | null | undefined;
+
+  const thumbnail = images?.[0];
+
   return (
     <div
       className="w-full flex flex-col gap-8"
@@ -25,20 +29,20 @@ export default function ShareCard({ info, checked, onChange }: Props) {
         <div className="bg-white rounded-5">
           {checked ? <CheckIcon width={16} height={16} /> : <UnCheckIcon width={16} height={16} />}
         </div>
-        <label htmlFor={info.propertyAddress} className="font-bold text-18">
-          {info.propertyName}
+        <label htmlFor={info.address} className="font-bold text-18">
+          {info.name}
         </label>
       </div>
       <div className="flex w-full justify-between items-center rounded-lg bg-white border p-20">
         <div className="flex flex-col gap-12">
           <div className="flex flex-col gap-4">
-            <HouseTypeTag type={info.leaseType} />
+            <HouseTypeTag type={info.lease_type} />
             <div className="flex font-bold text-base gap-4">
               <p>보증금 {formatWon(info.deposit)}</p>
-              {info.leaseType !== 'JEONSE' && <p>/</p>}
-              {info.monthlyFee && <p>월세 {formatWon(info.monthlyFee)}</p>}
+              {info.lease_type !== 'jeonse' && <p>/</p>}
+              {info.monthly_fee && <p>월세 {formatWon(info.monthly_fee)}</p>}
             </div>
-            <p className="text-gray-500 text-sm">{info.propertyAddress}</p>
+            <p className="text-gray-500 text-sm">{info.address}</p>
           </div>
           <div className="flex gap-4 items-center">
             <Image
@@ -49,13 +53,13 @@ export default function ShareCard({ info, checked, onChange }: Props) {
               alt="캘린더 아이콘"
             />
             <p className="flex items-center text-brownText text-12">
-              {formatDate(new Date(info.availableDate), 2)} 입주
+              {formatDate(new Date(info.avaliable_date), 2)} 입주
             </p>
           </div>
         </div>
         <div className="bg-primary2 w-56 h-56 rounded relative">
-          {info.propertyImages.length > 0 ? (
-            <Image src={info.propertyImages[0].imageUrl} fill alt="thumbnail" className="rounded" />
+          {thumbnail ? (
+            <Image src={thumbnail?.imageUrl} fill alt="thumbnail" className="rounded" />
           ) : (
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
               <HomeIcon width={28} height={28} />
