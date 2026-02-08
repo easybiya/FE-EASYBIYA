@@ -1,11 +1,7 @@
 import FixedBar from '../FixedBar';
 import ChecklistContent from './CheckListContent';
-import {
-  getChecklistTemplate,
-  getPropertyChecklistById,
-  updateChecklist,
-} from '@/lib/api/checklist';
-import { updateProperty, postProperty } from '@/lib/api/property';
+import { getPropertyChecklistById, updateChecklist } from '@/lib/api/checklist';
+import { updateProperty } from '@/lib/api/property';
 import { usePropertyStore } from '@/store/usePropertyStore';
 import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
 import checklistFormatter from '@/utils/checklistFormatter';
@@ -17,9 +13,7 @@ import { toast } from '@/hooks/use-toast';
 import { InputModal } from '../Modal/InputModal';
 import Spinner from '../Spinner';
 import { CHECKLIST_TEMPLATE } from '@/constants/checklistTemplate';
-import { PropertyInsert } from '@/types';
-import { Json } from '../../../database.types';
-import { supabase } from '@/lib/supabaseClient';
+import useCreateProperty from '@/hooks/property/useCreateProperty';
 
 interface Props {
   isEdit?: boolean;
@@ -35,6 +29,7 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
   const { property, images, resetAll } = usePropertyStore();
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
+  const { mutate } = useCreateProperty();
 
   useEffect(() => {
     const fetchTemplate = async () => {
@@ -96,17 +91,7 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
         queryClient.invalidateQueries({ queryKey: ['propertyDetail', id] });
         queryClient.invalidateQueries({ queryKey: ['checklist', id] });
       } else {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        if (!user) throw new Error('로그인이 필요합니다');
-        const payload: PropertyInsert = {
-          ...property,
-          user_id: user.id,
-          bookmarked: false,
-          checklist: checklist as unknown as Json,
-        };
-        await postProperty(payload);
+        mutate(checklist);
       }
       setIsLoading(false);
       resetAll();

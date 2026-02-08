@@ -7,14 +7,12 @@ import useBookmark from '@/hooks/property/useBookmark';
 import { ConfirmModal } from '@/components/Modal/ConfirmModal';
 import DialogDropdownLayout from '@/components/Dropdown/DialogDropdown';
 import PreventDropdownMenuItem from '@/components/Dropdown/PreventDropdownMenuItem';
-import { deleteProperty } from '@/lib/api/property';
-import { useQueryClient } from '@tanstack/react-query';
-import { toast } from '@/hooks/use-toast';
 import DropdownIcon from '@/public/icons/meatball.svg?react';
 import ArrowLeftIcon from '@/public/icons/arrow-left.svg?react';
 import PinIcon from '@/public/icons/pin-icon.svg?react';
 import ShareIcon from '@/public/icons/share-Icon.svg?react';
 import { PropertyImage } from '@/types';
+import useDeleteProperty from '@/hooks/property/useDeleteProperty';
 
 export default function ChecklistDetailPage() {
   const router = useRouter();
@@ -22,7 +20,7 @@ export default function ChecklistDetailPage() {
 
   const { propertyChecklist, propertyDetail, isLoading } = usePropertyDetail(id);
   const { mutate } = useBookmark();
-  const queryClient = useQueryClient();
+  const { mutate: deleteProperty } = useDeleteProperty();
   const propertyImages = (propertyDetail?.images ?? []) as unknown as PropertyImage[];
 
   // 카카오 공유
@@ -55,11 +53,9 @@ export default function ChecklistDetailPage() {
     });
   };
 
-  const handleDelete = async () => {
-    await deleteProperty(id);
-    await queryClient.invalidateQueries({ queryKey: ['bookmarkedProperty'] });
-    await queryClient.invalidateQueries({ queryKey: ['propertyList'] });
-    toast({ title: '매물이 삭제되었습니다.', variant: 'success' });
+  const handleDelete = () => {
+    deleteProperty(id);
+    router.replace('/');
   };
 
   if (!router.isReady) {

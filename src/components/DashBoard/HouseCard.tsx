@@ -4,9 +4,7 @@ import { Property, PropertyImage } from '@/types';
 import { formatWon } from '@/utils/formatWon';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import { deleteProperty } from '@/lib/api/property';
 import { useQueryClient } from '@tanstack/react-query';
-import { toast } from '@/hooks/use-toast';
 import DialogDropdownLayout from '../Dropdown/DialogDropdown';
 import PreventDropdownMenuItem from '../Dropdown/PreventDropdownMenuItem';
 import { ConfirmModal } from '../Modal/ConfirmModal';
@@ -15,6 +13,7 @@ import useBookmark from '@/hooks/property/useBookmark';
 import HomeIcon from '@/public/icons/home.svg?react';
 import PinIcon from '@/public/icons/pin-icon.svg?react';
 import { formatDate } from '@/utils/formatDate';
+import useDeleteProperty from '@/hooks/property/useDeleteProperty';
 
 interface Props {
   info: Property;
@@ -26,6 +25,7 @@ export default function HouseCard({ info, isFixed, isShared }: Props) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { mutate } = useBookmark(isFixed);
+  const { mutate: deleteProperty } = useDeleteProperty();
 
   const images = info.images as PropertyImage[] | null | undefined;
 
@@ -66,12 +66,7 @@ export default function HouseCard({ info, isFixed, isShared }: Props) {
               <ConfirmModal
                 title="매물 정보 삭제"
                 description="매물 정보를 삭제하시겠습니까?"
-                handleSubmit={() => {
-                  deleteProperty(String(info.id));
-                  queryClient.invalidateQueries({ queryKey: ['bookmarkedProperty'] });
-                  queryClient.invalidateQueries({ queryKey: ['propertyList'] });
-                  toast({ title: '매물이 삭제되었습니다.', variant: 'success' });
-                }}
+                handleSubmit={() => deleteProperty(String(info.id))}
                 trigger={
                   <PreventDropdownMenuItem className="!text-red-500">
                     삭제하기

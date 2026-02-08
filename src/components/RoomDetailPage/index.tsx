@@ -36,6 +36,8 @@ export default function RoomDetailPage({ roomChecklist, detail, id, isShared }: 
 
   const propertyImages = (images ?? []) as unknown as PropertyImage[];
 
+  console.log(propertyImages);
+
   const { setSelected, setApi, setStartIndex, selected, startIndex, currentIndex } =
     useImageCarousel({ images: propertyImages || [] });
 

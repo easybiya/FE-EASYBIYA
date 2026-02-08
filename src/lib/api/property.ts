@@ -3,6 +3,7 @@ import instance from './axiosInstance';
 import { PropertyData } from '@/store/usePropertyStore';
 import { ChecklistPayloadItem } from '@/types/checklist';
 import { supabase } from '../supabaseClient';
+import { v4 as uuidv4 } from 'uuid';
 
 export const getBookmarkedPropertyList = async (): Promise<Property[]> => {
   const { data, error } = await supabase
@@ -92,8 +93,17 @@ export const updatePropertyImages = async (propertyId: string, formData: FormDat
 };
 
 export const deleteProperty = async (id: string) => {
-  const result = await instance.delete(`/api/property/${id}`);
-  return result.data;
+  const { error } = await supabase
+    .from('property')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+
+  return true;
 };
 
 export const getMapPropertyList = async (): Promise<MapProperty[]> => {
@@ -121,4 +131,32 @@ export const getSharedPropertyChecklist = async (id: string): Promise<ChecklistP
     withCredentials: false,
   });
   return result.data.result;
+};
+
+
+export const uploadImagesToStorage = async (images: File[], userId: string) => {
+  const urls = await Promise.all(
+    images.map(async (file) => {
+      const ext = file.name.split('.').pop();
+      const fileName = `${uuidv4()}.${ext}`;
+      const filePath = `properties/${userId}/${fileName}`;
+
+      const { error } = await supabase.storage
+        .from('easybiya')
+        .upload(filePath, file, {
+          upsert: false,
+          contentType: file.type,
+        });
+
+      if (error) throw error;
+
+      const { data } = supabase.storage
+        .from('easybiya')
+        .getPublicUrl(filePath);
+
+      return data.publicUrl;
+    }),
+  );
+
+  return urls; // string[]
 };
