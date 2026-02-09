@@ -107,8 +107,30 @@ export const deleteProperty = async (id: string) => {
 };
 
 export const getMapPropertyList = async (): Promise<MapProperty[]> => {
-  const result = await instance.get(`/api/property/map`);
-  return result.data.result;
+  const { data, error } = await supabase
+    .from('property')
+    .select(`
+      id,
+      name,
+      address,
+      address_detail,
+      lat,
+      lng
+    `)
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+
+  return (
+    data?.map((item) => ({
+      id: item.id,
+      name: item.name,
+      address: item.address,
+      address_detail: item.address_detail,
+      lat: item.lat,
+      lng: item.lng,
+    })) ?? []
+  );
 };
 
 export const getSharedPropertyList = async (ids: string[]): Promise<Property[]> => {

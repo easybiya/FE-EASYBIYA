@@ -4,7 +4,7 @@ import CreateInstitutionButton from './CreateInstitutionButton';
 import EditIcon from '@/public/icons/pencil.svg?react';
 
 interface Props {
-  institution: Institution | null;
+  institution?: Institution;
   handleTagClick: (item: MapProperty) => Promise<void>;
   isLoading?: boolean;
 }
@@ -25,11 +25,11 @@ export function RoomContainer({ institution, handleTagClick, isLoading }: Props)
           onClick={() =>
             handleTagClick({
               id: 0,
-              propertyName: institution.institutionName,
-              propertyAddress: institution.institutionAddress,
-              propertyDetailedAddress: '',
-              propertyLatitude: institution.institutionLatitude,
-              propertyLongitude: institution.institutionLongitude,
+              name: institution.institutionName,
+              address: institution.institutionAddress,
+              address_detail: '',
+              lat: institution.institutionLatitude,
+              lng: institution.institutionLongitude,
             })
           }
           className={`px-10 py-6 w-full rounded-sm cursor-pointer text-14 bg-white leading-tight flex justify-between mb-10`}

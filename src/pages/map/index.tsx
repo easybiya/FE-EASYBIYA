@@ -35,10 +35,7 @@ export default function Page() {
   const handleTagClick = async (item: MapProperty) => {
     setModalContent(item);
     setIsModalOpen(true);
-    const houseLocation = new window.kakao.maps.LatLng(
-      item.propertyLatitude,
-      item.propertyLongitude,
-    );
+    const houseLocation = new window.kakao.maps.LatLng(item.lat, item.lng);
     if (map) {
       map.setCenter(houseLocation);
       map.setLevel(3);

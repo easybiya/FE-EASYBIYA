@@ -11,17 +11,19 @@ export type LeaseType = Database['public']['Enums']['leaseType'];
 
 export const LEASE_TYPE = ['jeonse', 'monthly_rent', 'half_jeonse'] as const;
 
+export type User = Database['public']['Tables']['users']['Row']
+
 export type Property = Database['public']['Tables']['property']['Row'];
 
 export type PropertyInsert = Database['public']['Tables']['property']['Insert'];
 
 export interface MapProperty {
   id: number;
-  propertyName: string;
-  propertyAddress: string;
-  propertyDetailedAddress: string;
-  propertyLatitude: number;
-  propertyLongitude: number;
+  name: string;
+  address: string;
+  address_detail: string;
+  lat: number;
+  lng: number;
 }
 
 export interface Institution {

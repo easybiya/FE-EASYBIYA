@@ -56,9 +56,9 @@ export default function RoomFloatButton({ roomList, handleTagClick }: Props) {
                   <div
                     className={`px-6 py-2 rounded-full border border-black  w-fit text-12 bg-black text-white font-semibold leading-tight`}
                   >
-                    {item.propertyName}
+                    {item.name}
                   </div>
-                  <p className="text-sm font-semibold">{item.propertyAddress}</p>
+                  <p className="text-sm font-semibold">{item.address}</p>
                 </li>
               ))}
             </ul>
