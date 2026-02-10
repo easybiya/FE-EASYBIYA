@@ -1,8 +1,7 @@
 import { Institution } from '@/types';
 import { supabase } from '../supabaseClient';
-import instance from './axiosInstance';
 
-export const getInstitutions = async ():Promise<Institution> => {
+export const getInstitutions = async (): Promise<Institution> => {
   const {
     data: { user },
     error: authError,
@@ -21,7 +20,6 @@ export const getInstitutions = async ():Promise<Institution> => {
 
   return data.favorate_place;
 };
-
 
 export const updateInstitution = async (body: Institution) => {
   const {

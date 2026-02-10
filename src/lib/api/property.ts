@@ -1,6 +1,5 @@
 import { MapProperty, Property, PropertyInsert } from '@/types';
 import instance from './axiosInstance';
-import { PropertyData } from '@/store/usePropertyStore';
 import { ChecklistPayloadItem } from '@/types/checklist';
 import { supabase } from '../supabaseClient';
 import { v4 as uuidv4 } from 'uuid';
@@ -71,9 +70,16 @@ export const postProperty = async (property: PropertyInsert) => {
   return data;
 };
 
-export const updateProperty = async (property: PropertyData, id: string) => {
-  const result = await instance.patch(`/api/property/${id}`, property);
-  return result.data;
+export const updateProperty = async (id: string, property: PropertyInsert) => {
+  const { data, error } = await supabase
+    .from('property')
+    .update(property)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
 };
 
 export const toggleBookmark = async (id: string) => {
@@ -93,10 +99,7 @@ export const updatePropertyImages = async (propertyId: string, formData: FormDat
 };
 
 export const deleteProperty = async (id: string) => {
-  const { error } = await supabase
-    .from('property')
-    .delete()
-    .eq('id', id);
+  const { error } = await supabase.from('property').delete().eq('id', id);
 
   if (error) {
     console.error(error);
@@ -109,14 +112,16 @@ export const deleteProperty = async (id: string) => {
 export const getMapPropertyList = async (): Promise<MapProperty[]> => {
   const { data, error } = await supabase
     .from('property')
-    .select(`
+    .select(
+      `
       id,
       name,
       address,
       address_detail,
       lat,
       lng
-    `)
+    `,
+    )
     .order('created_at', { ascending: false });
 
   if (error) throw error;
@@ -155,7 +160,6 @@ export const getSharedPropertyChecklist = async (id: string): Promise<ChecklistP
   return result.data.result;
 };
 
-
 export const uploadImagesToStorage = async (images: File[], userId: string) => {
   const urls = await Promise.all(
     images.map(async (file) => {
@@ -163,18 +167,14 @@ export const uploadImagesToStorage = async (images: File[], userId: string) => {
       const fileName = `${uuidv4()}.${ext}`;
       const filePath = `properties/${userId}/${fileName}`;
 
-      const { error } = await supabase.storage
-        .from('easybiya')
-        .upload(filePath, file, {
-          upsert: false,
-          contentType: file.type,
-        });
+      const { error } = await supabase.storage.from('easybiya').upload(filePath, file, {
+        upsert: false,
+        contentType: file.type,
+      });
 
       if (error) throw error;
 
-      const { data } = supabase.storage
-        .from('easybiya')
-        .getPublicUrl(filePath);
+      const { data } = supabase.storage.from('easybiya').getPublicUrl(filePath);
 
       return data.publicUrl;
     }),

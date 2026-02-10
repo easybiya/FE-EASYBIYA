@@ -4,14 +4,14 @@ export type FeeType = 'DEPOSIT' | 'MONTHLY_RENT' | 'MAINTENANCE_FEE';
 
 export interface PropertyImage {
   imageUrl: string;
-  file?:File
+  file?: File;
 }
 
 export type LeaseType = Database['public']['Enums']['leaseType'];
 
 export const LEASE_TYPE = ['jeonse', 'monthly_rent', 'half_jeonse'] as const;
 
-export type User = Database['public']['Tables']['users']['Row']
+export type User = Database['public']['Tables']['users']['Row'];
 
 export type Property = Database['public']['Tables']['property']['Row'];
 
