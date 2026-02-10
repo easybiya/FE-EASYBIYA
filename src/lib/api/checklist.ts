@@ -1,8 +1,4 @@
-import {
-  ChecklistPayloadItem,
-  ChecklistTemplate,
-  TemplatePreview,
-} from '@/types/checklist';
+import { ChecklistPayloadItem, ChecklistTemplate, TemplatePreview } from '@/types/checklist';
 import instance from './axiosInstance';
 import { supabase } from '../supabaseClient';
 

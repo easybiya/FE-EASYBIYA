@@ -53,7 +53,7 @@ export default function ShareCard({ info, checked, onChange }: Props) {
               alt="캘린더 아이콘"
             />
             <p className="flex items-center text-brownText text-12">
-              {formatDate(new Date(info.avaliable_date), 2)} 입주
+              {formatDate(new Date(info.available_date), 2)} 입주
             </p>
           </div>
         </div>

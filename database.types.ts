@@ -12,7 +12,7 @@ export type Database = {
         Row: {
           address: string;
           address_detail: string;
-          avaliable_date: string;
+          available_date: string;
           bookmarked: boolean;
           checklist: Json;
           created_at: string;
@@ -30,7 +30,7 @@ export type Database = {
         Insert: {
           address: string;
           address_detail: string;
-          avaliable_date: string;
+          available_date: string;
           bookmarked?: boolean;
           checklist: Json;
           created_at?: string;
@@ -48,7 +48,7 @@ export type Database = {
         Update: {
           address?: string;
           address_detail?: string;
-          avaliable_date?: string;
+          available_date?: string;
           bookmarked?: boolean;
           checklist?: Json;
           created_at?: string;

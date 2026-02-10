@@ -6,7 +6,7 @@ export interface PropertyData {
   deposit: number;
   monthly_fee: number;
   maintenance_fee: number;
-  avaliable_date: string;
+  available_date: string;
   name: string;
   address: string;
   address_detail: string;
@@ -28,7 +28,7 @@ export const usePropertyStore = create<PropertyStore>((set) => ({
     deposit: 0,
     monthly_fee: 0,
     maintenance_fee: 0,
-    avaliable_date: '',
+    available_date: '',
     name: '',
     address: '',
     address_detail: '',
@@ -51,7 +51,7 @@ export const usePropertyStore = create<PropertyStore>((set) => ({
         deposit: 0,
         monthly_fee: 0,
         maintenance_fee: 0,
-        avaliable_date: '',
+        available_date: '',
         name: '',
         address: '',
         address_detail: '',

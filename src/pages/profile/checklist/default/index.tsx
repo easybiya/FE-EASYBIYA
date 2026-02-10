@@ -61,8 +61,6 @@ export default function DefaultTemplate() {
     setChecklist(transformedTemplate);
   }, [defaultTemplate]);
 
-  console.log(showNewTemplateModal);
-
   return (
     <div>
       <Header

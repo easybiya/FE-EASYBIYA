@@ -29,14 +29,12 @@ interface Props {
 }
 
 export default function RoomDetailPage({ roomChecklist, detail, id, isShared }: Props) {
-  const { images, address, lease_type, deposit, monthly_fee, avaliable_date } = detail;
+  const { images, address, lease_type, deposit, monthly_fee, available_date } = detail;
   const [isEdit, setIsEdit] = useState(false);
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const queryClient = useQueryClient();
 
   const propertyImages = (images ?? []) as unknown as PropertyImage[];
-
-  console.log(propertyImages);
 
   const { setSelected, setApi, setStartIndex, selected, startIndex, currentIndex } =
     useImageCarousel({ images: propertyImages || [] });
@@ -64,14 +62,14 @@ export default function RoomDetailPage({ roomChecklist, detail, id, isShared }: 
     <>
       {isEdit && !isShared && <EditButtonContainer onClick={submitUpdateChecklist} />}
       <div className="w-full aspect-[1.8/1] relative">
-        {!isShared && (
+        {/* {!isShared && (
           <Link
             href={`/property/edit-photo?propertyId=${id}`}
             className="absolute right-14 top-15 z-10 px-8 py-4 rounded-full border-gray-300 bg-white text-14/19 transition duration-100 hover:bg-gray-300 active:bg-gray-400"
           >
             사진 수정
           </Link>
-        )}
+        )} */}
         {propertyImages.length > 0 ? (
           <Swiper
             modules={[Pagination]}
@@ -137,7 +135,7 @@ export default function RoomDetailPage({ roomChecklist, detail, id, isShared }: 
           />
           <div className="flex gap-8 text-brownText text-r-12">
             <span className="font-semibold">입주 가능 일자</span>
-            <p className="flex items-center ">{formatDate(new Date(avaliable_date), 2)}</p>
+            <p className="flex items-center ">{formatDate(new Date(available_date), 2)}</p>
           </div>
         </div>
       </motion.div>

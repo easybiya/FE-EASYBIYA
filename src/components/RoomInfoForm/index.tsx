@@ -62,7 +62,7 @@ export default function RoomInfoForm({ isEdit = false, id, setStep }: Props) {
         deposit: values.deposit,
         monthly_fee: values.monthlyRent || 0,
         maintenance_fee: values.maintenanceFee || 0,
-        avaliable_date: values.available,
+        available_date: values.available,
       });
 
       setStep(2);
@@ -101,7 +101,7 @@ export default function RoomInfoForm({ isEdit = false, id, setStep }: Props) {
         deposit: result.deposit,
         monthlyRent: result.monthly_fee ?? 0,
         maintenanceFee: result.maintenance_fee ?? 0,
-        available: formatDate(new Date(result.avaliable_date), 1),
+        available: formatDate(new Date(result.available_date), 1),
       });
     };
     if (isEdit && id) {
