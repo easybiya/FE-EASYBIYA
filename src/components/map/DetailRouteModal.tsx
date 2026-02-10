@@ -1,7 +1,4 @@
 import { Institution, MapProperty } from '@/types';
-import { Result } from '@/types/odsay';
-import { searchPubTransPathAJAX } from '@/utils/searchPath';
-import { useQuery } from '@tanstack/react-query';
 import CloseIcon from '@/public/icons/close.svg?react';
 import ArrowDownIcon from '@/public/icons/arrow-down.svg?react';
 import { ReactNode } from 'react';
@@ -10,6 +7,7 @@ import BusIcon from '@/public/icons/bus-icon.svg?react';
 import WalkIcon from '@/public/icons/walk-icon.svg?react';
 import TrainIcon from '@/public/icons/subway-icon.svg?react';
 import { getTransitColor } from '@/utils/odsayColor';
+import usePath from '@/hooks/institution/usePath';
 
 type Traffic = {
   name: string;
@@ -36,8 +34,6 @@ const trafficType: Record<number, Traffic> = {
   },
 };
 
-const STABLE_TIME_DAY = 1000 * 60 * 60 * 24;
-
 interface Props {
   institution: Institution;
   currentAddress: MapProperty;
@@ -45,19 +41,7 @@ interface Props {
 }
 
 export default function DetailRouteModal({ institution, currentAddress, isClose }: Props) {
-  const { data, isLoading } = useQuery({
-    queryKey: [institution.institutionAddress, currentAddress],
-    queryFn: async () => {
-      const result: Result = await searchPubTransPathAJAX({
-        sx: String(currentAddress.propertyLongitude),
-        sy: String(currentAddress.propertyLatitude),
-        ex: String(institution.institutionLongitude),
-        ey: String(institution.institutionLatitude),
-      });
-      return result.path[0];
-    },
-    staleTime: STABLE_TIME_DAY,
-  });
+  const { data, isLoading } = usePath(currentAddress, institution);
 
   if (isLoading)
     return <div className="flex h-80 justify-between items-center p-16 bg-gray-200 rounded-lg" />;
@@ -151,8 +135,8 @@ export default function DetailRouteModal({ institution, currentAddress, isClose 
         </div>
         <div className="flex flex-col gap-6 leading-normal items-center">
           <div className="flex flex-col items-center gap-2 px-16 py-12 border rounded-lg w-full bg-gray-100">
-            <p className="text-15 font-bold">{currentAddress.propertyName}</p>
-            <p className="text-14">{currentAddress.propertyAddress}</p>
+            <p className="text-15 font-bold">{currentAddress.name}</p>
+            <p className="text-14">{currentAddress.address}</p>
           </div>
           <ArrowDownIcon width={16} height={16} />
           <div className="flex flex-col items-center gap-2 px-16 py-12 border rounded-lg w-full bg-gray-100">
