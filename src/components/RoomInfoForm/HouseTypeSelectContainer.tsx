@@ -1,20 +1,20 @@
-import { HouseType } from '@/types';
+import { LeaseType } from '@/types';
 import OptionButton from '../Button/OptionButton';
 
 type SelectOption = {
-  value: HouseType;
+  value: LeaseType;
   text: string;
 };
 
 const HOUSE_TYPE_SELECT: SelectOption[] = [
-  { value: 'JEONSE', text: '전세' },
-  { value: 'BANJEONSE', text: '반전세' },
-  { value: 'MONTHLY_RENT', text: '월세' },
+  { value: 'jeonse', text: '전세' },
+  { value: 'half_jeonse', text: '반전세' },
+  { value: 'monthly_rent', text: '월세' },
 ];
 
 interface Props {
-  handleClick: (type: HouseType) => void;
-  value: HouseType;
+  handleClick: (type: LeaseType) => void;
+  value: LeaseType;
 }
 
 export default function HouseTypeSelectContainer({ handleClick, value }: Props) {

@@ -1,15 +1,15 @@
 import Header from '@/components/Layout/Header';
 import { ConfirmModal } from '@/components/Modal/ConfirmModal';
+import { supabase } from '@/lib/supabaseClient';
 import Link from 'next/link';
-import { useCookies } from 'react-cookie';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
-  const [, setCookie] = useCookies(['accessToken']);
+  const router = useRouter();
 
-  const logout = () => {
-    setCookie('accessToken', '', { path: '/', maxAge: 0, sameSite: 'lax' });
-    // setCookie('isNewMember', '', { path: '/', maxAge: 0, sameSite: 'lax' });
-    window.location.href = '/onboarding';
+  const logout = async () => {
+    await supabase.auth.signOut();
+    router.replace('/login');
   };
 
   return (

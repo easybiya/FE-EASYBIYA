@@ -1,9 +1,9 @@
 import { LeaseType } from '@/types';
 
 const HOUSE_TYPE: Record<LeaseType, string> = {
-  JEONSE: '전세',
-  MONTHLY_RENT: '월세',
-  BANJEONSE: '반전세',
+  jeonse: '전세',
+  monthly_rent: '월세',
+  half_jeonse: '반전세',
 };
 
 export default function HouseTypeTag({ type }: { type: LeaseType }) {

@@ -1,21 +1,18 @@
 import FixedBar from '../FixedBar';
 import ChecklistContent from './CheckListContent';
-import {
-  getChecklistTemplate,
-  getPropertyChecklistById,
-  updateChecklist,
-} from '@/lib/api/checklist';
-import { updateProperty, postProperty } from '@/lib/api/property';
+import { getPropertyChecklistById } from '@/lib/api/checklist';
 import { usePropertyStore } from '@/store/usePropertyStore';
 import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
 import checklistFormatter from '@/utils/checklistFormatter';
-import { useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import CheckListTemplate from './CheckListTemplate';
 import { getTemplateById, postTemplate } from '@/lib/api/template';
 import { toast } from '@/hooks/use-toast';
 import { InputModal } from '../Modal/InputModal';
 import Spinner from '../Spinner';
+import { CHECKLIST_TEMPLATE } from '@/constants/checklistTemplate';
+import useCreateProperty from '@/hooks/property/useCreateProperty';
+import useUpdateProperty from '@/hooks/property/useUpdateProperty';
 
 interface Props {
   isEdit?: boolean;
@@ -28,16 +25,17 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
   const [isDefaultTemplate, setIsDefaultTemplate] = useState(false); // 기본 템플릿 사용 여부
   const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
-  const { property, images, resetAll } = usePropertyStore();
-  const queryClient = useQueryClient();
+  const { property, resetAll } = usePropertyStore();
   const [isLoading, setIsLoading] = useState(false);
+  const { mutate } = useCreateProperty();
+  const { mutate: updateProperty } = useUpdateProperty(id as string);
 
   useEffect(() => {
     const fetchTemplate = async () => {
       if (isDefaultTemplate) {
         // 기본 템플릿 사용하는 경우
-        const result = await getChecklistTemplate();
-        const transformed = checklistFormatter(result.checklists);
+        const defaultTemplate = CHECKLIST_TEMPLATE;
+        const transformed = checklistFormatter(defaultTemplate.checklists);
         setChecklist(transformed);
       } else {
         // 선택한 템플릿이 있는 경우
@@ -78,21 +76,12 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
   };
 
   const handleComplete = async () => {
-    const formData = new FormData();
-    formData.append(
-      'request',
-      new Blob([JSON.stringify({ property, checklists: checklist })], { type: 'application/json' }),
-    );
-    images.forEach((img) => formData.append('images', img));
     try {
       setIsLoading(true);
       if (isEdit) {
-        await updateProperty(property, id as string);
-        await updateChecklist(id as string, checklist);
-        queryClient.invalidateQueries({ queryKey: ['propertyDetail', id] });
-        queryClient.invalidateQueries({ queryKey: ['checklist', id] });
+        updateProperty(checklist);
       } else {
-        await postProperty(formData);
+        mutate(checklist);
       }
       setIsLoading(false);
       resetAll();
@@ -148,7 +137,7 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
       <FixedBar
         onClick={handleComplete}
         preventSkip={true}
-        disabled={property.monthlyFee === null && property.propertyLatitude === null} // 매물 정보, 매물 주소 등록 안한경우 생성 못함
+        disabled={property.monthly_fee === null && property.lat === null} // 매물 정보, 매물 주소 등록 안한경우 생성 못함
         text="완료"
       />
       <InputModal

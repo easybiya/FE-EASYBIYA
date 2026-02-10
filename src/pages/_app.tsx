@@ -4,12 +4,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import { useEffect } from 'react';
-import { useAuthStore } from '@/store/authStore';
+import { useEffect, useState } from 'react';
 import KakaoScript from '@/components/Layout/KakaoScript';
 import { CookiesProvider } from 'react-cookie';
 import { Toaster } from '@/components/ui/toaster';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { supabase } from '@/lib/supabaseClient';
+import { Session } from '@supabase/supabase-js';
+import { useRouter } from 'next/router';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,16 +26,40 @@ const queryClient = new QueryClient({
 
 export default function App({ Component, pageProps }: AppProps) {
   const imageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/images/opengraph.png`;
-  const setTokens = useAuthStore((state) => state.setTokens);
+  const router = useRouter();
+  const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    const refreshToken = localStorage.getItem('refreshToken');
+    const checkSession = async () => {
+      const pathname = router.pathname;
+      if (
+        pathname.startsWith('/login') ||
+        pathname.startsWith('/onboarding') ||
+        pathname.startsWith('/view')
+      ) {
+        return;
+      }
 
-    if (accessToken && refreshToken) {
-      setTokens(accessToken, refreshToken);
-    }
-  }, [setTokens]);
+      const { data } = await supabase.auth.getSession();
+
+      if (!data.session) {
+        router.replace('/login');
+        return;
+      }
+
+      setSession(data.session);
+    };
+
+    checkSession();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [router.pathname]);
 
   return (
     <>
@@ -52,7 +78,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <CookiesProvider>
         <QueryClientProvider client={queryClient}>
           <Layout>
-            <Component {...pageProps} />
+            <Component {...pageProps} session={session} />
             <GoogleAnalytics gaId="G-WV84R1N7GC" />
             <Toaster />
           </Layout>

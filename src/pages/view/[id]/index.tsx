@@ -43,7 +43,7 @@ export default function ChecklistDetailPage() {
               onClick={() => router.back()}
               className="cursor-pointer"
             />
-            <h1 className="text-b-20 text-start">{propertyDetail.propertyName}</h1>
+            <h1 className="text-b-20 text-start">{propertyDetail.name}</h1>
           </div>
         }
       />

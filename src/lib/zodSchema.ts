@@ -1,3 +1,4 @@
+import { LEASE_TYPE } from '@/types';
 import { z } from 'zod';
 
 export const createRoomZodSchema = z.object({
@@ -11,7 +12,7 @@ export const createRoomZodSchema = z.object({
 });
 
 export const roomInfoZodSchema = z.object({
-  contractType: z.enum(['JEONSE', 'BANJEONSE', 'MONTHLY_RENT']),
+  contractType: z.enum(LEASE_TYPE),
   deposit: z.number(),
   monthlyRent: z.number().nullable(),
   maintenanceFee: z.number().optional(),

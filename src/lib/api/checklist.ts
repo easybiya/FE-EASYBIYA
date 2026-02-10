@@ -1,5 +1,6 @@
 import { ChecklistPayloadItem, ChecklistTemplate, TemplatePreview } from '@/types/checklist';
 import instance from './axiosInstance';
+import { supabase } from '../supabaseClient';
 
 export const updateChecklist = async (propertyId: string, checklist: ChecklistPayloadItem[]) => {
   const result = await instance.put(`/api/checklist/property/${propertyId}`, {
@@ -14,8 +15,10 @@ export const getChecklistTemplate = async (): Promise<ChecklistTemplate> => {
 };
 
 export const getPropertyChecklistById = async (id: string): Promise<ChecklistPayloadItem[]> => {
-  const result = await instance.get(`/api/checklist/property/${id}`);
-  return result.data.result;
+  const { data, error } = await supabase.from('property').select('*').eq('id', id).single();
+
+  if (error) throw error;
+  return data.checklist;
 };
 
 export interface GetTemplateListParams {

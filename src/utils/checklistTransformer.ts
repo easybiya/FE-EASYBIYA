@@ -9,13 +9,13 @@ export function toPayload(checklist: ChecklistItemType[]): ChecklistPayloadItem[
     checkItems:
       item.type === 'text'
         ? []
-        : item.options?.map((option, i) => ({
+        : (item.options?.map((option, i) => ({
             description: option,
             checked:
               item.type === 'checkbox'
                 ? Array.isArray(item.value) && item.value.includes(option)
                 : item.value === option,
             priority: i + 1,
-          })) ?? [],
+          })) ?? []),
   }));
 }

@@ -104,7 +104,7 @@ export default function ChecklistDetail() {
                   className="cursor-pointer"
                 />
                 <h1 className="text-b-20">
-                  {isNewTemplate ? `${template?.name} 복제본` : template?.name ?? ''}
+                  {isNewTemplate ? `${template?.name} 복제본` : (template?.name ?? '')}
                 </h1>
               </div>
             }

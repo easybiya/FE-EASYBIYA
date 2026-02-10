@@ -12,7 +12,6 @@ export default function CheckListTemplate({ setTemplate, setIsDefaultTemplate }:
   const { params } = useDispatch();
   const { data, isLoading } = useTemplates(params);
   const templateList = data?.pages.flatMap((page) => page);
-  console.log(templateList);
 
   const handleSelect = (id: number) => {
     console.log(id);

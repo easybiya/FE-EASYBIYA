@@ -10,7 +10,7 @@ import { keepPreviousData, useInfiniteQuery, useQuery } from '@tanstack/react-qu
 // 로딩처리, 딜레이 300ms 적용
 export const useProperty = (query: GetPropertyListParams) => {
   const { data: bookmarkData, isLoading: bookmarkLoading } = useQuery({
-    queryKey: ['bookmarkedProperty'],
+    queryKey: ['bookmarked-property'],
     queryFn: getBookmarkedPropertyList,
     placeholderData: keepPreviousData,
   });
@@ -22,7 +22,7 @@ export const useProperty = (query: GetPropertyListParams) => {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery({
-    queryKey: ['propertyList', query],
+    queryKey: ['property-list', query],
     queryFn: ({ pageParam = 1 }) => getNonBookmarkedPropertyList({ ...query, page: pageParam }),
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage.length < query.size) return undefined;

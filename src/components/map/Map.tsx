@@ -1,4 +1,4 @@
-import { Institution, MapProperty } from '@/types';
+import { Institution, MapProperty, Property } from '@/types';
 import { useCallback, useEffect, useState } from 'react';
 import markerIcon from '@/public/icons/marker.svg?url';
 import borwnMarkerIcon from '@/public/icons/marker-brown.svg?url';
@@ -70,7 +70,7 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
     if (!map || !window.kakao || !window.kakao.maps || !roomList?.length) return;
 
     roomList.forEach((house) => {
-      const coords = new window.kakao.maps.LatLng(house.propertyLatitude, house.propertyLongitude);
+      const coords = new window.kakao.maps.LatLng(house.lat, house.lng);
       const markerImage = new window.kakao.maps.MarkerImage(
         markerIcon.src,
         new window.kakao.maps.Size(24, 24),
@@ -80,7 +80,7 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
       const marker = new window.kakao.maps.Marker({
         position: coords,
         map,
-        title: house.propertyName,
+        title: house.name,
         image: markerImage,
       });
 
@@ -107,7 +107,7 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
           position: relative;
           min-width: 50px;
         ">
-          ${house.propertyName}
+          ${house.name}
         </div>
       `;
 
@@ -146,13 +146,13 @@ export function Map({ roomList, institution, settingMapObject, handleMarkerClick
       image: markerImage,
     });
 
-    const formatContent = {
+    const formatContent: MapProperty = {
       id: 0,
-      propertyName: institution.institutionName,
-      propertyAddress: institution.institutionAddress,
-      propertyDetailedAddress: '',
-      propertyLatitude: institution.institutionLatitude,
-      propertyLongitude: institution.institutionLongitude,
+      name: institution.institutionName,
+      address: institution.institutionAddress,
+      address_detail: '',
+      lat: institution.institutionLatitude,
+      lng: institution.institutionLongitude,
     };
 
     window.kakao.maps.event.addListener(marker, 'click', () => {

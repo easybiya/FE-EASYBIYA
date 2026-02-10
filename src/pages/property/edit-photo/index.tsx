@@ -13,64 +13,57 @@ import { Button } from '@/components/ui/button';
 import CustomButton from '@/components/Button/CustomButton';
 import Spinner from '@/components/Spinner';
 
-interface PropertyImageWithFiel extends PropertyImage {
-  file?: File;
-}
-
 export default function EditPhotoPage() {
   const searchParams = useSearchParams();
   const propertyId = searchParams.get('propertyId');
   const router = useRouter();
   const queryClient = useQueryClient();
-  const [existingImages, setExistingImages] = useState<PropertyImageWithFiel[]>([]);
-  const [originalImages, setOriginalImages] = useState<PropertyImage[]>([]);
+  const [images, setImages] = useState<PropertyImage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (files) {
-      const fileArray = Array.from(files).slice(0, 8 - existingImages.length); // 최대 8장 제한
+    if (!files) return;
 
-      // 미리보기용 URL 저장
-      const imageUrls: PropertyImage[] = fileArray.map((file, idx) => ({
-        imageId: idx * 1000 + Date.now(),
-        imageUrl: URL.createObjectURL(file),
-        priority: existingImages.length + idx,
-        file,
-      }));
-      setExistingImages((prev) => [...prev, ...imageUrls]);
-    }
+    const fileArray = Array.from(files).slice(0, 8 - images.length);
+
+    const newImages: PropertyImage[] = fileArray.map((file) => ({
+      imageUrl: URL.createObjectURL(file),
+    }));
+
+    setImages((prev) => [...prev, ...newImages]);
   };
 
   const handleRemoveImage = (index: number) => {
-    setExistingImages((prev) => prev.filter((_, i) => i !== index));
-    // 상태에서는 삭제하지 않아도 됨
+    setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   const updateImages = async () => {
     if (!propertyId) return;
+
     const formData = new FormData();
 
-    const propertyImageIds = existingImages.map((img) => {
-      const original = originalImages.find((ori) => ori.imageId === img.imageId);
-      return original?.imageId ?? null;
-    });
-
-    const newImages = existingImages.filter((item) => !!item.file).map((item) => item.file as File);
-
-    const json = JSON.stringify({ propertyImageIds });
+    const order = images.map((img) => (img.file ? 'new' : 'existing'));
 
     formData.append(
       'request',
-      new Blob([json], { type: 'application/json' }), // ★ 여기 중요
+      new Blob([JSON.stringify({ order })], {
+        type: 'application/json',
+      }),
     );
 
-    newImages.forEach((img) => formData.append('images', img));
+    images
+      .filter((img) => img.file)
+      .forEach((img) => {
+        formData.append('images', img.file as File);
+      });
+
     setIsLoading(true);
     await updatePropertyImages(propertyId, formData);
     await queryClient.invalidateQueries({ queryKey: ['propertyDetail', propertyId] });
     setIsLoading(false);
+
     toast({ title: '사진이 성공적으로 업데이트되었습니다.', variant: 'success' });
     router.push(`/details/${propertyId}`);
   };
@@ -79,8 +72,7 @@ export default function EditPhotoPage() {
     const getPropertyData = async () => {
       if (!propertyId) return;
       const data = await getPropertyById(propertyId);
-      setExistingImages(data.propertyImages);
-      setOriginalImages(data.propertyImages);
+      setImages(data.images as unknown as PropertyImage[]);
     };
     getPropertyData();
   }, [propertyId]);
@@ -106,7 +98,7 @@ export default function EditPhotoPage() {
           }
         />
         <div className="flex-grow flex flex-col items-center pt-32 px-16">
-          {existingImages.length === 0 ? (
+          {images.length === 0 ? (
             <label
               className="w-full px-20 py-10 border gap-4 border-gray-300 bg-white rounded-lg flex justify-center items-center cursor-pointer shadow-sm hover:bg-gray-100 transition"
               onClick={() => fileInputRef.current?.click()}
@@ -122,7 +114,7 @@ export default function EditPhotoPage() {
           ) : (
             <>
               <div className="grid grid-cols-3 gap-12 w-full max-w-md">
-                {existingImages.map((image, index) => (
+                {images.map((image, index) => (
                   <div key={index} className="relative w-full aspect-square bg-gray-100 rounded-lg">
                     <Image
                       src={image.imageUrl}
@@ -145,7 +137,7 @@ export default function EditPhotoPage() {
                 ))}
               </div>
 
-              {existingImages.length < 8 && (
+              {images.length < 8 && (
                 <div className="w-full max-w-md mt-16">
                   <Button
                     variant="secondary"

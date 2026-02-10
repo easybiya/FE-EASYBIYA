@@ -7,11 +7,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '../ui/input';
 import { createInstitutionZodSchema } from '@/lib/zodSchema';
 import FixedBar from '../FixedBar';
-import { fetchInstitution } from '@/lib/api/institutuion';
 import { useRouter } from 'next/navigation';
 import { Institution } from '@/types';
 import SearchIcon from '@/public/icons/SearchIcon.svg?react';
-import { toast } from '@/hooks/use-toast';
+import useUpdateInstitution from '@/hooks/institution/useUpdateInstitution';
 
 declare global {
   interface Window {
@@ -32,7 +31,7 @@ interface Props {
 export default function InstitutionForm({ institution }: Props) {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [addressCoordinate, setAddressCoordinate] = useState({ x: '', y: '' });
-  const [isPending, startTransition] = useTransition();
+  const { mutate, isPending } = useUpdateInstitution();
   const router = useRouter();
 
   const form = useForm<InstitutionSchema>({
@@ -44,17 +43,15 @@ export default function InstitutionForm({ institution }: Props) {
     mode: 'onBlur',
   });
 
-  const onSubmit: SubmitHandler<InstitutionSchema> = async (values) => {
-    startTransition(async () => {
-      await fetchInstitution({
-        institutionName: values.nickName,
-        institutionAddress: values.address,
-        institutionLatitude: Number(parseFloat(addressCoordinate.y).toFixed(7)),
-        institutionLongitude: Number(parseFloat(addressCoordinate.x).toFixed(7)),
-      });
-      toast({ title: '직장/학교 주소가 업데이트되었습니다.', variant: 'success' });
-      router.push('/');
-    });
+  const onSubmit: SubmitHandler<InstitutionSchema> = (values) => {
+    const body = {
+      institutionName: values.nickName,
+      institutionAddress: values.address,
+      institutionLatitude: Number(parseFloat(addressCoordinate.y).toFixed(7)),
+      institutionLongitude: Number(parseFloat(addressCoordinate.x).toFixed(7)),
+    };
+    mutate(body);
+    router.push('/');
   };
 
   const completeSearch = (data: Address) => {

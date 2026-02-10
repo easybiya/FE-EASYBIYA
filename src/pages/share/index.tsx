@@ -50,7 +50,7 @@ export default function Home() {
       content: {
         title: '이 집 어때요?',
         description: '계약하고 싶은 집인데 한마디 해줘요!',
-        imageUrl: checkedList[0].propertyImages[0]?.imageUrl ?? imageUrl,
+        imageUrl: imageUrl,
         link: {
           mobileWebUrl: url,
           webUrl: url, // ✅ 모바일+웹 둘 다

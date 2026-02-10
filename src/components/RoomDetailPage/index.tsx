@@ -14,7 +14,7 @@ import { updateChecklist } from '@/lib/api/checklist';
 import Link from 'next/link';
 import ImageSlider from '@/components/DashBoard/ImageSlider';
 import useImageCarousel from '@/hooks/propertyDetail/useImageCarousel';
-import { Property } from '@/types';
+import { Property, PropertyImage } from '@/types';
 import { motion } from 'framer-motion';
 import { toast } from '@/hooks/use-toast';
 import { useQueryClient } from '@tanstack/react-query';
@@ -29,13 +29,15 @@ interface Props {
 }
 
 export default function RoomDetailPage({ roomChecklist, detail, id, isShared }: Props) {
-  const { propertyImages, propertyAddress, leaseType, deposit, monthlyFee, availableDate } = detail;
+  const { images, address, lease_type, deposit, monthly_fee, available_date } = detail;
   const [isEdit, setIsEdit] = useState(false);
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const queryClient = useQueryClient();
 
+  const propertyImages = (images ?? []) as unknown as PropertyImage[];
+
   const { setSelected, setApi, setStartIndex, selected, startIndex, currentIndex } =
-    useImageCarousel({ images: detail.propertyImages || [] });
+    useImageCarousel({ images: propertyImages || [] });
 
   const handleEdit = () => {
     if (isShared) return;
@@ -60,14 +62,14 @@ export default function RoomDetailPage({ roomChecklist, detail, id, isShared }: 
     <>
       {isEdit && !isShared && <EditButtonContainer onClick={submitUpdateChecklist} />}
       <div className="w-full aspect-[1.8/1] relative">
-        {!isShared && (
+        {/* {!isShared && (
           <Link
             href={`/property/edit-photo?propertyId=${id}`}
             className="absolute right-14 top-15 z-10 px-8 py-4 rounded-full border-gray-300 bg-white text-14/19 transition duration-100 hover:bg-gray-300 active:bg-gray-400"
           >
             사진 수정
           </Link>
-        )}
+        )} */}
         {propertyImages.length > 0 ? (
           <Swiper
             modules={[Pagination]}
@@ -113,15 +115,15 @@ export default function RoomDetailPage({ roomChecklist, detail, id, isShared }: 
         className="flex flex-col gap-10 px-20 mt-28 mb-20"
       >
         <div className=" flex flex-col gap-4">
-          <HouseTypeTag type={leaseType} />
-          {leaseType === 'JEONSE' ? (
+          <HouseTypeTag type={lease_type} />
+          {lease_type === 'jeonse' ? (
             <h2 className="text-b-18">보증금 {formatWon(deposit)}</h2>
           ) : (
             <h2 className="text-b-18">
-              보증금 {formatWon(deposit)} / 월세 {formatWon(monthlyFee ?? 0)}
+              보증금 {formatWon(deposit)} / 월세 {formatWon(monthly_fee ?? 0)}
             </h2>
           )}
-          <p className="text-r-15 text-15">{propertyAddress}</p>
+          <p className="text-r-15 text-15">{address}</p>
         </div>
         <div className="flex gap-4 items-center">
           <Image
@@ -133,7 +135,7 @@ export default function RoomDetailPage({ roomChecklist, detail, id, isShared }: 
           />
           <div className="flex gap-8 text-brownText text-r-12">
             <span className="font-semibold">입주 가능 일자</span>
-            <p className="flex items-center ">{formatDate(new Date(availableDate), 2)}</p>
+            <p className="flex items-center ">{formatDate(new Date(available_date), 2)}</p>
           </div>
         </div>
       </motion.div>
