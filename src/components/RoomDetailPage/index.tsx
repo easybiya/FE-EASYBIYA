@@ -10,16 +10,14 @@ import HouseTypeTag from '@/components/DashBoard/HouseTypeTag';
 import Image from 'next/image';
 import EditButtonContainer from '@/components/EditButtonContainer';
 import CheckListContainer from '@/components/CheckList/CheckListContainer';
-import { updateChecklist } from '@/lib/api/checklist';
 import Link from 'next/link';
 import ImageSlider from '@/components/DashBoard/ImageSlider';
 import useImageCarousel from '@/hooks/propertyDetail/useImageCarousel';
 import { Property, PropertyImage } from '@/types';
 import { motion } from 'framer-motion';
-import { toast } from '@/hooks/use-toast';
-import { useQueryClient } from '@tanstack/react-query';
 import HomeIcon from '@/public/icons/home.svg?react';
 import { cn } from '@/lib/utils';
+import useUpdateChecklist from '@/hooks/checklist/useUpdateChecklist';
 
 interface Props {
   roomChecklist: ChecklistPayloadItem[];
@@ -32,7 +30,7 @@ export default function RoomDetailPage({ roomChecklist, detail, id, isShared }: 
   const { images, address, lease_type, deposit, monthly_fee, available_date } = detail;
   const [isEdit, setIsEdit] = useState(false);
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
-  const queryClient = useQueryClient();
+  const { mutate } = useUpdateChecklist(id);
 
   const propertyImages = (images ?? []) as unknown as PropertyImage[];
 
@@ -46,9 +44,7 @@ export default function RoomDetailPage({ roomChecklist, detail, id, isShared }: 
   };
 
   const submitUpdateChecklist = async () => {
-    await updateChecklist(String(id), checklist);
-    await queryClient.invalidateQueries({ queryKey: ['propertyDetail', String(id)] });
-    toast({ title: '체크리스트가 수정되었습니다.', variant: 'success' });
+    mutate(checklist);
     setIsEdit(false);
   };
 
@@ -62,14 +58,14 @@ export default function RoomDetailPage({ roomChecklist, detail, id, isShared }: 
     <>
       {isEdit && !isShared && <EditButtonContainer onClick={submitUpdateChecklist} />}
       <div className="w-full aspect-[1.8/1] relative">
-        {/* {!isShared && (
+        {!isShared && (
           <Link
             href={`/property/edit-photo?propertyId=${id}`}
             className="absolute right-14 top-15 z-10 px-8 py-4 rounded-full border-gray-300 bg-white text-14/19 transition duration-100 hover:bg-gray-300 active:bg-gray-400"
           >
             사진 수정
           </Link>
-        )} */}
+        )}
         {propertyImages.length > 0 ? (
           <Swiper
             modules={[Pagination]}

@@ -43,7 +43,7 @@ export default function App({ Component, pageProps }: AppProps) {
       const { data } = await supabase.auth.getSession();
 
       if (!data.session) {
-        router.replace('/login');
+        router.replace('/onboarding');
         return;
       }
 

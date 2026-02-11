@@ -23,7 +23,6 @@ interface Props {
 
 export default function HouseCard({ info, isFixed, isShared }: Props) {
   const router = useRouter();
-  const queryClient = useQueryClient();
   const { mutate } = useBookmark(isFixed);
   const { mutate: deleteProperty } = useDeleteProperty();
 

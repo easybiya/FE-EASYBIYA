@@ -1,4 +1,4 @@
-import { MapProperty, Property, PropertyInsert } from '@/types';
+import { MapProperty, Property, PropertyImage, PropertyInsert } from '@/types';
 import instance from './axiosInstance';
 import { ChecklistPayloadItem } from '@/types/checklist';
 import { supabase } from '../supabaseClient';
@@ -82,9 +82,28 @@ export const updateProperty = async (id: string, property: PropertyInsert) => {
   return data;
 };
 
-export const toggleBookmark = async (id: string) => {
-  const result = await instance.patch(`/api/property/${id}/bookmark`);
-  return result.data;
+export const updatePropertyImage = async (id: string, images: PropertyImage[]) => {
+  const { data, error } = await supabase
+    .from('property')
+    .update({ images: images })
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const toggleBookmark = async (id: string, value: boolean) => {
+  const { data, error } = await supabase
+    .from('property')
+    .update({ bookmarked: value })
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
 };
 
 export const updatePropertyImages = async (propertyId: string, formData: FormData) => {

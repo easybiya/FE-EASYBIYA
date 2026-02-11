@@ -2,22 +2,22 @@ import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { getPropertyById, updatePropertyImages } from '@/lib/api/property';
 import Header from '@/components/Layout/Header';
 import { PropertyImage } from '@/types';
-import { useQueryClient } from '@tanstack/react-query';
-import { toast } from '@/hooks/use-toast';
 import PlusIcon from '@/public/icons/plus.svg?react';
 import CloseIcon from '@/public/icons/close.svg?react';
 import { Button } from '@/components/ui/button';
 import CustomButton from '@/components/Button/CustomButton';
 import Spinner from '@/components/Spinner';
+import { usePropertyDetail } from '@/hooks/propertyDetail/usePropertyDetail';
+import useUpdateImage from '@/hooks/propertyDetail/useUpdateImage';
 
 export default function EditPhotoPage() {
   const searchParams = useSearchParams();
-  const propertyId = searchParams.get('propertyId');
+  const propertyId = searchParams.get('propertyId') ?? '';
   const router = useRouter();
-  const queryClient = useQueryClient();
+  const { propertyDetail } = usePropertyDetail(propertyId);
+  const { mutate } = useUpdateImage(propertyId);
   const [images, setImages] = useState<PropertyImage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -30,6 +30,7 @@ export default function EditPhotoPage() {
 
     const newImages: PropertyImage[] = fileArray.map((file) => ({
       imageUrl: URL.createObjectURL(file),
+      file,
     }));
 
     setImages((prev) => [...prev, ...newImages]);
@@ -41,41 +42,16 @@ export default function EditPhotoPage() {
 
   const updateImages = async () => {
     if (!propertyId) return;
-
-    const formData = new FormData();
-
-    const order = images.map((img) => (img.file ? 'new' : 'existing'));
-
-    formData.append(
-      'request',
-      new Blob([JSON.stringify({ order })], {
-        type: 'application/json',
-      }),
-    );
-
-    images
-      .filter((img) => img.file)
-      .forEach((img) => {
-        formData.append('images', img.file as File);
-      });
-
     setIsLoading(true);
-    await updatePropertyImages(propertyId, formData);
-    await queryClient.invalidateQueries({ queryKey: ['propertyDetail', propertyId] });
+    mutate(images);
     setIsLoading(false);
-
-    toast({ title: '사진이 성공적으로 업데이트되었습니다.', variant: 'success' });
-    router.push(`/details/${propertyId}`);
   };
 
   useEffect(() => {
-    const getPropertyData = async () => {
-      if (!propertyId) return;
-      const data = await getPropertyById(propertyId);
-      setImages(data.images as unknown as PropertyImage[]);
-    };
-    getPropertyData();
-  }, [propertyId]);
+    if (propertyDetail) {
+      setImages(propertyDetail.images as unknown as PropertyImage[]);
+    }
+  }, [propertyId, propertyDetail]);
 
   return (
     <>
