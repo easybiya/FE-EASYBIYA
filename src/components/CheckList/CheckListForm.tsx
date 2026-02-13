@@ -31,13 +31,12 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
 
   useEffect(() => {
     const fetchTemplate = async () => {
-      // if (isDefaultTemplate) {
-      // 기본 템플릿 사용하는 경우
+      if (!defaultTemplateType) return;
       if (defaultTemplateType === PropertyPurpose.FIND_HOME) {
         const defaultTemplate = CHECKLIST_TEMPLATE;
         const transformed = checklistFormatter(defaultTemplate.checklists);
         setChecklist(transformed);
-      } else {
+      } else if (defaultTemplateType === PropertyPurpose.FIELD_SURVEY) {
         const defaultTemplate = INVESTMENT_CHECKLIST_TEMPLATE;
         const transformed = checklistFormatter(defaultTemplate.checklists);
         setChecklist(transformed);
@@ -51,8 +50,8 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
     if (isEdit) {
       // 편집 모드 일때, 해당 매물 정보 저장 및 체크리스트 저장
       fetchData();
-    } else {
-      // 신규 모드일때는 템플릿 변환
+    }
+    if (!isEdit && defaultTemplateType) {
       fetchTemplate();
     }
   }, [isEdit, id, defaultTemplateType]);
@@ -114,13 +113,13 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
   //   }
   // };
 
-  if (!isEdit) {
+  if (!isEdit && checklist.length === 0) {
     return <CheckListTemplate setDefaultTemplateType={setDefaultTemplateType} />;
   }
 
   return (
     <>
-      {isPending || isUpdatePending || <Spinner />}
+      {(isPending || isUpdatePending) && <Spinner />}
       <ChecklistContent
         checklist={checklist}
         setter={setChecklist}
