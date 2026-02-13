@@ -54,7 +54,7 @@ export default function DefaultTemplate() {
     }
   };
 
-  const handleSaveTemplate = () => setShowNewTemplateModal(true);
+  // const handleSaveTemplate = () => setShowNewTemplateModal(true);
 
   useEffect(() => {
     const transformedTemplate = checklistFormatter(defaultTemplate?.checklists ?? []);
@@ -84,7 +84,7 @@ export default function DefaultTemplate() {
           checklist={checklist}
           setter={setChecklist}
           onAddChecklist={handleAddChecklist}
-          onSaveTemplate={handleSaveTemplate}
+          // onSaveTemplate={handleSaveTemplate}
           isTemplate={!isNewTemplate}
         />
       </div>

@@ -156,7 +156,7 @@ export default function ChecklistDetail() {
               checklist={checklist}
               setter={setChecklist}
               onAddChecklist={handleAddChecklist}
-              onSaveTemplate={() => setShowNewTemplateModal(true)}
+              // onSaveTemplate={() => setShowNewTemplateModal(true)}
             />
           </div>
           <InputModal
