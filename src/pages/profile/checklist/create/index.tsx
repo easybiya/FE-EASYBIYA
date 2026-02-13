@@ -73,7 +73,7 @@ export default function CreateTemplate() {
     }
   };
 
-  const handleSaveTemplate = () => setIsModalOpen(true);
+  // const handleSaveTemplate = () => setIsModalOpen(true);
 
   return (
     <div>
@@ -96,7 +96,7 @@ export default function CreateTemplate() {
           checklist={checklist}
           setter={setChecklist}
           onAddChecklist={handleAddChecklist}
-          onSaveTemplate={handleSaveTemplate}
+          // onSaveTemplate={handleSaveTemplate}
         />
       </div>
       <InputModal
