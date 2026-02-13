@@ -1,8 +1,8 @@
-import { Dispatch } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { PropertyPurpose } from '@/types';
 
 interface Props {
-  setDefaultTemplateType: Dispatch<PropertyPurpose>;
+  setDefaultTemplateType: Dispatch<SetStateAction<PropertyPurpose | undefined>>;
 }
 
 export default function CheckListTemplate({ setDefaultTemplateType }: Props) {
