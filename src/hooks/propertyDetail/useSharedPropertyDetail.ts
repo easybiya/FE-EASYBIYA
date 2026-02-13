@@ -1,4 +1,3 @@
-import { getPropertyChecklistById } from '@/lib/api/checklist';
 import { getSharedPropertyChecklist, getSharedPropertyDetail } from '@/lib/api/property';
 import { useQuery } from '@tanstack/react-query';
 

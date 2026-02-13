@@ -157,13 +157,21 @@ export const getMapPropertyList = async (): Promise<MapProperty[]> => {
   );
 };
 
-export const getSharedPropertyList = async (ids: string[]): Promise<Property[]> => {
-  const result = await instance.get(`/shared/property`, {
-    params: { ids: ids.join(',') },
-    withCredentials: false,
-  });
-  return result.data.result;
+export const getSharedPropertyList = async (
+  ids: string[],
+): Promise<Property[]> => {
+  if (!ids.length) return [];
+
+  const { data, error } = await supabase
+    .from('property')
+    .select('*')
+    .in('id', ids);
+
+  if (error) throw error;
+
+  return data ?? [];
 };
+
 
 export const getSharedPropertyDetail = async (id: string): Promise<Property> => {
   const result = await instance.get(`/shared/property/${id}`, {

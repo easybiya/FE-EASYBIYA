@@ -3,13 +3,12 @@ import { useRouter } from 'next/router';
 import RoomDetailPage from '@/components/RoomDetailPage';
 import DetailSkeleton from '@/components/RoomDetailPage/DetailSkeleton';
 import ArrowLeftIcon from '@/public/icons/arrow-left.svg?react';
-import { useSharedPropertyDetail } from '@/hooks/propertyDetail/useSharedPropertyDetail';
+import { usePropertyDetail } from '@/hooks/propertyDetail/usePropertyDetail';
 
 export default function ChecklistDetailPage() {
   const router = useRouter();
   const { id } = router.query as { id: string };
-
-  const { propertyChecklist, propertyDetail, isLoading } = useSharedPropertyDetail(id);
+  const { propertyChecklist, propertyDetail, isLoading } = usePropertyDetail(id);
 
   if (!router.isReady) {
     return null;
