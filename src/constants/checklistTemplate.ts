@@ -96,3 +96,121 @@ export const CHECKLIST_TEMPLATE: { name: string; checklists: ChecklistItem[] } =
     },
   ],
 };
+
+export const INVESTMENT_CHECKLIST_TEMPLATE: {
+  name: string;
+  checklists: ChecklistItem[];
+} = {
+  name: '부동산 투자 체크리스트',
+  checklists: [
+    {
+      title: '📍 입지 분석',
+      checkType: 'CHECKBOX',
+      checkItems: [
+        '지하철 도보 10분 이내',
+        '버스 노선 다양',
+        '주요 업무지구 접근성 우수',
+        '학군 수요 존재',
+        '상권 활성화 지역',
+        '병원/관공서 인접',
+        '공원/녹지 인접',
+      ],
+    },
+    {
+      title: '🏢 건물 및 물리적 상태',
+      checkType: 'CHECKBOX',
+      checkItems: [
+        '외벽 균열 없음',
+        '누수 흔적 없음',
+        '공용부 관리 양호',
+        '엘리베이터 정상 작동',
+        '주차 공간 충분',
+        '건물 노후도 심하지 않음',
+        '향/채광 양호',
+      ],
+    },
+    {
+      title: '💰 매입가 분석',
+      checkType: 'TEXT',
+      checkItems: [],
+    },
+    {
+      title: '📊 실거래가 비교',
+      checkType: 'TEXT',
+      checkItems: [],
+    },
+    {
+      title: '📈 전세가율 분석',
+      checkType: 'TEXT',
+      checkItems: [],
+    },
+    {
+      title: '💵 월세 수익성 분석',
+      checkType: 'TEXT',
+      checkItems: [],
+    },
+    {
+      title: '📉 가격 경쟁력',
+      checkType: 'CHECKBOX',
+      checkItems: [
+        '최근 실거래가 대비 저렴',
+        '급매물 수준 가격',
+        '인근 유사 매물 대비 가격 우위',
+      ],
+    },
+    {
+      title: '🏗 개발 호재 여부',
+      checkType: 'CHECKBOX',
+      checkItems: [
+        '재개발/재건축 구역',
+        'GTX/지하철 연장 예정',
+        '대형 상업시설 예정',
+        '기업/산업단지 조성 예정',
+      ],
+    },
+    {
+      title: '📦 공급 리스크',
+      checkType: 'CHECKBOX',
+      checkItems: [
+        '주변 신축 대량 공급 예정 없음',
+        '미분양 증가 지역 아님',
+        '입주 물량 과다 지역 아님',
+      ],
+    },
+    {
+      title: '👥 수요 분석',
+      checkType: 'CHECKBOX',
+      checkItems: [
+        '전세 수요 충분',
+        '월세 수요 충분',
+        '1~2인 가구 밀집 지역',
+        '직장인/학생 수요 존재',
+      ],
+    },
+    {
+      title: '📑 권리 관계',
+      checkType: 'CHECKBOX',
+      checkItems: [
+        '근저당 과다 설정 아님',
+        '가압류/가처분 없음',
+        '토지/건물 소유자 동일',
+        '전세보증보험 가입 가능',
+      ],
+    },
+    {
+      title: '⚠ 리스크 요소',
+      checkType: 'CHECKBOX',
+      checkItems: [
+        '유흥가 밀집 지역 아님',
+        '혐오시설 인접 아님',
+        '침수 위험 지역 아님',
+        '재난 위험 지역 아님',
+      ],
+    },
+    {
+      title: '📝 종합 투자 판단 메모',
+      checkType: 'TEXT',
+      checkItems: [],
+    },
+  ],
+};

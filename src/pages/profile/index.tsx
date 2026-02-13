@@ -19,9 +19,9 @@ export default function Page() {
         <Link className="py-12 font-semibold" href="/profile/info">
           기본 정보
         </Link>
-        <Link className="py-12 font-semibold" href="/profile/checklist">
+        {/* <Link className="py-12 font-semibold" href="/profile/checklist">
           체크리스트 관리
-        </Link>
+        </Link> */}
         <Link
           className="py-12 font-semibold"
           href="https://dent-kitten-aab.notion.site/24b30a2dbf6f80c5ad6bd5789d8f5131"

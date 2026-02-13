@@ -1,9 +1,16 @@
 import CustomButton from '@/components/Button/CustomButton';
 import CheckIcon from '@/public/icons/big-check.svg?react';
+import { usePropertyStore } from '@/store/usePropertyStore';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 export default function ChecklistComplete() {
   const router = useRouter();
+  const { resetAll } = usePropertyStore();
+
+  useEffect(() => {
+    resetAll();
+  }, []);
 
   return (
     <div className="relative flex flex-col items-center justify-center h-full text-center bg-[#F6F5F2]">

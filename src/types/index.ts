@@ -32,3 +32,11 @@ export interface Institution {
   institutionLatitude: number;
   institutionLongitude: number;
 }
+
+export const PropertyPurpose = {
+  FIND_HOME: 'find_home',
+  FIELD_SURVEY: 'field_survey',
+} as const;
+
+export type PropertyPurpose =
+  typeof PropertyPurpose[keyof typeof PropertyPurpose];

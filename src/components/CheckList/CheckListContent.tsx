@@ -1,5 +1,5 @@
 import ChecklistAddButton from '@/components/Button/CheckListAddButton';
-import CustomButton from '@/components/Button/CustomButton';
+// import CustomButton from '@/components/Button/CustomButton';
 import { ChecklistPayloadItem, CheckType } from '@/types/checklist';
 import CheckListContainer from './CheckListContainer';
 
@@ -7,7 +7,7 @@ interface Props {
   checklist: ChecklistPayloadItem[];
   setter: React.Dispatch<React.SetStateAction<ChecklistPayloadItem[]>>;
   onAddChecklist: (type: CheckType) => void;
-  onSaveTemplate: () => void;
+  // onSaveTemplate: () => void;
   isTemplate?: boolean;
 }
 
@@ -15,7 +15,7 @@ const ChecklistContent = ({
   checklist,
   setter,
   onAddChecklist,
-  onSaveTemplate,
+  // onSaveTemplate,
   isTemplate,
 }: Props) => {
   return (
@@ -45,13 +45,13 @@ const ChecklistContent = ({
               />
             </div>
           </div>
-          <CustomButton
+          {/* <CustomButton
             label="템플릿 저장"
             variant="secondary"
             fullWidth
             className="mt-20 mb-24"
             onClick={onSaveTemplate}
-          />
+          /> */}
         </>
       )}
     </div>

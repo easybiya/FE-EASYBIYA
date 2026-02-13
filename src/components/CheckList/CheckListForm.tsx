@@ -2,17 +2,18 @@ import FixedBar from '../FixedBar';
 import ChecklistContent from './CheckListContent';
 import { getPropertyChecklistById } from '@/lib/api/checklist';
 import { usePropertyStore } from '@/store/usePropertyStore';
-import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
+import { ChecklistPayloadItem, CheckType } from '@/types/checklist';
 import checklistFormatter from '@/utils/checklistFormatter';
 import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import CheckListTemplate from './CheckListTemplate';
-import { getTemplateById, postTemplate } from '@/lib/api/template';
+// import { postTemplate } from '@/lib/api/template';
 import { toast } from '@/hooks/use-toast';
-import { InputModal } from '../Modal/InputModal';
+// import { InputModal } from '../Modal/InputModal';
 import Spinner from '../Spinner';
-import { CHECKLIST_TEMPLATE } from '@/constants/checklistTemplate';
+import { CHECKLIST_TEMPLATE, INVESTMENT_CHECKLIST_TEMPLATE } from '@/constants/checklistTemplate';
 import useCreateProperty from '@/hooks/property/useCreateProperty';
 import useUpdateProperty from '@/hooks/property/useUpdateProperty';
+import { PropertyPurpose } from '@/types';
 
 interface Props {
   isEdit?: boolean;
@@ -21,27 +22,24 @@ interface Props {
 }
 
 export default function CheckListForm({ setStep, isEdit, id }: Props) {
-  const [selectedTemplate, setSelectedTemplate] = useState<string | undefined>(undefined); // 선택한 템플릿 id
-  const [isDefaultTemplate, setIsDefaultTemplate] = useState(false); // 기본 템플릿 사용 여부
-  const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
+  const [defaultTemplateType, setDefaultTemplateType] = useState<PropertyPurpose>();
+  // const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
-  const { property, resetAll } = usePropertyStore();
-  const [isLoading, setIsLoading] = useState(false);
-  const { mutate } = useCreateProperty();
-  const { mutate: updateProperty } = useUpdateProperty(id as string);
+  const { property } = usePropertyStore();
+  const { mutate, isPending } = useCreateProperty();
+  const { mutate: updateProperty, isPending: isUpdatePending } = useUpdateProperty(id as string);
 
   useEffect(() => {
     const fetchTemplate = async () => {
-      if (isDefaultTemplate) {
-        // 기본 템플릿 사용하는 경우
+      // if (isDefaultTemplate) {
+      // 기본 템플릿 사용하는 경우
+      if (defaultTemplateType === PropertyPurpose.FIND_HOME) {
         const defaultTemplate = CHECKLIST_TEMPLATE;
         const transformed = checklistFormatter(defaultTemplate.checklists);
         setChecklist(transformed);
       } else {
-        // 선택한 템플릿이 있는 경우
-        if (!selectedTemplate) return;
-        const result = await getTemplateById(selectedTemplate);
-        const transformed = checklistFormatter(result.checklists);
+        const defaultTemplate = INVESTMENT_CHECKLIST_TEMPLATE;
+        const transformed = checklistFormatter(defaultTemplate.checklists);
         setChecklist(transformed);
       }
     };
@@ -57,7 +55,7 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
       // 신규 모드일때는 템플릿 변환
       fetchTemplate();
     }
-  }, [isEdit, id, selectedTemplate, isDefaultTemplate]);
+  }, [isEdit, id, defaultTemplateType]);
 
   const handleAddChecklist = (type: CheckType) => {
     const newId = checklist.length > 0 ? checklist[checklist.length - 1].priority + 1 : 1;
@@ -71,68 +69,63 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
     setChecklist((prev) => [...prev, newItem]);
   };
 
-  const handleSaveTemplate = () => {
-    setShowNewTemplateModal(true);
-  };
+  // const handleSaveTemplate = () => {
+  //   setShowNewTemplateModal(true);
+  // };
 
-  const handleComplete = async () => {
+  const handleComplete = () => {
     try {
-      setIsLoading(true);
       if (isEdit) {
-        updateProperty(checklist);
+        updateProperty(checklist, {
+          onSuccess: () => {
+            setStep((prev) => prev + 1);
+          },
+        });
       } else {
-        mutate(checklist);
+        mutate(checklist, {
+          onSuccess: () => {
+            setStep((prev) => prev + 1);
+          },
+        });
       }
-      setIsLoading(false);
-      resetAll();
-      setStep((prev) => prev + 1);
     } catch {
       toast({ title: '등록에 실패했습니다', variant: 'fail' });
     }
   };
 
-  const handleNewTemplateSave = async (name: string) => {
-    const template: ChecklistTemplate = {
-      name,
-      checklists: checklist.map(({ title, checkType, content, checkItems }) => ({
-        title,
-        checkType,
-        content,
-        checkItems: checkItems.map((i) => i.description),
-      })),
-    };
+  // const handleNewTemplateSave = async (name: string) => {
+  //   const template: ChecklistTemplate = {
+  //     name,
+  //     checklists: checklist.map(({ title, checkType, content, checkItems }) => ({
+  //       title,
+  //       checkType,
+  //       content,
+  //       checkItems: checkItems.map((i) => i.description),
+  //     })),
+  //   };
 
-    try {
-      setIsLoading(true);
-      await postTemplate(template);
-      setIsLoading(false);
-      setShowNewTemplateModal(false);
-      toast({ title: '새 템플릿 생성 완료', variant: 'success' });
-    } catch (error) {
-      toast({ title: '템플릿 저장 실패', variant: 'fail' });
-      console.error(error);
-    }
-  };
+  //   try {
+  //     await postTemplate(template);
+  //     setShowNewTemplateModal(false);
+  //     toast({ title: '새 템플릿 생성 완료', variant: 'success' });
+  //   } catch (error) {
+  //     toast({ title: '템플릿 저장 실패', variant: 'fail' });
+  //     console.error(error);
+  //   }
+  // };
 
-  const isTemplateSelected = selectedTemplate || isDefaultTemplate;
-
-  if (!isEdit && !isTemplateSelected) {
-    return (
-      <CheckListTemplate
-        setTemplate={setSelectedTemplate}
-        setIsDefaultTemplate={setIsDefaultTemplate}
-      />
-    );
+  if (!isEdit) {
+    return <CheckListTemplate setDefaultTemplateType={setDefaultTemplateType} />;
   }
 
   return (
     <>
-      {isLoading && <Spinner />}
+      {isPending || isUpdatePending || <Spinner />}
       <ChecklistContent
         checklist={checklist}
         setter={setChecklist}
         onAddChecklist={handleAddChecklist}
-        onSaveTemplate={handleSaveTemplate}
+        // onSaveTemplate={handleSaveTemplate}
       />
       <FixedBar
         onClick={handleComplete}
@@ -140,7 +133,7 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
         disabled={property.monthly_fee === null && property.lat === null} // 매물 정보, 매물 주소 등록 안한경우 생성 못함
         text="완료"
       />
-      <InputModal
+      {/* <InputModal
         open={showNewTemplateModal}
         openChange={setShowNewTemplateModal}
         title={isEdit ? '템플릿 저장' : '새 템플릿 생성'}
@@ -148,7 +141,7 @@ export default function CheckListForm({ setStep, isEdit, id }: Props) {
         handleClick={(value) => handleNewTemplateSave(value)}
         trigger={<></>}
         maxLength={20}
-      />
+      /> */}
     </>
   );
 }
