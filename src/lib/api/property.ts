@@ -147,6 +147,12 @@ export const deleteProperty = async (id: string) => {
 };
 
 export const getMapPropertyList = async (): Promise<MapProperty[]> => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) throw new Error('로그인이 필요합니다');
+
   const { data, error } = await supabase
     .from('property')
     .select(
@@ -159,6 +165,7 @@ export const getMapPropertyList = async (): Promise<MapProperty[]> => {
       lng
     `,
     )
+    .eq('user_id',user.id)
     .order('created_at', { ascending: false });
 
   if (error) throw error;
