@@ -5,9 +5,16 @@ import { supabase } from '../supabaseClient';
 import { v4 as uuidv4 } from 'uuid';
 
 export const getBookmarkedPropertyList = async (): Promise<Property[]> => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) throw new Error('로그인이 필요합니다');
+
   const { data, error } = await supabase
     .from('property')
     .select('*')
+    .eq('user_id', user.id)
     .eq('bookmarked', true)
     .order('created_at', { ascending: false });
 
@@ -37,10 +44,21 @@ export const getNonBookmarkedPropertyList = async (
 ): Promise<Property[]> => {
   const { page, size, sortBy } = params;
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) throw new Error('로그인이 필요합니다');
+
   const from = (page - 1) * size;
   const to = from + size - 1;
 
-  let query = supabase.from('property').select('*').eq('bookmarked', false).range(from, to);
+  let query = supabase
+    .from('property')
+    .select('*')
+    .eq('bookmarked', false)
+    .eq('user_id', user.id)
+    .range(from, to);
 
   if (sortBy === 'LATEST') {
     query = query.order('created_at', { ascending: false });
@@ -157,21 +175,15 @@ export const getMapPropertyList = async (): Promise<MapProperty[]> => {
   );
 };
 
-export const getSharedPropertyList = async (
-  ids: string[],
-): Promise<Property[]> => {
+export const getSharedPropertyList = async (ids: string[]): Promise<Property[]> => {
   if (!ids.length) return [];
 
-  const { data, error } = await supabase
-    .from('property')
-    .select('*')
-    .in('id', ids);
+  const { data, error } = await supabase.from('property').select('*').in('id', ids);
 
   if (error) throw error;
 
   return data ?? [];
 };
-
 
 export const getSharedPropertyDetail = async (id: string): Promise<Property> => {
   const result = await instance.get(`/shared/property/${id}`, {

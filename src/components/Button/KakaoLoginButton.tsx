@@ -6,6 +6,7 @@ export default function KakaoLoginButton() {
     await supabase.auth.signInWithOAuth({
       provider: 'kakao',
       options: {
+        // redirectTo: 'http://localhost:3000/auth/callback',
         redirectTo: `${location.origin}/auth/callback`,
       },
     });

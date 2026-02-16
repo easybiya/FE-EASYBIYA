@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '@/lib/supabaseClient';
+import Spinner from '@/components/Spinner';
 
 export default function AuthCallback() {
   const router = useRouter();
@@ -23,5 +24,9 @@ export default function AuthCallback() {
     handleAuth();
   }, []);
 
-  return <p>로그인 처리중...</p>;
+  return (
+    <>
+      <Spinner />
+    </>
+  );
 }

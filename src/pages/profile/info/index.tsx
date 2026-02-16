@@ -4,13 +4,27 @@ import { useRouter } from 'next/navigation';
 import ArrowLeft from '@/public/icons/arrow-left.svg?react';
 import KakaoIcon from '@/public/icons/kakao.svg?react';
 import useAccount from '@/hooks/user/useAccount';
+import useDeleteAccount from '@/hooks/user/useDeleteAccount';
+import { supabase } from '@/lib/supabaseClient';
+import Spinner from '@/components/Spinner';
 
 export default function Page() {
   const router = useRouter();
   const { data } = useAccount();
+  const { mutate, isPending } = useDeleteAccount();
+
+  const handleDelete = () => {
+    mutate(undefined, {
+      onSuccess: async () => {
+        await supabase.auth.signOut();
+        window.location.href = '/onboarding';
+      },
+    });
+  };
 
   return (
     <>
+      {isPending && <Spinner />}
       <Header
         left={
           <div className="flex items-center gap-8">
@@ -33,10 +47,11 @@ export default function Page() {
           <p className="font-semibold text-base leading-tight">{data?.email}</p>
         </div>
         <ConfirmModal
-          trigger={<button className="py-12 font-semibold text-start">회원 탈퇴</button>}
+          trigger={<div className="py-12 font-semibold text-start cursor-pointer">회원 탈퇴</div>}
           title="회원탈퇴"
           description="회원 탈퇴 하시겠어요?"
-          handleSubmit={() => console.log('탈퇴')}
+          handleSubmit={handleDelete}
+          buttonStyle="bg-red-500 hover:bg-red-400 active:bg-red-300"
         />
       </div>
     </>

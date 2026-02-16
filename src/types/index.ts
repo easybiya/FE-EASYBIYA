@@ -38,5 +38,4 @@ export const PropertyPurpose = {
   FIELD_SURVEY: 'field_survey',
 } as const;
 
-export type PropertyPurpose =
-  typeof PropertyPurpose[keyof typeof PropertyPurpose];
+export type PropertyPurpose = (typeof PropertyPurpose)[keyof typeof PropertyPurpose];

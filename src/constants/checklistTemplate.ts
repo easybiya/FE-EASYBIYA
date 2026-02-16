@@ -152,11 +152,7 @@ export const INVESTMENT_CHECKLIST_TEMPLATE: {
     {
       title: '📉 가격 경쟁력',
       checkType: 'CHECKBOX',
-      checkItems: [
-        '최근 실거래가 대비 저렴',
-        '급매물 수준 가격',
-        '인근 유사 매물 대비 가격 우위',
-      ],
+      checkItems: ['최근 실거래가 대비 저렴', '급매물 수준 가격', '인근 유사 매물 대비 가격 우위'],
     },
     {
       title: '🏗 개발 호재 여부',

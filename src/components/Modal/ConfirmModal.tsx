@@ -39,7 +39,7 @@ export function ConfirmModal({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex flex-col gap-12">
-          <AlertDialogAction>
+          <AlertDialogAction asChild>
             <CustomButton
               label={buttonText || '네'}
               fullWidth
