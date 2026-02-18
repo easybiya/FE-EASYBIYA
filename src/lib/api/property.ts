@@ -23,11 +23,19 @@ export const getBookmarkedPropertyList = async (): Promise<Property[]> => {
 };
 
 export const getTotalCount = async (): Promise<number> => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) throw new Error('로그인이 필요합니다');
+
   const { count, error } = await supabase
     .from('property')
-    .select('*', { count: 'exact', head: true });
-
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', user.id);
+  
   if (error) throw error;
+
   return count ?? 0;
 };
 
@@ -165,7 +173,7 @@ export const getMapPropertyList = async (): Promise<MapProperty[]> => {
       lng
     `,
     )
-    .eq('user_id',user.id)
+    .eq('user_id', user.id)
     .order('created_at', { ascending: false });
 
   if (error) throw error;
