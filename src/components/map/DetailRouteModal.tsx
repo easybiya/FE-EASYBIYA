@@ -8,28 +8,25 @@ import WalkIcon from '@/public/icons/walk-icon.svg?react';
 import TrainIcon from '@/public/icons/subway-icon.svg?react';
 import { getTransitColor } from '@/utils/odsayColor';
 import usePath from '@/hooks/institution/usePath';
+import { cn } from '@/lib/utils';
 
 type Traffic = {
   name: string;
-  color: string;
   icon: ReactNode;
 };
 
 const trafficType: Record<number, Traffic> = {
   1: {
     name: '지하철',
-    color: '',
     icon: <SubwayIcon width={20} height={20} className="fill-current" />,
   },
-  2: { name: '버스', color: '', icon: <BusIcon width={20} height={20} className="fill-current" /> },
+  2: { name: '버스', icon: <BusIcon width={20} height={20} className="fill-current" /> },
   3: {
     name: '도보',
-    color: '',
     icon: <WalkIcon width={20} height={20} className="fill-current" />,
   },
   4: {
     name: '열차',
-    color: '',
     icon: <TrainIcon width={20} height={20} className="fill-current" />,
   },
 };
@@ -68,33 +65,41 @@ export default function DetailRouteModal({ institution, currentAddress, isClose 
         </div>
         <div className="flex w-full gap-4">
           {data?.subPath?.map((info, index) => {
+            const color = getTransitColor(
+              info.trafficType,
+              info.lane?.[0]?.subwayCode ?? 0,
+              info.lane?.[0]?.type ?? 0,
+            );
+
             if (info.sectionTime > 0) {
               return (
                 <div
                   key={index}
-                  className={`relative h-16 flex items-center justify-center ${
-                    trafficType[info.trafficType].color
-                  } ${index === 0 && 'rounded-l-full'} ${
-                    index === data.subPath.length - 1 && 'rounded-r-full'
-                  }`}
+                  className={cn(
+                    'relative h-16 flex items-center justify-center',
+                    index === 0 && 'rounded-l-full',
+                    index === data.subPath.length - 1 && 'rounded-r-full',
+                  )}
                   style={{
-                    backgroundColor: getTransitColor(
-                      info.trafficType,
-                      info.lane?.[0]?.subwayCode ?? 0,
-                      info.lane?.[0]?.type ?? 0,
-                    ),
-                    color: getTransitColor(
-                      info.trafficType,
-                      info.lane?.[0]?.subwayCode ?? 0,
-                      info.lane?.[0]?.type ?? 0,
-                    ),
+                    backgroundColor: color,
+                    color,
                     width: `${(info.sectionTime / (data.info.totalTime ?? 1)) * 100}%`,
                   }}
                 >
-                  <div className="text-11 font-semibold absolute left-0 -bottom-26 h-23 text-black text-nowrap">
+                  <div
+                    className={cn(
+                      'font-semibold absolute left-0 -bottom-26 h-23 text-nowrap text-[11px] text-black',
+                      (index === 0 || index === data.subPath.length - 1) && '-left-5',
+                    )}
+                  >
                     {info.sectionTime}분
                   </div>
-                  <div className="absolute -top-22 w-20 h-20 left-0">
+                  <div
+                    className={cn(
+                      'absolute -top-22 w-20 h-20 left-0',
+                      (index === 0 || index === data.subPath.length - 1) && '-left-5',
+                    )}
+                  >
                     {trafficType[info.trafficType].icon}
                   </div>
                 </div>
