@@ -14,7 +14,7 @@ import useUpdateImage from '@/hooks/propertyDetail/useUpdateImage';
 
 export default function EditPhotoPage() {
   const searchParams = useSearchParams();
-  const propertyId = searchParams.get('propertyId') ?? '';
+  const propertyId = searchParams?.get('propertyId') ?? '';
   const router = useRouter();
   const { propertyDetail } = usePropertyDetail(propertyId);
   const { mutate } = useUpdateImage(propertyId);

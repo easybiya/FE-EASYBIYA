@@ -1,5 +1,7 @@
+'use client';
+
 import { ReactNode, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 import TabBar from './TabBar';
 
 interface LayoutProps {
@@ -11,10 +13,10 @@ const HIDDEN_TABBAR_PAGES = ['/login', '/details', '/property', '/share', '/view
 const HIDEEN_LAYOUT_ROUTE = '/property';
 
 export default function Layout({ children }: LayoutProps) {
-  const router = useRouter();
-  const isCreatePage = router.pathname.startsWith(HIDEEN_LAYOUT_ROUTE);
+  const pathname = usePathname();
+  const isCreatePage = pathname?.startsWith(HIDEEN_LAYOUT_ROUTE) ?? false;
   const hideTabBar =
-    HIDDEN_TABBAR_PAGES.some((path) => router.pathname.startsWith(path)) || isCreatePage;
+    HIDDEN_TABBAR_PAGES.some((path) => pathname?.startsWith(path)) || isCreatePage;
 
   useEffect(() => {
     const setVh = () => {

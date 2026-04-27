@@ -33,7 +33,7 @@ function CreatePageContent({
   setStep: Dispatch<SetStateAction<number>>;
 }) {
   const searchParams = useSearchParams();
-  const propertyId = searchParams.get('propertyId') ?? '';
+  const propertyId = searchParams?.get('propertyId') ?? '';
 
   return (
     <>

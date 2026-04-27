@@ -1,15 +1,11 @@
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  const token = req.headers.authorization?.replace('Bearer ', '');
+export async function POST(req: NextRequest) {
+  const token = req.headers.get('authorization')?.replace('Bearer ', '');
 
   if (!token) {
-    return res.status(401).json({ error: 'No token provided' });
+    return NextResponse.json({ error: 'No token provided' }, { status: 401 });
   }
 
   const {
@@ -18,34 +14,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } = await supabaseAdmin.auth.getUser(token);
 
   if (error || !user) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   const userId = user.id;
 
   try {
-    // 1️⃣ storage 삭제
     const { data: files } = await supabaseAdmin.storage
       .from('easybiya')
       .list(`properties/${userId}`);
 
     if (files && files.length > 0) {
       const paths = files.map((file) => `properties/${userId}/${file.name}`);
-
       await supabaseAdmin.storage.from('easybiya').remove(paths);
     }
 
-    // 2️⃣ property 삭제
     await supabaseAdmin.from('property').delete().eq('user_id', userId);
-
-    // 3️⃣ users 삭제
     await supabaseAdmin.from('users').delete().eq('id', userId);
-
-    // 4️⃣ auth 삭제 (마지막)
     await supabaseAdmin.auth.admin.deleteUser(userId);
 
-    return res.status(200).json({ success: true });
-  } catch (err) {
-    return res.status(500).json({ error: 'Delete failed' });
+    return NextResponse.json({ success: true });
+  } catch {
+    return NextResponse.json({ error: 'Delete failed' }, { status: 500 });
   }
 }

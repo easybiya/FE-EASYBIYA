@@ -7,7 +7,7 @@ import { useSearchParams } from 'next/navigation';
 
 export default function Home() {
   const searchParams = useSearchParams();
-  const ids = searchParams.get('ids');
+  const ids = searchParams?.get('ids');
   const idArray = (ids ?? '').split(',').filter(Boolean);
   const { data, isLoading } = useSharedProperty(idArray);
 
