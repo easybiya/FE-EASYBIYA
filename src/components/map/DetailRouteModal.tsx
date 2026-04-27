@@ -6,29 +6,36 @@ import SubwayIcon from '@/public/icons/subway-icon.svg?react';
 import BusIcon from '@/public/icons/bus-icon.svg?react';
 import WalkIcon from '@/public/icons/walk-icon.svg?react';
 import TrainIcon from '@/public/icons/subway-icon.svg?react';
-import { getTransitColor } from '@/utils/odsayColor';
+import { getTransitColor } from '@/utils/transferColor';
 import usePath from '@/hooks/institution/usePath';
 import { cn } from '@/lib/utils';
+import { TmapLeg, TmapMode } from '@/types/tmap';
 
 type Traffic = {
   name: string;
   icon: ReactNode;
 };
 
-const trafficType: Record<number, Traffic> = {
-  1: {
-    name: '지하철',
-    icon: <SubwayIcon width={20} height={20} className="fill-current" />,
+const trafficMode: Record<TmapMode, Traffic> = {
+  SUBWAY: { name: '지하철', icon: <SubwayIcon width={20} height={20} className="fill-current" /> },
+  BUS: { name: '버스', icon: <BusIcon width={20} height={20} className="fill-current" /> },
+  WALK: { name: '도보', icon: <WalkIcon width={20} height={20} className="fill-current" /> },
+  TRAIN: { name: '열차', icon: <TrainIcon width={20} height={20} className="fill-current" /> },
+  EXPRESSBUS: { name: '버스', icon: <BusIcon width={20} height={20} className="fill-current" /> },
+  AIRPLANE: {
+    name: '비행기',
+    icon: undefined,
   },
-  2: { name: '버스', icon: <BusIcon width={20} height={20} className="fill-current" /> },
-  3: {
-    name: '도보',
-    icon: <WalkIcon width={20} height={20} className="fill-current" />,
+  FERRY: {
+    name: '페리',
+    icon: undefined,
   },
-  4: {
-    name: '열차',
-    icon: <TrainIcon width={20} height={20} className="fill-current" />,
-  },
+};
+
+const getRouteLabel = (leg: TmapLeg): string => {
+  if (!leg.route) return '';
+  const parts = leg.route.split(':');
+  return parts.length > 1 ? parts[1] : leg.route;
 };
 
 interface Props {
@@ -42,6 +49,9 @@ export default function DetailRouteModal({ institution, currentAddress, isClose 
 
   if (isLoading)
     return <div className="flex h-80 justify-between items-center p-16 bg-gray-200 rounded-lg" />;
+
+  const visibleLegs = data?.legs.filter((leg) => leg.sectionTime > 0) ?? [];
+  const totalTime = Math.round((data?.totalTime ?? 0) / 60);
 
   return (
     <div className="absolute inset-0 z-50 bg-white">
@@ -60,82 +70,55 @@ export default function DetailRouteModal({ institution, currentAddress, isClose 
       </div>
       <div className="px-24 py-8 flex flex-col gap-32">
         <div className="flex justify-center gap-4 items-center py-8 w-full font-bold text-24">
-          <p>{data?.info.totalTime}분</p>
+          <p>{totalTime}분</p>
           <p className="text-gray-500">소요</p>
         </div>
-        <div className="flex w-full gap-4">
-          {data?.subPath?.map((info, index) => {
-            const color = getTransitColor(
-              info.trafficType,
-              info.lane?.[0]?.subwayCode ?? 0,
-              info.lane?.[0]?.type ?? 0,
-            );
-
-            if (info.sectionTime > 0) {
-              return (
-                <div
-                  key={index}
-                  className={cn(
-                    'relative h-16 flex items-center justify-center',
-                    index === 0 && 'rounded-l-full',
-                    index === data.subPath.length - 1 && 'rounded-r-full',
-                  )}
-                  style={{
-                    backgroundColor: color,
-                    color,
-                    width: `${(info.sectionTime / (data.info.totalTime ?? 1)) * 100}%`,
-                  }}
-                >
-                  <div
-                    className={cn(
-                      'font-semibold absolute left-0 -bottom-26 h-23 text-nowrap text-[11px] text-black',
-                      (index === 0 || index === data.subPath.length - 1) && '-left-5',
-                    )}
-                  >
-                    {info.sectionTime}분
-                  </div>
-                  <div
-                    className={cn(
-                      'absolute -top-22 w-20 h-20 left-0',
-                      (index === 0 || index === data.subPath.length - 1) && '-left-5',
-                    )}
-                  >
-                    {trafficType[info.trafficType].icon}
-                  </div>
+        <div className="flex w-full">
+          {visibleLegs.map((leg, index) => {
+            const color = getTransitColor(leg.mode, leg.routeColor);
+            return (
+              <div
+                key={index}
+                className={cn(
+                  'relative h-16 flex items-center justify-center mr-2',
+                  index === 0 && 'rounded-l-full',
+                  index === visibleLegs.length - 1 && 'rounded-r-full mr-0',
+                )}
+                style={{
+                  backgroundColor: color,
+                  color,
+                  width: `${(leg.sectionTime / (data?.totalTime ?? 1)) * 100}%`,
+                }}
+              >
+                <div className="font-semibold absolute left-1/2 -translate-x-1/2 -bottom-26 h-23 text-nowrap text-[11px] text-black">
+                  {Math.round(leg.sectionTime / 60)}분
                 </div>
-              );
-            }
+                <div className="absolute -top-22 w-20 h-20 left-1/2 -translate-x-1/2 flex items-center justify-center">
+                  {trafficMode[leg.mode]?.icon}
+                </div>
+              </div>
+            );
           })}
         </div>
         <div className="flex flex-col gap-10">
-          {data?.subPath?.map((info, index) => {
-            if (info.sectionTime > 0) {
-              return (
-                <div className="flex justify-between" key={index}>
-                  <div className="flex gap-4 items-center text-14 font-semibold leading-tight">
-                    <span
-                      className={`w-8 h-8 rounded-full`}
-                      style={{
-                        backgroundColor: getTransitColor(
-                          info.trafficType,
-                          info.lane?.[0]?.subwayCode ?? 0,
-                          info.lane?.[0]?.type ?? 0,
-                        ),
-                      }}
-                    />
-                    {info.trafficType === 1 || info.trafficType === 2 ? (
-                      <div className="flex gap-4">
-                        {info.trafficType === 2 && <p>버스</p>}
-                        <p>{info.lane?.[0]?.busNo || info.lane?.[0]?.name || ''}</p>
-                      </div>
-                    ) : (
-                      <p>{trafficType[info.trafficType].name}</p>
-                    )}
-                    <p>{info.sectionTime}분</p>
-                  </div>
+          {visibleLegs.map((leg, index) => {
+            const color = getTransitColor(leg.mode, leg.routeColor);
+            return (
+              <div className="flex justify-between" key={index}>
+                <div className="flex gap-4 items-center text-14 font-semibold leading-tight">
+                  <span className="w-8 h-8 rounded-full" style={{ backgroundColor: color }} />
+                  {leg.mode === 'SUBWAY' || leg.mode === 'BUS' || leg.mode === 'EXPRESSBUS' ? (
+                    <div className="flex gap-4">
+                      {(leg.mode === 'BUS' || leg.mode === 'EXPRESSBUS') && <p>버스</p>}
+                      <p>{getRouteLabel(leg)}</p>
+                    </div>
+                  ) : (
+                    <p>{trafficMode[leg.mode]?.name}</p>
+                  )}
+                  <p>{Math.round(leg.sectionTime / 60)}분</p>
                 </div>
-              );
-            }
+              </div>
+            );
           })}
         </div>
         <div className="flex flex-col gap-6 leading-normal items-center">
