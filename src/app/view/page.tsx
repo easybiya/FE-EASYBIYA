@@ -1,3 +1,6 @@
+'use client';
+
+import { Suspense } from 'react';
 import DashboardSkeleton from '@/components/DashBoard/DashboardSkeleton';
 import HouseCard from '@/components/DashBoard/HouseCard';
 import Header from '@/components/Layout/Header';
@@ -5,7 +8,7 @@ import { useSharedProperty } from '@/hooks/property/uesSharedProperty';
 import { motion } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
 
-export default function Home() {
+function SharedView() {
   const searchParams = useSearchParams();
   const ids = searchParams?.get('ids');
   const idArray = (ids ?? '').split(',').filter(Boolean);
@@ -14,7 +17,6 @@ export default function Home() {
   return (
     <div className="flex flex-col px-20 py-8 gap-8 mb-20">
       <Header title="공유받은 매물" />
-
       <div className="flex w-full justify-between items-center">
         {!isLoading && <p className="text-gray-500 text-14">전체 {data?.length}</p>}
       </div>
@@ -41,5 +43,21 @@ export default function Home() {
         </motion.div>
       )}
     </div>
+  );
+}
+
+export default function ViewPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex flex-col gap-16 pt-42 px-20">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <DashboardSkeleton key={i} />
+          ))}
+        </div>
+      }
+    >
+      <SharedView />
+    </Suspense>
   );
 }

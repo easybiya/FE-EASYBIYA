@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import InfoModal from '@/components/map/infoModal';
 import Header from '@/components/Layout/Header';
@@ -9,7 +11,7 @@ import { useMapProperty } from '@/hooks/map/useMapProperty';
 import { MapProperty } from '@/types';
 import { AnimatePresence } from 'framer-motion';
 
-export default function Page() {
+export default function MapPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<MapProperty | null>(null);
   const { data } = useMapProperty();

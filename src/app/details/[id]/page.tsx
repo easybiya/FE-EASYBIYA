@@ -1,5 +1,7 @@
+'use client';
+
 import Header from '@/components/Layout/Header';
-import { useRouter } from 'next/router';
+import { useRouter, useParams } from 'next/navigation';
 import { usePropertyDetail } from '@/hooks/propertyDetail/usePropertyDetail';
 import RoomDetailPage from '@/components/RoomDetailPage';
 import DetailSkeleton from '@/components/RoomDetailPage/DetailSkeleton';
@@ -16,17 +18,15 @@ import useDeleteProperty from '@/hooks/property/useDeleteProperty';
 
 export default function ChecklistDetailPage() {
   const router = useRouter();
-  const { id } = router.query as { id: string };
+  const id = useParams<{ id: string }>()?.id ?? '';
 
   const { propertyChecklist, propertyDetail, isLoading } = usePropertyDetail(id);
   const { mutate } = useBookmark();
   const { mutate: deleteProperty } = useDeleteProperty();
   const propertyImages = (propertyDetail?.images ?? []) as unknown as PropertyImage[];
 
-  // 카카오 공유
   const shareKakao = () => {
     const { Kakao } = window;
-
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/view/${id}`;
     const imageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/images/opengraph.png`;
 
@@ -34,22 +34,11 @@ export default function ChecklistDetailPage() {
       objectType: 'feed',
       content: {
         title: '이 집 어때요?',
-        description: `계약하고 싶은 집인데 한마디 해줘요!`,
-        imageUrl: propertyImages[0]?.imageUrl ?? imageUrl, // 기본 이미지 필요함
-        link: {
-          mobileWebUrl: url,
-          webUrl: url,
-        },
+        description: '계약하고 싶은 집인데 한마디 해줘요!',
+        imageUrl: propertyImages[0]?.imageUrl ?? imageUrl,
+        link: { mobileWebUrl: url, webUrl: url },
       },
-      buttons: [
-        {
-          title: '집 같이 보기',
-          link: {
-            mobileWebUrl: url,
-            webUrl: url,
-          },
-        },
-      ],
+      buttons: [{ title: '집 같이 보기', link: { mobileWebUrl: url, webUrl: url } }],
     });
   };
 
@@ -57,10 +46,6 @@ export default function ChecklistDetailPage() {
     deleteProperty(id);
     router.replace('/');
   };
-
-  if (!router.isReady) {
-    return null;
-  }
 
   if (isLoading) {
     return (
@@ -73,7 +58,7 @@ export default function ChecklistDetailPage() {
   if (!propertyDetail) {
     return (
       <div className="h-full flex flex-col items-center justify-center bg-[#F6F5F2] relative">
-        <div className="">매물 정보가 없습니다.</div>
+        <div>매물 정보가 없습니다.</div>
       </div>
     );
   }
@@ -101,7 +86,7 @@ export default function ChecklistDetailPage() {
                 width={24}
                 height={24}
                 className="cursor-pointer"
-                onClick={() => mutate(id as string)}
+                onClick={() => mutate(id)}
               />
             )}
             <ShareIcon

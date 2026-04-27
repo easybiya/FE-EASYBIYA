@@ -1,18 +1,16 @@
+'use client';
+
 import Header from '@/components/Layout/Header';
-import { useRouter } from 'next/router';
+import { useRouter, useParams } from 'next/navigation';
 import RoomDetailPage from '@/components/RoomDetailPage';
 import DetailSkeleton from '@/components/RoomDetailPage/DetailSkeleton';
 import ArrowLeftIcon from '@/public/icons/arrow-left.svg';
 import { usePropertyDetail } from '@/hooks/propertyDetail/usePropertyDetail';
 
-export default function ChecklistDetailPage() {
+export default function SharedDetailPage() {
   const router = useRouter();
-  const { id } = router.query as { id: string };
+  const id = useParams<{ id: string }>()?.id ?? '';
   const { propertyChecklist, propertyDetail, isLoading } = usePropertyDetail(id);
-
-  if (!router.isReady) {
-    return null;
-  }
 
   if (isLoading) {
     return (
@@ -25,7 +23,7 @@ export default function ChecklistDetailPage() {
   if (!propertyDetail) {
     return (
       <div className="h-full flex flex-col items-center justify-center bg-[#F6F5F2] relative">
-        <div className="">매물 정보가 없습니다.</div>
+        <div>매물 정보가 없습니다.</div>
       </div>
     );
   }

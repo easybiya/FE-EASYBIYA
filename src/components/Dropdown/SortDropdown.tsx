@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import DefaultDropdownLayout from './DropdownLayout';
-import { DROPDOWN_OPTION } from '@/pages';
 import ArrowIcon from '@/public/icons/arrow-up.svg';
+
+const DROPDOWN_OPTION = [
+  { value: '최신순', key: 'LATEST' },
+  { value: '입주 빠른 순', key: 'AVAILABLE_DATE_ASC' },
+];
 
 interface Props {
   handleClick: (option: string) => void;

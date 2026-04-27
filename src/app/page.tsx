@@ -1,3 +1,5 @@
+'use client';
+
 import DashboardSkeleton from '@/components/DashBoard/DashboardSkeleton';
 import HouseCard from '@/components/DashBoard/HouseCard';
 import Header from '@/components/Layout/Header';
@@ -16,26 +18,17 @@ import ShareIcon from '@/public/icons/share-Icon.svg';
 import PlusIcon from '@/public/icons/plus.svg';
 import { useTotalCount } from '@/hooks/property/useTotalCount';
 
-export const DROPDOWN_OPTION = [
-  { value: '최신순', key: 'LATEST' },
-  { value: '입주 빠른 순', key: 'AVAILABLE_DATE_ASC' },
-];
 
 export default function Home() {
   const router = useRouter();
   const { params, setSortBy } = useDispatch();
   const { bookmarked, nonBookmarked, isLoading, fetchNextPage, hasNextPage, isFetching } =
     useProperty(params);
-  const { ref, inView } = useInView({
-    threshold: 0.5,
-  });
+  const { ref, inView } = useInView({ threshold: 0.5 });
   const { data: totalCount } = useTotalCount();
 
   const handleSelect = (option: string) => {
-    const selectedOption = DROPDOWN_OPTION.find((item) => item.key === option);
-    if (selectedOption) {
-      setSortBy(selectedOption.key as PropertySortBy);
-    }
+    setSortBy(option as PropertySortBy);
   };
 
   const flattedNonBookmarkedData = useMemo(
@@ -49,7 +42,7 @@ export default function Home() {
     if (inView && !isFetching && hasNextPage) {
       fetchNextPage();
     }
-  }, [inView, isFetching, hasNextPage]);
+  }, [inView, isFetching, hasNextPage, fetchNextPage]);
 
   return (
     <>
@@ -89,43 +82,40 @@ export default function Home() {
         </div>
       ) : (
         <div className="flex flex-col px-20 py-8 gap-8 mb-80">
-          <>
-            {isLoading ? (
-              <div className="flex flex-col gap-16 pt-42">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <DashboardSkeleton key={index} />
-                ))}
+          {isLoading ? (
+            <div className="flex flex-col gap-16 pt-42">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <DashboardSkeleton key={index} />
+              ))}
+            </div>
+          ) : (
+            <>
+              <div className="flex w-full justify-between items-center">
+                <p className="text-gray-500 text-14/19">전체 {totalCount}</p>
+                <SortDropdown handleClick={handleSelect} params={params} />
               </div>
-            ) : (
-              <>
-                <div className="flex w-full justify-between items-center">
-                  <p className="text-gray-500 text-14/19">전체 {totalCount}</p>
-                  <SortDropdown handleClick={handleSelect} params={params} />
-                </div>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  <ul className="flex flex-col gap-16">
-                    {bookmarked.map((item) => (
-                      <li key={item.id}>
-                        <HouseCard info={item} isFixed />
-                      </li>
-                    ))}
-
-                    {flattedNonBookmarkedData.map((item) => (
-                      <li key={item.id}>
-                        <HouseCard info={item} isFixed={false} />
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-                <div ref={ref} />
-              </>
-            )}
-          </>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.4 }}
+              >
+                <ul className="flex flex-col gap-16">
+                  {bookmarked.map((item) => (
+                    <li key={item.id}>
+                      <HouseCard info={item} isFixed />
+                    </li>
+                  ))}
+                  {flattedNonBookmarkedData.map((item) => (
+                    <li key={item.id}>
+                      <HouseCard info={item} isFixed={false} />
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+              <div ref={ref} />
+            </>
+          )}
         </div>
       )}
     </>
