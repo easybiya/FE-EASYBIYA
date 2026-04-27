@@ -7,10 +7,10 @@ import useBookmark from '@/hooks/property/useBookmark';
 import { ConfirmModal } from '@/components/Modal/ConfirmModal';
 import DialogDropdownLayout from '@/components/Dropdown/DialogDropdown';
 import PreventDropdownMenuItem from '@/components/Dropdown/PreventDropdownMenuItem';
-import DropdownIcon from '@/public/icons/meatball.svg?react';
-import ArrowLeftIcon from '@/public/icons/arrow-left.svg?react';
-import PinIcon from '@/public/icons/pin-icon.svg?react';
-import ShareIcon from '@/public/icons/share-Icon.svg?react';
+import DropdownIcon from '@/public/icons/meatball.svg';
+import ArrowLeftIcon from '@/public/icons/arrow-left.svg';
+import PinIcon from '@/public/icons/pin-icon.svg';
+import ShareIcon from '@/public/icons/share-Icon.svg';
 import { PropertyImage } from '@/types';
 import useDeleteProperty from '@/hooks/property/useDeleteProperty';
 

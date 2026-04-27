@@ -6,7 +6,7 @@ import { postTemplate } from '@/lib/api/template';
 import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import ArrowLeftIcon from '@/public/icons/arrow-left.svg?react';
+import ArrowLeftIcon from '@/public/icons/arrow-left.svg';
 
 const defaultChecklist: ChecklistPayloadItem[] = [
   {

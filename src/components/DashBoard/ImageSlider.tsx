@@ -9,7 +9,7 @@ import {
 import { PropertyImage } from '@/types';
 import { cn } from '@/lib/utils';
 import { createPortal } from 'react-dom';
-import CloseIcon from '@/public/icons/close.svg?react';
+import CloseIcon from '@/public/icons/close.svg';
 
 type Props = {
   images: PropertyImage[];

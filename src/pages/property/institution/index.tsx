@@ -1,9 +1,9 @@
 import InstitutionForm from '@/components/Institution';
 import Header from '@/components/Layout/Header';
 import { useInstitution } from '@/hooks/map/useInstitution';
-import MapIcon from '@/public/icons/map-pinned.svg?react';
+import MapIcon from '@/public/icons/map-pinned.svg';
 import { useRouter } from 'next/navigation';
-import CloseIcon from '@/public/icons/close.svg?react';
+import CloseIcon from '@/public/icons/close.svg';
 
 export default function Page() {
   const { institution } = useInstitution();

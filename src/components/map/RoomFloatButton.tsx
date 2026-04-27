@@ -1,8 +1,8 @@
 import { MapProperty } from '@/types';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import HamburgerIcon from '@/public/icons/hanburger.svg?react';
-import CloseIcon from '@/public/icons/close.svg?react';
+import HamburgerIcon from '@/public/icons/hanburger.svg';
+import CloseIcon from '@/public/icons/close.svg';
 
 interface Props {
   roomList?: MapProperty[];

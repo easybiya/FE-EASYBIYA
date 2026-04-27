@@ -3,9 +3,9 @@ import { Property, PropertyImage } from '@/types';
 import { formatDate } from '@/utils/formatDate';
 import { formatWon } from '@/utils/formatWon';
 import Image from 'next/image';
-import HomeIcon from '@/public/icons/home.svg?react';
-import CheckIcon from '@/public/icons/checkbox-check.svg?react';
-import UnCheckIcon from '@/public/icons/checkbox-uncheck.svg?react';
+import HomeIcon from '@/public/icons/home.svg';
+import CheckIcon from '@/public/icons/checkbox-check.svg';
+import UnCheckIcon from '@/public/icons/checkbox-uncheck.svg';
 
 interface Props {
   info: Property;

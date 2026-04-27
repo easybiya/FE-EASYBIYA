@@ -12,9 +12,9 @@ import checklistFormatter from '@/utils/checklistFormatter';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import DropdownIcon from '@/public/icons/meatball.svg?react';
+import DropdownIcon from '@/public/icons/meatball.svg';
 import { InputModal } from '@/components/Modal/InputModal';
-import ArrowLeftIcon from '@/public/icons/arrow-left.svg?react';
+import ArrowLeftIcon from '@/public/icons/arrow-left.svg';
 
 export default function ChecklistDetail() {
   const router = useRouter();

@@ -13,8 +13,8 @@ import { usePropertyStore } from '@/store/usePropertyStore';
 import { getPropertyById } from '@/lib/api/property';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import CalendarIcon from '@/public/icons/calendar.svg?react';
-import ArrowDownIcon from '@/public/icons/arrow-down.svg?react';
+import CalendarIcon from '@/public/icons/calendar.svg';
+import ArrowDownIcon from '@/public/icons/arrow-down.svg';
 
 type roomInfoSchema = {
   contractType: LeaseType;

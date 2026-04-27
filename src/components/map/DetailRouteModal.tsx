@@ -1,11 +1,11 @@
 import { Institution, MapProperty } from '@/types';
-import CloseIcon from '@/public/icons/close.svg?react';
-import ArrowDownIcon from '@/public/icons/arrow-down.svg?react';
+import CloseIcon from '@/public/icons/close.svg';
+import ArrowDownIcon from '@/public/icons/arrow-down.svg';
 import { ReactNode } from 'react';
-import SubwayIcon from '@/public/icons/subway-icon.svg?react';
-import BusIcon from '@/public/icons/bus-icon.svg?react';
-import WalkIcon from '@/public/icons/walk-icon.svg?react';
-import TrainIcon from '@/public/icons/subway-icon.svg?react';
+import SubwayIcon from '@/public/icons/subway-icon.svg';
+import BusIcon from '@/public/icons/bus-icon.svg';
+import WalkIcon from '@/public/icons/walk-icon.svg';
+import TrainIcon from '@/public/icons/subway-icon.svg';
 import { getTransitColor } from '@/utils/transferColor';
 import usePath from '@/hooks/institution/usePath';
 import { cn } from '@/lib/utils';

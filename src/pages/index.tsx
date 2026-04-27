@@ -5,7 +5,6 @@ import { useDispatch } from '@/hooks/property/useDispatch';
 import { useProperty } from '@/hooks/property/useProperty';
 import { PropertySortBy } from '@/lib/api/property';
 import Link from 'next/link';
-import DashboardEmpty from '@/public/images/dashboard-empty.svg?url';
 import Image from 'next/image';
 import Button from '@/components/Button/CustomButton';
 import { useRouter } from 'next/navigation';
@@ -13,8 +12,8 @@ import { motion } from 'framer-motion';
 import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import SortDropdown from '@/components/Dropdown/SortDropdown';
-import ShareIcon from '@/public/icons/share-Icon.svg?react';
-import PlusIcon from '@/public/icons/plus.svg?react';
+import ShareIcon from '@/public/icons/share-Icon.svg';
+import PlusIcon from '@/public/icons/plus.svg';
 import { useTotalCount } from '@/hooks/property/useTotalCount';
 
 export const DROPDOWN_OPTION = [
@@ -74,7 +73,7 @@ export default function Home() {
         <div className="font-semibold text-brownText text-center py-16 w-full max-h-[calc(100%-63px)] relative h-full flex flex-col items-center justify-center gap-52">
           <div className="w-full">
             <Image
-              src={DashboardEmpty}
+              src="/images/dashboard-empty.svg"
               alt="대시보드 빈 이미지"
               style={{ height: 'auto', width: '100%' }}
             />

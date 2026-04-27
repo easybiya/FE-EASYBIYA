@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.css';
 import Providers from './providers';
+import Layout from '@/components/Layout';
 import { GoogleAnalytics } from '@next/third-parties/google';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? '';
@@ -28,7 +29,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko">
       <body className="antialiased">
-        <Providers>{children}</Providers>
+        <Providers>
+          <Layout>{children}</Layout>
+        </Providers>
         <GoogleAnalytics gaId="G-WV84R1N7GC" />
       </body>
     </html>

@@ -1,17 +1,15 @@
+'use client';
+
 import KakaoLoginButton from '@/components/Button/KakaoLoginButton';
 import Image from 'next/image';
-import router from 'next/router';
-import CloseIcon from '@/public/icons/close.svg?react';
-import YellowCheckIcon from '@/public/icons/yellow-check.svg?react';
-import Logo from '@/public/icons/logo.svg?react';
-
-export async function getStaticProps() {
-  return {
-    props: {},
-  };
-}
+import { useRouter } from 'next/navigation';
+import CloseIcon from '@/public/icons/close.svg';
+import YellowCheckIcon from '@/public/icons/yellow-check.svg';
+import Logo from '@/public/icons/logo.svg';
 
 export default function LoginPage() {
+  const router = useRouter();
+
   return (
     <div className="flex flex-col justify-between items-center h-dvh bg-[#FDFEFF] relative px-24 py-40">
       <button className="absolute top-16 right-16">

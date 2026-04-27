@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
-import HouseIcon from '@/public/icons/house.svg?react';
-import MapIcon from '@/public/icons/map.svg?react';
-import UserIcon from '@/public/icons/user.svg?react';
+import HouseIcon from '@/public/icons/house.svg';
+import MapIcon from '@/public/icons/map.svg';
+import UserIcon from '@/public/icons/user.svg';
 
 export default function TabBar() {
   const path = usePathname();

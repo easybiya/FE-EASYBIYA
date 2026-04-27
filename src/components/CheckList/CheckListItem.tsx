@@ -1,15 +1,15 @@
 import { CheckItemPayload, ChecklistPayloadItem } from '@/types/checklist';
-import DragIcon from '@/public/icons/drag.svg?react';
+import DragIcon from '@/public/icons/drag.svg';
 import { Draggable } from '@hello-pangea/dnd';
 import { stripEmoji } from '@/utils/stripEmoji';
 import DialogDropdownLayout from '../Dropdown/DialogDropdown';
 import { InputModal } from '../Modal/InputModal';
 import { ConfirmModal } from '../Modal/ConfirmModal';
 import PreventDropdownMenuItem from '../Dropdown/PreventDropdownMenuItem';
-import DropdownIcon from '@/public/icons/meatball-gray.svg?react';
+import DropdownIcon from '@/public/icons/meatball-gray.svg';
 import { matchedInfoByTitle } from '@/utils/matchedInfoByTitle';
 import { NotificationModal } from '../Modal/NotificationModal';
-import InfoIcon from '@/public/icons/info-circle.svg?react';
+import InfoIcon from '@/public/icons/info-circle.svg';
 import TextCheckItem from './TextCheckItem';
 import RadioCheckItem from './RadioCheckItem';
 import CheckboxCheckItem from './CheckboxCheckItem';

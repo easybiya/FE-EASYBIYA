@@ -9,9 +9,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import DialogDropdownLayout from '@/components/Dropdown/DialogDropdown';
 import PreventDropdownMenuItem from '@/components/Dropdown/PreventDropdownMenuItem';
 import { ConfirmModal } from '@/components/Modal/ConfirmModal';
-import DropdownIcon from '@/public/icons/meatball.svg?react';
-import ArrowLeftIcon from '@/public/icons/arrow-left.svg?react';
-import PlusIcon from '@/public/icons/plus.svg?react';
+import DropdownIcon from '@/public/icons/meatball.svg';
+import ArrowLeftIcon from '@/public/icons/arrow-left.svg';
+import PlusIcon from '@/public/icons/plus.svg';
 
 export default function Page() {
   const router = useRouter();

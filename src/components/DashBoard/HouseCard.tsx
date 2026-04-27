@@ -8,10 +8,10 @@ import { useQueryClient } from '@tanstack/react-query';
 import DialogDropdownLayout from '../Dropdown/DialogDropdown';
 import PreventDropdownMenuItem from '../Dropdown/PreventDropdownMenuItem';
 import { ConfirmModal } from '../Modal/ConfirmModal';
-import DropdownIcon from '@/public/icons/meatball.svg?react';
+import DropdownIcon from '@/public/icons/meatball.svg';
 import useBookmark from '@/hooks/property/useBookmark';
-import HomeIcon from '@/public/icons/home.svg?react';
-import PinIcon from '@/public/icons/pin-icon.svg?react';
+import HomeIcon from '@/public/icons/home.svg';
+import PinIcon from '@/public/icons/pin-icon.svg';
 import { formatDate } from '@/utils/formatDate';
 import useDeleteProperty from '@/hooks/property/useDeleteProperty';
 

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import NotFoundIcon from '@/public/icons/file-plus.svg?react';
+import NotFoundIcon from '@/public/icons/file-plus.svg';
 
 export default function NotFoundPage() {
   return (

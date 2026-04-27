@@ -1,7 +1,7 @@
 import { CheckItemPayload } from '@/types/checklist';
 import { useState } from 'react';
-import CheckIcon from '@/public/icons/radio-check.svg?react';
-import UnCheckIcon from '@/public/icons/radio-uncheck.svg?react';
+import CheckIcon from '@/public/icons/radio-check.svg';
+import UnCheckIcon from '@/public/icons/radio-uncheck.svg';
 import { cn } from '@/lib/utils';
 
 interface Props {

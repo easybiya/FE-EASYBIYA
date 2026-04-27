@@ -2,7 +2,7 @@ import Header from '@/components/Layout/Header';
 import { useRouter } from 'next/router';
 import RoomDetailPage from '@/components/RoomDetailPage';
 import DetailSkeleton from '@/components/RoomDetailPage/DetailSkeleton';
-import ArrowLeftIcon from '@/public/icons/arrow-left.svg?react';
+import ArrowLeftIcon from '@/public/icons/arrow-left.svg';
 import { usePropertyDetail } from '@/hooks/propertyDetail/usePropertyDetail';
 
 export default function ChecklistDetailPage() {

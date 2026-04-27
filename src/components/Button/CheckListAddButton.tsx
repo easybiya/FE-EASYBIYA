@@ -1,6 +1,6 @@
-import CheckItemIcon from '@/public/icons/add-list-check.svg?react';
-import RadioItemIcon from '@/public/icons/add-list-radio.svg?react';
-import TextItemIcon from '@/public/icons/add-list-text.svg?react';
+import CheckItemIcon from '@/public/icons/add-list-check.svg';
+import RadioItemIcon from '@/public/icons/add-list-radio.svg';
+import TextItemIcon from '@/public/icons/add-list-text.svg';
 
 interface ChecklistAddButtonProps {
   label: string;

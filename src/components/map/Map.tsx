@@ -1,7 +1,7 @@
 import { Institution, MapProperty, Property } from '@/types';
 import { useCallback, useEffect, useState } from 'react';
-import markerIcon from '@/public/icons/marker.svg?url';
-import borwnMarkerIcon from '@/public/icons/marker-brown.svg?url';
+const markerIcon = { src: '/icons/marker.svg' };
+const borwnMarkerIcon = { src: '/icons/marker-brown.svg' };
 
 declare global {
   interface Window {

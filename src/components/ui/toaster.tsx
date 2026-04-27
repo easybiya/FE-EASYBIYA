@@ -1,8 +1,8 @@
 import { Toast, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
 import { useToast } from '@/hooks/use-toast';
 import { SwitchCase } from './SwitchCase';
-import ToastSuccessIcon from '@/public/icons/toast-success.svg?react';
-import ToastErrorIcon from '@/public/icons/toast-error.svg?react';
+import ToastSuccessIcon from '@/public/icons/toast-success.svg';
+import ToastErrorIcon from '@/public/icons/toast-error.svg';
 
 export function Toaster() {
   const { toasts } = useToast();

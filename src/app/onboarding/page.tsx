@@ -1,3 +1,5 @@
+'use client';
+
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -9,12 +11,6 @@ import Section1 from '@/components/Onboarding/Section1';
 import Section2 from '@/components/Onboarding/Section2';
 import Section3 from '@/components/Onboarding/Section3';
 import { useRouter } from 'next/navigation';
-
-export async function getStaticProps() {
-  return {
-    props: {},
-  };
-}
 
 export default function OnboardingPage() {
   const [activeIndex, setActiveIndex] = useState<number>(0);

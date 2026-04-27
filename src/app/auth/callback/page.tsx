@@ -1,5 +1,7 @@
+'use client';
+
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import Spinner from '@/components/Spinner';
 
@@ -22,11 +24,7 @@ export default function AuthCallback() {
     };
 
     handleAuth();
-  }, []);
+  }, [router]);
 
-  return (
-    <>
-      <Spinner />
-    </>
-  );
+  return <Spinner />;
 }

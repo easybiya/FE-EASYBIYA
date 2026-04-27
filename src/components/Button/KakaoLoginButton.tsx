@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabaseClient';
-import KakaoIcon from '@/public/icons/kakao.svg?react';
+import KakaoIcon from '@/public/icons/kakao.svg';
 
 export default function KakaoLoginButton() {
   const loginWithKakao = async () => {

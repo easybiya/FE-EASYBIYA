@@ -1,5 +1,5 @@
 import CustomButton from '@/components/Button/CustomButton';
-import CheckIcon from '@/public/icons/big-check.svg?react';
+import CheckIcon from '@/public/icons/big-check.svg';
 import { usePropertyStore } from '@/store/usePropertyStore';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';

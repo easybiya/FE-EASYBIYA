@@ -7,7 +7,7 @@ import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/chec
 import checklistFormatter from '@/utils/checklistFormatter';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import ArrowLeftIcon from '@/public/icons/arrow-left.svg?react';
+import ArrowLeftIcon from '@/public/icons/arrow-left.svg';
 import { CHECKLIST_TEMPLATE } from '@/constants/checklistTemplate';
 
 export default function DefaultTemplate() {

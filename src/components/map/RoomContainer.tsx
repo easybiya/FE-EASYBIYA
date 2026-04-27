@@ -1,7 +1,7 @@
 import { Institution, MapProperty } from '@/types';
 import { useRouter } from 'next/navigation';
 import CreateInstitutionButton from './CreateInstitutionButton';
-import EditIcon from '@/public/icons/pencil.svg?react';
+import EditIcon from '@/public/icons/pencil.svg';
 
 interface Props {
   institution?: Institution;
@@ -41,7 +41,7 @@ export function RoomContainer({ institution, handleTagClick, isLoading }: Props)
           <EditIcon
             width={16}
             height={16}
-            onClick={(e) => {
+            onClick={(e: React.MouseEvent) => {
               e.stopPropagation();
               router.push('/property/institution');
             }}

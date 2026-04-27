@@ -15,7 +15,7 @@ import ImageSlider from '@/components/DashBoard/ImageSlider';
 import useImageCarousel from '@/hooks/propertyDetail/useImageCarousel';
 import { Property, PropertyImage } from '@/types';
 import { motion } from 'framer-motion';
-import HomeIcon from '@/public/icons/home.svg?react';
+import HomeIcon from '@/public/icons/home.svg';
 import { cn } from '@/lib/utils';
 import useUpdateChecklist from '@/hooks/checklist/useUpdateChecklist';
 

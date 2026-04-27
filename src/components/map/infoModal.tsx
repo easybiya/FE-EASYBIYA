@@ -4,10 +4,10 @@ import DetailRouteModal from './DetailRouteModal';
 import { calculateDistance } from '@/utils/calculateDistance';
 import { motion } from 'framer-motion';
 import { formatDistance } from '@/utils/formatDistance';
-import CloseIcon from '@/public/icons/close.svg?react';
-import ArrowRightIcon from '@/public/icons/arrow-right.svg?react';
-import InstitutionIcon from '@/public/icons/institution.svg?react';
-import PropertyIcon from '@/public/icons/property.svg?react';
+import CloseIcon from '@/public/icons/close.svg';
+import ArrowRightIcon from '@/public/icons/arrow-right.svg';
+import InstitutionIcon from '@/public/icons/institution.svg';
+import PropertyIcon from '@/public/icons/property.svg';
 
 interface Props {
   modalContent: MapProperty;

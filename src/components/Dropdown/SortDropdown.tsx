@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import DefaultDropdownLayout from './DropdownLayout';
 import { DROPDOWN_OPTION } from '@/pages';
-import ArrowIcon from '@/public/icons/arrow-up.svg?react';
+import ArrowIcon from '@/public/icons/arrow-up.svg';
 
 interface Props {
   handleClick: (option: string) => void;

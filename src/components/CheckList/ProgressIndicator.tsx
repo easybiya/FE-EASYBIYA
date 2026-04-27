@@ -1,4 +1,4 @@
-import CheckIcon from '@/public/icons/check.svg?react';
+import CheckIcon from '@/public/icons/check.svg';
 
 interface Props {
   totalSteps: number;

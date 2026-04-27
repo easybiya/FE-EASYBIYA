@@ -1,8 +1,8 @@
 import Header from '@/components/Layout/Header';
 import { ConfirmModal } from '@/components/Modal/ConfirmModal';
 import { useRouter } from 'next/navigation';
-import ArrowLeft from '@/public/icons/arrow-left.svg?react';
-import KakaoIcon from '@/public/icons/kakao.svg?react';
+import ArrowLeft from '@/public/icons/arrow-left.svg';
+import KakaoIcon from '@/public/icons/kakao.svg';
 import useAccount from '@/hooks/user/useAccount';
 import useDeleteAccount from '@/hooks/user/useDeleteAccount';
 import { supabase } from '@/lib/supabaseClient';

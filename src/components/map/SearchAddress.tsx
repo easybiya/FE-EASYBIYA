@@ -8,7 +8,7 @@ import { Input } from '../ui/input';
 import { createRoomZodSchema } from '@/lib/zodSchema';
 import FixedBar from '../FixedBar';
 import { usePropertyStore } from '@/store/usePropertyStore';
-import SearchIcon from '@/public/icons/SearchIcon.svg?react';
+import SearchIcon from '@/public/icons/SearchIcon.svg';
 
 declare global {
   interface Window {

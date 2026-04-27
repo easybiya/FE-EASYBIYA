@@ -1,7 +1,7 @@
 import { CheckItemPayload } from '@/types/checklist';
 import { useState } from 'react';
-import CheckIcon from '@/public/icons/checkbox-check.svg?react';
-import UnCheckIcon from '@/public/icons/checkbox-uncheck.svg?react';
+import CheckIcon from '@/public/icons/checkbox-check.svg';
+import UnCheckIcon from '@/public/icons/checkbox-uncheck.svg';
 
 interface Props {
   priority: number;

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import PlusIcon from '@/public/icons/plus.svg?react';
+import PlusIcon from '@/public/icons/plus.svg';
 
 export default function CreateInstitutionButton() {
   const router = useRouter();

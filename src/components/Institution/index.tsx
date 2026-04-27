@@ -9,7 +9,7 @@ import { createInstitutionZodSchema } from '@/lib/zodSchema';
 import FixedBar from '../FixedBar';
 import { useRouter } from 'next/navigation';
 import { Institution } from '@/types';
-import SearchIcon from '@/public/icons/SearchIcon.svg?react';
+import SearchIcon from '@/public/icons/SearchIcon.svg';
 import useUpdateInstitution from '@/hooks/institution/useUpdateInstitution';
 
 declare global {

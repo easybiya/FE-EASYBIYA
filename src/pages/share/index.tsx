@@ -4,7 +4,7 @@ import Header from '@/components/Layout/Header';
 import { Property } from '@/types';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import CloseIcon from '@/public/icons/close.svg?react';
+import CloseIcon from '@/public/icons/close.svg';
 import { useDispatch } from '@/hooks/property/useDispatch';
 import { useProperty } from '@/hooks/property/useProperty';
 import { useInView } from 'react-intersection-observer';

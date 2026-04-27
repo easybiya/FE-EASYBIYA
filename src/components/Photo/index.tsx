@@ -2,8 +2,8 @@ import { useState, useRef, Dispatch, SetStateAction } from 'react';
 import Image from 'next/image';
 import FixedBar from '@/components/FixedBar';
 import { usePropertyStore } from '@/store/usePropertyStore';
-import PlusIcon from '@/public/icons/plus.svg?react';
-import CloseIcon from '@/public/icons/close.svg?react';
+import PlusIcon from '@/public/icons/plus.svg';
+import CloseIcon from '@/public/icons/close.svg';
 import { Button } from '../ui/button';
 
 interface Props {
