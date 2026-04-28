@@ -1,101 +1,10 @@
-'use client';
+import DefaultTemplate from './DefaultTemplate';
 
-import ChecklistContent from '@/components/CheckList/CheckListContent';
-import Header from '@/components/Layout/Header';
-import { InputModal } from '@/components/Modal/InputModal';
-import { toast } from '@/hooks/use-toast';
-import { postTemplate } from '@/lib/api/template';
-import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
-import checklistFormatter from '@/utils/checklistFormatter';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import ArrowLeftIcon from '@/public/icons/arrow-left.svg';
-import { CHECKLIST_TEMPLATE } from '@/constants/checklistTemplate';
-
-export default function DefaultTemplate() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const mode = searchParams.get('mode');
-  const isNewTemplate = mode === 'new';
-  const defaultTemplate = CHECKLIST_TEMPLATE;
-
-  const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
-  const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
-
-  const handleAddChecklist = (type: CheckType) => {
-    const newId = checklist.length > 0 ? checklist[checklist.length - 1].priority + 1 : 1;
-    const newItem: ChecklistPayloadItem = {
-      priority: newId,
-      title: '새 체크리스트 항목',
-      content: type === 'TEXT' ? '옵션1' : null,
-      checkType: type,
-      checkItems: type === 'TEXT' ? [] : [{ description: '옵션1', checked: false, priority: 1 }],
-    };
-    setChecklist((prev) => [...prev, newItem]);
-  };
-
-  const handleNewTemplateSave = async (name: string) => {
-    const template: ChecklistTemplate = {
-      name,
-      checklists: checklist.map(({ title, checkType, content, checkItems }) => ({
-        title,
-        checkType,
-        content,
-        checkItems: checkItems.map((i) => i.description),
-      })),
-    };
-
-    try {
-      await postTemplate(template);
-      setShowNewTemplateModal(false);
-      toast({ title: '새 템플릿 생성 완료', variant: 'success' });
-      router.push('/profile/checklist');
-    } catch (error) {
-      console.error(error);
-      toast({ title: '템플릿 저장 실패', variant: 'fail' });
-    }
-  };
-
-  useEffect(() => {
-    const transformedTemplate = checklistFormatter(defaultTemplate?.checklists ?? []);
-    setChecklist(transformedTemplate);
-  }, [defaultTemplate]);
-
-  return (
-    <div>
-      <Header
-        left={
-          <div className="flex items-center gap-8">
-            <ArrowLeftIcon
-              name="arrowLeft"
-              width={24}
-              height={24}
-              onClick={() => router.back()}
-              className="cursor-pointer"
-            />
-            <h1 className="text-b-20">
-              {isNewTemplate ? `${defaultTemplate?.name} 복제본` : defaultTemplate?.name}
-            </h1>
-          </div>
-        }
-      />
-      <div className="px-20">
-        <ChecklistContent
-          checklist={checklist}
-          setter={setChecklist}
-          onAddChecklist={handleAddChecklist}
-          isTemplate={!isNewTemplate}
-        />
-      </div>
-
-      <InputModal
-        open={showNewTemplateModal}
-        openChange={setShowNewTemplateModal}
-        title="새 템플릿 생성"
-        defaultValue={`${defaultTemplate?.name} 복제본`}
-        handleClick={(value) => handleNewTemplateSave(value as string)}
-        trigger={<></>}
-      />
-    </div>
-  );
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ mode?: string }>;
+}) {
+  const { mode } = await searchParams;
+  return <DefaultTemplate isNewTemplate={mode === 'new'} />;
 }
