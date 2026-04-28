@@ -1,6 +1,6 @@
-import { useRouter } from 'next/router';
 import ProgressIndicator from '@/components/CheckList/ProgressIndicator';
 import ArrowLeftIcon from '@/public/icons/arrow-left.svg';
+import { useRouter } from 'next/navigation';
 
 interface HeaderWithProgressProps {
   title: string;

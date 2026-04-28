@@ -1,4 +1,6 @@
-import { useRouter } from 'next/router';
+'use client';
+
+import { useRouter } from 'next/navigation';
 import Header from '@/components/Layout/Header';
 import Link from 'next/link';
 import { useDispatch } from '@/hooks/checklist/useDispatch';
@@ -64,10 +66,8 @@ export default function Page() {
                 </button>
               }
             >
-              <PreventDropdownMenuItem
-                onSelect={() => router.push('/profile/checklist/default?mode=new')}
-              >
-                복제
+              <PreventDropdownMenuItem>
+                <Link href={`/profile/checklist/default?mode=new`}>복제</Link>
               </PreventDropdownMenuItem>
             </DialogDropdownLayout>
           </div>
@@ -94,12 +94,10 @@ export default function Page() {
                       </button>
                     }
                   >
-                    <PreventDropdownMenuItem
-                      onSelect={() =>
-                        router.push(`/profile/checklist/detail/${template.templateId}?mode=new`)
-                      }
-                    >
-                      복제
+                    <PreventDropdownMenuItem>
+                      <Link href={`/profile/checklist/detail/${template.templateId}?mode=new`}>
+                        복제
+                      </Link>
                     </PreventDropdownMenuItem>
                     <ConfirmModal
                       title="템플릿 삭제"

@@ -3,7 +3,7 @@ import { updatePropertyImage, uploadImagesToStorage } from '@/lib/api/property';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { PropertyImage } from '@/types';
 import { toast } from '../use-toast';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const useUpdateImage = (id: string) => {
   const router = useRouter();

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import HeaderWithProgress from '@/components/Layout/HeaderWithProgress';
 import RoomInfoForm from '@/components/RoomInfoForm';

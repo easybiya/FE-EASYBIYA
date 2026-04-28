@@ -1,3 +1,5 @@
+'use client';
+
 import InstitutionForm from '@/components/Institution';
 import Header from '@/components/Layout/Header';
 import { useInstitution } from '@/hooks/map/useInstitution';

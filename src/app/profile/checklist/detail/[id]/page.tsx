@@ -1,3 +1,5 @@
+'use client';
+
 import ChecklistContent from '@/components/CheckList/CheckListContent';
 import DialogDropdownLayout from '@/components/Dropdown/DialogDropdown';
 import PreventDropdownMenuItem from '@/components/Dropdown/PreventDropdownMenuItem';
@@ -10,7 +12,7 @@ import { deleteTemplate, editTemplate, postTemplate } from '@/lib/api/template';
 import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
 import checklistFormatter from '@/utils/checklistFormatter';
 import { useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/router';
+import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import DropdownIcon from '@/public/icons/meatball.svg';
 import { InputModal } from '@/components/Modal/InputModal';
@@ -18,10 +20,10 @@ import ArrowLeftIcon from '@/public/icons/arrow-left.svg';
 
 export default function ChecklistDetail() {
   const router = useRouter();
-  const templateId = router.query.id as string;
-  const { mode } = router.query;
-  const templateMode = typeof mode === 'string' ? mode : undefined;
-  const isNewTemplate = templateMode === 'new';
+  const { id: templateId } = useParams<{ id: string }>();
+  const searchParams = useSearchParams();
+  const mode = searchParams.get('mode');
+  const isNewTemplate = mode === 'new';
   const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
   const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
   const queryClient = useQueryClient();
@@ -156,7 +158,6 @@ export default function ChecklistDetail() {
               checklist={checklist}
               setter={setChecklist}
               onAddChecklist={handleAddChecklist}
-              // onSaveTemplate={() => setShowNewTemplateModal(true)}
             />
           </div>
           <InputModal

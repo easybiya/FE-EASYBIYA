@@ -2,9 +2,7 @@ import Link from 'next/link';
 import HouseTypeTag from './HouseTypeTag';
 import { Property, PropertyImage } from '@/types';
 import { formatWon } from '@/utils/formatWon';
-import { useRouter } from 'next/router';
 import Image from 'next/image';
-import { useQueryClient } from '@tanstack/react-query';
 import DialogDropdownLayout from '../Dropdown/DialogDropdown';
 import PreventDropdownMenuItem from '../Dropdown/PreventDropdownMenuItem';
 import { ConfirmModal } from '../Modal/ConfirmModal';
@@ -22,7 +20,6 @@ interface Props {
 }
 
 export default function HouseCard({ info, isFixed, isShared }: Props) {
-  const router = useRouter();
   const { mutate } = useBookmark(isFixed);
   const { mutate: deleteProperty } = useDeleteProperty();
 
@@ -57,10 +54,8 @@ export default function HouseCard({ info, isFixed, isShared }: Props) {
               <PreventDropdownMenuItem onSelect={() => mutate(String(info.id))}>
                 {isFixed ? '고정 해제하기' : '고정하기'}
               </PreventDropdownMenuItem>
-              <PreventDropdownMenuItem
-                onSelect={() => router.push(`/property/edit?propertyId=${info.id}`)}
-              >
-                수정하기
+              <PreventDropdownMenuItem>
+                <Link href={`/property/edit?propertyId=${info.id}`}>수정하기</Link>
               </PreventDropdownMenuItem>
               <ConfirmModal
                 title="매물 정보 삭제"

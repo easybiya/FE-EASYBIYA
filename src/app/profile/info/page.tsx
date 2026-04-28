@@ -1,3 +1,5 @@
+'use client';
+
 import Header from '@/components/Layout/Header';
 import { ConfirmModal } from '@/components/Modal/ConfirmModal';
 import { useRouter } from 'next/navigation';

@@ -1,43 +1,26 @@
+'use client';
+
 import ChecklistContent from '@/components/CheckList/CheckListContent';
 import Header from '@/components/Layout/Header';
 import { InputModal } from '@/components/Modal/InputModal';
 import { toast } from '@/hooks/use-toast';
 import { postTemplate } from '@/lib/api/template';
 import { ChecklistPayloadItem, ChecklistTemplate, CheckType } from '@/types/checklist';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
+import checklistFormatter from '@/utils/checklistFormatter';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import ArrowLeftIcon from '@/public/icons/arrow-left.svg';
+import { CHECKLIST_TEMPLATE } from '@/constants/checklistTemplate';
 
-const defaultChecklist: ChecklistPayloadItem[] = [
-  {
-    priority: 1,
-    title: '새 체크리스트 항목',
-    content: '옵션1',
-    checkType: 'TEXT',
-    checkItems: [],
-  },
-  {
-    priority: 1,
-    title: '새 체크리스트 항목',
-    content: '옵션1',
-    checkType: 'RADIO',
-    checkItems: [{ description: '옵션1', checked: true, priority: 1 }],
-  },
-  {
-    priority: 1,
-    title: '새 체크리스트 항목',
-    content: '옵션1',
-    checkType: 'CHECKBOX',
-    checkItems: [{ description: '옵션1', checked: true, priority: 1 }],
-  },
-];
-
-export default function CreateTemplate() {
+export default function DefaultTemplate() {
   const router = useRouter();
-  const [modalOpen, setIsModalOpen] = useState(false);
-  const defaultTitle = '우리집 체크리스트';
+  const searchParams = useSearchParams();
+  const mode = searchParams.get('mode');
+  const isNewTemplate = mode === 'new';
+  const defaultTemplate = CHECKLIST_TEMPLATE;
 
-  const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>(defaultChecklist);
+  const [checklist, setChecklist] = useState<ChecklistPayloadItem[]>([]);
+  const [showNewTemplateModal, setShowNewTemplateModal] = useState(false);
 
   const handleAddChecklist = (type: CheckType) => {
     const newId = checklist.length > 0 ? checklist[checklist.length - 1].priority + 1 : 1;
@@ -64,16 +47,19 @@ export default function CreateTemplate() {
 
     try {
       await postTemplate(template);
-      setIsModalOpen(false);
+      setShowNewTemplateModal(false);
       toast({ title: '새 템플릿 생성 완료', variant: 'success' });
       router.push('/profile/checklist');
     } catch (error) {
-      toast({ title: '템플릿 저장 실패', variant: 'fail' });
       console.error(error);
+      toast({ title: '템플릿 저장 실패', variant: 'fail' });
     }
   };
 
-  // const handleSaveTemplate = () => setIsModalOpen(true);
+  useEffect(() => {
+    const transformedTemplate = checklistFormatter(defaultTemplate?.checklists ?? []);
+    setChecklist(transformedTemplate);
+  }, [defaultTemplate]);
 
   return (
     <div>
@@ -87,7 +73,9 @@ export default function CreateTemplate() {
               onClick={() => router.back()}
               className="cursor-pointer"
             />
-            <h1 className="text-b-20">{defaultTitle}</h1>
+            <h1 className="text-b-20">
+              {isNewTemplate ? `${defaultTemplate?.name} 복제본` : defaultTemplate?.name}
+            </h1>
           </div>
         }
       />
@@ -96,18 +84,17 @@ export default function CreateTemplate() {
           checklist={checklist}
           setter={setChecklist}
           onAddChecklist={handleAddChecklist}
-          // onSaveTemplate={handleSaveTemplate}
+          isTemplate={!isNewTemplate}
         />
       </div>
+
       <InputModal
+        open={showNewTemplateModal}
+        openChange={setShowNewTemplateModal}
         title="새 템플릿 생성"
-        open={modalOpen}
-        openChange={setIsModalOpen}
+        defaultValue={`${defaultTemplate?.name} 복제본`}
+        handleClick={(value) => handleNewTemplateSave(value as string)}
         trigger={<></>}
-        defaultValue={defaultTitle}
-        handleClick={(v) => handleNewTemplateSave(v)}
-        maxLength={13}
-        placeholder="템플릿 이름을 입력하세요"
       />
     </div>
   );
