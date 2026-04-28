@@ -16,6 +16,7 @@ import useImageCarousel from '@/hooks/propertyDetail/useImageCarousel';
 import { Property, PropertyImage } from '@/types';
 import { motion } from 'framer-motion';
 import HomeIcon from '@/public/icons/home.svg';
+import CalendarIcon from '@/public/icons/calendar-brown.svg';
 import { cn } from '@/lib/utils';
 import useUpdateChecklist from '@/hooks/checklist/useUpdateChecklist';
 
@@ -122,13 +123,7 @@ export default function RoomDetailPage({ roomChecklist, detail, id, isShared }: 
           <p className="text-r-15 text-15">{address}</p>
         </div>
         <div className="flex gap-4 items-center">
-          <Image
-            src="/icons/calendar-brown.svg"
-            color="#94896A"
-            width={10}
-            height={10}
-            alt="캘린더 아이콘"
-          />
+          <CalendarIcon width={10} height={10} />
           <div className="flex gap-8 text-brownText text-r-12">
             <span className="font-semibold">입주 가능 일자</span>
             <p className="flex items-center ">{formatDate(new Date(available_date), 2)}</p>

@@ -1,17 +1,13 @@
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
-import { NextRequest, NextResponse } from 'next/server';
+import { createSupabaseServerClient } from '@/lib/supabaseServer';
+import { NextResponse } from 'next/server';
 
-export async function POST(req: NextRequest) {
-  const token = req.headers.get('authorization')?.replace('Bearer ', '');
-
-  if (!token) {
-    return NextResponse.json({ error: 'No token provided' }, { status: 401 });
-  }
-
+export async function POST() {
+  const supabase = await createSupabaseServerClient();
   const {
     data: { user },
     error,
-  } = await supabaseAdmin.auth.getUser(token);
+  } = await supabase.auth.getUser();
 
   if (error || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
