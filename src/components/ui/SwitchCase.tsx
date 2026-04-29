@@ -1,9 +1,11 @@
-type CaseFunction<Case> = (value: Case) => JSX.Element | null;
+import type { ReactElement } from 'react';
+
+type CaseFunction<Case> = (value: Case) => ReactElement | null;
 
 interface Props<Case extends string | number> {
-  caseBy: Partial<Record<Case, JSX.Element | null>> | CaseFunction<Case>;
+  caseBy: Partial<Record<Case, ReactElement | null>> | CaseFunction<Case>;
   value: Case;
-  defaultComponent?: JSX.Element | null;
+  defaultComponent?: ReactElement | null;
 }
 
 export function SwitchCase<Case extends string | number>({
